@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA 2K Overlay Control</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #1f2937;
+      margin-bottom: 8px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 32px;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #1f2937;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    select:hover {
+      border-color: #667eea;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .preview-card {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 24px;
+      display: none;
+    }
+
+    .preview-card.show {
+      display: block;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .preview-time {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .preview-status {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-scheduled {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status-live {
+      background: #fee2e2;
+      color: #991b1b;
+      animation: pulse 2s infinite;
+    }
+
+    .status-final {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .preview-teams {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .preview-team {
+      flex: 1;
+      text-align: center;
+    }
+
+    .preview-team img {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 8px;
+    }
+
+    .preview-team-name {
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .preview-team-record {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .preview-team-score {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-top: 8px;
+    }
+
+    .preview-vs {
+      font-size: 18px;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #6b7280;
+    }
+
+    .error {
+      background: #fee2e2;
+      border: 2px solid #fecaca;
+      color: #991b1b;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border: 2px solid #dbeafe;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 14px;
+      color: #1e40af;
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .refresh-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 16px;
+    }
+
+    .refresh-btn:hover {
+      background: #5568d3;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .refresh-btn:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏀 NBA Game Overlay Control</h1>
+    <p class="subtitle">Select which game to display on your stream</p>
+
+    <div id="error" class="error" style="display: none;"></div>
+
+    <div class="section">
+      <label class="section-title" for="gameSelect">Today's Games</label>
+      <select id="gameSelect">
+        <option value="">Loading games...</option>
+      </select>
+      <button id="refreshBtn" class="refresh-btn">🔄 Refresh Games</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Preview</div>
+      <div id="loading" class="loading">Select a game to see preview</div>
+      <div id="preview" class="preview-card"></div>
+    </div>
+
+    <div class="info-box">
+      <strong>📺 OBS Setup:</strong>
+      Add a Browser Source with this URL:<br>
+      <code>http://localhost:3000/overlay/game-stats</code>
+    </div>
+  </div>
+
+  <script src="/overlay/shared/config.js"></script>
+  <script src="/overlay/shared/nbaApi.js"></script>
+  <script src="/overlay/dashboard/dashboard.js"></script>
+</body>
+</html>
+

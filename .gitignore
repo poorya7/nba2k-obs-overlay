@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Backup folder (reference only)
+backup_old_dashboard/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+

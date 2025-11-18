@@ -1,0 +1,20 @@
+{
+  "name": "nba2k-obs-overlay",
+  "version": "1.0.0",
+  "description": "Live NBA game stats overlay for OBS streaming",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "nba",
+    "obs",
+    "overlay",
+    "streaming",
+    "nba2k"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+
