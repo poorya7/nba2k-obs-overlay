@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overlay Design Tester 🏀</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/overlay/design-test/styles.css">
+  <link rel="stylesheet" href="/overlay/design-test/designs.css">
+</head>
+<body>
+  <!-- Stream Background -->
+  <div class="stream-background">
+    <img src="/game-stream.png" alt="Stream Preview">
+  </div>
+
+  <!-- Control Panel -->
+  <div class="control-panel">
+    <h1>🏀 Overlay Design Tester</h1>
+    <div class="controls">
+      <label>
+        <span>Select Game:</span>
+        <select id="game-selector">
+          <option value="">Loading games...</option>
+        </select>
+      </label>
+      <div class="status-indicator" id="status">
+        <span class="dot"></span>
+        <span class="text">Ready</span>
+      </div>
+    </div>
+    <p class="hint">💡 Click any design to see it full-size on your stream background!</p>
+  </div>
+
+  <!-- Design Grid -->
+  <div class="design-grid" id="design-grid">
+    <!-- Design previews will be inserted here -->
+  </div>
+
+  <!-- Full Preview Modal -->
+  <div class="modal" id="preview-modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <button class="modal-close" onclick="closePreview()">✕</button>
+      <div class="modal-stream-bg">
+        <img src="/game-stream.png" alt="Stream Preview">
+        <div id="modal-overlay-container"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-apply" onclick="applyDesign()">Apply This Design</button>
+        <button class="btn-cancel" onclick="closePreview()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/overlay/shared/config.js"></script>
+  <script src="/overlay/shared/nbaApi.js"></script>
+  <script src="/overlay/design-test/preview.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,611 @@
+/* ===== BASE STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f0f0f;
+  color: #fff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== STREAM BACKGROUND ===== */
+.stream-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  opacity: 1;
+  display: none;
+}
+
+.stream-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== CONTROL PANEL ===== */
+.control-panel {
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid #333;
+  padding: 20px 40px;
+  position: relative;
+  z-index: 100;
+}
+
+.control-panel h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  background: linear-gradient(135deg, #4CAF50, #2196F3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.controls label span {
+  font-weight: 600;
+  color: #aaa;
+}
+
+.controls select {
+  background: #2a2a2a;
+  color: #fff;
+  border: 2px solid #444;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  min-width: 250px;
+}
+
+.controls select:hover {
+  border-color: #4CAF50;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #2a2a2a;
+  border-radius: 8px;
+}
+
+.status-indicator .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4CAF50;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator .text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hint {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #888;
+}
+
+/* ===== DESIGN GRID ===== */
+.design-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+}
+
+.design-card {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('/game-stream.png');
+}
+
+.design-card:hover {
+  box-shadow: inset 0 0 100px rgba(76, 175, 80, 0.2);
+}
+
+.design-card h3 {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: 900;
+  color: #4CAF50;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.design-card p {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  font-size: 14px;
+  color: #ddd;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 8px 16px;
+  border-radius: 6px;
+  max-width: 300px;
+  z-index: 10;
+}
+
+.design-preview {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  position: relative;
+  z-index: 1001;
+  max-width: 95vw;
+  max-height: 95vh;
+}
+
+.modal-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: #f44336;
+  color: #fff;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: #d32f2f;
+}
+
+.modal-stream-bg {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  max-width: 95vw;
+  max-height: 70vh;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modal-stream-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#modal-overlay-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-apply {
+  background: #4CAF50;
+  color: #fff;
+}
+
+.btn-apply:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+.btn-cancel {
+  background: #555;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background: #666;
+}
+
+/* ===== OVERLAY DESIGNS ===== */
+
+/* Common styles */
+.game-card {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+  font-family: 'Inter', sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+.team-logo {
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* ===== DESIGN 1: COMPACT MODERN ===== */
+.design-compact .game-card {
+  background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+  border: 2px solid rgba(76, 175, 80, 0.3);
+  padding: 16px 18px;
+  width: 280px;
+}
+
+.design-compact .team-logo {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 8px;
+}
+
+.design-compact .team-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #e8eef5;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.design-compact .team-record {
+  font-size: 12px;
+  color: #8a95a8;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.design-compact .team-score {
+  font-size: 36px;
+  font-weight: 900;
+  color: #4CAF50;
+  text-shadow: 0 3px 10px rgba(76, 175, 80, 0.4);
+  line-height: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.design-compact .vs-divider {
+  font-size: 16px;
+  font-weight: 800;
+  color: #6b7280;
+  margin: 0 12px;
+}
+
+.design-compact .game-status {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.design-compact .status-live {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ff6b6b;
+}
+
+.design-compact .status-final {
+  background: rgba(34, 197, 94, 0.25);
+  color: #4ade80;
+}
+
+/* ===== DESIGN 2: STREAMER PRO ===== */
+.design-streamer .game-card {
+  background: #1a1d29;
+  border: 3px solid #4CAF50;
+  border-radius: 10px;
+  padding: 14px 16px;
+  width: 280px;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+}
+
+.design-streamer .team-logo {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.design-streamer .team-name {
+  font-size: 17px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 4px;
+  line-height: 1.1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Poppins', sans-serif;
+}
+
+.design-streamer .team-record {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.design-streamer .team-score {
+  font-size: 38px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(76, 175, 80, 0.6), 0 3px 6px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.design-streamer .vs-divider {
+  font-size: 18px;
+  font-weight: 900;
+  color: #4CAF50;
+  margin: 0 12px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.design-streamer .game-status {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #4CAF50;
+  color: #000;
+  font-weight: 900;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.design-streamer .status-live {
+  background: #ff4757;
+  color: #fff;
+  animation: glow 1.5s infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 71, 87, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 71, 87, 0.8); }
+}
+
+.design-streamer .status-final {
+  background: #4CAF50;
+  color: #000;
+}
+
+/* ===== DESIGN 3: MINIMAL GLASS ===== */
+.design-glass .game-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 16px 18px;
+  width: 280px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.design-glass .team-logo {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 8px;
+}
+
+.design-glass .team-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+  line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.design-glass .team-record {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.design-glass .team-score {
+  font-size: 36px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.design-glass .vs-divider {
+  font-size: 16px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 12px;
+}
+
+.design-glass .game-status {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: 700;
+  color: #fff;
+}
+
+.design-glass .status-live {
+  background: rgba(255, 71, 87, 0.3);
+  border-color: rgba(255, 71, 87, 0.5);
+  color: #fff;
+}
+
+.design-glass .status-final {
+  background: rgba(76, 175, 80, 0.3);
+  border-color: rgba(76, 175, 80, 0.5);
+  color: #fff;
+}
+
+/* ===== DESIGN 4: BOLD NEON ===== */
+.design-neon .game-card {
+  background: #0a0e1a;
+  border: 3px solid #00ff88;
+  border-radius: 8px;
+  padding: 14px 16px;
+  width: 280px;
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.4), 
+              inset 0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+.design-neon .team-logo {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.5));
+}
+
+.design-neon .team-name {
+  font-size: 17px;
+  font-weight: 900;
+  color: #00ff88;
+  margin-bottom: 4px;
+  line-height: 1.1;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+  font-family: 'Poppins', sans-serif;
+}
+
+.design-neon .team-record {
+  font-size: 12px;
+  color: #7dd3fc;
+  margin-bottom: 8px;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(125, 211, 252, 0.5);
+}
+
+.design-neon .team-score {
+  font-size: 40px;
+  font-weight: 900;
+  color: #00ff88;
+  text-shadow: 0 0 20px rgba(0, 255, 136, 0.8), 
+               0 0 40px rgba(0, 255, 136, 0.4);
+  line-height: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.design-neon .vs-divider {
+  font-size: 18px;
+  font-weight: 900;
+  color: #7dd3fc;
+  margin: 0 12px;
+  text-shadow: 0 0 10px rgba(125, 211, 252, 0.8);
+}
+
+.design-neon .game-status {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 900;
+  border: 2px solid #00ff88;
+}
+
+.design-neon .status-live {
+  background: #ff0066;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 20px rgba(255, 0, 102, 0.6);
+  animation: neon-pulse 1.5s infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(255, 0, 102, 0.6);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(255, 0, 102, 1);
+  }
+}
+
+.design-neon .status-final {
+  background: #0a0e1a;
+  color: #00ff88;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+}
+

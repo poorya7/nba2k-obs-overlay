@@ -12,8 +12,8 @@ async function init() {
   // Start refresh loop
   await updateOverlay();
   
-  // Auto-refresh every 30 seconds
-  refreshInterval = setInterval(updateOverlay, window.NBA_CONFIG.OVERLAY_REFRESH_INTERVAL);
+  // Auto-refresh every 10 seconds (faster updates)
+  refreshInterval = setInterval(updateOverlay, 10000);
 }
 
 /**
@@ -21,8 +21,14 @@ async function init() {
  */
 async function updateOverlay() {
   try {
-    // Check if game is selected
-    const selectedGameId = localStorage.getItem(window.NBA_CONFIG.STORAGE_KEY_SELECTED_GAME);
+    // Fetch selected game ID from server
+    const response = await fetch('/api/selected-game');
+    if (!response.ok) {
+      throw new Error('Failed to fetch selection');
+    }
+    
+    const data = await response.json();
+    const selectedGameId = data.gameId;
     
     if (!selectedGameId) {
       showNoGameSelected();
@@ -70,18 +76,21 @@ function displayGame(game) {
   // Show scores only for live or final games
   const showScores = game.isLive || game.isFinal;
   
+  // Split team names for 2-line display
+  const formatTeamName = (name) => {
+    const words = name.split(' ');
+    if (words.length === 2) return `${words[0]}<br>${words[1]}`;
+    if (words.length === 3) return `${words[0]} ${words[1]}<br>${words[2]}`;
+    return name.replace(' ', '<br>'); // fallback
+  };
+  
   // Build HTML
   container.innerHTML = `
     <div class="game-card">
-      <div class="status-bar">
-        <div class="game-status ${statusClass}">${statusText}</div>
-        <div class="game-time">${game.name}</div>
-      </div>
-      
       <div class="teams-container">
         <div class="team">
           <img class="team-logo" src="${game.awayTeam.logo}" alt="${game.awayTeam.name}">
-          <div class="team-name">${game.awayTeam.name}</div>
+          <div class="team-name">${formatTeamName(game.awayTeam.name)}</div>
           <div class="team-record">${game.awayTeam.record}</div>
           ${showScores ? `<div class="team-score">${game.awayTeam.score}</div>` : ''}
         </div>
@@ -90,11 +99,13 @@ function displayGame(game) {
         
         <div class="team">
           <img class="team-logo" src="${game.homeTeam.logo}" alt="${game.homeTeam.name}">
-          <div class="team-name">${game.homeTeam.name}</div>
+          <div class="team-name">${formatTeamName(game.homeTeam.name)}</div>
           <div class="team-record">${game.homeTeam.record}</div>
           ${showScores ? `<div class="team-score">${game.homeTeam.score}</div>` : ''}
         </div>
       </div>
+      
+      <div class="game-status ${statusClass}">${statusText}</div>
     </div>
   `;
   

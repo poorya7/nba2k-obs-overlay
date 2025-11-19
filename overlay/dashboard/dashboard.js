@@ -37,8 +37,8 @@ async function loadGames() {
     // Populate dropdown
     populateGameSelect(allGames);
     
-    // Restore previous selection if exists
-    const savedGameId = localStorage.getItem(window.NBA_CONFIG.STORAGE_KEY_SELECTED_GAME);
+    // Restore previous selection from server
+    const savedGameId = await loadSavedSelection();
     if (savedGameId) {
       selectEl.value = savedGameId;
       updatePreview(savedGameId);
@@ -79,23 +79,64 @@ function populateGameSelect(games) {
 /**
  * Handle game selection change
  */
-function handleGameSelection(event) {
+async function handleGameSelection(event) {
   const gameId = event.target.value;
   
   if (!gameId) {
     // No game selected
     clearPreview();
-    localStorage.removeItem(window.NBA_CONFIG.STORAGE_KEY_SELECTED_GAME);
+    await saveGameSelection(null);
     console.log('🚫 Game selection cleared');
     return;
   }
   
-  // Save selection
-  localStorage.setItem(window.NBA_CONFIG.STORAGE_KEY_SELECTED_GAME, gameId);
+  // Save selection to server
+  await saveGameSelection(gameId);
   console.log('💾 Saved game selection:', gameId);
   
   // Update preview
   updatePreview(gameId);
+}
+
+/**
+ * Save game selection to server
+ */
+async function saveGameSelection(gameId) {
+  try {
+    const response = await fetch('/api/selected-game', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ gameId })
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to save selection');
+    }
+    
+    console.log('✅ Selection saved to server');
+  } catch (error) {
+    console.error('❌ Failed to save selection:', error);
+  }
+}
+
+/**
+ * Load saved game selection from server
+ */
+async function loadSavedSelection() {
+  try {
+    const response = await fetch('/api/selected-game');
+    if (!response.ok) {
+      throw new Error('Failed to load selection');
+    }
+    
+    const data = await response.json();
+    return data.gameId;
+  } catch (error) {
+    console.error('❌ Failed to load saved selection:', error);
+    return null;
+  }
 }
 
 /**
