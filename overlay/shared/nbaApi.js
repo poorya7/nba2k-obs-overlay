@@ -37,6 +37,35 @@ async function fetchTodaysGames() {
 }
 
 /**
+ * Parse ESPN status to SHORT format (matching transition-test.html)
+ * "1st Quarter 8:32" -> "Q1 8:32"
+ * "4th Quarter 3:45" -> "Q4 3:45"
+ * "Overtime 2:30" -> "OT 2:30"
+ */
+function parseStatusToShortFormat(statusDetail) {
+  // Already short? Return as-is
+  if (/^Q\d+\s+[\d:.]+/.test(statusDetail) || /^OT\s+[\d:.]+/.test(statusDetail)) {
+    return statusDetail;
+  }
+  
+  // ESPN FORMAT: "4:59 - 4th Quarter" OR "31.2 - 4th Quarter" -> "Q4 4:59" or "Q4 31.2"
+  // Handle BOTH colon and decimal formats!
+  const quarterMatch = statusDetail.match(/([\d:.]+)\s+-\s+(\d+)(?:st|nd|rd|th)\s+Quarter/i);
+  if (quarterMatch) {
+    return `Q${quarterMatch[2]} ${quarterMatch[1]}`;
+  }
+  
+  // "3:45 - Overtime" OR "31.2 - Overtime" -> "OT 3:45" or "OT 31.2"
+  const otMatch = statusDetail.match(/([\d:.]+)\s+-\s+(?:Overtime|OT)/i);
+  if (otMatch) {
+    return `OT ${otMatch[1]}`;
+  }
+  
+  // Return as-is for other cases (Halftime, Final, etc)
+  return statusDetail;
+}
+
+/**
  * Get game status information
  */
 function getGameStatus(competition) {
@@ -53,7 +82,7 @@ function getGameStatus(competition) {
   } else if (status === 'STATUS_IN_PROGRESS') {
     return { 
       status: 'live', 
-      text: statusDetail, // e.g., "Q3 8:32"
+      text: parseStatusToShortFormat(statusDetail), // Parse to short format!
       isLive: true,
       isFinal: false
     };
@@ -68,7 +97,7 @@ function getGameStatus(competition) {
   
   return { 
     status: 'unknown', 
-    text: statusDetail,
+    text: parseStatusToShortFormat(statusDetail),
     isLive: false,
     isFinal: false
   };

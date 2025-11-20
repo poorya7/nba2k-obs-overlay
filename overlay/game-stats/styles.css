@@ -1,3 +1,8 @@
+/**
+ * NBA Game Overlay - Pill Design Styles
+ * Extracted from transition-test.html (lines 10-343)
+ */
+
 * {
   margin: 0;
   padding: 0;
@@ -5,123 +10,179 @@
 }
 
 body {
+  font-family: 'Inter', sans-serif;
   background: transparent;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: #fff;
   overflow: hidden;
 }
 
 .overlay-container {
-  padding: 20px;
+  position: fixed;
+  top: 40px;
+  left: 40px;
+  z-index: 10;
 }
 
-/* Game Card */
-.game-card {
-  background: linear-gradient(135deg, #252b3d 0%, #2a3142 100%);
-  border: 1px solid rgba(76, 175, 80, 0.2);
-  border-radius: 10px;
-  padding: 14px 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  min-width: 240px;
-  max-width: 280px;
-}
-
-/* Status Bar */
-.game-status {
-  text-align: center;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 10px;
-  letter-spacing: 0.5px;
-}
-
-.status-scheduled {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
-}
-
-.status-live {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-  animation: pulse 2s infinite;
-}
-
-.status-final {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-/* Teams Container */
-.teams-container {
+/* Pill Container - SCALED 1.5X for visibility on stream */
+.overlay-pill .pill {
+  background: rgb(0, 0, 0);
+  backdrop-filter: none;
+  border-radius: 75px;
+  padding: 9px 18px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 51px;
+  box-sizing: border-box;
+  justify-content: flex-start;
 }
 
-/* Team Display */
-.team {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+.overlay-pill .pill.pregame {
+  min-width: 300px;
+  max-width: 300px;
 }
 
-.team-logo {
-  width: 45px;
-  height: 45px;
-  margin-bottom: 6px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+.overlay-pill .pill.live {
+  min-width: 480px;
+  max-width: 480px;
 }
 
-.team-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: #b8c5d6;
-  margin-bottom: 3px;
-  min-height: 32px;
-  max-width: 85px;
+.overlay-pill .pill.final {
+  min-width: 390px;
+  max-width: 390px;
+}
+
+/* Team Display - SCALED 1.5X */
+.overlay-pill .team {
   display: flex;
   align-items: center;
-  justify-content: center;
-  line-height: 1.2;
-  text-align: center;
+  gap: 9px;
 }
 
-.team-record {
-  font-size: 10px;
-  color: #8a95a8;
-  margin-bottom: 6px;
+.overlay-pill .logo {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
 }
 
-.team-score {
-  font-size: 28px;
+.overlay-pill .score {
+  font-size: 30px;
   font-weight: 900;
   color: #4CAF50;
-  text-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-  line-height: 1;
+  font-family: 'Poppins', sans-serif;
+  width: 53px;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
-/* VS Divider */
-.vs-divider {
-  font-size: 14px;
+/* Score animation - Glow Pulse (Animation #7) */
+@keyframes glowPulse {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 5px #4CAF50;
+  }
+  50% { 
+    transform: scale(1.2);
+    text-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50, 0 0 40px #4CAF50;
+  }
+}
+
+.score.anim-glow {
+  animation: glowPulse 0.6s ease-out;
+}
+
+.overlay-pill .vs {
+  font-size: 17px;
+  color: #666;
   font-weight: 700;
-  color: #6b7280;
-  text-transform: uppercase;
 }
 
-/* No Game Selected */
+/* Status Pills - SCALED 1.5X */
+.overlay-pill .status-pill {
+  background: rgba(255, 71, 87, 0.3);
+  padding: 6px 15px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #ff4757;
+  white-space: nowrap;
+}
+
+.overlay-pill .time-pill {
+  background: rgba(0, 150, 136, 0.25);
+  padding: 6px 15px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #26A69A;
+  min-width: 90px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.overlay-pill .countdown-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFA726;
+  white-space: nowrap;
+}
+
+/* Element transitions */
+.element {
+  transition: all 0.5s ease;
+}
+
+.element.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.element.display-none {
+  display: none !important;
+}
+
+/* Box expansion animations */
+.expand-smooth .pill {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Content fade animations */
+.content-fade .element {
+  transition: all 0.4s ease;
+}
+
+/* Pregame elements fade out */
+.content-fade #pregameLogo1,
+.content-fade #pregameVs,
+.content-fade #pregameLogo2,
+.content-fade #countdown {
+  transition: opacity 0.4s ease;
+}
+
+/* Live elements slide up from bottom */
+.content-fade #liveStatus,
+.content-fade #liveLogo1,
+.content-fade #leftScore,
+.content-fade #liveVs,
+.content-fade #rightScore,
+.content-fade #liveLogo2,
+.content-fade #gameTime {
+  transition: all 0.4s ease;
+}
+
+.content-fade #liveStatus.hidden,
+.content-fade #liveLogo1.hidden,
+.content-fade #leftScore.hidden,
+.content-fade #liveVs.hidden,
+.content-fade #rightScore.hidden,
+.content-fade #liveLogo2.hidden,
+.content-fade #gameTime.hidden {
+  transform: translateY(10px);
+}
+
+/* No Game Selected State */
 .no-game {
   background: rgba(17, 24, 39, 0.95);
   backdrop-filter: blur(10px);
@@ -152,38 +213,6 @@ body {
   line-height: 1.6;
 }
 
-/* Loading State */
-.loading {
-  background: rgba(17, 24, 39, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 32px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  min-width: 400px;
-}
-
-.loading-spinner {
-  font-size: 32px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.loading-text {
-  font-size: 16px;
-  color: #9ca3af;
-  margin-top: 16px;
-}
-
 /* Error State */
 .error {
   background: rgba(127, 29, 29, 0.95);
@@ -205,4 +234,3 @@ body {
   color: #fca5a5;
   line-height: 1.6;
 }
-
