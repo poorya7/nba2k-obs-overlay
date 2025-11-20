@@ -65,6 +65,11 @@ body {
   max-width: 320px;
 }
 
+.overlay-pill .pill.final {
+  min-width: 260px;
+  max-width: 260px;
+}
+
 .overlay-pill .team {
   display: flex;
   align-items: center;
@@ -222,32 +227,32 @@ body {
 /* Control Panel */
 .control-panel {
   position: fixed;
-  bottom: 40px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.9);
-  padding: 30px;
-  border-radius: 12px;
+  padding: 15px 20px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   z-index: 100;
   backdrop-filter: blur(10px);
-  min-width: 700px;
+  min-width: 500px;
 }
 
 .control-panel h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
+  font-size: 14px;
+  margin-bottom: 10px;
   text-align: center;
   color: #4CAF50;
 }
 
 .control-section {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .control-section h3 {
-  font-size: 14px;
-  margin-bottom: 10px;
+  font-size: 11px;
+  margin-bottom: 6px;
   color: #999;
   text-align: center;
 }
@@ -317,16 +322,16 @@ body {
 
 .info {
   text-align: center;
-  margin-top: 15px;
-  font-size: 12px;
+  margin-top: 8px;
+  font-size: 9px;
   color: #888;
 }
 
 .state-indicator {
   text-align: center;
-  margin-top: 10px;
-  font-size: 14px;
-  font-weight: 700;
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .state-indicator.pregame {
@@ -342,13 +347,14 @@ body {
   <div class="background"></div>
 
   <div class="overlay-container">
+    <!-- First overlay: Pre-game to Live -->
     <div class="overlay-pill expand-smooth content-fade" id="overlay">
       <div class="pill pregame" id="pillBox">
         <!-- Pre-game content (compact) -->
+        <div class="element" style="background: rgba(255, 152, 0, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #FFA726; white-space: nowrap; min-width: 75px; text-align: center;" id="countdown">Starts in 0:05</div>
         <img src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" class="logo element" id="pregameLogo1">
         <div class="vs element" id="pregameVs">vs</div>
         <img src="https://a.espncdn.com/i/teamlogos/nba/500/orl.png" class="logo element" id="pregameLogo2">
-        <div class="element" style="background: rgba(255, 152, 0, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #FFA726; white-space: nowrap;" id="countdown">Starts in 0:05</div>
         
         <!-- Live content (full width) -->
         <div class="status-pill element hidden display-none" id="liveStatus">🔴 LIVE</div>
@@ -360,20 +366,53 @@ body {
         <div class="time-pill element hidden display-none" id="gameTime">Q1 12:00</div>
       </div>
     </div>
+
+    <!-- Second overlay: Live to Final -->
+    <div class="overlay-pill expand-smooth content-fade" id="overlay2" style="margin-top: 40px;">
+      <div class="pill live" id="pillBox2">
+        <!-- Live content -->
+        <div class="status-pill element" id="liveStatus2">🔴 LIVE</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" class="logo element" id="liveLogo1_2">
+        <span class="score element" id="leftScore2">108</span>
+        <div class="vs element" id="liveVs2">-</div>
+        <span class="score element" id="rightScore2">112</span>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" class="logo element" id="liveLogo2_2">
+        <div class="time-pill element" id="gameTime2">Q4 0:00</div>
+        
+        <!-- Final content -->
+        <div class="element hidden display-none" style="background: rgba(76, 175, 80, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #66BB6A; white-space: nowrap;" id="finalStatus">FINAL</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" class="logo element hidden display-none" id="finalLogo1">
+        <span class="score element hidden display-none" id="finalLeftScore">108</span>
+        <div class="vs element hidden display-none" id="finalVs">-</div>
+        <span class="score element hidden display-none" id="finalRightScore">112</span>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" class="logo element hidden display-none" id="finalLogo2">
+      </div>
+    </div>
   </div>
 
   <div class="control-panel">
-    <h2>📦 Pre-game to Live Transition Test</h2>
+    <h2>📦 Game State Transition Tests</h2>
     
-    <div class="action-buttons">
-      <button class="action-btn start" id="startBtn">🎮 Start Game (Expand to Live)</button>
-      <button class="action-btn reset" id="resetBtn">🔄 Reset to Pre-game</button>
+    <div class="control-section">
+      <h3>1️⃣ Pre-game → Live</h3>
+      <div class="action-buttons">
+        <button class="action-btn start" id="startBtn">🎮 Start Game</button>
+        <button class="action-btn reset" id="resetBtn">🔄 Reset</button>
+      </div>
+      <div class="state-indicator pregame" id="stateIndicator">Current State: PRE-GAME (Countdown: 0:05)</div>
     </div>
 
-    <div class="state-indicator pregame" id="stateIndicator">Current State: PRE-GAME (Countdown: 0:05)</div>
+    <div class="control-section" style="margin-top: 30px;">
+      <h3>2️⃣ Live → Final</h3>
+      <div class="action-buttons">
+        <button class="action-btn start" id="endBtn">🏁 End Game</button>
+        <button class="action-btn reset" id="resetBtn2">🔄 Reset</button>
+      </div>
+      <div class="state-indicator live" id="stateIndicator2">Current State: LIVE (Q4 0:00)</div>
+    </div>
 
     <div class="info">
-      Animation: Smooth box expansion, pregame fades out, live content slides up from bottom
+      Animation: Smooth transitions with fade out and slide up effects
     </div>
   </div>
 
@@ -392,7 +431,15 @@ body {
       document.getElementById('pregameLogo2'),
       document.getElementById('countdown')
     ];
-    const liveElements = document.querySelectorAll('.element.hidden');
+    const liveElements = [
+      document.getElementById('liveStatus'),
+      document.getElementById('liveLogo1'),
+      document.getElementById('leftScore'),
+      document.getElementById('liveVs'),
+      document.getElementById('rightScore'),
+      document.getElementById('liveLogo2'),
+      document.getElementById('gameTime')
+    ];
     const startBtn = document.getElementById('startBtn');
     const resetBtn = document.getElementById('resetBtn');
     const stateIndicator = document.getElementById('stateIndicator');
@@ -486,6 +533,99 @@ body {
       
       // Restart countdown
       startCountdown();
+    });
+
+    // ========== SECOND OVERLAY: LIVE TO FINAL ==========
+    let isFinal = false;
+    
+    const overlay2 = document.getElementById('overlay2');
+    const pillBox2 = document.getElementById('pillBox2');
+    const liveElements2 = [
+      document.getElementById('liveStatus2'),
+      document.getElementById('liveLogo1_2'),
+      document.getElementById('leftScore2'),
+      document.getElementById('liveVs2'),
+      document.getElementById('rightScore2'),
+      document.getElementById('liveLogo2_2'),
+      document.getElementById('gameTime2')
+    ];
+    const finalElements2 = [
+      document.getElementById('finalStatus'),
+      document.getElementById('finalLogo1'),
+      document.getElementById('finalLeftScore'),
+      document.getElementById('finalVs'),
+      document.getElementById('finalRightScore'),
+      document.getElementById('finalLogo2')
+    ];
+    const endBtn = document.getElementById('endBtn');
+    const resetBtn2 = document.getElementById('resetBtn2');
+    const stateIndicator2 = document.getElementById('stateIndicator2');
+
+    // Transition to final
+    function transitionToFinal() {
+      isFinal = true;
+      
+      // Fade out live elements
+      liveElements2.forEach(el => el.classList.add('hidden'));
+      
+      // Wait for fade out, then hide with display:none and shrink box
+      setTimeout(() => {
+        liveElements2.forEach(el => el.classList.add('display-none'));
+        pillBox2.classList.remove('live');
+        pillBox2.classList.add('final');
+        
+        // Show final content AFTER box fully shrinks (600ms is the box transition time)
+        setTimeout(() => {
+          // First remove display:none
+          finalElements2.forEach(el => el.classList.remove('display-none'));
+          // Force reflow
+          void pillBox2.offsetWidth;
+          // Then fade in
+          finalElements2.forEach(el => el.classList.remove('hidden'));
+          
+          stateIndicator2.textContent = 'Current State: FINAL';
+          stateIndicator2.className = 'state-indicator';
+          stateIndicator2.style.color = '#66BB6A';
+          endBtn.disabled = true;
+          endBtn.style.opacity = '0.5';
+        }, 650);
+      }, 400);
+    }
+
+    // End game button
+    endBtn.addEventListener('click', () => {
+      if (!isFinal) {
+        setTimeout(() => {
+          transitionToFinal();
+        }, 300);
+      }
+    });
+
+    // Reset second overlay
+    resetBtn2.addEventListener('click', () => {
+      isFinal = false;
+      
+      // Hide final elements
+      finalElements2.forEach(el => el.classList.add('hidden'));
+      
+      setTimeout(() => {
+        finalElements2.forEach(el => el.classList.add('display-none'));
+        
+        // Expand box back to live
+        pillBox2.classList.remove('final');
+        pillBox2.classList.add('live');
+        
+        // Show live elements after box expands
+        setTimeout(() => {
+          liveElements2.forEach(el => el.classList.remove('display-none', 'hidden'));
+        }, 650);
+      }, 400);
+      
+      stateIndicator2.textContent = 'Current State: LIVE (Q4 0:00)';
+      stateIndicator2.className = 'state-indicator live';
+      stateIndicator2.style.color = '';
+      endBtn.disabled = false;
+      endBtn.style.opacity = '1';
     });
 
     // Initialize
