@@ -35,23 +35,31 @@ class StateRenderer {
   /**
    * Helper: Generate team logo element
    */
-  static _pillLogo(logoUrl, state, position) {
-    return `<img src="${logoUrl}" class="logo element" id="${state}Logo${position}">`;
+  static _pillLogo(logoUrl, state, position, hiddenClass = '') {
+    return `<img src="${logoUrl}" class="logo element ${hiddenClass}" id="${state}Logo${position}">`;
   }
 
   /**
    * Helper: Generate score element
    */
-  static _pillScore(score, state, side) {
-    const scoreId = side === 'left' ? `${state}LeftScore` : `${state}RightScore`;
-    return `<span class="score element" id="${scoreId}">${score || '0'}</span>`;
+  static _pillScore(score, state, side, hiddenClass = '') {
+    // Live and overtime states use simple IDs for score updates
+    let scoreId;
+    if (state === 'live') {
+      scoreId = side === 'left' ? 'leftScore' : 'rightScore';
+    } else if (state === 'overtime') {
+      scoreId = side === 'left' ? 'otLeftScore' : 'otRightScore';
+    } else {
+      scoreId = side === 'left' ? `${state}LeftScore` : `${state}RightScore`;
+    }
+    return `<span class="score element ${hiddenClass}" id="${scoreId}">${score}</span>`;
   }
 
   /**
    * Helper: Generate vs divider
    */
-  static _pillDivider(state, text = '-') {
-    return `<div class="vs element" id="${state}Vs">${text}</div>`;
+  static _pillDivider(state, text = '-', hiddenClass = '') {
+    return `<div class="vs element ${hiddenClass}" id="${state}Vs">${text}</div>`;
   }
   /**
    * Render layout based on type
