@@ -410,6 +410,37 @@ body {
         <img src="https://a.espncdn.com/i/teamlogos/nba/500/dal.png" class="logo element hidden display-none" id="halftimeLogo2">
       </div>
     </div>
+
+    <!-- Fourth overlay: Live to Overtime to Final -->
+    <div class="overlay-pill expand-smooth content-fade" id="overlay4" style="margin-top: 40px;">
+      <div class="pill live" id="pillBox4">
+        <!-- Live content (Q4 ending tied) -->
+        <div class="status-pill element" id="liveStatus4">🔴 LIVE</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/den.png" class="logo element" id="liveLogo1_4">
+        <span class="score element" id="leftScore4">115</span>
+        <div class="vs element" id="liveVs4">-</div>
+        <span class="score element" id="rightScore4">115</span>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/por.png" class="logo element" id="liveLogo2_4">
+        <div class="time-pill element" id="gameTime4">Q4 0:00</div>
+        
+        <!-- Overtime content -->
+        <div class="status-pill element hidden display-none" id="otStatus">🔴 LIVE</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/den.png" class="logo element hidden display-none" id="otLogo1">
+        <span class="score element hidden display-none" id="otLeftScore">118</span>
+        <div class="vs element hidden display-none" id="otVs">-</div>
+        <span class="score element hidden display-none" id="otRightScore">121</span>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/por.png" class="logo element hidden display-none" id="otLogo2">
+        <div class="time-pill element hidden display-none" style="background: rgba(156, 39, 176, 0.25); color: #AB47BC;" id="otTime">OT 0:00</div>
+        
+        <!-- Final content -->
+        <div class="element hidden display-none" style="background: rgba(76, 175, 80, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #66BB6A; white-space: nowrap; min-width: 75px; text-align: center;" id="finalStatus4">FINAL/OT</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/den.png" class="logo element hidden display-none" id="finalLogo1_4">
+        <span class="score element hidden display-none" id="finalLeftScore4">118</span>
+        <div class="vs element hidden display-none" id="finalVs4">-</div>
+        <span class="score element hidden display-none" id="finalRightScore4">121</span>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/por.png" class="logo element hidden display-none" id="finalLogo2_4">
+      </div>
+    </div>
   </div>
 
   <div class="control-panel">
@@ -440,6 +471,16 @@ body {
         <button class="action-btn reset" id="resetBtn3">🔄 Reset</button>
       </div>
       <div class="state-indicator live" id="stateIndicator3">Current State: LIVE (Q2 0:00)</div>
+    </div>
+
+    <div class="control-section" style="margin-top: 20px;">
+      <h3>4️⃣ Live → OT → Final</h3>
+      <div class="action-buttons">
+        <button class="action-btn start" id="otBtn">⏱️ Overtime</button>
+        <button class="action-btn start" id="endOtBtn" style="display: none;">🏁 End OT</button>
+        <button class="action-btn reset" id="resetBtn4">🔄 Reset</button>
+      </div>
+      <div class="state-indicator live" id="stateIndicator4">Current State: LIVE (Q4 0:00 - Tied)</div>
     </div>
 
     <div class="info">
@@ -750,6 +791,150 @@ body {
       stateIndicator3.style.color = '';
       halftimeBtn.disabled = false;
       halftimeBtn.style.opacity = '1';
+    });
+
+    // ========== FOURTH OVERLAY: LIVE TO OVERTIME TO FINAL ==========
+    let currentState4 = 'live'; // 'live', 'ot', 'final'
+    
+    const overlay4 = document.getElementById('overlay4');
+    const pillBox4 = document.getElementById('pillBox4');
+    const liveElements4 = [
+      document.getElementById('liveStatus4'),
+      document.getElementById('liveLogo1_4'),
+      document.getElementById('leftScore4'),
+      document.getElementById('liveVs4'),
+      document.getElementById('rightScore4'),
+      document.getElementById('liveLogo2_4'),
+      document.getElementById('gameTime4')
+    ];
+    const otElements4 = [
+      document.getElementById('otStatus'),
+      document.getElementById('otLogo1'),
+      document.getElementById('otLeftScore'),
+      document.getElementById('otVs'),
+      document.getElementById('otRightScore'),
+      document.getElementById('otLogo2'),
+      document.getElementById('otTime')
+    ];
+    const finalElements4 = [
+      document.getElementById('finalStatus4'),
+      document.getElementById('finalLogo1_4'),
+      document.getElementById('finalLeftScore4'),
+      document.getElementById('finalVs4'),
+      document.getElementById('finalRightScore4'),
+      document.getElementById('finalLogo2_4')
+    ];
+    const otBtn = document.getElementById('otBtn');
+    const endOtBtn = document.getElementById('endOtBtn');
+    const resetBtn4 = document.getElementById('resetBtn4');
+    const stateIndicator4 = document.getElementById('stateIndicator4');
+
+    // Transition to overtime
+    function transitionToOT() {
+      currentState4 = 'ot';
+      
+      // Fade out live elements
+      liveElements4.forEach(el => el.classList.add('hidden'));
+      
+      // Wait for fade out, then switch content (no box size change, stays live width)
+      setTimeout(() => {
+        liveElements4.forEach(el => el.classList.add('display-none'));
+        
+        // Show OT content
+        setTimeout(() => {
+          otElements4.forEach(el => el.classList.remove('display-none'));
+          void pillBox4.offsetWidth;
+          otElements4.forEach(el => el.classList.remove('hidden'));
+          
+          stateIndicator4.textContent = 'Current State: OVERTIME';
+          stateIndicator4.style.color = '#AB47BC';
+          otBtn.style.display = 'none';
+          endOtBtn.style.display = 'block';
+        }, 100);
+      }, 400);
+    }
+
+    // Transition to final from OT
+    function transitionOTToFinal() {
+      currentState4 = 'final';
+      
+      // Fade out OT elements
+      otElements4.forEach(el => el.classList.add('hidden'));
+      
+      // Wait for fade out, then shrink box
+      setTimeout(() => {
+        otElements4.forEach(el => el.classList.add('display-none'));
+        pillBox4.classList.remove('live');
+        pillBox4.classList.add('final');
+        
+        // Show final content after box shrinks
+        setTimeout(() => {
+          finalElements4.forEach(el => el.classList.remove('display-none'));
+          void pillBox4.offsetWidth;
+          finalElements4.forEach(el => el.classList.remove('hidden'));
+          
+          stateIndicator4.textContent = 'Current State: FINAL/OT';
+          stateIndicator4.className = 'state-indicator';
+          stateIndicator4.style.color = '#66BB6A';
+          endOtBtn.disabled = true;
+          endOtBtn.style.opacity = '0.5';
+        }, 650);
+      }, 400);
+    }
+
+    // OT button
+    otBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        transitionToOT();
+      }, 300);
+    });
+
+    // End OT button
+    endOtBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        transitionOTToFinal();
+      }, 300);
+    });
+
+    // Reset fourth overlay
+    resetBtn4.addEventListener('click', () => {
+      currentState4 = 'live';
+      
+      if (pillBox4.classList.contains('final')) {
+        // Reset from final
+        finalElements4.forEach(el => el.classList.add('hidden'));
+        
+        setTimeout(() => {
+          finalElements4.forEach(el => el.classList.add('display-none'));
+          pillBox4.classList.remove('final');
+          pillBox4.classList.add('live');
+          
+          setTimeout(() => {
+            liveElements4.forEach(el => el.classList.remove('display-none', 'hidden'));
+          }, 650);
+        }, 400);
+      } else {
+        // Reset from OT
+        otElements4.forEach(el => el.classList.add('hidden'));
+        
+        setTimeout(() => {
+          otElements4.forEach(el => el.classList.add('display-none'));
+          
+          setTimeout(() => {
+            liveElements4.forEach(el => el.classList.remove('display-none', 'hidden'));
+          }, 100);
+        }, 400);
+      }
+      
+      stateIndicator4.textContent = 'Current State: LIVE (Q4 0:00 - Tied)';
+      stateIndicator4.className = 'state-indicator live';
+      stateIndicator4.style.color = '';
+      otBtn.style.display = 'block';
+      otBtn.disabled = false;
+      otBtn.style.opacity = '1';
+      endOtBtn.style.display = 'none';
+      endOtBtn.disabled = false;
+      endOtBtn.style.opacity = '1';
     });
 
     // Initialize
