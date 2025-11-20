@@ -388,6 +388,28 @@ body {
         <img src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" class="logo element hidden display-none" id="finalLogo2">
       </div>
     </div>
+
+    <!-- Third overlay: Live to Halftime -->
+    <div class="overlay-pill expand-smooth content-fade" id="overlay3" style="margin-top: 40px;">
+      <div class="pill live" id="pillBox3">
+        <!-- Live content -->
+        <div class="status-pill element" id="liveStatus3">🔴 LIVE</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/mia.png" class="logo element" id="liveLogo1_3">
+        <span class="score element" id="leftScore3">54</span>
+        <div class="vs element" id="liveVs3">-</div>
+        <span class="score element" id="rightScore3">61</span>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/dal.png" class="logo element" id="liveLogo2_3">
+        <div class="time-pill element" id="gameTime3">Q2 0:00</div>
+        
+        <!-- Halftime content -->
+        <div class="element hidden display-none" style="background: rgba(33, 150, 243, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #42A5F5; white-space: nowrap; min-width: 75px; text-align: center;" id="halftimeStatus">HALFTIME</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/mia.png" class="logo element hidden display-none" id="halftimeLogo1">
+        <span class="score element hidden display-none" id="halftimeLeftScore">54</span>
+        <div class="vs element hidden display-none" id="halftimeVs">-</div>
+        <span class="score element hidden display-none" id="halftimeRightScore">61</span>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/dal.png" class="logo element hidden display-none" id="halftimeLogo2">
+      </div>
+    </div>
   </div>
 
   <div class="control-panel">
@@ -402,13 +424,22 @@ body {
       <div class="state-indicator pregame" id="stateIndicator">Current State: PRE-GAME (Countdown: 0:05)</div>
     </div>
 
-    <div class="control-section" style="margin-top: 30px;">
+    <div class="control-section" style="margin-top: 20px;">
       <h3>2️⃣ Live → Final</h3>
       <div class="action-buttons">
         <button class="action-btn start" id="endBtn">🏁 End Game</button>
         <button class="action-btn reset" id="resetBtn2">🔄 Reset</button>
       </div>
       <div class="state-indicator live" id="stateIndicator2">Current State: LIVE (Q4 0:00)</div>
+    </div>
+
+    <div class="control-section" style="margin-top: 20px;">
+      <h3>3️⃣ Live ↔️ Halftime</h3>
+      <div class="action-buttons">
+        <button class="action-btn start" id="halftimeBtn">⏸️ Halftime</button>
+        <button class="action-btn reset" id="resetBtn3">🔄 Reset</button>
+      </div>
+      <div class="state-indicator live" id="stateIndicator3">Current State: LIVE (Q2 0:00)</div>
     </div>
 
     <div class="info">
@@ -626,6 +657,99 @@ body {
       stateIndicator2.style.color = '';
       endBtn.disabled = false;
       endBtn.style.opacity = '1';
+    });
+
+    // ========== THIRD OVERLAY: LIVE TO HALFTIME ==========
+    let isHalftime = false;
+    
+    const overlay3 = document.getElementById('overlay3');
+    const pillBox3 = document.getElementById('pillBox3');
+    const liveElements3 = [
+      document.getElementById('liveStatus3'),
+      document.getElementById('liveLogo1_3'),
+      document.getElementById('leftScore3'),
+      document.getElementById('liveVs3'),
+      document.getElementById('rightScore3'),
+      document.getElementById('liveLogo2_3'),
+      document.getElementById('gameTime3')
+    ];
+    const halftimeElements3 = [
+      document.getElementById('halftimeStatus'),
+      document.getElementById('halftimeLogo1'),
+      document.getElementById('halftimeLeftScore'),
+      document.getElementById('halftimeVs'),
+      document.getElementById('halftimeRightScore'),
+      document.getElementById('halftimeLogo2')
+    ];
+    const halftimeBtn = document.getElementById('halftimeBtn');
+    const resetBtn3 = document.getElementById('resetBtn3');
+    const stateIndicator3 = document.getElementById('stateIndicator3');
+
+    // Transition to halftime
+    function transitionToHalftime() {
+      isHalftime = true;
+      
+      // Fade out live elements
+      liveElements3.forEach(el => el.classList.add('hidden'));
+      
+      // Wait for fade out, then hide with display:none and shrink box
+      setTimeout(() => {
+        liveElements3.forEach(el => el.classList.add('display-none'));
+        pillBox3.classList.remove('live');
+        pillBox3.classList.add('final');
+        
+        // Show halftime content AFTER box fully shrinks
+        setTimeout(() => {
+          // First remove display:none
+          halftimeElements3.forEach(el => el.classList.remove('display-none'));
+          // Force reflow
+          void pillBox3.offsetWidth;
+          // Then fade in
+          halftimeElements3.forEach(el => el.classList.remove('hidden'));
+          
+          stateIndicator3.textContent = 'Current State: HALFTIME';
+          stateIndicator3.className = 'state-indicator';
+          stateIndicator3.style.color = '#42A5F5';
+          halftimeBtn.disabled = true;
+          halftimeBtn.style.opacity = '0.5';
+        }, 650);
+      }, 400);
+    }
+
+    // Halftime button
+    halftimeBtn.addEventListener('click', () => {
+      if (!isHalftime) {
+        setTimeout(() => {
+          transitionToHalftime();
+        }, 300);
+      }
+    });
+
+    // Reset third overlay
+    resetBtn3.addEventListener('click', () => {
+      isHalftime = false;
+      
+      // Hide halftime elements
+      halftimeElements3.forEach(el => el.classList.add('hidden'));
+      
+      setTimeout(() => {
+        halftimeElements3.forEach(el => el.classList.add('display-none'));
+        
+        // Expand box back to live
+        pillBox3.classList.remove('final');
+        pillBox3.classList.add('live');
+        
+        // Show live elements after box expands
+        setTimeout(() => {
+          liveElements3.forEach(el => el.classList.remove('display-none', 'hidden'));
+        }, 650);
+      }, 400);
+      
+      stateIndicator3.textContent = 'Current State: LIVE (Q2 0:00)';
+      stateIndicator3.className = 'state-indicator live';
+      stateIndicator3.style.color = '';
+      halftimeBtn.disabled = false;
+      halftimeBtn.style.opacity = '1';
     });
 
     // Initialize
