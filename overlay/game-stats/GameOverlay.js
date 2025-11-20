@@ -440,9 +440,7 @@ class GameOverlay {
       // Update countdown display
       const countdownEl = document.getElementById('countdown');
       if (countdownEl) {
-        const minutes = Math.floor(this.countdown / 60);
-        const seconds = this.countdown % 60;
-        const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        const timeStr = StateRenderer.formatCountdown(this.countdown);
         countdownEl.textContent = `Starts in ${timeStr}`;
       }
     }, 1000);

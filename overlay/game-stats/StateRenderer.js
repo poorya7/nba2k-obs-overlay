@@ -7,6 +7,25 @@
 
 class StateRenderer {
   /**
+   * Format countdown time smartly
+   * Shows HH:MM:SS when >= 1 hour, MM:SS when < 1 hour
+   * @param {number} totalSeconds - Total seconds until game starts
+   * @returns {string} Formatted time string
+   */
+  static formatCountdown(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    
+    if (hours > 0) {
+      // Show hours: "11:24:04"
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    } else {
+      // No hours: "22:11"
+      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+  }
+  /**
    * Render layout based on type
    * @param {Object} gameData - Game data object
    * @param {number} countdown - Seconds until game starts  
@@ -27,9 +46,7 @@ class StateRenderer {
    * PILL LAYOUT - Original pill design
    */
   static renderPillLayout(gameData, countdown, activeState) {
-    const minutes = Math.floor(countdown / 60);
-    const seconds = countdown % 60;
-    const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    const timeStr = StateRenderer.formatCountdown(countdown);
     
     const hiddenClass = (state) => state === activeState ? '' : 'hidden display-none';
     
@@ -207,9 +224,8 @@ class StateRenderer {
   static updateCountdown(countdown) {
     const countdownEl = document.getElementById('countdown');
     if (countdownEl) {
-      const minutes = Math.floor(countdown / 60);
-      const seconds = countdown % 60;
-      countdownEl.textContent = `Starts in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+      const timeStr = StateRenderer.formatCountdown(countdown);
+      countdownEl.textContent = `Starts in ${timeStr}`;
     }
   }
   
