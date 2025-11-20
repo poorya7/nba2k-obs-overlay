@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State Transition Animation Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../../game-stream.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.overlay-container {
+  position: fixed;
+  top: 40px;
+  left: 40px;
+  z-index: 10;
+}
+
+.overlay-pill .pill {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 34px;
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
+
+.overlay-pill .pill.pregame {
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.overlay-pill .pill.live {
+  min-width: 320px;
+  max-width: 320px;
+}
+
+.overlay-pill .team {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.overlay-pill .logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+
+.overlay-pill .score {
+  font-size: 20px;
+  font-weight: 900;
+  color: #4CAF50;
+  font-family: 'Poppins', sans-serif;
+  width: 35px;
+  text-align: center;
+}
+
+.overlay-pill .vs {
+  font-size: 11px;
+  color: #666;
+  font-weight: 700;
+}
+
+.overlay-pill .status-pill {
+  background: rgba(255, 71, 87, 0.3);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 900;
+  color: #ff4757;
+  white-space: nowrap;
+}
+
+.overlay-pill .time-pill {
+  background: rgba(0, 150, 136, 0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #26A69A;
+  min-width: 60px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.overlay-pill .countdown-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #FFA726;
+  white-space: nowrap;
+}
+
+/* Element transitions */
+.element {
+  transition: all 0.5s ease;
+}
+
+.element.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.element.display-none {
+  display: none !important;
+}
+
+/* Box expansion animations */
+.expand-smooth .pill {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.expand-bounce .pill {
+  transition: all 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.expand-fast .pill {
+  transition: all 0.4s ease-out;
+}
+
+.expand-slow .pill {
+  transition: all 0.9s ease-in-out;
+}
+
+.expand-elastic .pill {
+  transition: all 0.8s cubic-bezier(0.68, -0.35, 0.265, 1.35);
+}
+
+/* Content fade animations */
+.content-fade .element {
+  transition: all 0.4s ease;
+}
+
+/* Pregame elements fade out */
+.content-fade #pregameLogo1,
+.content-fade #pregameVs,
+.content-fade #pregameLogo2,
+.content-fade #countdown {
+  transition: opacity 0.4s ease;
+}
+
+/* Live elements slide up from bottom */
+.content-fade #liveStatus,
+.content-fade #liveLogo1,
+.content-fade #leftScore,
+.content-fade #liveVs,
+.content-fade #rightScore,
+.content-fade #liveLogo2,
+.content-fade #gameTime {
+  transition: all 0.4s ease;
+}
+
+.content-fade #liveStatus.hidden,
+.content-fade #liveLogo1.hidden,
+.content-fade #leftScore.hidden,
+.content-fade #liveVs.hidden,
+.content-fade #rightScore.hidden,
+.content-fade #liveLogo2.hidden,
+.content-fade #gameTime.hidden {
+  transform: translateY(10px);
+}
+
+.content-slide .element {
+  transition: all 0.4s ease;
+}
+
+.content-slide .element.hidden {
+  transform: translateX(-10px);
+}
+
+.content-scale .element {
+  transition: all 0.4s ease;
+}
+
+.content-scale .element.hidden {
+  transform: scale(0.9);
+}
+
+.content-blur .element {
+  transition: all 0.4s ease;
+  filter: blur(0px);
+}
+
+.content-blur .element.hidden {
+  filter: blur(5px);
+}
+
+.content-instant .element {
+  transition: none;
+}
+
+/* Control Panel */
+.control-panel {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  min-width: 700px;
+}
+
+.control-panel h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #4CAF50;
+}
+
+.control-section {
+  margin-bottom: 20px;
+}
+
+.control-section h3 {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #999;
+  text-align: center;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.anim-btn {
+  padding: 10px 15px;
+  background: rgba(76, 175, 80, 0.2);
+  border: 2px solid #4CAF50;
+  border-radius: 8px;
+  color: #4CAF50;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.anim-btn:hover {
+  background: rgba(76, 175, 80, 0.4);
+  transform: translateY(-2px);
+}
+
+.anim-btn.active {
+  background: #4CAF50;
+  color: #000;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.action-btn {
+  padding: 15px 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.action-btn.start {
+  border-color: #4CAF50;
+  color: #4CAF50;
+}
+
+.action-btn.reset {
+  border-color: #FFA726;
+  color: #FFA726;
+}
+
+.info {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 12px;
+  color: #888;
+}
+
+.state-indicator {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.state-indicator.pregame {
+  color: #FFA726;
+}
+
+.state-indicator.live {
+  color: #4CAF50;
+}
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="overlay-container">
+    <div class="overlay-pill expand-smooth content-fade" id="overlay">
+      <div class="pill pregame" id="pillBox">
+        <!-- Pre-game content (compact) -->
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" class="logo element" id="pregameLogo1">
+        <div class="vs element" id="pregameVs">vs</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/orl.png" class="logo element" id="pregameLogo2">
+        <div class="element" style="background: rgba(255, 152, 0, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #FFA726; white-space: nowrap;" id="countdown">Starts in 0:05</div>
+        
+        <!-- Live content (full width) -->
+        <div class="status-pill element hidden display-none" id="liveStatus">🔴 LIVE</div>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" class="logo element hidden display-none" id="liveLogo1">
+        <span class="score element hidden display-none" id="leftScore">0</span>
+        <div class="vs element hidden display-none" id="liveVs">-</div>
+        <span class="score element hidden display-none" id="rightScore">0</span>
+        <img src="https://a.espncdn.com/i/teamlogos/nba/500/orl.png" class="logo element hidden display-none" id="liveLogo2">
+        <div class="time-pill element hidden display-none" id="gameTime">Q1 12:00</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-panel">
+    <h2>📦 Pre-game to Live Transition Test</h2>
+    
+    <div class="action-buttons">
+      <button class="action-btn start" id="startBtn">🎮 Start Game (Expand to Live)</button>
+      <button class="action-btn reset" id="resetBtn">🔄 Reset to Pre-game</button>
+    </div>
+
+    <div class="state-indicator pregame" id="stateIndicator">Current State: PRE-GAME (Countdown: 0:05)</div>
+
+    <div class="info">
+      Animation: Smooth box expansion, pregame fades out, live content slides up from bottom
+    </div>
+  </div>
+
+  <script>
+    let expandAnimation = 'smooth';
+    let contentAnimation = 'fade';
+    let isLive = false;
+    let countdown = 5;
+    let countdownInterval = null;
+
+    const overlay = document.getElementById('overlay');
+    const pillBox = document.getElementById('pillBox');
+    const pregameElements = [
+      document.getElementById('pregameLogo1'),
+      document.getElementById('pregameVs'),
+      document.getElementById('pregameLogo2'),
+      document.getElementById('countdown')
+    ];
+    const liveElements = document.querySelectorAll('.element.hidden');
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const stateIndicator = document.getElementById('stateIndicator');
+    const countdownEl = document.getElementById('countdown');
+
+    // Start countdown
+    function startCountdown() {
+      countdownInterval = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = `Starts in 0:0${countdown}`;
+        stateIndicator.textContent = `Current State: PRE-GAME (Countdown: 0:0${countdown})`;
+        
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          // Wait 0.3 seconds at 0:00 before transitioning
+          setTimeout(() => {
+            transitionToLive();
+          }, 300);
+        }
+      }, 1000);
+    }
+
+    // Transition to live
+    function transitionToLive() {
+      isLive = true;
+      
+      // Fade out pre-game elements
+      pregameElements.forEach(el => el.classList.add('hidden'));
+      
+      // Wait for fade out, then hide with display:none and expand box
+      setTimeout(() => {
+        pregameElements.forEach(el => el.classList.add('display-none'));
+        pillBox.classList.remove('pregame');
+        pillBox.classList.add('live');
+        
+        // Show live content AFTER box fully expands (600ms is the box transition time)
+        setTimeout(() => {
+          // First remove display:none
+          liveElements.forEach(el => el.classList.remove('display-none'));
+          // Force reflow
+          void pillBox.offsetWidth;
+          // Then fade in
+          liveElements.forEach(el => el.classList.remove('hidden'));
+          
+          stateIndicator.textContent = 'Current State: LIVE GAME';
+          stateIndicator.className = 'state-indicator live';
+          startBtn.disabled = true;
+          startBtn.style.opacity = '0.5';
+        }, 650);
+      }, 400);
+    }
+
+    // Manual start
+    startBtn.addEventListener('click', () => {
+      if (!isLive) {
+        clearInterval(countdownInterval);
+        // Wait 0.3 seconds before transitioning
+        setTimeout(() => {
+          transitionToLive();
+        }, 300);
+      }
+    });
+
+    // Reset
+    resetBtn.addEventListener('click', () => {
+      clearInterval(countdownInterval);
+      isLive = false;
+      countdown = 5;
+      
+      // Hide live elements
+      liveElements.forEach(el => el.classList.add('hidden'));
+      
+      setTimeout(() => {
+        liveElements.forEach(el => el.classList.add('display-none'));
+        
+        // Shrink box back
+        pillBox.classList.remove('live');
+        pillBox.classList.add('pregame');
+        
+        // Show pre-game elements
+        setTimeout(() => {
+          pregameElements.forEach(el => el.classList.remove('display-none', 'hidden'));
+        }, 300);
+      }, 400);
+      
+      countdownEl.textContent = 'Starts in 0:05';
+      stateIndicator.textContent = 'Current State: PRE-GAME (Countdown: 0:05)';
+      stateIndicator.className = 'state-indicator pregame';
+      startBtn.disabled = false;
+      startBtn.style.opacity = '1';
+      
+      // Restart countdown
+      startCountdown();
+    });
+
+    // Initialize
+    startCountdown();
+  </script>
+</body>
+</html>

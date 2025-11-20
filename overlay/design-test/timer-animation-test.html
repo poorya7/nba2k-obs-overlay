@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timer Animation Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../../game-stream.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.overlay-container {
+  position: fixed;
+  top: 40px;
+  left: 40px;
+  z-index: 10;
+}
+
+.overlay-pill .pill {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.overlay-pill .team {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.overlay-pill .logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+
+.overlay-pill .score {
+  font-size: 20px;
+  font-weight: 900;
+  color: #4CAF50;
+  font-family: 'Poppins', sans-serif;
+  width: 35px;
+  text-align: center;
+}
+
+.overlay-pill .vs {
+  font-size: 11px;
+  color: #666;
+  font-weight: 700;
+}
+
+.overlay-pill .status-pill {
+  background: rgba(255, 71, 87, 0.3);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 900;
+  color: #ff4757;
+}
+
+.overlay-pill .time-pill {
+  background: rgba(0, 150, 136, 0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #26A69A;
+  position: relative;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* ===== ANIMATION 1: FADE ===== */
+@keyframes fade {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.time-pill.anim-fade {
+  animation: fade 0.3s ease-in-out;
+}
+
+/* ===== ANIMATION 2: SUBTLE PULSE ===== */
+@keyframes subtlePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.time-pill.anim-subtle-pulse {
+  animation: subtlePulse 0.3s ease-in-out;
+}
+
+/* ===== ANIMATION 3: GLOW FLASH ===== */
+@keyframes glowFlash {
+  0%, 100% { 
+    box-shadow: none;
+  }
+  50% { 
+    box-shadow: 0 0 15px rgba(0, 150, 136, 0.6), 0 0 25px rgba(0, 150, 136, 0.4);
+  }
+}
+
+.time-pill.anim-glow-flash {
+  animation: glowFlash 0.4s ease-out;
+}
+
+/* ===== ANIMATION 4: SLIDE REFRESH ===== */
+@keyframes slideRefresh {
+  0% { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(-5px);
+    opacity: 0.5;
+  }
+  100% { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.time-pill.anim-slide-refresh {
+  animation: slideRefresh 0.4s ease-in-out;
+}
+
+/* ===== ANIMATION 5: FLIP ===== */
+@keyframes flip {
+  0% { 
+    transform: rotateX(0deg);
+  }
+  50% { 
+    transform: rotateX(90deg);
+  }
+  100% { 
+    transform: rotateX(0deg);
+  }
+}
+
+.time-pill.anim-flip {
+  animation: flip 0.4s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+/* ===== ANIMATION 6: BLINK ===== */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+.time-pill.anim-blink {
+  animation: blink 0.4s ease-in-out;
+}
+
+/* ===== ANIMATION 7: SCALE FADE ===== */
+@keyframes scaleFade {
+  0% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.time-pill.anim-scale-fade {
+  animation: scaleFade 0.3s ease-in-out;
+}
+
+/* ===== ANIMATION 8: SHIMMER ===== */
+@keyframes shimmer {
+  0% { 
+    background: rgba(0, 150, 136, 0.25);
+  }
+  50% { 
+    background: rgba(0, 150, 136, 0.5);
+  }
+  100% { 
+    background: rgba(0, 150, 136, 0.25);
+  }
+}
+
+.time-pill.anim-shimmer {
+  animation: shimmer 0.4s ease-in-out;
+}
+
+/* ===== ANIMATION 9: BOUNCE SUBTLE ===== */
+@keyframes bounceSubtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.time-pill.anim-bounce-subtle {
+  animation: bounceSubtle 0.3s ease-out;
+}
+
+/* ===== ANIMATION 10: NONE ===== */
+.time-pill.anim-none {
+  /* No animation - instant update */
+}
+
+/* Control Panel */
+.control-panel {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.control-panel h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #26A69A;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.anim-btn {
+  padding: 12px 20px;
+  background: rgba(0, 150, 136, 0.2);
+  border: 2px solid #26A69A;
+  border-radius: 8px;
+  color: #26A69A;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.anim-btn:hover {
+  background: rgba(0, 150, 136, 0.4);
+  transform: translateY(-2px);
+}
+
+.anim-btn.active {
+  background: #26A69A;
+  color: #000;
+}
+
+.update-button {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.update-btn {
+  padding: 15px 40px;
+  background: rgba(0, 150, 136, 0.3);
+  border: 2px solid #26A69A;
+  border-radius: 8px;
+  color: #26A69A;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.update-btn:hover {
+  background: rgba(0, 150, 136, 0.5);
+  transform: translateY(-2px);
+}
+
+.info {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 12px;
+  color: #888;
+}
+
+.current-time {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #26A69A;
+  font-weight: 700;
+}
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="overlay-container">
+    <div class="overlay-pill">
+      <div class="pill">
+        <div class="status-pill">🔴 LIVE</div>
+        <div class="team">
+          <img src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" class="logo">
+          <span class="score">11</span>
+        </div>
+        <div class="vs">-</div>
+        <div class="team">
+          <span class="score">13</span>
+          <img src="https://a.espncdn.com/i/teamlogos/nba/500/orl.png" class="logo">
+        </div>
+        <div class="time-pill" id="timePill">Q3 8:32</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-panel">
+    <h2>⏱️ Timer Animation Test</h2>
+    
+    <div class="button-grid">
+      <button class="anim-btn active" data-anim="fade">1. Fade</button>
+      <button class="anim-btn" data-anim="subtle-pulse">2. Subtle Pulse</button>
+      <button class="anim-btn" data-anim="glow-flash">3. Glow Flash</button>
+      <button class="anim-btn" data-anim="slide-refresh">4. Slide Refresh</button>
+      <button class="anim-btn" data-anim="flip">5. Flip</button>
+      <button class="anim-btn" data-anim="blink">6. Blink</button>
+      <button class="anim-btn" data-anim="scale-fade">7. Scale Fade</button>
+      <button class="anim-btn" data-anim="shimmer">8. Shimmer</button>
+      <button class="anim-btn" data-anim="bounce-subtle">9. Bounce</button>
+      <button class="anim-btn" data-anim="none">10. None</button>
+    </div>
+
+    <div class="update-button">
+      <button class="update-btn" id="updateBtn">⏰ Update Timer (-1 sec)</button>
+    </div>
+
+    <div class="current-time" id="currentTime">Current: Q3 8:32</div>
+
+    <div class="info">
+      Click an animation style above, then click the button to see the timer update!
+    </div>
+  </div>
+
+  <script>
+    let currentAnimation = 'fade';
+    let quarter = 3;
+    let minutes = 8;
+    let seconds = 32;
+
+    const timePill = document.getElementById('timePill');
+    const updateBtn = document.getElementById('updateBtn');
+    const currentTimeDisplay = document.getElementById('currentTime');
+    const animBtns = document.querySelectorAll('.anim-btn');
+
+    // Select animation
+    animBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        animBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentAnimation = btn.dataset.anim;
+      });
+    });
+
+    // Format time
+    function formatTime() {
+      const mins = String(minutes).padStart(2, '0');
+      const secs = String(seconds).padStart(2, '0');
+      return `Q${quarter} ${mins}:${secs}`;
+    }
+
+    // Update timer
+    function updateTimer() {
+      // Decrease by 1 second
+      seconds--;
+      
+      if (seconds < 0) {
+        seconds = 59;
+        minutes--;
+        
+        if (minutes < 0) {
+          // End of quarter, go to next
+          quarter++;
+          if (quarter > 4) quarter = 1;
+          minutes = 12;
+          seconds = 0;
+        }
+      }
+
+      const newTime = formatTime();
+      
+      // Animate
+      animateTimer(newTime);
+      
+      // Update display
+      currentTimeDisplay.textContent = `Current: ${newTime}`;
+    }
+
+    // Animate timer
+    function animateTimer(newTime) {
+      // Remove any existing animation
+      timePill.className = 'time-pill';
+      
+      // Force reflow
+      void timePill.offsetWidth;
+      
+      // Update time
+      timePill.textContent = newTime;
+      
+      // Add animation (unless "none")
+      if (currentAnimation !== 'none') {
+        timePill.classList.add(`anim-${currentAnimation}`);
+        
+        // Remove animation class after it completes
+        setTimeout(() => {
+          timePill.classList.remove(`anim-${currentAnimation}`);
+        }, 500);
+      }
+    }
+
+    // Update button
+    updateBtn.addEventListener('click', updateTimer);
+  </script>
+</body>
+</html>
+

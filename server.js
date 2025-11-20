@@ -66,6 +66,8 @@ const server = http.createServer((req, res) => {
     filePath = './overlay/design-test/index.html';
   } else if (filePath === './overlay/design-test' || filePath === './overlay/design-test/') {
     filePath = './overlay/design-test/index.html';
+  } else if (filePath === './variations' || filePath === './variations/') {
+    filePath = './overlay/design-test/variations.html';
   }
 
   // Get file extension

@@ -170,37 +170,34 @@ function renderDesignGrid() {
  * Render overlay HTML for a game
  */
 function renderOverlay(game, designClass) {
-  // Determine status display
-  let statusClass, statusText;
+  // FORCE LIVE GAME VIEW FOR PREVIEW
+  const statusClass = 'status-live';
+  const statusText = '🔴 Q3 8:32';
+  const showScores = true;
   
-  if (game.isLive) {
-    statusClass = 'status-live';
-    statusText = `🔴 ${game.statusText}`;
-  } else if (game.isFinal) {
-    statusClass = 'status-final';
-    statusText = '✅ FINAL';
-  } else {
-    statusClass = 'status-scheduled';
-    statusText = window.NBAApi.formatGameTime(game.date);
-  }
+  // Mock scores for preview
+  const awayScore = '82';
+  const homeScore = '78';
   
-  // Show scores only for live or final games
-  const showScores = game.isLive || game.isFinal;
+  // Extract just team name (no city)
+  const getShortTeamName = (fullName) => {
+    const words = fullName.split(' ');
+    // Return last word (team name)
+    return words[words.length - 1];
+  };
   
-  // Split team names for display
+  // Format team name for display (split if needed)
   const formatTeamName = (name, singleLine = false) => {
-    if (singleLine) return name;
-    const words = name.split(' ');
-    if (words.length === 2) return `${words[0]}<br>${words[1]}`;
-    if (words.length === 3) return `${words[0]} ${words[1]}<br>${words[2]}`;
-    return name.replace(' ', '<br>');
+    const shortName = getShortTeamName(name);
+    if (singleLine) return shortName;
+    // For vertical, return as single line since it's already short
+    return shortName;
   };
   
   // HORIZONTAL BAR layout
   if (designClass.startsWith('design-horizontal')) {
     return `
       <div class="game-card">
-        <div class="live-nba-badge">LIVE NBA</div>
         <div class="teams-container">
           <div class="team">
             <img class="team-logo" src="${game.awayTeam.logo}" alt="${game.awayTeam.name}">
@@ -208,13 +205,13 @@ function renderOverlay(game, designClass) {
               <div class="team-name">${formatTeamName(game.awayTeam.name, true)}</div>
               <div class="team-record">${game.awayTeam.record}</div>
             </div>
-            ${showScores ? `<div class="team-score">${game.awayTeam.score}</div>` : ''}
+            <div class="team-score">${awayScore}</div>
           </div>
           
-          <div class="vs-divider">${showScores ? '-' : 'vs'}</div>
+          <div class="vs-divider">-</div>
           
           <div class="team">
-            ${showScores ? `<div class="team-score">${game.homeTeam.score}</div>` : ''}
+            <div class="team-score">${homeScore}</div>
             <div>
               <div class="team-name">${formatTeamName(game.homeTeam.name, true)}</div>
               <div class="team-record">${game.homeTeam.record}</div>
@@ -223,7 +220,7 @@ function renderOverlay(game, designClass) {
           </div>
         </div>
         
-        <div class="game-status ${statusClass}">${statusText}</div>
+        <div class="game-status ${statusClass}">🔴 LIVE • ${statusText}</div>
       </div>
     `;
   }
@@ -231,26 +228,25 @@ function renderOverlay(game, designClass) {
   // VERTICAL SIDEBAR layout
   return `
     <div class="game-card">
-      <div class="live-nba-badge">LIVE NBA</div>
       <div class="teams-container">
         <div class="team">
           <img class="team-logo" src="${game.awayTeam.logo}" alt="${game.awayTeam.name}">
           <div class="team-name">${formatTeamName(game.awayTeam.name)}</div>
           <div class="team-record">${game.awayTeam.record}</div>
-          ${showScores ? `<div class="team-score">${game.awayTeam.score}</div>` : ''}
+          <div class="team-score">${awayScore}</div>
         </div>
         
-        <div class="vs-divider">${showScores ? '-' : 'vs'}</div>
+        <div class="vs-divider">-</div>
         
         <div class="team">
           <img class="team-logo" src="${game.homeTeam.logo}" alt="${game.homeTeam.name}">
           <div class="team-name">${formatTeamName(game.homeTeam.name)}</div>
           <div class="team-record">${game.homeTeam.record}</div>
-          ${showScores ? `<div class="team-score">${game.homeTeam.score}</div>` : ''}
+          <div class="team-score">${homeScore}</div>
         </div>
       </div>
       
-      <div class="game-status ${statusClass}">${statusText}</div>
+      <div class="game-status ${statusClass}">🔴 LIVE<br>${statusText}</div>
     </div>
   `;
 }
