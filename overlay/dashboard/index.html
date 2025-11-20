@@ -252,6 +252,25 @@
     </div>
 
     <div class="section">
+      <div class="section-title">🎮 Simulation Mode (Testing)</div>
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="simulationToggle" style="width: 20px; height: 20px; cursor: pointer;">
+          <span style="font-size: 14px; font-weight: 600; color: #1f2937;">Enable Simulation Mode</span>
+        </label>
+      </div>
+      <div id="simulationControls" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="flex: 1;">
+            <div id="currentState" style="font-size: 16px; font-weight: 600; color: #1f2937; margin-bottom: 4px;">Pregame</div>
+            <div style="font-size: 12px; color: #6b7280;">Current game state</div>
+          </div>
+          <button id="nextStateBtn" class="refresh-btn" style="margin-top: 0;">▶ Next State</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
       <div class="section-title">Preview</div>
       <div id="loading" class="loading">Select a game to see preview</div>
       <div id="preview" class="preview-card"></div>

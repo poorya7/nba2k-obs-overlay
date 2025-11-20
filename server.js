@@ -10,6 +10,10 @@ const PORT = 3000;
 let selectedGameId = null;
 let selectedStyle = 'pill-green'; // default style
 
+// Simulation mode for testing
+let simulationEnabled = false;
+let simulationState = 'pregame'; // pregame, live, halftime, overtime, final
+
 // MIME types for different file extensions
 const MIME_TYPES = {
   '.html': 'text/html',
@@ -70,6 +74,41 @@ const server = http.createServer((req, res) => {
         const data = JSON.parse(body);
         selectedStyle = data.style;
         console.log('🎨 Style changed:', selectedStyle);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true }));
+      } catch (error) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid JSON' }));
+      }
+    });
+    return;
+  }
+
+  // API endpoints for simulation mode
+  if (req.url === '/api/simulation' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ 
+      enabled: simulationEnabled,
+      state: simulationState
+    }));
+    return;
+  }
+
+  if (req.url === '/api/simulation' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body);
+        if (data.enabled !== undefined) {
+          simulationEnabled = data.enabled;
+        }
+        if (data.state !== undefined) {
+          simulationState = data.state;
+        }
+        console.log('🎮 Simulation:', simulationEnabled ? 'ON' : 'OFF', '| State:', simulationState);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true }));
       } catch (error) {

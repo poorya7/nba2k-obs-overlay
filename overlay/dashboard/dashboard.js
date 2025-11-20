@@ -21,6 +21,10 @@ const STYLES = [
 
 let currentStyleIndex = 0;
 
+// Simulation state
+const SIMULATION_STATES = ['pregame', 'live', 'halftime', 'overtime', 'final'];
+let currentSimulationStateIndex = 0;
+
 /**
  * Initialize dashboard on page load
  */
@@ -31,9 +35,14 @@ async function init() {
   document.getElementById('gameSelect').addEventListener('change', handleGameSelection);
   document.getElementById('refreshBtn').addEventListener('click', refreshGames);
   document.getElementById('nextStyleBtn').addEventListener('click', nextStyle);
+  document.getElementById('simulationToggle').addEventListener('change', handleSimulationToggle);
+  document.getElementById('nextStateBtn').addEventListener('click', nextSimulationState);
   
   // Load saved style
   await loadCurrentStyle();
+  
+  // Load simulation state
+  await loadSimulationState();
   
   // Load games
   await loadGames();
@@ -283,6 +292,102 @@ async function nextStyle() {
 function updateStyleDisplay() {
   const currentStyle = STYLES[currentStyleIndex];
   document.getElementById('currentStyle').textContent = currentStyle.name;
+}
+
+/**
+ * Load simulation state from server
+ */
+async function loadSimulationState() {
+  try {
+    const response = await fetch('/api/simulation');
+    if (response.ok) {
+      const data = await response.json();
+      const toggle = document.getElementById('simulationToggle');
+      toggle.checked = data.enabled;
+      
+      // Find state index
+      const stateIndex = SIMULATION_STATES.indexOf(data.state);
+      if (stateIndex !== -1) {
+        currentSimulationStateIndex = stateIndex;
+      }
+      
+      updateSimulationUI();
+    }
+  } catch (error) {
+    console.error('❌ Failed to load simulation state:', error);
+  }
+}
+
+/**
+ * Handle simulation toggle
+ */
+async function handleSimulationToggle(event) {
+  const enabled = event.target.checked;
+  
+  try {
+    const response = await fetch('/api/simulation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled })
+    });
+    
+    if (response.ok) {
+      console.log('🎮 Simulation mode:', enabled ? 'ON' : 'OFF');
+      updateSimulationUI();
+    }
+  } catch (error) {
+    console.error('❌ Failed to toggle simulation:', error);
+  }
+}
+
+/**
+ * Cycle to next simulation state
+ */
+async function nextSimulationState() {
+  currentSimulationStateIndex = (currentSimulationStateIndex + 1) % SIMULATION_STATES.length;
+  const newState = SIMULATION_STATES[currentSimulationStateIndex];
+  
+  try {
+    const response = await fetch('/api/simulation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state: newState })
+    });
+    
+    if (response.ok) {
+      console.log('🎮 Simulation state:', newState);
+      updateSimulationUI();
+    }
+  } catch (error) {
+    console.error('❌ Failed to change state:', error);
+  }
+}
+
+/**
+ * Update simulation UI
+ */
+function updateSimulationUI() {
+  const toggle = document.getElementById('simulationToggle');
+  const controls = document.getElementById('simulationControls');
+  const stateDisplay = document.getElementById('currentState');
+  
+  // Show/hide controls based on toggle
+  if (toggle.checked) {
+    controls.style.display = 'block';
+  } else {
+    controls.style.display = 'none';
+  }
+  
+  // Update state display with nice formatting
+  const state = SIMULATION_STATES[currentSimulationStateIndex];
+  const stateNames = {
+    'pregame': '⏰ Pregame',
+    'live': '🔴 Live (Q3 8:32)',
+    'halftime': '⏸️ Halftime',
+    'overtime': '🔥 Overtime (OT 3:45)',
+    'final': '✅ Final'
+  };
+  stateDisplay.textContent = stateNames[state] || state;
 }
 
 // Initialize on page load

@@ -52,7 +52,7 @@ class StateRenderer {
     
     return `
       <!-- Pre-game content -->
-      <div class="element ${hiddenClass('pregame')}" style="background: rgba(255, 152, 0, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #FFA726; white-space: nowrap; min-width: 75px; text-align: center;" id="countdown">Starts in ${timeStr}</div>
+      <div class="element ${hiddenClass('pregame')}" style="background: rgba(255, 152, 0, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #FFA726; white-space: nowrap; width: 130px; text-align: center; font-family: 'Courier New', monospace; font-variant-numeric: tabular-nums;" id="countdown">Starts in ${timeStr}</div>
       <img src="${gameData.awayTeam.logo}" class="logo element ${hiddenClass('pregame')}" id="pregameLogo1">
       <div class="vs element ${hiddenClass('pregame')}" id="pregameVs">vs</div>
       <img src="${gameData.homeTeam.logo}" class="logo element ${hiddenClass('pregame')}" id="pregameLogo2">

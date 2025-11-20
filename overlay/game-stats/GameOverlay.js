@@ -167,7 +167,20 @@ class GameOverlay {
    */
   async _updateFromAPI() {
     try {
-      // Fetch selected game ID from server
+      // Check if simulation mode is enabled
+      const simResponse = await fetch('/api/simulation');
+      if (simResponse.ok) {
+        const simData = await simResponse.json();
+        
+        if (simData.enabled) {
+          // Use mock data in simulation mode
+          const mockGame = this._generateMockGameData(simData.state);
+          this._autoDetectAndSetState(mockGame);
+          return;
+        }
+      }
+      
+      // Normal mode - fetch real game data
       const response = await fetch('/api/selected-game');
       if (!response.ok) {
         throw new Error('Failed to fetch selection');
@@ -460,6 +473,97 @@ class GameOverlay {
    */
   show() {
     this.container.style.display = 'block';
+  }
+
+  /**
+   * Generate mock game data for simulation mode
+   */
+  _generateMockGameData(state) {
+    const baseGame = {
+      id: 'simulation-game',
+      name: 'Los Angeles Lakers at Golden State Warriors',
+      shortName: 'LAL @ GSW',
+      awayTeam: {
+        name: 'Los Angeles Lakers',
+        abbreviation: 'LAL',
+        logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png',
+        score: '0',
+        record: '35-31'
+      },
+      homeTeam: {
+        name: 'Golden State Warriors',
+        abbreviation: 'GSW',
+        logo: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png',
+        score: '0',
+        record: '32-34'
+      }
+    };
+    
+    // Customize based on state
+    switch (state) {
+      case 'pregame':
+        // Game starts in 23 minutes
+        const futureDate = new Date(Date.now() + 23 * 60 * 1000);
+        return {
+          ...baseGame,
+          date: futureDate.toISOString(),
+          status: 'scheduled',
+          statusText: 'Starts in 23:00',
+          isLive: false,
+          isFinal: false
+        };
+        
+      case 'live':
+        return {
+          ...baseGame,
+          date: new Date().toISOString(),
+          awayTeam: { ...baseGame.awayTeam, score: '82' },
+          homeTeam: { ...baseGame.homeTeam, score: '78' },
+          status: 'live',
+          statusText: 'Q3 8:32',
+          isLive: true,
+          isFinal: false
+        };
+        
+      case 'halftime':
+        return {
+          ...baseGame,
+          date: new Date().toISOString(),
+          awayTeam: { ...baseGame.awayTeam, score: '58' },
+          homeTeam: { ...baseGame.homeTeam, score: '55' },
+          status: 'live',
+          statusText: 'Halftime',
+          isLive: true,
+          isFinal: false
+        };
+        
+      case 'overtime':
+        return {
+          ...baseGame,
+          date: new Date().toISOString(),
+          awayTeam: { ...baseGame.awayTeam, score: '112' },
+          homeTeam: { ...baseGame.homeTeam, score: '112' },
+          status: 'live',
+          statusText: 'OT 3:45',
+          isLive: true,
+          isFinal: false
+        };
+        
+      case 'final':
+        return {
+          ...baseGame,
+          date: new Date().toISOString(),
+          awayTeam: { ...baseGame.awayTeam, score: '118' },
+          homeTeam: { ...baseGame.homeTeam, score: '115' },
+          status: 'final',
+          statusText: 'Final',
+          isLive: false,
+          isFinal: true
+        };
+        
+      default:
+        return baseGame;
+    }
   }
 
   /**
