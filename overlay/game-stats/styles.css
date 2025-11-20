@@ -122,11 +122,49 @@ body {
   white-space: nowrap;
 }
 
-.overlay-pill .countdown-text {
-  font-size: 17px;
+/* Countdown pill (pregame) */
+.overlay-pill .countdown-pill {
+  background: rgba(255, 152, 0, 0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
   font-weight: 700;
   color: #FFA726;
   white-space: nowrap;
+  width: 130px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Halftime status pill */
+.overlay-pill .halftime-pill {
+  background: rgba(33, 150, 243, 0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #42A5F5;
+  white-space: nowrap;
+  min-width: 75px;
+  text-align: center;
+}
+
+/* Final status pill */
+.overlay-pill .final-pill {
+  background: rgba(76, 175, 80, 0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #66BB6A;
+  white-space: nowrap;
+}
+
+/* Overtime time pill (extends time-pill) */
+.overlay-pill .time-pill.overtime-time {
+  background: rgba(156, 39, 176, 0.25);
+  color: #AB47BC;
 }
 
 /* Element transitions */

@@ -6,6 +6,12 @@
  */
 
 class StateRenderer {
+  // Default values
+  static DEFAULT_STATUS_TEXT = 'Q1 12:00';
+  static DEFAULT_SCORE = '0';
+  static DEFAULT_OT_TIME = 'OT 5:00';
+  static LIVE_INDICATOR = '🔴 LIVE';
+  
   /**
    * Format countdown time smartly
    * Shows HH:MM:SS when >= 1 hour, MM:SS when < 1 hour
@@ -24,6 +30,28 @@ class StateRenderer {
       // No hours: "22:11"
       return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     }
+  }
+
+  /**
+   * Helper: Generate team logo element
+   */
+  static _pillLogo(logoUrl, state, position) {
+    return `<img src="${logoUrl}" class="logo element" id="${state}Logo${position}">`;
+  }
+
+  /**
+   * Helper: Generate score element
+   */
+  static _pillScore(score, state, side) {
+    const scoreId = side === 'left' ? `${state}LeftScore` : `${state}RightScore`;
+    return `<span class="score element" id="${scoreId}">${score || '0'}</span>`;
+  }
+
+  /**
+   * Helper: Generate vs divider
+   */
+  static _pillDivider(state, text = '-') {
+    return `<div class="vs element" id="${state}Vs">${text}</div>`;
   }
   /**
    * Render layout based on type
@@ -47,49 +75,55 @@ class StateRenderer {
    */
   static renderPillLayout(gameData, countdown, activeState) {
     const timeStr = StateRenderer.formatCountdown(countdown);
+    const hidden = (state) => state === activeState ? '' : 'hidden display-none';
     
-    const hiddenClass = (state) => state === activeState ? '' : 'hidden display-none';
+    // Extract scores and status for reuse
+    const awayScore = gameData.awayTeam.score || StateRenderer.DEFAULT_SCORE;
+    const homeScore = gameData.homeTeam.score || StateRenderer.DEFAULT_SCORE;
+    const awayLogo = gameData.awayTeam.logo;
+    const homeLogo = gameData.homeTeam.logo;
+    const statusText = gameData.statusText || StateRenderer.DEFAULT_STATUS_TEXT;
     
     return `
       <!-- Pre-game content -->
-      <div class="element ${hiddenClass('pregame')}" style="background: rgba(255, 152, 0, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #FFA726; white-space: nowrap; width: 130px; text-align: center; font-family: 'Courier New', monospace; font-variant-numeric: tabular-nums;" id="countdown">Starts in ${timeStr}</div>
-      <img src="${gameData.awayTeam.logo}" class="logo element ${hiddenClass('pregame')}" id="pregameLogo1">
-      <div class="vs element ${hiddenClass('pregame')}" id="pregameVs">vs</div>
-      <img src="${gameData.homeTeam.logo}" class="logo element ${hiddenClass('pregame')}" id="pregameLogo2">
+      <div class="countdown-pill element ${hidden('pregame')}" id="countdown">Starts in ${timeStr}</div>
+      <img src="${awayLogo}" class="logo element ${hidden('pregame')}" id="pregameLogo1">
+      <div class="vs element ${hidden('pregame')}" id="pregameVs">vs</div>
+      <img src="${homeLogo}" class="logo element ${hidden('pregame')}" id="pregameLogo2">
       
       <!-- Live content -->
-      <div class="status-pill element ${hiddenClass('live')}" id="liveStatus">🔴 LIVE</div>
-      <img src="${gameData.awayTeam.logo}" class="logo element ${hiddenClass('live')}" id="liveLogo1">
-      <span class="score element ${hiddenClass('live')}" id="leftScore">${gameData.awayTeam.score || '0'}</span>
-      <div class="vs element ${hiddenClass('live')}" id="liveVs">-</div>
-      <span class="score element ${hiddenClass('live')}" id="rightScore">${gameData.homeTeam.score || '0'}</span>
-      <img src="${gameData.homeTeam.logo}" class="logo element ${hiddenClass('live')}" id="liveLogo2">
-      <div class="time-pill element ${hiddenClass('live')}" id="gameTime">${gameData.statusText || 'Q1 12:00'}</div>
+      <div class="status-pill element ${hidden('live')}" id="liveStatus">${StateRenderer.LIVE_INDICATOR}</div>
+      <img src="${awayLogo}" class="logo element ${hidden('live')}" id="liveLogo1">
+      <span class="score element ${hidden('live')}" id="leftScore">${awayScore}</span>
+      <div class="vs element ${hidden('live')}" id="liveVs">-</div>
+      <span class="score element ${hidden('live')}" id="rightScore">${homeScore}</span>
+      <img src="${homeLogo}" class="logo element ${hidden('live')}" id="liveLogo2">
+      <div class="time-pill element ${hidden('live')}" id="gameTime">${statusText}</div>
       
       <!-- Halftime content -->
-      <div class="element ${hiddenClass('halftime')}" style="background: rgba(33, 150, 243, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #42A5F5; white-space: nowrap; min-width: 75px; text-align: center;" id="halftimeStatus">HALFTIME</div>
-      <img src="${gameData.awayTeam.logo}" class="logo element ${hiddenClass('halftime')}" id="halftimeLogo1">
-      <span class="score element ${hiddenClass('halftime')}" id="halftimeLeftScore">${gameData.awayTeam.score || '0'}</span>
-      <div class="vs element ${hiddenClass('halftime')}" id="halftimeVs">-</div>
-      <span class="score element ${hiddenClass('halftime')}" id="halftimeRightScore">${gameData.homeTeam.score || '0'}</span>
-      <img src="${gameData.homeTeam.logo}" class="logo element ${hiddenClass('halftime')}" id="halftimeLogo2">
+      <div class="halftime-pill element ${hidden('halftime')}" id="halftimeStatus">HALFTIME</div>
+      <img src="${awayLogo}" class="logo element ${hidden('halftime')}" id="halftimeLogo1">
+      <span class="score element ${hidden('halftime')}" id="halftimeLeftScore">${awayScore}</span>
+      <div class="vs element ${hidden('halftime')}" id="halftimeVs">-</div>
+      <span class="score element ${hidden('halftime')}" id="halftimeRightScore">${homeScore}</span>
+      <img src="${homeLogo}" class="logo element ${hidden('halftime')}" id="halftimeLogo2">
       
       <!-- Final content -->
-      <div class="element ${hiddenClass('final')}" style="background: rgba(76, 175, 80, 0.25); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: #66BB6A; white-space: nowrap;" id="finalStatus">FINAL</div>
-      <img src="${gameData.awayTeam.logo}" class="logo element ${hiddenClass('final')}" id="finalLogo1">
-      <span class="score element ${hiddenClass('final')}" id="finalLeftScore">${gameData.awayTeam.score || '0'}</span>
-      <div class="vs element ${hiddenClass('final')}" id="finalVs">-</div>
-      <span class="score element ${hiddenClass('final')}" id="finalRightScore">${gameData.homeTeam.score || '0'}</span>
-      <img src="${gameData.homeTeam.logo}" class="logo element ${hiddenClass('final')}" id="finalLogo2">
+      <div class="final-pill element ${hidden('final')}" id="finalStatus">FINAL</div>
+      <img src="${awayLogo}" class="logo element ${hidden('final')}" id="finalLogo1">
+      <span class="score element ${hidden('final')}" id="finalLeftScore">${awayScore}</span>
+      <div class="vs element ${hidden('final')}" id="finalVs">-</div>
+      <span class="score element ${hidden('final')}" id="finalRightScore">${homeScore}</span>
+      <img src="${homeLogo}" class="logo element ${hidden('final')}" id="finalLogo2">
       
       <!-- Overtime content -->
-      <div class="status-pill element ${hiddenClass('overtime')}" id="otStatus">🔴 LIVE</div>
-      <img src="${gameData.awayTeam.logo}" class="logo element ${hiddenClass('overtime')}" id="otLogo1">
-      <span class="score element ${hiddenClass('overtime')}" id="otLeftScore">${gameData.awayTeam.score || '0'}</span>
-      <div class="vs element ${hiddenClass('overtime')}" id="otVs">-</div>
-      <span class="score element ${hiddenClass('overtime')}" id="otRightScore">${gameData.homeTeam.score || '0'}</span>
-      <img src="${gameData.homeTeam.logo}" class="logo element ${hiddenClass('overtime')}" id="otLogo2">
-      <div class="time-pill element ${hiddenClass('overtime')}" style="background: rgba(156, 39, 176, 0.25); color: #AB47BC;" id="otTime">${gameData.statusText || 'OT 5:00'}</div>
+      <div class="status-pill element ${hidden('overtime')}" id="otStatus">${StateRenderer.LIVE_INDICATOR}</div>
+      <img src="${awayLogo}" class="logo element ${hidden('overtime')}" id="otLogo1">
+      <span class="score element ${hidden('overtime')}" id="otLeftScore">${awayScore}</span>
+      <div class="vs element ${hidden('overtime')}" id="otVs">-</div>
+      <span class="score element ${hidden('overtime')}" id="otRightScore">${homeScore}</span>
+      <img src="${homeLogo}" class="logo element ${hidden('overtime')}" id="otLogo2">
+      <div class="time-pill overtime-time element ${hidden('overtime')}" id="otTime">${statusText}</div>
     `;
   }
   
@@ -97,20 +131,21 @@ class StateRenderer {
    * HORIZONTAL LAYOUT - Bar design
    */
   static renderHorizontalLayout(gameData, activeState) {
-    const formatTeamName = (name) => {
-      // Abbreviate team names for horizontal layout
-      return name.replace('LA ', '').replace('Portland ', '').replace(' Blazers', '');
-    };
-    
-    const awayScore = gameData.awayTeam.score || '0';
-    const homeScore = gameData.homeTeam.score || '0';
-    const statusText = gameData.statusText || 'Q1 12:00';
+    // Extract common values
+    const awayScore = gameData.awayTeam.score || StateRenderer.DEFAULT_SCORE;
+    const homeScore = gameData.homeTeam.score || StateRenderer.DEFAULT_SCORE;
+    const statusText = gameData.statusText || StateRenderer.DEFAULT_STATUS_TEXT;
     const isLive = activeState === 'live' || activeState === 'overtime';
     const statusClass = isLive ? 'status-live' : (activeState === 'final' ? 'status-final' : 'status-pregame');
     
+    // Abbreviate team names for horizontal layout
+    const formatTeamName = (name) => {
+      return name.replace('LA ', '').replace('Portland ', '').replace(' Blazers', '');
+    };
+    
     return `
       <div class="game-card">
-        ${isLive ? '<div class="live-nba-badge">🔴 LIVE</div>' : ''}
+        ${isLive ? `<div class="live-nba-badge">${StateRenderer.LIVE_INDICATOR}</div>` : ''}
         <div class="teams-container">
           <div class="team">
             <img class="team-logo" src="${gameData.awayTeam.logo}" alt="${gameData.awayTeam.name}">
@@ -133,7 +168,7 @@ class StateRenderer {
           </div>
         </div>
         
-        <div class="game-status ${statusClass}" id="gameTime">${isLive ? '🔴 LIVE •' : ''} ${statusText}</div>
+        <div class="game-status ${statusClass}" id="gameTime">${isLive ? `${StateRenderer.LIVE_INDICATOR} •` : ''} ${statusText}</div>
       </div>
     `;
   }
@@ -142,9 +177,10 @@ class StateRenderer {
    * VERTICAL LAYOUT - Sidebar design
    */
   static renderVerticalLayout(gameData, activeState) {
-    const awayScore = gameData.awayTeam.score || '0';
-    const homeScore = gameData.homeTeam.score || '0';
-    const statusText = gameData.statusText || 'Q1 12:00';
+    // Extract common values
+    const awayScore = gameData.awayTeam.score || StateRenderer.DEFAULT_SCORE;
+    const homeScore = gameData.homeTeam.score || StateRenderer.DEFAULT_SCORE;
+    const statusText = gameData.statusText || StateRenderer.DEFAULT_STATUS_TEXT;
     const isLive = activeState === 'live' || activeState === 'overtime';
     const statusClass = isLive ? 'status-live' : (activeState === 'final' ? 'status-final' : 'status-pregame');
     
@@ -168,7 +204,7 @@ class StateRenderer {
           </div>
         </div>
         
-        <div class="game-status ${statusClass}" id="gameTime">${isLive ? '🔴 LIVE<br>' : ''}${statusText}</div>
+        <div class="game-status ${statusClass}" id="gameTime">${isLive ? `${StateRenderer.LIVE_INDICATOR}<br>` : ''}${statusText}</div>
       </div>
     `;
   }
