@@ -1,0 +1,99 @@
+/**
+ * Pill Color Variations
+ * Changes the accent colors for different styles
+ */
+
+/* Default Green - already in styles.css */
+
+/* RED Variation */
+.overlay-wrapper.pill-red .score {
+  color: #EF5350;
+}
+.overlay-wrapper.pill-red .score.anim-glow {
+  animation: glowPulseRed 0.6s ease-out;
+}
+@keyframes glowPulseRed {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 5px #EF5350;
+  }
+  50% { 
+    transform: scale(1.2);
+    text-shadow: 0 0 20px #EF5350, 0 0 30px #EF5350, 0 0 40px #EF5350;
+  }
+}
+.overlay-wrapper.pill-red .status-pill {
+  background: rgba(239, 83, 80, 0.25);
+  color: #EF5350;
+  border: 1px solid rgba(239, 83, 80, 0.3);
+}
+
+/* BLUE Variation */
+.overlay-wrapper.pill-blue .score {
+  color: #42A5F5;
+}
+.overlay-wrapper.pill-blue .score.anim-glow {
+  animation: glowPulseBlue 0.6s ease-out;
+}
+@keyframes glowPulseBlue {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 5px #42A5F5;
+  }
+  50% { 
+    transform: scale(1.2);
+    text-shadow: 0 0 20px #42A5F5, 0 0 30px #42A5F5, 0 0 40px #42A5F5;
+  }
+}
+.overlay-wrapper.pill-blue .status-pill {
+  background: rgba(66, 165, 245, 0.25);
+  color: #42A5F5;
+  border: 1px solid rgba(66, 165, 245, 0.3);
+}
+
+/* PURPLE Variation */
+.overlay-wrapper.pill-purple .score {
+  color: #AB47BC;
+}
+.overlay-wrapper.pill-purple .score.anim-glow {
+  animation: glowPulsePurple 0.6s ease-out;
+}
+@keyframes glowPulsePurple {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 5px #AB47BC;
+  }
+  50% { 
+    transform: scale(1.2);
+    text-shadow: 0 0 20px #AB47BC, 0 0 30px #AB47BC, 0 0 40px #AB47BC;
+  }
+}
+.overlay-wrapper.pill-purple .status-pill {
+  background: rgba(171, 71, 188, 0.25);
+  color: #AB47BC;
+  border: 1px solid rgba(171, 71, 188, 0.3);
+}
+
+/* GOLD Variation */
+.overlay-wrapper.pill-gold .score {
+  color: #FBC02D;
+}
+.overlay-wrapper.pill-gold .score.anim-glow {
+  animation: glowPulseGold 0.6s ease-out;
+}
+@keyframes glowPulseGold {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 5px #FBC02D;
+  }
+  50% { 
+    transform: scale(1.2);
+    text-shadow: 0 0 20px #FBC02D, 0 0 30px #FBC02D, 0 0 40px #FBC02D;
+  }
+}
+.overlay-wrapper.pill-gold .status-pill {
+  background: rgba(251, 192, 45, 0.25);
+  color: #FBC02D;
+  border: 1px solid rgba(251, 192, 45, 0.3);
+}
+

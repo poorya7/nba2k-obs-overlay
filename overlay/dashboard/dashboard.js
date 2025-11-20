@@ -2,6 +2,25 @@
 
 let allGames = [];
 
+// Available styles - ALL from design-test
+const STYLES = [
+  { id: 'pill-green', name: 'Pill - Green' },
+  { id: 'pill-red', name: 'Pill - Red' },
+  { id: 'pill-blue', name: 'Pill - Blue' },
+  { id: 'pill-purple', name: 'Pill - Purple' },
+  { id: 'pill-gold', name: 'Pill - Gold' },
+  { id: 'horizontal-green', name: 'Horizontal - Classic Green' },
+  { id: 'horizontal-cyan', name: 'Horizontal - Neon Cyan' },
+  { id: 'horizontal-red', name: 'Horizontal - Red' },
+  { id: 'horizontal-white', name: 'Horizontal - White' },
+  { id: 'vertical-green', name: 'Vertical - Green' },
+  { id: 'vertical-purple', name: 'Vertical - Purple' },
+  { id: 'vertical-blue', name: 'Vertical - Blue' },
+  { id: 'vertical-gold', name: 'Vertical - Gold' }
+];
+
+let currentStyleIndex = 0;
+
 /**
  * Initialize dashboard on page load
  */
@@ -11,6 +30,10 @@ async function init() {
   // Setup event listeners
   document.getElementById('gameSelect').addEventListener('change', handleGameSelection);
   document.getElementById('refreshBtn').addEventListener('click', refreshGames);
+  document.getElementById('nextStyleBtn').addEventListener('click', nextStyle);
+  
+  // Load saved style
+  await loadCurrentStyle();
   
   // Load games
   await loadGames();
@@ -204,6 +227,62 @@ function clearPreview() {
 async function refreshGames() {
   console.log('🔄 Refreshing games...');
   await loadGames();
+}
+
+/**
+ * Load current style from server
+ */
+async function loadCurrentStyle() {
+  try {
+    const response = await fetch('/api/selected-style');
+    if (response.ok) {
+      const data = await response.json();
+      const styleIndex = STYLES.findIndex(s => s.id === data.style);
+      if (styleIndex !== -1) {
+        currentStyleIndex = styleIndex;
+      }
+    }
+  } catch (error) {
+    console.error('❌ Failed to load style:', error);
+  }
+  updateStyleDisplay();
+}
+
+/**
+ * Cycle to next style
+ */
+async function nextStyle() {
+  currentStyleIndex = (currentStyleIndex + 1) % STYLES.length;
+  const selectedStyle = STYLES[currentStyleIndex];
+  
+  console.log('🎨 Button clicked! Cycling to:', selectedStyle.name, '(', selectedStyle.id, ')');
+  
+  // Save to server
+  try {
+    const response = await fetch('/api/selected-style', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ style: selectedStyle.id })
+    });
+    
+    if (response.ok) {
+      console.log('✅ Style saved to server:', selectedStyle.id);
+    } else {
+      console.error('❌ Server returned error:', response.status);
+    }
+  } catch (error) {
+    console.error('❌ Failed to save style:', error);
+  }
+  
+  updateStyleDisplay();
+}
+
+/**
+ * Update style display
+ */
+function updateStyleDisplay() {
+  const currentStyle = STYLES[currentStyleIndex];
+  document.getElementById('currentStyle').textContent = currentStyle.name;
 }
 
 // Initialize on page load

@@ -1,28 +1,36 @@
 /**
  * StateRenderer.js
  * 
- * Handles HTML generation for different game states.
- * Extracted from transition-test.html (lines 354-442)
- * 
- * Key: ALL state elements are rendered at once (like transition-test.html)
- * States are toggled with "hidden" and "display-none" classes
+ * Handles HTML generation for different game states and layout types.
+ * Supports: pill, horizontal, and vertical layouts
  */
 
 class StateRenderer {
   /**
-   * Render ALL state elements at once
-   * This matches transition-test.html structure exactly
+   * Render layout based on type
    * @param {Object} gameData - Game data object
-   * @param {number} countdown - Seconds until game starts
-   * @param {string} activeState - Which state to show ('pregame', 'live', 'halftime', 'final', 'overtime')
-   * @returns {string} Complete HTML string with all states
+   * @param {number} countdown - Seconds until game starts  
+   * @param {string} activeState - Current game state
+   * @param {string} layoutType - 'pill', 'horizontal', or 'vertical'
    */
-  static renderAllStates(gameData, countdown, activeState) {
+  static renderAllStates(gameData, countdown, activeState, layoutType = 'pill') {
+    if (layoutType === 'horizontal') {
+      return StateRenderer.renderHorizontalLayout(gameData, activeState);
+    } else if (layoutType === 'vertical') {
+      return StateRenderer.renderVerticalLayout(gameData, activeState);
+    } else {
+      return StateRenderer.renderPillLayout(gameData, countdown, activeState);
+    }
+  }
+  
+  /**
+   * PILL LAYOUT - Original pill design
+   */
+  static renderPillLayout(gameData, countdown, activeState) {
     const minutes = Math.floor(countdown / 60);
     const seconds = countdown % 60;
     const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
     
-    // Helper to add hidden classes if not active
     const hiddenClass = (state) => state === activeState ? '' : 'hidden display-none';
     
     return `
@@ -69,66 +77,155 @@ class StateRenderer {
   }
   
   /**
-   * Update specific elements without re-rendering everything
+   * HORIZONTAL LAYOUT - Bar design
    */
-  static updateScores(awayScore, homeScore) {
-    // Update all score elements across all states
-    const scoreElements = {
-      live: ['leftScore', 'rightScore'],
-      halftime: ['halftimeLeftScore', 'halftimeRightScore'],
-      final: ['finalLeftScore', 'finalRightScore'],
-      overtime: ['otLeftScore', 'otRightScore']
+  static renderHorizontalLayout(gameData, activeState) {
+    const formatTeamName = (name) => {
+      // Abbreviate team names for horizontal layout
+      return name.replace('LA ', '').replace('Portland ', '').replace(' Blazers', '');
     };
     
-    Object.values(scoreElements).flat().forEach((id, idx) => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.textContent = idx % 2 === 0 ? awayScore : homeScore;
-      }
-    });
-  }
-  
-  /**
-   * Update countdown timer
-   */
-  static updateCountdown(countdown) {
-    const el = document.getElementById('countdown');
-    if (!el) return;
+    const awayScore = gameData.awayTeam.score || '0';
+    const homeScore = gameData.homeTeam.score || '0';
+    const statusText = gameData.statusText || 'Q1 12:00';
+    const isLive = activeState === 'live' || activeState === 'overtime';
+    const statusClass = isLive ? 'status-live' : (activeState === 'final' ? 'status-final' : 'status-pregame');
     
-    const minutes = Math.floor(countdown / 60);
-    const seconds = countdown % 60;
-    const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    el.textContent = `Starts in ${timeStr}`;
+    return `
+      <div class="game-card">
+        ${isLive ? '<div class="live-nba-badge">🔴 LIVE</div>' : ''}
+        <div class="teams-container">
+          <div class="team">
+            <img class="team-logo" src="${gameData.awayTeam.logo}" alt="${gameData.awayTeam.name}">
+            <div>
+              <div class="team-name">${formatTeamName(gameData.awayTeam.name)}</div>
+              <div class="team-record">${gameData.awayTeam.record}</div>
+            </div>
+            <div class="team-score" id="leftScore">${awayScore}</div>
+          </div>
+          
+          <div class="vs-divider">-</div>
+          
+          <div class="team">
+            <div class="team-score" id="rightScore">${homeScore}</div>
+            <div>
+              <div class="team-name">${formatTeamName(gameData.homeTeam.name)}</div>
+              <div class="team-record">${gameData.homeTeam.record}</div>
+            </div>
+            <img class="team-logo" src="${gameData.homeTeam.logo}" alt="${gameData.homeTeam.name}">
+          </div>
+        </div>
+        
+        <div class="game-status ${statusClass}" id="gameTime">${isLive ? '🔴 LIVE •' : ''} ${statusText}</div>
+      </div>
+    `;
   }
   
   /**
-   * Update game time displays
+   * VERTICAL LAYOUT - Sidebar design
+   */
+  static renderVerticalLayout(gameData, activeState) {
+    const awayScore = gameData.awayTeam.score || '0';
+    const homeScore = gameData.homeTeam.score || '0';
+    const statusText = gameData.statusText || 'Q1 12:00';
+    const isLive = activeState === 'live' || activeState === 'overtime';
+    const statusClass = isLive ? 'status-live' : (activeState === 'final' ? 'status-final' : 'status-pregame');
+    
+    return `
+      <div class="game-card">
+        <div class="teams-container">
+          <div class="team">
+            <img class="team-logo" src="${gameData.awayTeam.logo}" alt="${gameData.awayTeam.name}">
+            <div class="team-name">${gameData.awayTeam.abbreviation || gameData.awayTeam.name}</div>
+            <div class="team-record">${gameData.awayTeam.record}</div>
+            <div class="team-score" id="leftScore">${awayScore}</div>
+          </div>
+          
+          <div class="vs-divider">-</div>
+          
+          <div class="team">
+            <img class="team-logo" src="${gameData.homeTeam.logo}" alt="${gameData.homeTeam.name}">
+            <div class="team-name">${gameData.homeTeam.abbreviation || gameData.homeTeam.name}</div>
+            <div class="team-record">${gameData.homeTeam.record}</div>
+            <div class="team-score" id="rightScore">${homeScore}</div>
+          </div>
+        </div>
+        
+        <div class="game-status ${statusClass}" id="gameTime">${isLive ? '🔴 LIVE<br>' : ''}${statusText}</div>
+      </div>
+    `;
+  }
+  
+  /**
+   * Update scores (works for all layouts)
+   */
+  static updateScores(awayScore, homeScore) {
+    const leftScore = document.getElementById('leftScore');
+    const rightScore = document.getElementById('rightScore');
+    
+    if (leftScore) leftScore.textContent = awayScore;
+    if (rightScore) rightScore.textContent = homeScore;
+    
+    // Also update pill-specific score elements if they exist
+    const halftimeLeft = document.getElementById('halftimeLeftScore');
+    const halftimeRight = document.getElementById('halftimeRightScore');
+    const finalLeft = document.getElementById('finalLeftScore');
+    const finalRight = document.getElementById('finalRightScore');
+    const otLeft = document.getElementById('otLeftScore');
+    const otRight = document.getElementById('otRightScore');
+    
+    if (halftimeLeft) halftimeLeft.textContent = awayScore;
+    if (halftimeRight) halftimeRight.textContent = homeScore;
+    if (finalLeft) finalLeft.textContent = awayScore;
+    if (finalRight) finalRight.textContent = homeScore;
+    if (otLeft) otLeft.textContent = awayScore;
+    if (otRight) otRight.textContent = homeScore;
+  }
+  
+  /**
+   * Update game time/status text
    */
   static updateGameTime(timeText) {
-    const gameTimeEl = document.getElementById('gameTime');
-    const otTimeEl = document.getElementById('otTime');
+    const gameTime = document.getElementById('gameTime');
+    if (gameTime) {
+      // For horizontal/vertical, update just the time part
+      if (gameTime.innerHTML.includes('LIVE')) {
+        gameTime.innerHTML = `🔴 LIVE • ${timeText}`;
+      } else {
+        gameTime.textContent = timeText;
+      }
+    }
     
-    if (gameTimeEl) gameTimeEl.textContent = timeText;
-    if (otTimeEl) otTimeEl.textContent = timeText;
+    // Also update pill-specific time element if it exists
+    const otTime = document.getElementById('otTime');
+    if (otTime) otTime.textContent = timeText;
   }
-
+  
   /**
-   * Get all element IDs for a specific state
-   * Used for transition animations
+   * Update countdown timer (pill layout only)
+   */
+  static updateCountdown(countdown) {
+    const countdownEl = document.getElementById('countdown');
+    if (countdownEl) {
+      const minutes = Math.floor(countdown / 60);
+      const seconds = countdown % 60;
+      countdownEl.textContent = `Starts in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+  }
+  
+  /**
+   * Get element IDs for a given state (pill layout)
    */
   static getStateElementIds(state) {
-    const elementIds = {
-      pregame: ['pregameLogo1', 'pregameVs', 'pregameLogo2', 'countdown'],
+    const elementMap = {
+      pregame: ['countdown', 'pregameLogo1', 'pregameVs', 'pregameLogo2'],
       live: ['liveStatus', 'liveLogo1', 'leftScore', 'liveVs', 'rightScore', 'liveLogo2', 'gameTime'],
       halftime: ['halftimeStatus', 'halftimeLogo1', 'halftimeLeftScore', 'halftimeVs', 'halftimeRightScore', 'halftimeLogo2'],
       final: ['finalStatus', 'finalLogo1', 'finalLeftScore', 'finalVs', 'finalRightScore', 'finalLogo2'],
       overtime: ['otStatus', 'otLogo1', 'otLeftScore', 'otVs', 'otRightScore', 'otLogo2', 'otTime']
     };
     
-    return elementIds[state] || [];
+    return elementMap[state] || [];
   }
 }
-
-// Make available globally
-window.StateRenderer = StateRenderer;
 

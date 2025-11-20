@@ -106,6 +106,77 @@ console.log(data.success); // true
 
 ---
 
+#### GET /api/selected-style
+
+**Description:** Retrieve the currently selected overlay style.
+
+**Request:**
+```http
+GET /api/selected-style
+```
+
+**Response:**
+```json
+{
+  "style": "pill-green"
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/selected-style');
+const data = await response.json();
+console.log(data.style); // "pill-green", "horizontal-cyan", etc.
+```
+
+---
+
+#### POST /api/selected-style
+
+**Description:** Set the currently selected overlay style.
+
+**Request:**
+```http
+POST /api/selected-style
+Content-Type: application/json
+
+{
+  "style": "horizontal-cyan"
+}
+```
+
+**Available Styles:**
+- Pill: `pill-green`, `pill-red`, `pill-blue`, `pill-purple`, `pill-gold`
+- Horizontal: `horizontal-green`, `horizontal-cyan`, `horizontal-red`, `horizontal-white`
+- Vertical: `vertical-green`, `vertical-purple`, `vertical-blue`, `vertical-gold`
+
+**Response:**
+```json
+{
+  "success": true
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+- `400 Bad Request` - Invalid JSON payload
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/selected-style', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ style: 'horizontal-cyan' })
+});
+```
+
+---
+
 ## NBAApi Client
 
 JavaScript client for interacting with ESPN's NBA API. Available globally as `window.NBAApi`.
@@ -114,7 +185,7 @@ JavaScript client for interacting with ESPN's NBA API. Available globally as `wi
 
 #### getTodaysGames()
 
-**Description:** Fetch all NBA games scheduled for today.
+**Description:** Fetch NBA games for today, plus any games from yesterday that are still live or finished within the last 2 hours. This prevents games from disappearing when streaming past midnight.
 
 **Signature:**
 ```javascript
@@ -123,10 +194,15 @@ async function getTodaysGames(): Promise<Game[]>
 
 **Returns:** Array of [Game objects](#game-object)
 
+**Smart Fetching Logic:**
+- All games scheduled for today
+- Yesterday's games if STATUS_IN_PROGRESS, STATUS_HALFTIME, or STATUS_END_PERIOD
+- Yesterday's games if STATUS_FINAL and game started < 5 hours ago (finished < 2 hours ago)
+
 **Example:**
 ```javascript
 const games = await window.NBAApi.getTodaysGames();
-console.log(games.length); // e.g., 8
+console.log(games.length); // e.g., 8 (or more if late games from yesterday)
 console.log(games[0].name); // "Los Angeles Lakers at Golden State Warriors"
 ```
 

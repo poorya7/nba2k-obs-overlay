@@ -19,7 +19,8 @@ The NBA 2K OBS Overlay is a local web application that displays live NBA game st
 │                                                               │
 │  • Serves static files (HTML/CSS/JS)                        │
 │  • API: GET/POST /api/selected-game                         │
-│  • In-memory storage for selected game ID                   │
+│  • API: GET/POST /api/selected-style                        │
+│  • In-memory storage for selected game ID and style         │
 └───────────────────┬─────────────────────┬───────────────────┘
                     │                     │
         ┌───────────▼─────────┐  ┌───────▼───────────┐
@@ -84,12 +85,23 @@ nba2k-obs-overlay/
 │   │
 │   ├── dashboard/              # Control Panel
 │   │   ├── index.html         # Dashboard UI
-│   │   └── dashboard.js       # Selection logic
+│   │   ├── dashboard.js       # Selection logic & style switcher
+│   │   └── styles.css         # Dashboard styling
+│   │
+│   ├── design-test/            # Design previews
+│   │   ├── index.html         # Design tester UI
+│   │   ├── designs.css        # All layout styles
+│   │   └── preview.js         # Preview logic
 │   │
 │   └── game-stats/            # OBS Overlay
 │       ├── index.html         # Overlay UI
-│       ├── styles.css         # Overlay styling
-│       └── overlay.js         # Display logic
+│       ├── styles.css         # Base overlay styling
+│       ├── pill-colors.css    # Pill color variations
+│       ├── layout-scaling.css # Horizontal/vertical scaling
+│       ├── overlay.js         # Main entry point
+│       ├── GameOverlay.js     # Main controller class
+│       ├── StateRenderer.js   # Multi-layout HTML generation
+│       └── StateTransitions.js # Animation logic
 │
 ├── docs/                       # Documentation
 ├── scripts/                    # Windows startup scripts
@@ -111,7 +123,9 @@ nba2k-obs-overlay/
 **Routes:**
 - `/` or `/dashboard` → Dashboard UI
 - `/overlay/game-stats` → OBS Overlay
-- `/api/selected-game` → Game selection API
+- `/design-test` → Design preview/tester
+- `/api/selected-game` → Game selection API (GET/POST)
+- `/api/selected-style` → Style selection API (GET/POST)
 
 ### Shared Utilities (`overlay/shared/`)
 
@@ -124,45 +138,80 @@ Centralized configuration for:
 
 #### nbaApi.js
 ESPN API integration layer providing:
-- `getTodaysGames()` - Fetch all games for today
+- `getTodaysGames()` - Fetch today's games + live/recent games from yesterday
 - `getGameById(id)` - Get specific game details
 - `formatGameTime(date)` - Format game times for display
+- `parseStatusToShortFormat()` - Parse ESPN status to compact format (Q4 3:06)
+- Handles all game states: scheduled, live, halftime, end of period, final
 - Data parsing and normalization
+
+**Smart Game Fetching:**
+- Shows all games scheduled for today
+- Includes yesterday's games if still in progress or finished within last 2 hours
+- Prevents games from disappearing at midnight during late streams
 
 ### Control Dashboard (`overlay/dashboard/`)
 
-**Purpose:** Web interface for selecting which NBA game to display on stream.
+**Purpose:** Web interface for selecting which NBA game to display and which style to use.
 
 **Features:**
-- Dropdown menu with today's NBA games
-- Preview of selected game
+- Dropdown menu with today's NBA games (+ live/recent from yesterday)
+- Preview of selected game with team logos, records, scores
+- **Style Switcher:** Button to cycle through 13 overlay styles in real-time
 - Saves selection to server via API
-- Auto-selects first live game (if available)
+- Auto-refresh every 60 seconds
+
+**Available Styles:**
+- **Pill (5 colors):** Green, Red, Blue, Purple, Gold
+- **Horizontal (4 styles):** Classic Green, Neon Cyan, Red, White
+- **Vertical (4 styles):** Green, Purple, Blue, Gold
 
 **User Interaction:**
 1. Opens in browser (not visible on stream)
-2. Shows all games for current day
+2. Shows all games (today + live from yesterday)
 3. User picks game from dropdown
-4. Selection saved immediately
-5. Overlay updates on next refresh
+4. User clicks "Next Style" to change overlay appearance
+5. Selections saved immediately
+6. Overlay updates within 2 seconds
 
 ### Game Overlay (`overlay/game-stats/`)
 
-**Purpose:** Browser source for OBS that displays live game statistics.
+**Purpose:** Browser source for OBS that displays live game statistics with multiple layout options.
+
+**Architecture:**
+- **Modular Design:** Following SOLID/DRY principles
+- **GameOverlay.js:** Main controller orchestrating all components
+- **StateRenderer.js:** HTML generation for all layout types
+- **StateTransitions.js:** Smooth animations between game states
+- **Multiple CSS files:** Base styles + layout-specific styles
 
 **Features:**
-- Transparent background (OBS-ready)
+- Transparent/solid background (OBS-ready)
+- 13 different styles (pill/horizontal/vertical layouts)
 - Team logos, names, records
-- Live scores (when game is active)
-- Game status (scheduled time, quarter, final)
-- Auto-refresh every 10 seconds
+- Live scores with glow animation on score changes
+- Game status (scheduled, live, halftime, end of quarter, final, overtime)
+- Auto-refresh every 10 seconds (game data) and 2 seconds (style changes)
+- Hides completely when server is down or no game selected
 
 **Display States:**
-- **No game selected:** Shows prompt to use dashboard
-- **Scheduled game:** Shows teams, records, start time
-- **Live game:** Shows teams, scores, quarter/time
-- **Final game:** Shows teams, final scores
-- **Error:** Shows error message
+- **Pregame:** Countdown timer until game starts
+- **Live:** Real-time scores, quarter, time remaining
+- **Halftime:** Halftime indicator with current scores
+- **End of Quarter:** Shows "Q# End" when clock hits 0:00
+- **Overtime:** OT indicator with time
+- **Final:** Final scores
+
+**Layout Types:**
+- **Pill (15% larger):** Compact horizontal pill with all states
+- **Horizontal Bar (20% larger):** Wide bar format, multiple color schemes
+- **Vertical Sidebar (20% larger):** Tall sidebar format, multiple color schemes
+
+**Smart Features:**
+- Auto-detects game state from ESPN API
+- Smooth transitions between states (pill layout only)
+- Score change animations
+- Handles midnight rollover (keeps yesterday's live games visible)
 
 ## Technology Stack
 

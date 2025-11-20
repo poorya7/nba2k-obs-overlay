@@ -2,34 +2,86 @@
 // Reused from backup dashboard with modifications for overlay
 
 /**
- * Get today's date in YYYYMMDD format for ESPN API
+ * Get date string in YYYYMMDD format for ESPN API
+ * @param {number} daysOffset - Days to offset from today (0 = today, -1 = yesterday, etc.)
  */
-function getTodayDateString() {
-  const today = new Date();
+function getDateString(daysOffset = 0) {
   const timezone = window.NBA_CONFIG?.TIMEZONE || 'America/New_York';
+  const date = new Date();
+  date.setDate(date.getDate() + daysOffset);
   
-  const year = today.toLocaleString('en-US', { timeZone: timezone, year: 'numeric' });
-  const month = today.toLocaleString('en-US', { timeZone: timezone, month: '2-digit' });
-  const day = today.toLocaleString('en-US', { timeZone: timezone, day: '2-digit' });
+  const year = date.toLocaleString('en-US', { timeZone: timezone, year: 'numeric' });
+  const month = date.toLocaleString('en-US', { timeZone: timezone, month: '2-digit' });
+  const day = date.toLocaleString('en-US', { timeZone: timezone, day: '2-digit' });
   
   return `${year}${month}${day}`;
 }
 
 /**
+ * Get today's date in YYYYMMDD format for ESPN API
+ */
+function getTodayDateString() {
+  return getDateString(0);
+}
+
+/**
  * Fetch today's NBA games from ESPN API
+ * Also includes games from yesterday that are still live (past midnight games)
  */
 async function fetchTodaysGames() {
   try {
     const todayDate = getTodayDateString();
-    const apiUrl = `${window.NBA_CONFIG.ESPN_NBA_SCOREBOARD}?dates=${todayDate}`;
+    const yesterdayDate = getDateString(-1);
     
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-      throw new Error(`ESPN API returned ${response.status}`);
+    console.log('📅 Fetching games for:', todayDate, '(and live games from', yesterdayDate, ')');
+    
+    // Fetch both today's games and yesterday's games
+    const [todayResponse, yesterdayResponse] = await Promise.all([
+      fetch(`${window.NBA_CONFIG.ESPN_NBA_SCOREBOARD}?dates=${todayDate}`),
+      fetch(`${window.NBA_CONFIG.ESPN_NBA_SCOREBOARD}?dates=${yesterdayDate}`)
+    ]);
+    
+    if (!todayResponse.ok || !yesterdayResponse.ok) {
+      throw new Error('ESPN API returned error');
     }
     
-    const data = await response.json();
-    return data.events || [];
+    const todayData = await todayResponse.json();
+    const yesterdayData = await yesterdayResponse.json();
+    
+    const todayGames = todayData.events || [];
+    const yesterdayGames = yesterdayData.events || [];
+    
+    // Filter yesterday's games: include if live/in-progress OR finished within last hour
+    const relevantYesterdayGames = yesterdayGames.filter(game => {
+      const competition = game.competitions[0];
+      const status = competition.status.type.name;
+      
+      // Include if in progress, halftime, or end of period
+      if (status === 'STATUS_IN_PROGRESS' || 
+          status === 'STATUS_HALFTIME' || 
+          status === 'STATUS_END_PERIOD' ||
+          status.includes('END')) {
+        return true;
+      }
+      
+      // If final, check if it finished within the last 2 hours
+      if (status === 'STATUS_FINAL') {
+        const gameDate = new Date(game.date);
+        const now = new Date();
+        const hoursSinceGame = (now - gameDate) / (1000 * 60 * 60);
+        
+        // Game typically lasts 2.5 hours, so if game started < 4.5 hours ago, it finished < 2 hours ago
+        return hoursSinceGame < 5;
+      }
+      
+      // Don't include scheduled games from yesterday
+      return false;
+    });
+    
+    console.log(`✅ Found ${todayGames.length} today's games + ${relevantYesterdayGames.length} relevant from yesterday`);
+    
+    // Combine: yesterday's games first (so live/recent games appear at top), then today's games
+    return [...relevantYesterdayGames, ...todayGames];
   } catch (error) {
     console.error('❌ Error fetching NBA games:', error);
     throw error;
@@ -48,6 +100,23 @@ function parseStatusToShortFormat(statusDetail) {
     return statusDetail;
   }
   
+  // Halftime variations
+  if (/halftime|half\s+time|half$/i.test(statusDetail)) {
+    return 'Halftime';
+  }
+  
+  // End of Quarter: "End of 3rd Quarter" -> "Q3 End"
+  const endQuarterMatch = statusDetail.match(/End\s+of\s+(\d+)(?:st|nd|rd|th)\s+Quarter/i);
+  if (endQuarterMatch) {
+    return `Q${endQuarterMatch[1]} End`;
+  }
+  
+  // "0:00 - 3rd Quarter" -> "Q3 0:00" (but show as End)
+  const zeroTimeMatch = statusDetail.match(/0:00\s+-\s+(\d+)(?:st|nd|rd|th)\s+Quarter/i);
+  if (zeroTimeMatch) {
+    return `Q${zeroTimeMatch[1]} End`;
+  }
+  
   // ESPN FORMAT: "4:59 - 4th Quarter" OR "31.2 - 4th Quarter" -> "Q4 4:59" or "Q4 31.2"
   // Handle BOTH colon and decimal formats!
   const quarterMatch = statusDetail.match(/([\d:.]+)\s+-\s+(\d+)(?:st|nd|rd|th)\s+Quarter/i);
@@ -61,7 +130,7 @@ function parseStatusToShortFormat(statusDetail) {
     return `OT ${otMatch[1]}`;
   }
   
-  // Return as-is for other cases (Halftime, Final, etc)
+  // Return as-is for other cases
   return statusDetail;
 }
 
@@ -72,6 +141,8 @@ function getGameStatus(competition) {
   const status = competition.status.type.name;
   const statusDetail = competition.status.type.detail;
   
+  console.log('🔍 ESPN Status Type:', status, '| Detail:', statusDetail);
+  
   if (status === 'STATUS_SCHEDULED') {
     return { 
       status: 'scheduled', 
@@ -80,9 +151,37 @@ function getGameStatus(competition) {
       isFinal: false
     };
   } else if (status === 'STATUS_IN_PROGRESS') {
+    const parsedStatus = parseStatusToShortFormat(statusDetail);
+    // Halftime is still "in progress" technically, so set isLive: true
     return { 
       status: 'live', 
-      text: parseStatusToShortFormat(statusDetail), // Parse to short format!
+      text: parsedStatus,
+      isLive: true, // Halftime counts as "live"
+      isFinal: false
+    };
+  } else if (status === 'STATUS_HALFTIME') {
+    // ESPN might have a separate halftime status
+    return { 
+      status: 'live', 
+      text: 'Halftime',
+      isLive: true, // Halftime is still live!
+      isFinal: false
+    };
+  } else if (status === 'STATUS_END_PERIOD') {
+    // End of quarter - game is still live!
+    const parsedStatus = parseStatusToShortFormat(statusDetail);
+    return { 
+      status: 'live', 
+      text: parsedStatus,
+      isLive: true, // End of quarter is still live!
+      isFinal: false
+    };
+  } else if (status.includes('END') || statusDetail.toLowerCase().includes('end of')) {
+    // Any other "END" status (end of period, end of quarter, etc.)
+    const parsedStatus = parseStatusToShortFormat(statusDetail);
+    return { 
+      status: 'live', 
+      text: parsedStatus,
       isLive: true,
       isFinal: false
     };
@@ -95,6 +194,8 @@ function getGameStatus(competition) {
     };
   }
   
+  // Unknown status - log it and treat as not live
+  console.warn('⚠️ Unknown game status:', status, statusDetail);
   return { 
     status: 'unknown', 
     text: parseStatusToShortFormat(statusDetail),

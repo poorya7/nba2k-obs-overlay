@@ -27,6 +27,8 @@ class GameOverlay {
     // State tracking
     this.currentState = null;
     this.currentGameData = null;
+    this.currentStyle = null;
+    this.currentLayoutType = 'pill';
     this.lastScores = { away: 0, home: 0 };
     this.countdown = 0; // seconds until game starts
     
@@ -35,17 +37,19 @@ class GameOverlay {
   }
 
   /**
-   * Initialize the pill box structure
+   * Initialize the overlay structure (layout-agnostic container)
    */
   _initializePillStructure() {
     this.container.innerHTML = `
-      <div class="overlay-pill expand-smooth content-fade">
-        <div class="pill pregame" id="pillBox"></div>
+      <div class="overlay-wrapper" id="overlayWrapper">
+        <div class="overlay-content" id="overlayContent"></div>
       </div>
     `;
     
-    this.pillBox = document.getElementById('pillBox');
-    this.transitions = new StateTransitions(this.pillBox);
+    this.overlayWrapper = document.getElementById('overlayWrapper');
+    this.overlayContent = document.getElementById('overlayContent');
+    this.pillBox = null; // Will be set when pill layout is rendered
+    this.transitions = null;
   }
 
   /**
@@ -55,13 +59,88 @@ class GameOverlay {
   async start() {
     console.log('🏀 NBA Overlay initialized');
     
+    // Load selected style
+    await this._loadSelectedStyle();
+    
     // Initial update
     await this._updateFromAPI();
     
-    // Auto-refresh every 10 seconds
+    // Auto-refresh game data every 10 seconds
     this.refreshInterval = setInterval(() => {
       this._updateFromAPI();
     }, 10000);
+    
+    // Check for style changes every 2 seconds (more responsive)
+    this.styleCheckInterval = setInterval(() => {
+      this._loadSelectedStyle();
+    }, 2000);
+  }
+  
+  /**
+   * Load selected style from server
+   */
+  async _loadSelectedStyle() {
+    try {
+      const response = await fetch('/api/selected-style');
+      if (response.ok) {
+        const data = await response.json();
+        // Apply style on first load OR when it changes
+        if (this.currentStyle !== data.style) {
+          this.currentStyle = data.style;
+          console.log('🎨 Style changed to:', data.style);
+          this._applyStyle(data.style);
+        } else if (!this.currentStyle) {
+          // First load - apply initial style
+          this.currentStyle = data.style;
+          this._applyStyle(data.style);
+        }
+      }
+    } catch (error) {
+      console.error('❌ Failed to load style:', error);
+    }
+  }
+  
+  /**
+   * Apply visual style to overlay
+   */
+  _applyStyle(styleId) {
+    console.log('🎨 Applying style:', styleId);
+    
+    const className = styleId || 'pill-green';
+    const layoutType = this._getLayoutType(styleId);
+    
+    // Pill styles: just "pill-blue" (no prefix) - apply to wrapper
+    // Horizontal/Vertical: "design-horizontal-green" (with prefix) - apply to content
+    if (layoutType === 'pill') {
+      if (this.overlayWrapper) this.overlayWrapper.className = `overlay-wrapper ${className}`;
+      if (this.overlayContent) this.overlayContent.className = 'overlay-content';
+    } else {
+      // For horizontal/vertical, apply design class to content (not wrapper)
+      if (this.overlayWrapper) this.overlayWrapper.className = 'overlay-wrapper';
+      if (this.overlayContent) this.overlayContent.className = `overlay-content design-${className}`;
+    }
+    
+    console.log('✅ Class applied:', layoutType === 'pill' ? className : `design-${className}`);
+    
+    // Re-render with new layout if layout type changed
+    if (this.currentLayoutType !== layoutType) {
+      this.currentLayoutType = layoutType;
+      console.log('🔄 Layout type changed to:', layoutType);
+      
+      // Force re-render with new layout
+      if (this.currentGameData) {
+        this._renderAllStates(this.currentGameData);
+      }
+    }
+  }
+  
+  /**
+   * Get layout type from style ID
+   */
+  _getLayoutType(styleId) {
+    if (styleId.startsWith('horizontal')) return 'horizontal';
+    if (styleId.startsWith('vertical')) return 'vertical';
+    return 'pill';
   }
 
   /**
@@ -75,6 +154,10 @@ class GameOverlay {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
       this.countdownInterval = null;
+    }
+    if (this.styleCheckInterval) {
+      clearInterval(this.styleCheckInterval);
+      this.styleCheckInterval = null;
     }
   }
 
@@ -94,7 +177,7 @@ class GameOverlay {
       const selectedGameId = data.gameId;
       
       if (!selectedGameId) {
-        this.showNoGameSelected();
+        this.hide();
         return;
       }
       
@@ -103,7 +186,7 @@ class GameOverlay {
       const game = await window.NBAApi.getGameById(selectedGameId);
       
       if (!game) {
-        this.showError('Selected game not found');
+        this.hide();
         return;
       }
       
@@ -112,7 +195,7 @@ class GameOverlay {
       
     } catch (error) {
       console.error('❌ Error updating overlay:', error);
-      this.showError(error.message);
+      this.hide(); // Hide instead of showing error
     }
   }
 
@@ -121,6 +204,8 @@ class GameOverlay {
    */
   _autoDetectAndSetState(game) {
     let newState = 'pregame';
+    
+    console.log('🔍 State detection:', { isLive: game.isLive, isFinal: game.isFinal, statusText: game.statusText });
     
     // Determine state based on game data
     if (game.isFinal) {
@@ -145,16 +230,20 @@ class GameOverlay {
       newState = 'pregame';
     }
     
-    // Detect score changes for animation
+    console.log('🎯 Detected state:', newState);
+    
+    // Detect score changes for animation (pill layout only)
     if (game.isLive || game.isFinal) {
       const awayScore = parseInt(game.awayTeam.score) || 0;
       const homeScore = parseInt(game.homeTeam.score) || 0;
       
-      if (awayScore > this.lastScores.away) {
-        this.transitions.animateScoreChange('leftScore');
-      }
-      if (homeScore > this.lastScores.home) {
-        this.transitions.animateScoreChange('rightScore');
+      if (this.transitions) {
+        if (awayScore > this.lastScores.away) {
+          this.transitions.animateScoreChange('leftScore');
+        }
+        if (homeScore > this.lastScores.home) {
+          this.transitions.animateScoreChange('rightScore');
+        }
       }
       
       this.lastScores = { away: awayScore, home: homeScore };
@@ -175,6 +264,9 @@ class GameOverlay {
       console.error(`Invalid state: ${state}`);
       return;
     }
+    
+    // Show overlay if hidden
+    this.show();
     
     // If game data changed or first time, re-render all states
     const gameChanged = !this.currentGameData || 
@@ -209,49 +301,71 @@ class GameOverlay {
   }
 
   /**
-   * Render all states at once (like transition-test.html)
+   * Render all states at once (supports all layout types)
    * Only call this once during initialization or when game changes
    */
   _renderAllStates(gameData) {
-    const html = StateRenderer.renderAllStates(gameData, this.countdown, this.currentState || 'pregame');
-    this.pillBox.innerHTML = html;
-    console.log('✅ All states rendered');
+    const layoutType = this.currentLayoutType || 'pill';
+    const html = StateRenderer.renderAllStates(gameData, this.countdown, this.currentState || 'pregame', layoutType);
+    
+    // For pill layout, wrap in pill container
+    if (layoutType === 'pill') {
+      this.overlayContent.innerHTML = `
+        <div class="overlay-pill expand-smooth content-fade">
+          <div class="pill ${this._getPillClass(this.currentState || 'pregame')}" id="pillBox">
+            ${html}
+          </div>
+        </div>
+      `;
+      this.pillBox = document.getElementById('pillBox');
+      this.transitions = new StateTransitions(this.pillBox);
+    } else {
+      // For horizontal/vertical, render directly
+      this.overlayContent.innerHTML = html;
+      this.pillBox = null;
+      this.transitions = null;
+    }
+    
+    console.log('✅ All states rendered (layout:', layoutType, ')');
   }
   
   /**
    * Show a specific state (toggle visibility only)
    */
   _showState(state) {
-    // Set correct pill class
-    this.pillBox.className = `pill ${this._getPillClass(state)}`;
-    
-    // Hide all states first
-    const allStates = ['pregame', 'live', 'halftime', 'final', 'overtime'];
-    allStates.forEach(s => {
-      const elementIds = StateRenderer.getStateElementIds(s);
+    // Only for pill layout
+    if (this.currentLayoutType === 'pill' && this.pillBox) {
+      // Set correct pill class
+      this.pillBox.className = `pill ${this._getPillClass(state)}`;
+      
+      // Hide all states first
+      const allStates = ['pregame', 'live', 'halftime', 'final', 'overtime'];
+      allStates.forEach(s => {
+        const elementIds = StateRenderer.getStateElementIds(s);
+        elementIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && s !== state) {
+            el.classList.add('hidden', 'display-none');
+          }
+        });
+      });
+      
+      // Show active state elements
+      const elementIds = StateRenderer.getStateElementIds(state);
       elementIds.forEach(id => {
         const el = document.getElementById(id);
-        if (el && s !== state) {
-          el.classList.add('hidden', 'display-none');
+        if (el) {
+          el.classList.remove('hidden', 'display-none');
         }
       });
-    });
-    
-    // Show active state elements
-    const elementIds = StateRenderer.getStateElementIds(state);
-    elementIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.classList.remove('hidden', 'display-none');
+      
+      // Start countdown timer if pregame
+      if (state === 'pregame') {
+        this._startCountdownTimer();
       }
-    });
-    
-    // Start countdown timer if pregame
-    if (state === 'pregame') {
-      this._startCountdownTimer();
     }
     
-    console.log('✅ Showing state:', state);
+    console.log('✅ Showing state:', state, '(layout:', this.currentLayoutType, ')');
   }
 
   /**
@@ -262,6 +376,12 @@ class GameOverlay {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
       this.countdownInterval = null;
+    }
+    
+    // For non-pill layouts, just re-render (no animations)
+    if (this.currentLayoutType !== 'pill') {
+      this._renderAllStates(gameData);
+      return;
     }
     
     const fromElementIds = StateRenderer.getStateElementIds(fromState);
@@ -329,39 +449,19 @@ class GameOverlay {
   }
 
   /**
-   * Show "No game selected" state
-   * From overlay.js
+   * Hide overlay (for errors, no game selected, etc.)
    */
-  showNoGameSelected() {
+  hide() {
     this.currentState = null;
-    this.container.innerHTML = `
-      <div class="no-game">
-        <div class="no-game-icon">🏀</div>
-        <div class="no-game-text">No Game Selected</div>
-        <div class="no-game-hint">
-          Open the control dashboard to select a game
-        </div>
-      </div>
-    `;
-    console.log('ℹ️ No game selected');
+    this.container.innerHTML = '';
+    this.container.style.display = 'none';
   }
-
+  
   /**
-   * Show error state
-   * From overlay.js
+   * Show overlay
    */
-  showError(message) {
-    this.currentState = null;
-    this.container.innerHTML = `
-      <div class="error">
-        <div class="error-icon">⚠️</div>
-        <div class="error-text">
-          <strong>Error:</strong><br>
-          ${message}
-        </div>
-      </div>
-    `;
-    console.error('❌ Error displayed:', message);
+  show() {
+    this.container.style.display = 'block';
   }
 
   /**

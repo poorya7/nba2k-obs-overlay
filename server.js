@@ -6,8 +6,9 @@ const path = require('path');
 
 const PORT = 3000;
 
-// In-memory storage for selected game ID
+// In-memory storage for selected game ID and style
 let selectedGameId = null;
+let selectedStyle = 'pill-green'; // default style
 
 // MIME types for different file extensions
 const MIME_TYPES = {
@@ -42,6 +43,33 @@ const server = http.createServer((req, res) => {
         const data = JSON.parse(body);
         selectedGameId = data.gameId;
         console.log('✅ Game selected:', selectedGameId);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true }));
+      } catch (error) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid JSON' }));
+      }
+    });
+    return;
+  }
+
+  // API endpoints for style selection
+  if (req.url === '/api/selected-style' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ style: selectedStyle }));
+    return;
+  }
+
+  if (req.url === '/api/selected-style' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body);
+        selectedStyle = data.style;
+        console.log('🎨 Style changed:', selectedStyle);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true }));
       } catch (error) {

@@ -4,11 +4,15 @@ Live NBA game stats overlay for your NBA 2K streams. Shows real-time scores, qua
 
 ## ✨ Features
 
-- **Live Game Stats**: Real-time scores, quarter/time, team logos
-- **Control Dashboard**: Easy game selection interface
-- **Auto-Updates**: Refreshes every 30 seconds
-- **Clean Design**: Professional overlay with transparent background
-- **OBS Ready**: Browser source compatible
+- **13 Different Styles**: Pill, horizontal, and vertical layouts with multiple color schemes
+- **Live Game Stats**: Real-time scores, quarter/time, team logos, records
+- **Smart Dashboard**: Easy game selection + style switcher
+- **Auto-Updates**: Game data every 10 seconds, style changes within 2 seconds
+- **State Detection**: Pregame, live, halftime, end of quarter, overtime, final
+- **Midnight Support**: Games from yesterday stay visible if still live or recently finished
+- **Modular Architecture**: Clean, maintainable code following SOLID/DRY principles
+- **Clean Design**: Professional overlay with transparent/solid background options
+- **OBS Ready**: Browser source compatible, hides gracefully on errors
 
 ## 🚀 Quick Start
 
@@ -27,17 +31,20 @@ Open in your browser:
 http://localhost:3000/dashboard
 ```
 
-- Select today's game from the dropdown
-- Preview will show below
-- Selection is saved automatically
+- Select today's game from the dropdown (includes yesterday's live/recent games)
+- Click "Next Style" to cycle through 13 different overlay designs
+- Preview shows team info, scores, and current style
+- Selections are saved automatically
 
 ### 3. Add Overlay to OBS
 
 1. In OBS, add a **Browser Source**
 2. Set URL to: `http://localhost:3000/overlay/game-stats`
-3. Set Width: `600` Height: `300` (adjust as needed)
+3. Set Width: `1920` Height: `1080`
 4. Check "Shutdown source when not visible" for better performance
-5. Position overlay on your stream!
+5. Position and scale overlay as needed on your stream!
+
+**Tip**: Use the style switcher in the dashboard to preview different designs live on your stream!
 
 ## 📁 Project Structure
 
@@ -45,18 +52,47 @@ http://localhost:3000/dashboard
 overlay/
 ├── shared/
 │   ├── config.js         # Configuration (ESPN API, refresh rates)
-│   └── nbaApi.js         # ESPN API integration
+│   └── nbaApi.js         # ESPN API integration + smart fetching
 ├── dashboard/
 │   ├── index.html        # Control panel UI
-│   └── dashboard.js      # Game selection logic
+│   ├── dashboard.js      # Game selection + style switcher
+│   └── styles.css        # Dashboard styling
+├── design-test/
+│   ├── designs.css       # All 13 overlay styles
+│   └── preview.js        # Design preview logic
 └── game-stats/
     ├── index.html        # Overlay display
-    ├── styles.css        # Overlay styling
-    └── overlay.js        # Overlay logic
+    ├── styles.css        # Base overlay styling
+    ├── pill-colors.css   # Pill color variations
+    ├── layout-scaling.css# Horizontal/vertical scaling
+    ├── overlay.js        # Main entry point
+    ├── GameOverlay.js    # Main controller (modular)
+    ├── StateRenderer.js  # HTML generation (3 layouts)
+    └── StateTransitions.js # Animation logic
 
-server.js                 # Local web server
+server.js                 # Local web server + APIs
 package.json             # NPM configuration
 ```
+
+## 🎨 Available Styles
+
+**Pill Layouts (5 colors)**
+- Green, Red, Blue, Purple, Gold
+- Compact horizontal design
+- Perfect for top-left/right corner
+- 15% larger than original
+
+**Horizontal Bars (4 styles)**
+- Classic Green, Neon Cyan, Red, White
+- Wide format for bottom/top of screen
+- 20% larger for visibility
+
+**Vertical Sidebars (4 styles)**
+- Green, Purple, Blue, Gold
+- Tall format for left/right side
+- 20% larger for visibility
+
+**Live Switching**: Use the dashboard button to cycle through all styles in real-time!
 
 ## ⚙️ Configuration
 
@@ -64,15 +100,17 @@ Edit `overlay/shared/config.js` to customize:
 
 - **Refresh Intervals**: How often overlay updates
 - **Timezone**: Display timezone for game times
-- **Storage Keys**: LocalStorage keys (if needed)
+- **ESPN API Endpoint**: Change data source if needed
 
 ## 🎮 How It Works
 
-1. **Dashboard** fetches today's NBA games from ESPN API
-2. You select which game to display
-3. Selection saved to **localStorage**
-4. **Overlay** reads selection and displays live stats
-5. Overlay auto-refreshes every 30 seconds
+1. **Dashboard** fetches today's games + yesterday's live/recent games from ESPN API
+2. You select which game to display and which style to use
+3. Selections saved to **server** (in-memory)
+4. **Overlay** reads selections and displays live stats with chosen style
+5. Overlay auto-refreshes game data every 10 seconds, checks for style changes every 2 seconds
+6. Smart state detection: pregame, live, halftime, end of quarter, overtime, final
+7. Graceful handling: overlay hides when server is down or no game selected
 
 ## 📡 Data Source
 
@@ -86,22 +124,38 @@ No API key needed! ✨
 ## 🔧 Troubleshooting
 
 **Overlay not updating?**
-- Make sure both dashboard and overlay use same localhost URL
+- Make sure server is running (`npm start`)
+- Hard refresh overlay (Ctrl+Shift+R) or clear OBS browser cache
 - Check browser console for errors (F12)
 
 **No games showing?**
-- Check if there are NBA games today
-- Try refreshing the dashboard
+- Check if there are NBA games today (or yesterday if past midnight)
+- Try clicking "Refresh Games" in dashboard
+- Check console for ESPN API errors
 
-**Overlay shows "No game selected"?**
-- Open dashboard and select a game from dropdown
+**Overlay disappeared?**
+- This is normal! It hides when server is down or no game selected
+- Select a game in dashboard to make it reappear
+
+**Style changes not working?**
+- Hard refresh overlay page (Ctrl+Shift+R)
+- In OBS: Right-click browser source → Refresh
+- Check console logs for "🎨 Style changed to"
+
+**"End of Quarter" showing as scheduled?**
+- Fixed! Now properly detects STATUS_END_PERIOD as live
+
+**Games disappeared at midnight?**
+- Fixed! Yesterday's live/recent games (< 2hrs) now stay visible
 
 ## 💡 Tips
 
-- Keep dashboard open during stream to monitor game status
-- Overlay updates every 30 seconds (configurable)
-- Works best with games that are live or scheduled for today
-- Can display scheduled games (shows start time instead of score)
+- **Style Switcher**: Click "Next Style" in dashboard to cycle through all 13 designs live on stream
+- **Midnight Support**: Games from yesterday stay visible if still live or finished < 2 hours ago
+- **Fast Updates**: Game data refreshes every 10 seconds, style changes apply within 2 seconds
+- **OBS Setup**: Set browser source to 1920x1080 for best quality, then scale in OBS
+- **Error Handling**: Overlay automatically hides if server is down or no game selected
+- **Design Tester**: Visit `http://localhost:3000/design-test` to preview all styles with real data
 
 ## 📝 License
 
