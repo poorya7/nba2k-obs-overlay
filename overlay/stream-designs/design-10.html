@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Design 10: Dynamic Asymmetric</title>
+  <link rel="stylesheet" href="styles/common.css">
+  <style>
+    body {
+      background: #000;
+    }
+
+    /* Diagonal banner across corner */
+    .diagonal-banner {
+      position: absolute;
+      top: -50px;
+      left: -150px;
+      width: 600px;
+      height: 200px;
+      background: linear-gradient(135deg, #e91e63, #9c27b0, #673ab7);
+      transform: rotate(-15deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 40px rgba(233, 30, 99, 0.5);
+      clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
+    }
+
+    .diagonal-content {
+      transform: rotate(15deg);
+      text-align: center;
+    }
+
+    .diagonal-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 3px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Offset score display - with player section */
+    .offset-score {
+      position: absolute;
+      bottom: 180px;
+      right: 120px;
+      background: rgba(0, 188, 212, 0.2);
+      backdrop-filter: blur(15px);
+      padding: 25px 35px;
+      border-radius: 20px;
+      border: 3px solid rgba(0, 188, 212, 0.6);
+      box-shadow: 0 8px 32px rgba(0, 188, 212, 0.4);
+      transform: rotate(-5deg);
+      min-width: 380px;
+    }
+
+    .offset-score-layout {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .offset-score-main {
+      flex: 1;
+    }
+
+    .offset-score-player {
+      text-align: center;
+      border-left: 2px solid rgba(0, 188, 212, 0.4);
+      padding-left: 20px;
+      opacity: 0.8;
+    }
+
+    .offset-score-player img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(0, 188, 212, 0.7);
+      margin-bottom: 6px;
+    }
+
+    .offset-score-player-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+
+    .offset-score-player-stat {
+      font-size: 24px;
+      font-weight: 900;
+      color: #80deea;
+      text-shadow: 0 0 12px rgba(128, 222, 234, 0.7);
+    }
+
+    .offset-score-teams {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .offset-team {
+      text-align: center;
+    }
+
+    .offset-team-abbr {
+      font-size: 16px;
+      font-weight: 700;
+      color: #80deea;
+      margin-bottom: 6px;
+    }
+
+    .offset-score-num {
+      font-size: 42px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 15px rgba(0, 188, 212, 0.8);
+    }
+
+    .offset-vs {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .offset-time {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #80deea;
+      font-weight: 600;
+    }
+
+    /* Asymmetric player cards */
+    .async-player-1 {
+      position: absolute;
+      top: 200px;
+      right: 50px;
+      width: 180px;
+      background: rgba(255, 152, 0, 0.2);
+      backdrop-filter: blur(15px);
+      padding: 20px;
+      border-radius: 15px;
+      border: 3px solid rgba(255, 152, 0, 0.5);
+      box-shadow: 0 6px 30px rgba(255, 152, 0, 0.4);
+      transform: rotate(8deg);
+    }
+
+    .async-player-2 {
+      position: absolute;
+      top: 450px;
+      left: 60px;
+      width: 200px;
+      background: rgba(76, 175, 80, 0.2);
+      backdrop-filter: blur(15px);
+      padding: 22px;
+      border-radius: 15px;
+      border: 3px solid rgba(76, 175, 80, 0.5);
+      box-shadow: 0 6px 30px rgba(76, 175, 80, 0.4);
+      transform: rotate(-7deg);
+    }
+
+    .async-player-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      margin: 0 auto 10px;
+      display: block;
+    }
+
+    .async-player-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .async-player-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .async-player-stat {
+      text-align: center;
+    }
+
+    .async-player-stat-value {
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .async-player-stat-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 3px;
+    }
+
+    /* Off-center ASMR badge */
+    .offcenter-asmr {
+      position: absolute;
+      top: 380px;
+      right: 280px;
+      width: 140px;
+      height: 140px;
+      background: rgba(255, 193, 7, 0.2);
+      backdrop-filter: blur(15px);
+      border-radius: 50%;
+      border: 4px solid rgba(255, 193, 7, 0.6);
+      box-shadow: 0 8px 35px rgba(255, 193, 7, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(20deg);
+    }
+
+    .offcenter-asmr-text {
+      font-size: 26px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 3px;
+      text-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+      transform: rotate(-20deg);
+    }
+
+    /* Dynamic stats unexpected position */
+    .dynamic-stats {
+      position: absolute;
+      bottom: 30px;
+      left: 150px;
+      background: rgba(156, 39, 176, 0.2);
+      backdrop-filter: blur(15px);
+      padding: 18px 30px;
+      border-radius: 50px 15px 50px 15px;
+      border: 3px solid rgba(156, 39, 176, 0.5);
+      box-shadow: 0 6px 30px rgba(156, 39, 176, 0.4);
+      display: flex;
+      gap: 30px;
+      transform: rotate(3deg);
+    }
+
+    .dynamic-stat-item {
+      text-align: center;
+    }
+
+    .dynamic-stat-label {
+      font-size: 10px;
+      color: #ce93d8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .dynamic-stat-value {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    /* Additional asymmetric element */
+    .floating-accent {
+      position: absolute;
+      top: 600px;
+      right: 400px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #00bcd4, #4caf50);
+      border-radius: 50% 40% 50% 40%;
+      box-shadow: 0 4px 20px rgba(0, 188, 212, 0.5);
+      transform: rotate(45deg);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(55deg) translateY(-20px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-background">
+    <video autoplay loop muted playsinline>
+      <source src="../../game.mp4" type="video/mp4">
+    </video>
+  </div>
+  
+  <div class="overlay-container">
+    <!-- Diagonal Banner -->
+    <div class="diagonal-banner fade-in">
+      <div class="diagonal-content">
+        <div class="diagonal-title">SILENT BASKETBALL</div>
+      </div>
+    </div>
+
+    <!-- Offset Score with Integrated Player -->
+    <div class="offset-score fade-in">
+      <div class="offset-score-layout">
+        <div class="offset-score-main">
+          <div class="offset-score-teams">
+            <div class="offset-team">
+              <div class="offset-team-abbr">PHI</div>
+              <div class="offset-score-num">87</div>
+            </div>
+            <div class="offset-vs">vs</div>
+            <div class="offset-team">
+              <div class="offset-score-num">92</div>
+              <div class="offset-team-abbr">MIL</div>
+            </div>
+          </div>
+          <div class="offset-time">Q3 • 6:42</div>
+        </div>
+        <div class="offset-score-player player-cycle">
+          <img src="https://a.espncdn.com/i/headshots/nba/players/full/3032977.png" alt="Giannis">
+          <div class="offset-score-player-name">Giannis</div>
+          <div class="offset-score-player-stat">31</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player now integrated into offset score widget above -->
+
+    <!-- Off-Center ASMR -->
+    <div class="offcenter-asmr fade-in pulse">
+      <div class="offcenter-asmr-text">ASMR</div>
+    </div>
+
+    <!-- Dynamic Stats -->
+    <div class="dynamic-stats fade-in">
+      <div class="dynamic-stat-item">
+        <div class="dynamic-stat-label">FG%</div>
+        <div class="dynamic-stat-value">48</div>
+      </div>
+      <div class="dynamic-stat-item">
+        <div class="dynamic-stat-label">3PT</div>
+        <div class="dynamic-stat-value">12</div>
+      </div>
+      <div class="dynamic-stat-item">
+        <div class="dynamic-stat-label">REB</div>
+        <div class="dynamic-stat-value">42</div>
+      </div>
+    </div>
+
+    <!-- Floating Accent -->
+    <div class="floating-accent"></div>
+  </div>
+</body>
+</html>
+

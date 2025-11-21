@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Design 16: Neon Dashboard</title>
+  <link rel="stylesheet" href="styles/common.css">
+  <style>
+    body {
+      background: #0d0221;
+    }
+
+    /* Neon glow effects */
+    .neon-pink { color: #ff006e; text-shadow: 0 0 20px #ff006e; }
+    .neon-cyan { color: #00f5ff; text-shadow: 0 0 20px #00f5ff; }
+    .neon-purple { color: #8338ec; text-shadow: 0 0 20px #8338ec; }
+
+    /* Circular progress indicators */
+    .progress-circle-container {
+      position: absolute;
+      top: 100px;
+      left: 50px;
+      display: flex;
+      gap: 30px;
+    }
+
+    .progress-circle {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .circle-svg {
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: rgba(255, 0, 110, 0.1);
+      stroke-width: 8;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke: #ff006e;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 339;
+      animation: circle-fill 2s ease-out forwards;
+      filter: drop-shadow(0 0 10px #ff006e);
+    }
+
+    @keyframes circle-fill {
+      from { stroke-dashoffset: 339; }
+    }
+
+    .circle-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .circle-value {
+      font-size: 24px;
+      font-weight: 900;
+      color: #ff006e;
+      font-family: 'Impact', sans-serif;
+      text-shadow: 0 0 15px #ff006e;
+    }
+
+    .circle-name {
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
+      font-family: 'Arial', sans-serif;
+      margin-top: 5px;
+    }
+
+    /* Main scoreboard */
+    .neon-scoreboard {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 650px;
+      background: rgba(13, 2, 33, 0.95);
+      border: 4px solid #ff006e;
+      padding: 40px;
+      box-shadow: 0 0 60px rgba(255, 0, 110, 0.6),
+                  inset 0 0 30px rgba(255, 0, 110, 0.1);
+    }
+
+    .scoreboard-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo-neon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 15px;
+      filter: drop-shadow(0 0 20px #ff006e);
+    }
+
+    .title-neon {
+      font-size: 28px;
+      font-weight: 900;
+      color: #ff006e;
+      font-family: 'Impact', sans-serif;
+      letter-spacing: 4px;
+      text-shadow: 0 0 30px #ff006e;
+    }
+
+    .subtitle-neon {
+      font-size: 16px;
+      color: #00f5ff;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 3px;
+      margin-top: 10px;
+      text-shadow: 0 0 15px #00f5ff;
+    }
+
+    .teams-neon {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .team-neon {
+      text-align: center;
+      flex: 1;
+    }
+
+    .team-name-neon {
+      font-size: 18px;
+      color: #888;
+      font-family: 'Arial', sans-serif;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .team-score-neon {
+      font-size: 76px;
+      font-weight: 900;
+      color: #ff006e;
+      font-family: 'Impact', sans-serif;
+      text-shadow: 0 0 40px #ff006e;
+      position: relative;
+    }
+
+    .team-score-neon::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle, rgba(255, 0, 110, 0.3), transparent);
+      z-index: -1;
+    }
+
+    .vs-neon {
+      font-size: 20px;
+      color: #8338ec;
+      font-weight: 700;
+    }
+
+    /* Beat visualizer */
+    .beat-visualizer-neon {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 150px;
+      background: rgba(13, 2, 33, 0.95);
+      border: 4px solid #00f5ff;
+      padding: 20px;
+      box-shadow: 0 0 60px rgba(0, 245, 255, 0.5);
+    }
+
+    .beat-title {
+      font-size: 14px;
+      color: #00f5ff;
+      font-family: 'Impact', sans-serif;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 15px;
+      text-shadow: 0 0 15px #00f5ff;
+    }
+
+    .beat-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      height: 80px;
+      gap: 6px;
+    }
+
+    .beat-bar-neon {
+      flex: 1;
+      background: linear-gradient(to top, #00f5ff, #8338ec);
+      border-radius: 4px 4px 0 0;
+      box-shadow: 0 0 15px #00f5ff;
+      animation: beat-pump 0.7s ease-in-out infinite;
+    }
+
+    @keyframes beat-pump {
+      0%, 100% { height: 25%; }
+      50% { height: var(--beat-height); }
+    }
+
+    .beat-bar-neon:nth-child(1) { --beat-height: 60%; animation-delay: 0s; }
+    .beat-bar-neon:nth-child(2) { --beat-height: 85%; animation-delay: 0.1s; }
+    .beat-bar-neon:nth-child(3) { --beat-height: 45%; animation-delay: 0.2s; }
+    .beat-bar-neon:nth-child(4) { --beat-height: 70%; animation-delay: 0.3s; }
+    .beat-bar-neon:nth-child(5) { --beat-height: 95%; animation-delay: 0.4s; }
+    .beat-bar-neon:nth-child(6) { --beat-height: 55%; animation-delay: 0.5s; }
+    .beat-bar-neon:nth-child(7) { --beat-height: 75%; animation-delay: 0.6s; }
+    .beat-bar-neon:nth-child(8) { --beat-height: 50%; animation-delay: 0.7s; }
+    .beat-bar-neon:nth-child(9) { --beat-height: 80%; animation-delay: 0.8s; }
+    .beat-bar-neon:nth-child(10) { --beat-height: 65%; animation-delay: 0.9s; }
+
+    /* Stats grid */
+    .stats-grid-neon {
+      position: absolute;
+      top: 100px;
+      right: 50px;
+      width: 300px;
+      background: rgba(13, 2, 33, 0.95);
+      border: 4px solid #8338ec;
+      padding: 20px;
+      box-shadow: 0 0 60px rgba(131, 56, 236, 0.5);
+    }
+
+    .grid-title {
+      font-size: 14px;
+      color: #8338ec;
+      font-family: 'Impact', sans-serif;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 0 0 15px #8338ec;
+    }
+
+    .stat-row-neon {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(131, 56, 236, 0.2);
+    }
+
+    .stat-name {
+      font-size: 13px;
+      color: #888;
+      font-family: 'Arial', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 900;
+      color: #8338ec;
+      font-family: 'Impact', sans-serif;
+      text-shadow: 0 0 10px #8338ec;
+    }
+
+    /* Particle effects */
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ff006e;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff006e;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      33% { transform: translateY(-100px) translateX(50px); }
+      66% { transform: translateY(-50px) translateX(-30px); }
+    }
+
+    .particle.p1 { top: 20%; left: 10%; animation-delay: 0s; }
+    .particle.p2 { top: 40%; left: 85%; animation-delay: 1s; }
+    .particle.p3 { top: 70%; left: 15%; animation-delay: 2s; }
+    .particle.p4 { top: 30%; left: 75%; animation-delay: 3s; }
+  </style>
+</head>
+<body>
+  <div class="game-background">
+    <video autoplay loop muted playsinline>
+      <source src="../../game.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Particles -->
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+
+  <div class="overlay-container">
+    <!-- Progress Circles -->
+    <div class="progress-circle-container fade-in">
+      <div class="progress-circle">
+        <svg class="circle-svg" width="120" height="120">
+          <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
+          <circle class="circle-progress" cx="60" cy="60" r="54" style="stroke-dashoffset: 68;"></circle>
+        </svg>
+        <div class="circle-label">
+          <div class="circle-value">48%</div>
+          <div class="circle-name">FG%</div>
+        </div>
+      </div>
+      <div class="progress-circle">
+        <svg class="circle-svg" width="120" height="120">
+          <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
+          <circle class="circle-progress" cx="60" cy="60" r="54" style="stroke-dashoffset: 100;"></circle>
+        </svg>
+        <div class="circle-label">
+          <div class="circle-value">35%</div>
+          <div class="circle-name">3PT%</div>
+        </div>
+      </div>
+      <div class="progress-circle">
+        <svg class="circle-svg" width="120" height="120">
+          <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
+          <circle class="circle-progress" cx="60" cy="60" r="54" style="stroke-dashoffset: 41;"></circle>
+        </svg>
+        <div class="circle-label">
+          <div class="circle-value">88%</div>
+          <div class="circle-name">FT%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Scoreboard -->
+    <div class="neon-scoreboard fade-in">
+      <div class="scoreboard-header">
+        <img src="logo.png" alt="Logo" class="logo-neon">
+        <div class="title-neon">SILENT BASKETBALL</div>
+        <div class="subtitle-neon">ASMR</div>
+      </div>
+      <div class="teams-neon">
+        <div class="team-neon">
+          <div class="team-name-neon">CELTICS</div>
+          <div class="team-score-neon">124</div>
+        </div>
+        <div class="vs-neon">VS</div>
+        <div class="team-neon">
+          <div class="team-name-neon">76ERS</div>
+          <div class="team-score-neon">119</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid-neon fade-in">
+      <div class="grid-title">LIVE STATS</div>
+      <div class="stat-row-neon">
+        <span class="stat-name">Rebounds</span>
+        <span class="stat-val">52</span>
+      </div>
+      <div class="stat-row-neon">
+        <span class="stat-name">Assists</span>
+        <span class="stat-val">34</span>
+      </div>
+      <div class="stat-row-neon">
+        <span class="stat-name">Steals</span>
+        <span class="stat-val">11</span>
+      </div>
+      <div class="stat-row-neon">
+        <span class="stat-name">Blocks</span>
+        <span class="stat-val">8</span>
+      </div>
+      <div class="stat-row-neon">
+        <span class="stat-name">Turnovers</span>
+        <span class="stat-val">9</span>
+      </div>
+      <div class="stat-row-neon">
+        <span class="stat-name">Fast Break</span>
+        <span class="stat-val">18</span>
+      </div>
+    </div>
+
+    <!-- Beat Visualizer -->
+    <div class="beat-visualizer-neon fade-in">
+      <div class="beat-title">♫ AUDIO SPECTRUM ♫</div>
+      <div class="beat-bars">
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+        <div class="beat-bar-neon"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

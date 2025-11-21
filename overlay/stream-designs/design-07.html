@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Design 7: Ambient Glow</title>
+  <link rel="stylesheet" href="styles/common.css">
+  <style>
+    body {
+      background: #000;
+    }
+
+    /* Soft glowing top banner */
+    .glow-banner {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 138, 101, 0.15);
+      backdrop-filter: blur(20px);
+      padding: 20px 60px;
+      border-radius: 50px;
+      border: 2px solid rgba(255, 138, 101, 0.3);
+      box-shadow: 
+        0 0 40px rgba(255, 138, 101, 0.4),
+        0 0 80px rgba(255, 138, 101, 0.2),
+        inset 0 0 20px rgba(255, 138, 101, 0.1);
+    }
+
+    .glow-banner h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 3px;
+      text-shadow: 
+        0 0 20px rgba(255, 138, 101, 0.8),
+        0 0 40px rgba(255, 138, 101, 0.4);
+    }
+
+    /* Corner glow widgets */
+    .glow-widget {
+      position: absolute;
+      background: rgba(255, 138, 101, 0.1);
+      backdrop-filter: blur(15px);
+      padding: 20px 30px;
+      border-radius: 20px;
+      border: 2px solid rgba(255, 138, 101, 0.25);
+      box-shadow: 
+        0 0 30px rgba(255, 138, 101, 0.3),
+        inset 0 0 15px rgba(255, 138, 101, 0.08);
+    }
+
+    .glow-widget.top-left {
+      top: 130px;
+      left: 40px;
+    }
+
+    .glow-widget.top-right {
+      top: 130px;
+      right: 40px;
+    }
+
+    .widget-label {
+      font-size: 11px;
+      color: rgba(255, 200, 180, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .widget-content {
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 
+        0 0 15px rgba(255, 138, 101, 0.7),
+        0 0 30px rgba(255, 138, 101, 0.4);
+    }
+
+    .widget-sub {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 5px;
+      font-weight: 600;
+    }
+
+    /* Score widget - with integrated player section */
+    .score-glow {
+      position: absolute;
+      bottom: 150px;
+      left: 40px;
+      background: rgba(255, 138, 101, 0.12);
+      backdrop-filter: blur(15px);
+      padding: 25px 35px;
+      border-radius: 25px;
+      border: 2px solid rgba(255, 138, 101, 0.3);
+      box-shadow: 
+        0 0 35px rgba(255, 138, 101, 0.35),
+        inset 0 0 20px rgba(255, 138, 101, 0.1);
+      min-width: 380px;
+    }
+
+    .score-glow-with-player {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .score-glow-main {
+      flex: 1;
+    }
+
+    .score-glow-player {
+      text-align: center;
+      border-left: 2px solid rgba(255, 138, 101, 0.3);
+      padding-left: 20px;
+      opacity: 0.85;
+    }
+
+    .score-glow-player img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 138, 101, 0.5);
+      margin-bottom: 6px;
+    }
+
+    .score-glow-player-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 4px;
+    }
+
+    .score-glow-player-stat {
+      font-size: 22px;
+      font-weight: 900;
+      color: rgba(255, 138, 101, 1);
+      text-shadow: 0 0 12px rgba(255, 138, 101, 0.7);
+    }
+
+    .score-teams {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .score-team {
+      text-align: center;
+    }
+
+    .score-abbr {
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(255, 200, 180, 0.9);
+      margin-bottom: 8px;
+    }
+
+    .score-num {
+      font-size: 42px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 
+        0 0 20px rgba(255, 138, 101, 0.8),
+        0 0 40px rgba(255, 138, 101, 0.4);
+    }
+
+    .score-vs {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Pulsing ASMR indicator */
+    .asmr-pulse {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 138, 101, 0.15);
+      backdrop-filter: blur(15px);
+      border-radius: 50%;
+      border: 3px solid rgba(255, 138, 101, 0.4);
+      box-shadow: 
+        0 0 40px rgba(255, 138, 101, 0.5),
+        0 0 80px rgba(255, 138, 101, 0.3),
+        inset 0 0 25px rgba(255, 138, 101, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulseSlow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseSlow {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 
+          0 0 40px rgba(255, 138, 101, 0.5),
+          0 0 80px rgba(255, 138, 101, 0.3),
+          inset 0 0 25px rgba(255, 138, 101, 0.15);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 
+          0 0 60px rgba(255, 138, 101, 0.7),
+          0 0 120px rgba(255, 138, 101, 0.4),
+          inset 0 0 30px rgba(255, 138, 101, 0.2);
+      }
+    }
+
+    .asmr-pulse-text {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 2px;
+      text-shadow: 
+        0 0 15px rgba(255, 138, 101, 0.8),
+        0 0 30px rgba(255, 138, 101, 0.5);
+    }
+
+    /* Player spotlight */
+    .player-spotlight {
+      position: absolute;
+      top: 350px;
+      right: 80px;
+      width: 220px;
+      background: rgba(255, 138, 101, 0.12);
+      backdrop-filter: blur(15px);
+      padding: 25px;
+      border-radius: 20px;
+      border: 2px solid rgba(255, 138, 101, 0.3);
+      box-shadow: 
+        0 0 35px rgba(255, 138, 101, 0.35),
+        inset 0 0 20px rgba(255, 138, 101, 0.1);
+    }
+
+    .spotlight-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255, 138, 101, 0.5);
+      margin: 0 auto 12px;
+      display: block;
+    }
+
+    .spotlight-label {
+      font-size: 11px;
+      color: rgba(255, 200, 180, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .spotlight-player {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 15px;
+      line-height: 1.3;
+      text-shadow: 0 0 10px rgba(255, 138, 101, 0.5);
+    }
+
+    .spotlight-stats {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .spotlight-stat {
+      text-align: center;
+    }
+
+    .spotlight-stat-value {
+      font-size: 26px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 15px rgba(255, 138, 101, 0.6);
+    }
+
+    .spotlight-stat-label {
+      font-size: 10px;
+      color: rgba(255, 200, 180, 0.8);
+      margin-top: 3px;
+    }
+
+    /* Gentle bottom ticker */
+    .gentle-ticker {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      background: rgba(255, 138, 101, 0.1);
+      backdrop-filter: blur(15px);
+      padding: 15px 25px;
+      border-radius: 50px;
+      border: 2px solid rgba(255, 138, 101, 0.2);
+      box-shadow: 
+        0 0 25px rgba(255, 138, 101, 0.25),
+        inset 0 0 15px rgba(255, 138, 101, 0.08);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-background">
+    <video autoplay loop muted playsinline>
+      <source src="../../game.mp4" type="video/mp4">
+    </video>
+  </div>
+  
+  <div class="overlay-container">
+    <!-- Glowing Banner -->
+    <div class="glow-banner fade-in">
+      <h1>SILENT BASKETBALL</h1>
+    </div>
+
+    <!-- Corner Widgets -->
+    <div class="glow-widget top-left fade-in">
+      <div class="widget-label">Quarter</div>
+      <div class="widget-content">Q3</div>
+      <div class="widget-sub">6:42 remaining</div>
+    </div>
+
+    <div class="glow-widget top-right fade-in">
+      <div class="widget-label">Game Time</div>
+      <div class="widget-content">29:18</div>
+      <div class="widget-sub">elapsed</div>
+    </div>
+
+    <!-- Score Widget with Integrated Player -->
+    <div class="score-glow fade-in">
+      <div class="score-glow-with-player">
+        <div class="score-glow-main">
+          <div class="score-teams">
+            <div class="score-team">
+              <div class="score-abbr">PHI</div>
+              <div class="score-num">87</div>
+            </div>
+            <div class="score-vs">vs</div>
+            <div class="score-team">
+              <div class="score-num">92</div>
+              <div class="score-abbr">MIL</div>
+            </div>
+          </div>
+        </div>
+        <div class="score-glow-player player-cycle">
+          <img src="https://a.espncdn.com/i/headshots/nba/players/full/3032977.png" alt="Giannis">
+          <div class="score-glow-player-name">Giannis</div>
+          <div class="score-glow-player-stat">31</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player now integrated into score widget above -->
+
+    <!-- ASMR Pulse -->
+    <div class="asmr-pulse fade-in">
+      <div class="asmr-pulse-text">ASMR</div>
+    </div>
+
+    <!-- Gentle Ticker -->
+    <div class="gentle-ticker fade-in">
+      @SilentBasketball • Pure Game Sounds
+    </div>
+  </div>
+</body>
+</html>
+

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Design 12: Circular Data Streams</title>
+  <link rel="stylesheet" href="styles/common.css">
+  <style>
+    body {
+      background: #0a0a0f;
+    }
+
+    /* Circular stats around logo - moved to top left */
+    .central-hub {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      width: 300px;
+      height: 300px;
+      z-index: 1;
+    }
+
+    .hub-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.9);
+      border: 3px solid #FF6B35;
+      padding: 20px;
+      box-shadow: 0 0 40px rgba(255, 107, 53, 0.6);
+    }
+
+    .hub-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Orbit rings */
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes rotateReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    .orbit-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(255, 107, 53, 0.3);
+    }
+
+    .orbit-ring.ring-1 {
+      width: 250px;
+      height: 250px;
+      border-color: rgba(255, 107, 53, 0.5);
+      animation: rotate 20s linear infinite;
+    }
+
+    .orbit-ring.ring-2 {
+      width: 350px;
+      height: 350px;
+      border-color: rgba(0, 176, 255, 0.4);
+      animation: rotateReverse 30s linear infinite;
+    }
+
+    .orbit-ring.ring-3 {
+      width: 450px;
+      height: 450px;
+      border-color: rgba(255, 107, 53, 0.3);
+      animation: rotate 40s linear infinite;
+    }
+
+    /* Data nodes on orbits */
+    .data-node {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #FF6B35;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Courier New', monospace;
+      box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    }
+
+    .data-node.node-1 {
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .data-node.node-2 {
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .data-node.node-3 {
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+    }
+
+    .data-node.node-4 {
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+    }
+
+    .node-label {
+      font-size: 9px;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    .node-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #FF6B35;
+      margin-top: 2px;
+    }
+
+    /* Waveform top */
+    .waveform-container {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 80px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00B0FF;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .waveform {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      height: 100%;
+      gap: 3px;
+    }
+
+    .wave-line {
+      width: 4px;
+      background: linear-gradient(to top, #00B0FF, #0080FF);
+      border-radius: 2px;
+      box-shadow: 0 0 10px #00B0FF;
+      animation: wave 1s ease-in-out infinite;
+    }
+
+    @keyframes wave {
+      0%, 100% { height: 20%; }
+      50% { height: 90%; }
+    }
+
+    .wave-line:nth-child(1) { animation-delay: 0s; }
+    .wave-line:nth-child(2) { animation-delay: 0.1s; }
+    .wave-line:nth-child(3) { animation-delay: 0.2s; }
+    .wave-line:nth-child(4) { animation-delay: 0.3s; }
+    .wave-line:nth-child(5) { animation-delay: 0.4s; }
+    .wave-line:nth-child(6) { animation-delay: 0.5s; }
+    .wave-line:nth-child(7) { animation-delay: 0.6s; }
+    .wave-line:nth-child(8) { animation-delay: 0.7s; }
+    .wave-line:nth-child(9) { animation-delay: 0.8s; }
+    .wave-line:nth-child(10) { animation-delay: 0.9s; }
+
+    /* Score panel bottom */
+    .score-stream {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 120px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #FF6B35;
+      padding: 20px;
+    }
+
+    .stream-header {
+      text-align: center;
+      font-size: 12px;
+      color: #FF6B35;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .stream-scores {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .stream-team {
+      text-align: center;
+    }
+
+    .stream-team-name {
+      font-size: 16px;
+      color: #888;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 10px;
+    }
+
+    .stream-team-score {
+      font-size: 48px;
+      font-weight: 900;
+      color: #FF6B35;
+      text-shadow: 0 0 20px #FF6B35;
+    }
+
+    /* ASMR label */
+    .asmr-badge {
+      position: absolute;
+      top: 50px;
+      right: 50px;
+      background: rgba(0, 176, 255, 0.2);
+      border: 2px solid #00B0FF;
+      padding: 15px 25px;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: #00B0FF;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      box-shadow: 0 0 30px rgba(0, 176, 255, 0.5);
+    }
+
+    /* Data stream lines */
+    .stream-line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #FF6B35, transparent);
+      animation: streamFlow 3s linear infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes streamFlow {
+      0% { width: 0; left: 0; }
+      100% { width: 100%; left: 0; }
+    }
+
+    .stream-line.line-1 {
+      top: 200px;
+      animation-delay: 0s;
+    }
+
+    .stream-line.line-2 {
+      top: 400px;
+      animation-delay: 1s;
+    }
+
+    .stream-line.line-3 {
+      top: 600px;
+      animation-delay: 2s;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-background">
+    <video autoplay loop muted playsinline>
+      <source src="../../game.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="overlay-container">
+    <!-- Streaming data lines -->
+    <div class="stream-line line-1"></div>
+    <div class="stream-line line-2"></div>
+    <div class="stream-line line-3"></div>
+
+    <!-- Waveform -->
+    <div class="waveform-container fade-in">
+      <div class="waveform">
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+        <div class="wave-line"></div>
+      </div>
+    </div>
+
+    <!-- ASMR Badge -->
+    <div class="asmr-badge fade-in">ASMR</div>
+
+    <!-- Central Hub with orbits -->
+    <div class="central-hub fade-in">
+      <div class="orbit-ring ring-3"></div>
+      <div class="orbit-ring ring-2"></div>
+      <div class="orbit-ring ring-1"></div>
+      <div class="hub-logo">
+        <img src="logo.png" alt="Silent Basketball">
+      </div>
+      
+      <!-- Data nodes -->
+      <div class="data-node node-1">
+        <span class="node-label">PTS</span>
+        <span class="node-value">87</span>
+      </div>
+      <div class="data-node node-2">
+        <span class="node-label">REB</span>
+        <span class="node-value">42</span>
+      </div>
+      <div class="data-node node-3">
+        <span class="node-label">AST</span>
+        <span class="node-value">28</span>
+      </div>
+      <div class="data-node node-4">
+        <span class="node-label">BLK</span>
+        <span class="node-value">7</span>
+      </div>
+    </div>
+
+    <!-- Score Stream -->
+    <div class="score-stream fade-in">
+      <div class="stream-header">Silent Basketball</div>
+      <div class="stream-scores">
+        <div class="stream-team">
+          <div class="stream-team-name">LAKERS</div>
+          <div class="stream-team-score">98</div>
+        </div>
+        <div class="stream-team">
+          <div class="stream-team-name">HEAT</div>
+          <div class="stream-team-score">103</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

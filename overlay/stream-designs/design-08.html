@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Design 8: Corner Clusters</title>
+  <link rel="stylesheet" href="styles/common.css">
+  <style>
+    body {
+      background: #000;
+    }
+
+    /* Top-left cluster */
+    .top-left-cluster {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .cluster-card {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(15px);
+      padding: 18px 25px;
+      border-radius: 12px;
+      border-left: 4px solid;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .cluster-card.branding {
+      border-left-color: #00bfa5;
+    }
+
+    .branding-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 2px;
+      margin-bottom: 3px;
+    }
+
+    .branding-sub {
+      font-size: 13px;
+      color: #00bfa5;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .cluster-card.nba-scores {
+      border-left-color: #2196f3;
+      min-width: 280px;
+    }
+
+    .nba-title {
+      font-size: 11px;
+      color: #64b5f6;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .nba-game-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .nba-game-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .nba-team-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .nba-score-num {
+      font-size: 18px;
+      font-weight: 900;
+      color: #2196f3;
+    }
+
+    .nba-divider {
+      color: #555;
+      margin: 0 8px;
+    }
+
+    /* Bottom-right cluster - with player integration */
+    .bottom-right-cluster {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: flex-end;
+    }
+
+    .cluster-card.player-integrated {
+      border-right: 4px solid #e91e63;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      min-width: 350px;
+    }
+
+    .player-cluster-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #e91e63;
+    }
+
+    .player-cluster-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .player-cluster-label {
+      font-size: 10px;
+      color: #ff6b9d;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .player-cluster-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .player-cluster-stats {
+      display: flex;
+      gap: 15px;
+    }
+
+    .player-cluster-stat {
+      text-align: center;
+    }
+
+    .player-cluster-stat-value {
+      font-size: 20px;
+      font-weight: 900;
+      color: #e91e63;
+    }
+
+    .player-cluster-stat-label {
+      font-size: 9px;
+      color: #aaa;
+    }
+
+    .cluster-card.game-stats {
+      border-left: none;
+      border-right: 4px solid #ff6b35;
+      text-align: right;
+      min-width: 250px;
+    }
+
+    .stats-title {
+      font-size: 11px;
+      color: #ff9776;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .stat-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #aaa;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 900;
+      color: #ff6b35;
+    }
+
+    .cluster-card.score-display {
+      border-left: none;
+      border-right: 4px solid #9c27b0;
+      min-width: 300px;
+    }
+
+    .score-display-teams {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .score-display-team {
+      text-align: center;
+    }
+
+    .score-display-abbr {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ce93d8;
+      margin-bottom: 6px;
+    }
+
+    .score-display-num {
+      font-size: 38px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .score-display-vs {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .score-display-time {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ce93d8;
+      font-weight: 600;
+    }
+
+    /* Top-right ASMR badge */
+    .asmr-badge-corner {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: rgba(255, 193, 7, 0.15);
+      backdrop-filter: blur(15px);
+      padding: 15px 35px;
+      border-radius: 50px;
+      border: 3px solid rgba(255, 193, 7, 0.5);
+      box-shadow: 0 0 30px rgba(255, 193, 7, 0.4);
+    }
+
+    .asmr-text-corner {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffd700;
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    }
+
+    /* Floating player highlight */
+    .player-float {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(156, 39, 176, 0.2);
+      backdrop-filter: blur(20px);
+      padding: 25px 40px;
+      border-radius: 20px;
+      border: 3px solid rgba(156, 39, 176, 0.5);
+      box-shadow: 0 8px 40px rgba(156, 39, 176, 0.4);
+      text-align: center;
+      min-width: 280px;
+    }
+
+    .player-float-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(156, 39, 176, 0.6);
+      margin: 0 auto 12px;
+      display: block;
+    }
+
+    .player-float-label {
+      font-size: 12px;
+      color: #ce93d8;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .player-float-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 15px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .player-float-stats {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+    }
+
+    .player-float-stat {
+      text-align: center;
+    }
+
+    .player-float-stat-value {
+      font-size: 30px;
+      font-weight: 900;
+      color: #ce93d8;
+      text-shadow: 0 0 15px rgba(206, 147, 216, 0.6);
+    }
+
+    .player-float-stat-label {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 3px;
+    }
+
+    /* Center-edge momentum bar */
+    .momentum-edge {
+      position: absolute;
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 250px;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      border: 3px solid rgba(76, 175, 80, 0.5);
+      box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .momentum-label-edge {
+      font-size: 10px;
+      color: #a5d6a7;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    .momentum-bar-vertical {
+      width: 30px;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .momentum-bar-fill-vertical {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 65%;
+      background: linear-gradient(to top, #4caf50, #81c784);
+      box-shadow: 0 0 15px rgba(76, 175, 80, 0.6);
+    }
+
+    .momentum-value-edge {
+      font-size: 18px;
+      font-weight: 900;
+      color: #4caf50;
+      text-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-background">
+    <video autoplay loop muted playsinline>
+      <source src="../../game.mp4" type="video/mp4">
+    </video>
+  </div>
+  
+  <div class="overlay-container">
+    <!-- Top-Left Cluster -->
+    <div class="top-left-cluster fade-in">
+      <div class="cluster-card branding">
+        <div class="branding-title">SILENT BASKETBALL</div>
+        <div class="branding-sub">ASMR GAMING</div>
+      </div>
+      
+      <div class="cluster-card nba-scores">
+        <div class="nba-title">Real NBA Today</div>
+        <div class="nba-game-row">
+          <span class="nba-team-name">LAL</span>
+          <span class="nba-score-num">102</span>
+          <span class="nba-divider">-</span>
+          <span class="nba-score-num">98</span>
+          <span class="nba-team-name">BOS</span>
+        </div>
+        <div class="nba-game-row">
+          <span class="nba-team-name">GSW</span>
+          <span class="nba-score-num">115</span>
+          <span class="nba-divider">-</span>
+          <span class="nba-score-num">108</span>
+          <span class="nba-team-name">DAL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom-Right Cluster with Integrated Player -->
+    <div class="bottom-right-cluster fade-in">
+      <div class="cluster-card score-display">
+        <div class="score-display-teams">
+          <div class="score-display-team">
+            <div class="score-display-abbr">PHI</div>
+            <div class="score-display-num">87</div>
+          </div>
+          <div class="score-display-vs">VS</div>
+          <div class="score-display-team">
+            <div class="score-display-num">92</div>
+            <div class="score-display-abbr">MIL</div>
+          </div>
+        </div>
+        <div class="score-display-time">Q3 • 6:42</div>
+      </div>
+
+      <!-- Player Card in Cluster -->
+      <div class="cluster-card player-integrated player-cycle">
+        <img src="https://a.espncdn.com/i/headshots/nba/players/full/3032977.png" alt="Giannis" class="player-cluster-image">
+        <div class="player-cluster-info">
+          <div class="player-cluster-label">MIL Leader</div>
+          <div class="player-cluster-name">Giannis</div>
+          <div class="player-cluster-stats">
+            <div class="player-cluster-stat">
+              <div class="player-cluster-stat-value">31</div>
+              <div class="player-cluster-stat-label">PTS</div>
+            </div>
+            <div class="player-cluster-stat">
+              <div class="player-cluster-stat-value">12</div>
+              <div class="player-cluster-stat-label">REB</div>
+            </div>
+            <div class="player-cluster-stat">
+              <div class="player-cluster-stat-value">8</div>
+              <div class="player-cluster-stat-label">AST</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cluster-card game-stats">
+        <div class="stats-title">Team Stats</div>
+        <div class="stat-row">
+          <span class="stat-label">Field Goal %</span>
+          <span class="stat-value">48%</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">3-Pointers</span>
+          <span class="stat-value">12</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Rebounds</span>
+          <span class="stat-value">42</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top-Right ASMR Badge -->
+    <div class="asmr-badge-corner fade-in pulse">
+      <div class="asmr-text-corner">ASMR</div>
+    </div>
+
+    <!-- Player now integrated into bottom-right cluster above -->
+
+    <!-- Momentum Edge Bar -->
+    <div class="momentum-edge fade-in">
+      <div class="momentum-label-edge">Momentum</div>
+      <div class="momentum-bar-vertical">
+        <div class="momentum-bar-fill-vertical"></div>
+      </div>
+      <div class="momentum-value-edge">MIL</div>
+    </div>
+  </div>
+</body>
+</html>
+
