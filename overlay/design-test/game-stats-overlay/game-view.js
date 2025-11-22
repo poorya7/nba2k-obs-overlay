@@ -366,6 +366,132 @@ class GameView {
     getCurrentState() {
         return this.currentState;
     }
+
+    // ==================== TRANSITIONS ====================
+
+    /**
+     * Transition to a new state with smooth fade effect
+     * @param {string} stateName - 'pregame', 'live', 'halftime', 'final'
+     * @param {Object} data - State-specific data
+     * @returns {Promise} Resolves when transition is complete
+     */
+    transitionToState(stateName, data) {
+        return new Promise((resolve) => {
+            // Don't transition if already in this state (but allow live to live transitions)
+            if (this.currentState === stateName && stateName !== 'live') {
+                resolve();
+                return;
+            }
+
+            // Add transitioning class to prevent interactions
+            this.elements.gameStatsBox.classList.add('transitioning');
+
+            // Determine if this is a content-only transition (Live/Halftime/Final) or full transition (Pre-Game involved)
+            const currentIsGameState = ['live', 'halftime', 'final'].includes(this.currentState);
+            const newIsGameState = ['live', 'halftime', 'final'].includes(stateName);
+            const isContentOnlyTransition = currentIsGameState && newIsGameState;
+
+            if (isContentOnlyTransition) {
+                // Smart transition: Only animate what changes
+                const teamsContainer = this.elements.teamsContainer;
+                const currentBottomElement = this.elements.gameStatsBox.querySelector('.game-status, .halftime-banner, .final-banner');
+                
+                // Determine if we need to animate teams (only for Live → Live transitions)
+                const shouldAnimateTeams = this.currentState === 'live' && stateName === 'live';
+                
+                // Fade out elements that will change
+                if (shouldAnimateTeams && teamsContainer) {
+                    teamsContainer.classList.add('content-fade-out');
+                }
+                if (currentBottomElement) {
+                    currentBottomElement.classList.add('content-fade-out');
+                }
+
+                setTimeout(() => {
+                    // Switch state (updates teams/scores instantly)
+                    this.switchToState(stateName, data);
+
+                    // Get new elements
+                    const newTeamsContainer = this.elements.teamsContainer;
+                    const newBottomElement = this.elements.gameStatsBox.querySelector('.game-status, .halftime-banner, .final-banner');
+
+                    // Fade in only the elements we faded out
+                    if (shouldAnimateTeams && newTeamsContainer) {
+                        newTeamsContainer.classList.remove('content-fade-out');
+                        newTeamsContainer.style.opacity = '0';
+                        void newTeamsContainer.offsetWidth;
+                        newTeamsContainer.classList.add('content-fade-in');
+                    }
+                    
+                    if (newBottomElement) {
+                        newBottomElement.style.opacity = '0';
+                        void newBottomElement.offsetWidth;
+                        newBottomElement.classList.add('content-fade-in');
+                    }
+
+                    setTimeout(() => {
+                        // Clean up
+                        if (shouldAnimateTeams && newTeamsContainer) {
+                            newTeamsContainer.classList.remove('content-fade-in');
+                            newTeamsContainer.style.opacity = '';
+                        }
+                        if (newBottomElement) {
+                            newBottomElement.classList.remove('content-fade-in');
+                            newBottomElement.style.opacity = '';
+                        }
+                        this.elements.gameStatsBox.classList.remove('transitioning');
+                        resolve();
+                    }, 300); // Match contentFadeIn duration
+                }, 250); // Match contentFadeOut duration
+            } else {
+                // Full box transition (Pre-Game involved) - fade the whole overlay
+                const currentOpacity = window.getComputedStyle(this.elements.gameStatsBox).opacity;
+                
+                // Animate to transparent
+                this.elements.gameStatsBox.style.transition = 'opacity 0.25s ease-out';
+                this.elements.gameStatsBox.style.opacity = '0';
+
+                setTimeout(() => {
+                    // Switch state
+                    this.switchToState(stateName, data);
+
+                    // Fade back in
+                    this.elements.gameStatsBox.style.transition = 'opacity 0.3s ease-in';
+                    this.elements.gameStatsBox.style.opacity = currentOpacity;
+
+                    setTimeout(() => {
+                        this.elements.gameStatsBox.style.transition = '';
+                        this.elements.gameStatsBox.classList.remove('transitioning');
+                        resolve();
+                    }, 300);
+                }, 250);
+            }
+        });
+    }
+
+    /**
+     * Internal method to switch to a state without transitions
+     * @param {string} stateName - State name
+     * @param {Object} data - State data
+     */
+    switchToState(stateName, data) {
+        switch (stateName) {
+            case 'pregame':
+                this.showPreGame(data);
+                break;
+            case 'live':
+                this.showLive(data);
+                break;
+            case 'halftime':
+                this.showHalftime(data);
+                break;
+            case 'final':
+                this.showFinal(data);
+                break;
+            default:
+                console.error('Invalid state:', stateName);
+        }
+    }
 }
 
 // GameView class is now available globally

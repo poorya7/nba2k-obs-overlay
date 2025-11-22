@@ -407,3 +407,35 @@ body {
     display: none !important;
 }
 
+/* Transition animations */
+.game-stats.transitioning {
+    pointer-events: none;
+}
+
+/* Content fade animations (for Live/Halftime/Final transitions) */
+.content-fade-out {
+    animation: contentFadeOut 0.25s ease-out forwards;
+}
+
+.content-fade-in {
+    animation: contentFadeIn 0.3s ease-in forwards;
+}
+
+@keyframes contentFadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes contentFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
