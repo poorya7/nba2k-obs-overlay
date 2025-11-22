@@ -119,7 +119,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Parse URL
+  // Parse URL (server runs from project root)
   let filePath = '.' + req.url;
   
   // Default routes
@@ -128,7 +128,7 @@ const server = http.createServer((req, res) => {
   } else if (filePath === './dashboard' || filePath === './dashboard/') {
     filePath = './overlay/dashboard/index.html';
   } else if (filePath === './overlay/game-stats' || filePath === './overlay/game-stats/') {
-    filePath = './overlay/game-stats/index.html';
+    filePath = './overlay/game-stats-overlay/core/index.html';
   } else if (filePath === './design-test' || filePath === './design-test/') {
     filePath = './overlay/design-test/index.html';
   } else if (filePath === './overlay/design-test' || filePath === './overlay/design-test/') {
@@ -141,17 +141,23 @@ const server = http.createServer((req, res) => {
   const extname = String(path.extname(filePath)).toLowerCase();
   const contentType = MIME_TYPES[extname] || 'application/octet-stream';
 
+  // Debug: Log the resolved file path
+  console.log('   → Serving:', filePath);
+
   // Read and serve file
   fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
+        console.log('   ❌ File not found:', path.resolve(filePath));
         res.writeHead(404, { 'Content-Type': 'text/html' });
         res.end('<h1>404 - File Not Found</h1>', 'utf-8');
       } else {
+        console.log('   ❌ Error:', error);
         res.writeHead(500);
         res.end('Server Error: ' + error.code);
       }
     } else {
+      console.log('   ✅ Served successfully');
       res.writeHead(200, { 'Content-Type': contentType });
       res.end(content, 'utf-8');
     }
@@ -163,8 +169,10 @@ server.listen(PORT, () => {
   console.log('');
   console.log('📺 Control Dashboard: http://localhost:' + PORT + '/dashboard');
   console.log('🏀 Game Overlay (OBS): http://localhost:' + PORT + '/overlay/game-stats');
+  console.log('   (Full path: /overlay/game-stats-overlay/core/index.html)');
   console.log('🎨 Design Tester: http://localhost:' + PORT + '/design-test');
   console.log('');
   console.log('Press Ctrl+C to stop the server');
 });
+
 

@@ -2,24 +2,6 @@
 
 let allGames = [];
 
-// Available styles - ALL from design-test
-const STYLES = [
-  { id: 'pill-green', name: 'Pill - Green' },
-  { id: 'pill-red', name: 'Pill - Red' },
-  { id: 'pill-blue', name: 'Pill - Blue' },
-  { id: 'pill-purple', name: 'Pill - Purple' },
-  { id: 'pill-gold', name: 'Pill - Gold' },
-  { id: 'horizontal-green', name: 'Horizontal - Classic Green' },
-  { id: 'horizontal-cyan', name: 'Horizontal - Neon Cyan' },
-  { id: 'horizontal-red', name: 'Horizontal - Red' },
-  { id: 'horizontal-white', name: 'Horizontal - White' },
-  { id: 'vertical-green', name: 'Vertical - Green' },
-  { id: 'vertical-purple', name: 'Vertical - Purple' },
-  { id: 'vertical-blue', name: 'Vertical - Blue' },
-  { id: 'vertical-gold', name: 'Vertical - Gold' }
-];
-
-let currentStyleIndex = 0;
 
 // Simulation state
 const SIMULATION_STATES = ['pregame', 'live', 'halftime', 'overtime', 'final'];
@@ -29,17 +11,10 @@ let currentSimulationStateIndex = 0;
  * Initialize dashboard on page load
  */
 async function init() {
-  console.log('🎮 Initializing dashboard...');
-  
   // Setup event listeners
   document.getElementById('gameSelect').addEventListener('change', handleGameSelection);
-  document.getElementById('refreshBtn').addEventListener('click', refreshGames);
-  document.getElementById('nextStyleBtn').addEventListener('click', nextStyle);
   document.getElementById('simulationToggle').addEventListener('change', handleSimulationToggle);
   document.getElementById('nextStateBtn').addEventListener('click', nextSimulationState);
-  
-  // Load saved style
-  await loadCurrentStyle();
   
   // Load simulation state
   await loadSimulationState();

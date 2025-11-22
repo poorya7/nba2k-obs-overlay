@@ -61,7 +61,7 @@
 </head>
 <body>
     <video id="gameplay-video" autoplay loop muted>
-        <source src="../../../../game.mp4" type="video/mp4">
+        <source src="../../game.mp4" type="video/mp4">
     </video>
 
     <div class="channel-branding">
@@ -118,12 +118,48 @@
         // Test controls and demo data
         // Initialize GameView
         const gameView = new GameView();
+        
+        // Track last state to mimic production behavior
+        let lastState = null;
+        let lastScores = { home: 0, away: 0 };
+        let isFirstLoad = true;
 
         // Sample data
         const sampleData = {
             homeTeam: { abbr: 'LAL', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png' },
             awayTeam: { abbr: 'GSW', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png' }
         };
+
+        // Smart update function (mimics production behavior)
+        function smartUpdate(stateName, data) {
+            const homeScore = data.home?.score || 0;
+            const awayScore = data.away?.score || 0;
+            
+            if (isFirstLoad) {
+                // First load - full transition
+                console.log('📊 First load - full transition');
+                gameView.transitionToState(stateName, data);
+                isFirstLoad = false;
+            } else if (lastState !== stateName) {
+                // State changed - switch instantly
+                console.log('🔄 State changed - switching without animation');
+                gameView.switchToState(stateName, data);
+            } else if (lastScores.home !== homeScore || lastScores.away !== awayScore) {
+                // Only scores changed - slide animation
+                console.log('🎯 Scores changed - updating with slide animation');
+                if (lastScores.home !== homeScore) {
+                    gameView.updateScore('home', homeScore, true);
+                }
+                if (lastScores.away !== awayScore) {
+                    gameView.updateScore('away', awayScore, true);
+                }
+            } else {
+                console.log('⏭️ No significant changes');
+            }
+            
+            lastState = stateName;
+            lastScores = { home: homeScore, away: awayScore };
+        }
 
         // Button handlers
         function updateActiveButton(buttonId) {
@@ -133,64 +169,63 @@
         }
 
         document.getElementById('btn-pregame').addEventListener('click', () => {
-            gameView.transitionToState('pregame', {
+            smartUpdate('pregame', {
                 homeTeam: sampleData.homeTeam,
                 awayTeam: sampleData.awayTeam,
                 countdown: '02:15:34'
-            }).then(() => {
-                updateActiveButton('btn-pregame');
             });
+            updateActiveButton('btn-pregame');
         });
 
         document.getElementById('btn-live-q1').addEventListener('click', () => {
-            gameView.transitionToState('live', {
+            smartUpdate('live', {
                 home: { ...sampleData.homeTeam, score: 18 },
                 away: { ...sampleData.awayTeam, score: 22 },
                 quarter: 'Q1',
                 time: '7:32'
-            }).then(() => {
-                updateActiveButton('btn-live-q1');
             });
+            updateActiveButton('btn-live-q1');
         });
 
         document.getElementById('btn-live-q3').addEventListener('click', () => {
-            gameView.transitionToState('live', {
+            smartUpdate('live', {
                 home: { ...sampleData.homeTeam, score: 67 },
                 away: { ...sampleData.awayTeam, score: 64 },
                 quarter: 'Q3',
                 time: '4:18'
-            }).then(() => {
-                updateActiveButton('btn-live-q3');
             });
+            updateActiveButton('btn-live-q3');
         });
 
         document.getElementById('btn-halftime').addEventListener('click', () => {
-            gameView.transitionToState('halftime', {
+            smartUpdate('halftime', {
                 home: { ...sampleData.homeTeam, score: 54 },
                 away: { ...sampleData.awayTeam, score: 48 }
-            }).then(() => {
-                updateActiveButton('btn-halftime');
             });
+            updateActiveButton('btn-halftime');
         });
 
         document.getElementById('btn-final').addEventListener('click', () => {
-            gameView.transitionToState('final', {
+            smartUpdate('final', {
                 home: { ...sampleData.homeTeam, score: 112 },
                 away: { ...sampleData.awayTeam, score: 108 }
-            }).then(() => {
-                updateActiveButton('btn-final');
             });
+            updateActiveButton('btn-final');
         });
 
         // Score increment buttons (with slide animation)
         document.getElementById('btn-home-score').addEventListener('click', () => {
             const currentScore = parseInt(gameView.elements.homeScore.textContent) || 0;
-            gameView.updateScore('home', currentScore + 1, true); // Uses default 'slide' animation
+            const newScore = currentScore + 1;
+            gameView.updateScore('home', newScore, true); // Uses default 'slide' animation
+            lastScores.home = newScore; // Update tracking
         });
 
         document.getElementById('btn-away-score').addEventListener('click', () => {
             const currentScore = parseInt(gameView.elements.awayScore.textContent) || 0;
-            gameView.updateScore('away', currentScore + 1, true); // Uses default 'slide' animation
+            const newScore = currentScore + 1;
+            gameView.updateScore('away', newScore, true); // Uses default 'slide' animation
+            lastScores.away = newScore; // Update tracking
         });
 
         // Set initial active button

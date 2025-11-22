@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/overlay/game-stats-overlay/core/">
+    <title>NBA Game Stats Overlay</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Game Stats Overlay - OBS Browser Source Ready -->
+    <div class="game-stats">
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span class="live-text">Live</span>
+            <span class="nba-label">NBA</span>
+        </div>
+        
+        <div class="teams">
+            <!-- Home Team -->
+            <div class="team" data-team="home">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="home" src="" alt="Home Team">
+                    <div class="team-abbr" data-abbr="home">---</div>
+                </div>
+                <div class="score" data-score="home">0</div>
+            </div>
+            
+            <!-- Away Team -->
+            <div class="team" data-team="away">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="away" src="" alt="Away Team">
+                    <div class="team-abbr" data-abbr="away">---</div>
+                </div>
+                <div class="score" data-score="away">0</div>
+            </div>
+        </div>
+        
+        <div class="game-status" data-status>Q1 · 12:00</div>
+    </div>
+
+    <!-- NBA API utilities -->
+    <script src="config.js"></script>
+    <script src="nbaApi.js"></script>
+    
+    <!-- Game View Controller -->
+    <script src="game-view.js"></script>
+    <script>
+        // Initialize GameView
+        const gameView = new GameView();
+        
+        // Track last game data to avoid unnecessary transitions
+        let lastGameData = null;
+        
+        // Countdown interval for pregame state
+        let countdownInterval = null;
+        let countdownSeconds = 0;
+        
+        // Simulation state
+        let simulationData = {
+            homeScore: 0,
+            awayScore: 0,
+            quarter: 'Q1',
+            timeSeconds: 720, // 12:00 in seconds
+            state: 'live'
+        };
+        
+        /**
+         * Generate fake game data for simulation
+         * @param {string} serverState - State from dashboard ('pregame', 'live', 'halftime', 'final')
+         */
+        function generateSimulationData(serverState) {
+            // Always increment scores for testing
+            if (Math.random() < 0.5) {
+                simulationData.homeScore += Math.random() < 0.7 ? 2 : 3; // 2pt or 3pt
+            } else {
+                simulationData.awayScore += Math.random() < 0.7 ? 2 : 3;
+            }
+            
+            // Use dashboard-selected state or auto-progress
+            if (serverState) {
+                simulationData.state = serverState;
+                
+                // Set appropriate quarter/time based on state
+                if (serverState === 'pregame') {
+                    simulationData.quarter = 'Q1';
+                    simulationData.timeSeconds = 720;
+                } else if (serverState === 'live') {
+                    // Keep current quarter or default to Q3 if not set
+                    if (!simulationData.quarter || simulationData.quarter === 'Q1') {
+                        simulationData.quarter = 'Q3';
+                    }
+                    if (simulationData.timeSeconds <= 0) {
+                        simulationData.timeSeconds = 420; // 7:00
+                    }
+                    // Tick down time
+                    simulationData.timeSeconds -= Math.floor(Math.random() * 15) + 5;
+                } else if (serverState === 'halftime') {
+                    simulationData.quarter = 'Q2';
+                    simulationData.timeSeconds = 0;
+                } else if (serverState === 'overtime') {
+                    simulationData.quarter = 'OT';
+                    simulationData.timeSeconds -= Math.floor(Math.random() * 15) + 5;
+                    if (simulationData.timeSeconds <= 0) simulationData.timeSeconds = 300; // 5:00
+                } else if (serverState === 'final') {
+                    simulationData.quarter = 'Q4';
+                    simulationData.timeSeconds = 0;
+                }
+            } else {
+                // Auto-progress mode (tick down time)
+                simulationData.timeSeconds -= Math.floor(Math.random() * 15) + 5;
+                
+                if (simulationData.timeSeconds <= 0) {
+                    if (simulationData.quarter === 'Q1') {
+                        simulationData.quarter = 'Q2';
+                        simulationData.timeSeconds = 720;
+                    } else if (simulationData.quarter === 'Q2') {
+                        simulationData.state = 'halftime';
+                        simulationData.timeSeconds = 0;
+                    } else if (simulationData.state === 'halftime') {
+                        simulationData.state = 'live';
+                        simulationData.quarter = 'Q3';
+                        simulationData.timeSeconds = 720;
+                    } else if (simulationData.quarter === 'Q3') {
+                        simulationData.quarter = 'Q4';
+                        simulationData.timeSeconds = 720;
+                    } else if (simulationData.quarter === 'Q4') {
+                        simulationData.state = 'final';
+                        simulationData.timeSeconds = 0;
+                    }
+                }
+            }
+            
+            // Format time as MM:SS
+            const minutes = Math.floor(simulationData.timeSeconds / 60);
+            const seconds = simulationData.timeSeconds % 60;
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Return fake game object matching ESPN API format
+            let statusText;
+            if (simulationData.state === 'pregame') {
+                // For pregame, show countdown (simplified to 5 mins for testing)
+                statusText = 'Scheduled';
+            } else if (simulationData.state === 'halftime') {
+                statusText = 'Halftime';
+            } else if (simulationData.state === 'final') {
+                statusText = 'Final';
+            } else {
+                // Live or overtime
+                statusText = `${simulationData.quarter} ${timeString}`;
+            }
+            
+            return {
+                id: 'simulation',
+                homeTeam: {
+                    abbreviation: 'LAL',
+                    logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png',
+                    score: simulationData.homeScore
+                },
+                awayTeam: {
+                    abbreviation: 'GSW',
+                    logo: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png',
+                    score: simulationData.awayScore
+                },
+                isLive: simulationData.state === 'live' || simulationData.state === 'overtime' || simulationData.state === 'halftime',
+                isFinal: simulationData.state === 'final',
+                statusText: statusText,
+                date: new Date().toISOString()
+            };
+        }
+        
+        /**
+         * Update overlay from API (copied from working overlay/game-stats/GameOverlay.js)
+         */
+        async function updateFromAPI() {
+            try {
+                // Step 1: Check if simulation mode is enabled
+                const simResponse = await fetch('/api/simulation');
+                const simData = await simResponse.json();
+                
+                if (simData.enabled) {
+                    const fakeGame = generateSimulationData(simData.state);
+                    detectStateAndUpdate(fakeGame);
+                    return;
+                }
+                
+                // Step 2: Get selected game ID from server
+                const response = await fetch('/api/selected-game');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch selection');
+                }
+                
+                const data = await response.json();
+                const selectedGameId = data.gameId;
+                
+                // No game selected - hide overlay
+                if (!selectedGameId) {
+                    gameView.hide();
+                    return;
+                }
+                
+                // Step 3: Fetch game data from ESPN API
+                const game = await window.NBAApi.getGameById(selectedGameId);
+                
+                if (!game) {
+                    gameView.hide();
+                    return;
+                }
+                
+                // Step 4: Auto-detect state and update view
+                detectStateAndUpdate(game);
+                
+            } catch (error) {
+                gameView.hide();
+            }
+        }
+        
+        /**
+         * Detect game state and update view (copied from working overlay)
+         */
+        function detectStateAndUpdate(game) {
+            let stateName = 'pregame';
+            
+            // Determine state (logic from GameOverlay.js)
+            if (game.isFinal) {
+                stateName = 'final';
+            } else if (game.isLive) {
+                // Check if halftime
+                if (game.statusText.toLowerCase().includes('halftime')) {
+                    stateName = 'halftime';
+                } else {
+                    stateName = 'live';
+                }
+            } else {
+                // Scheduled game
+                stateName = 'pregame';
+            }
+            
+            // Format data for GameView
+            const formattedData = formatGameDataForView(game, stateName);
+            
+            // Create comparison keys for different types of changes
+            // Extract scores and team info consistently regardless of data format
+            const homeScore = formattedData.home?.score ?? formattedData.homeTeam?.score ?? 0;
+            const awayScore = formattedData.away?.score ?? formattedData.awayTeam?.score ?? 0;
+            const homeAbbr = formattedData.home?.abbr ?? formattedData.homeTeam?.abbr ?? '';
+            const awayAbbr = formattedData.away?.abbr ?? formattedData.awayTeam?.abbr ?? '';
+            
+            const stateKey = JSON.stringify({
+                state: stateName,
+                quarter: formattedData.quarter
+            });
+            
+            const scoreKey = JSON.stringify({
+                homeScore: homeScore,
+                awayScore: awayScore,
+                homeAbbr: homeAbbr,
+                awayAbbr: awayAbbr
+            });
+            
+            const fullKey = stateKey + scoreKey;
+            
+            // Manage countdown interval for pregame state
+            if (stateName === 'pregame') {
+                if (!countdownInterval) {
+                    // Start countdown interval that ticks every second
+                    countdownInterval = setInterval(() => {
+                        if (countdownSeconds > 0) {
+                            countdownSeconds--;
+                            gameView.updateCountdown(formatCountdown(countdownSeconds));
+                        } else {
+                            // Countdown finished, trigger API update to check if game started
+                            clearInterval(countdownInterval);
+                            countdownInterval = null;
+                            updateFromAPI();
+                        }
+                    }, 1000);
+                }
+            } else {
+                // Not pregame - clear countdown interval if it exists
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+            }
+            
+            // Check what changed
+            if (!lastGameData) {
+                // First load - do full transition
+                gameView.transitionToState(stateName, formattedData);
+                lastGameData = fullKey;
+            } else if (lastGameData !== fullKey) {
+                // Something changed - determine what
+                const lastStateKey = lastGameData.split('}')[0] + '}';
+                const lastScoreKey = lastGameData.split('}')[1] + '}';
+                
+                const stateChanged = stateKey !== lastStateKey;
+                const scoresChanged = scoreKey !== lastScoreKey;
+                
+                if (stateChanged) {
+                    // State changed - switch directly without animation
+                    console.log('🔄 State changed - switching without animation');
+                    gameView.switchToState(stateName, formattedData);
+                } else if (scoresChanged) {
+                    // Teams or scores changed
+                    const teamsChanged = (lastScoreKey.includes(homeAbbr) === false) || (lastScoreKey.includes(awayAbbr) === false);
+                    
+                    if (teamsChanged) {
+                        // Teams changed - switch state to update everything
+                        console.log('🔄 Teams changed - switching without animation');
+                        gameView.switchToState(stateName, formattedData);
+                    } else if (stateName === 'live') {
+                        // Only scores changed in live state - slide animation
+                        console.log('🎯 Scores changed - updating with slide animation');
+                        gameView.updateScore('home', homeScore, true);
+                        gameView.updateScore('away', awayScore, true);
+                    } else {
+                        // Shouldn't happen
+                        console.log('⚠️ Unexpected change');
+                    }
+                } else {
+                    // Time or other minor change - shouldn't happen but handle it
+                    console.log('⚠️ Unexpected change');
+                }
+                
+                lastGameData = fullKey;
+            } else {
+                // Only time changed - update time silently
+                if (stateName === 'live' && formattedData.time) {
+                    console.log('⏰ Time update only');
+                    const statusElement = document.querySelector('[data-status]');
+                    if (statusElement) {
+                        statusElement.textContent = `${formattedData.quarter} · ${formattedData.time}`;
+                    }
+                } else {
+                    console.log('⏭️  No changes');
+                }
+            }
+        }
+        
+        /**
+         * Format ESPN API game data for GameView
+         */
+        function formatGameDataForView(game, stateName) {
+            // Base team data (used by all states)
+            const baseData = {
+                home: {
+                    abbr: game.homeTeam.abbreviation,
+                    logoUrl: game.homeTeam.logo,
+                    score: parseInt(game.homeTeam.score) || 0
+                },
+                away: {
+                    abbr: game.awayTeam.abbreviation,
+                    logoUrl: game.awayTeam.logo,
+                    score: parseInt(game.awayTeam.score) || 0
+                }
+            };
+            
+            // State-specific formatting
+            switch (stateName) {
+                case 'pregame':
+                    // Calculate countdown
+                    const gameTime = new Date(game.date).getTime();
+                    const now = Date.now();
+                    const secondsUntilGame = Math.max(0, Math.floor((gameTime - now) / 1000));
+                    
+                    // Update global countdown seconds for the countdown interval
+                    countdownSeconds = secondsUntilGame;
+                    
+                    return {
+                        homeTeam: baseData.home,
+                        awayTeam: baseData.away,
+                        countdown: formatCountdown(secondsUntilGame)
+                    };
+                
+                case 'live':
+                    return {
+                        ...baseData,
+                        quarter: game.statusText.split(' ')[0], // e.g., "Q3" from "Q3 8:32"
+                        time: game.statusText.split(' ')[1] || '12:00' // e.g., "8:32"
+                    };
+                
+                case 'halftime':
+                case 'final':
+                    return baseData;
+                
+                default:
+                    return baseData;
+            }
+        }
+        
+        /**
+         * Format countdown time (HH:MM:SS or MM:SS)
+         */
+        function formatCountdown(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            if (hours > 0) {
+                return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            } else {
+                return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+        
+        /**
+         * Start automatic updates (copied from working overlay)
+         */
+        function startOverlay() {
+            console.log('🏀 NBA Overlay initialized');
+            
+            // Initial update
+            updateFromAPI();
+            
+            // Auto-refresh every 3 seconds for responsive live updates
+            setInterval(updateFromAPI, 3000);
+        }
+        
+        // Start when page loads
+        window.addEventListener('DOMContentLoaded', startOverlay);
+        
+        // Make gameView globally available for testing
+        window.gameView = gameView;
+        window.updateFromAPI = updateFromAPI; // For manual testing
+    </script>
+    </script>
+</body>
+</html>

@@ -89,25 +89,6 @@ async function fetchTodaysGames() {
 }
 
 /**
- * Convert time to MM:SS format
- * Handles both "8:32" (already MM:SS) and "8.7" (decimal seconds)
- */
-function convertToMMSS(timeStr) {
-  // If it already has a colon, assume it's MM:SS format
-  if (timeStr.includes(':')) {
-    // Ensure 2-digit padding
-    const [min, sec] = timeStr.split(':');
-    return `${min.padStart(2, '0')}:${sec.padStart(2, '0')}`;
-  }
-  
-  // Otherwise it's decimal seconds (e.g., "8.7" or "31.2")
-  const totalSeconds = Math.floor(parseFloat(timeStr));
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
-/**
  * Parse ESPN status to SHORT format (matching transition-test.html)
  * "1st Quarter 8:32" -> "Q1 8:32"
  * "4th Quarter 3:45" -> "Q4 3:45"
@@ -136,19 +117,17 @@ function parseStatusToShortFormat(statusDetail) {
     return `Q${zeroTimeMatch[1]} End`;
   }
   
-  // ESPN FORMAT: "4:59 - 4th Quarter" OR "31.2 - 4th Quarter" -> "Q4 4:59" or "Q4 00:31"
-  // Convert decimal seconds to MM:SS format for consistency
+  // ESPN FORMAT: "4:59 - 4th Quarter" OR "31.2 - 4th Quarter" -> "Q4 4:59" or "Q4 31.2"
+  // Handle BOTH colon and decimal formats!
   const quarterMatch = statusDetail.match(/([\d:.]+)\s+-\s+(\d+)(?:st|nd|rd|th)\s+Quarter/i);
   if (quarterMatch) {
-    const time = convertToMMSS(quarterMatch[1]);
-    return `Q${quarterMatch[2]} ${time}`;
+    return `Q${quarterMatch[2]} ${quarterMatch[1]}`;
   }
   
-  // "3:45 - Overtime" OR "31.2 - Overtime" -> "OT 3:45" or "OT 00:31"
+  // "3:45 - Overtime" OR "31.2 - Overtime" -> "OT 3:45" or "OT 31.2"
   const otMatch = statusDetail.match(/([\d:.]+)\s+-\s+(?:Overtime|OT)/i);
   if (otMatch) {
-    const time = convertToMMSS(otMatch[1]);
-    return `OT ${time}`;
+    return `OT ${otMatch[1]}`;
   }
   
   // Return as-is for other cases

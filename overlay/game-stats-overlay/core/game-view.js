@@ -258,6 +258,17 @@ class GameView {
      * Update all game data at once
      * @param {Object} gameData - Complete game data object
      */
+    /**
+     * Update countdown timer (for pregame state)
+     * @param {string} countdownText - Formatted countdown string (e.g., "02:15:34")
+     */
+    updateCountdown(countdownText) {
+        const countdownElement = this.elements.gameStatsBox.querySelector('.countdown-time');
+        if (countdownElement) {
+            countdownElement.textContent = countdownText;
+        }
+    }
+
     updateAll(gameData) {
         const { home, away, quarter, time } = gameData;
 
@@ -496,8 +507,9 @@ class GameView {
                 const teamsContainer = this.elements.teamsContainer;
                 const currentBottomElement = this.elements.gameStatsBox.querySelector('.game-status, .halftime-banner, .final-banner');
                 
-                // Determine if we need to animate teams (only for Live → Live transitions)
-                const shouldAnimateTeams = this.currentState === 'live' && stateName === 'live';
+                // For Live → Live transitions, DON'T fade teams (score animations handle it)
+                // Only fade bottom element (game status)
+                const shouldAnimateTeams = false; // Disabled to prevent double animation with score slide
                 
                 // Fade out elements that will change
                 if (shouldAnimateTeams && teamsContainer) {
