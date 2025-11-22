@@ -68,6 +68,12 @@ body {
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.3);
     border: 1px solid rgba(59, 130, 246, 0.4);
     opacity: 0.7;
+    overflow: hidden;
+}
+
+/* Smooth height transition for pregame expansion */
+.game-stats.expanding {
+    transition: height 0.5s ease-out;
 }
 
 .live-indicator {
@@ -113,6 +119,7 @@ body {
     flex-direction: column;
     gap: 12px;
     margin: 10px 0 8px 0;
+    transition: opacity 0.3s ease-in;
 }
 
 .team {
@@ -131,6 +138,7 @@ body {
     width: 36px;
     height: 36px;
     filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+    transition: all 0.4s ease-out;
 }
 
 .team-abbr {
@@ -144,6 +152,7 @@ body {
     font-weight: 600;
     color: #dbeafe;
     text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    font-variant-numeric: tabular-nums;
 }
 
 /* Score animations */
@@ -310,6 +319,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-variant-numeric: tabular-nums;
 }
 
 /* State-specific styles */
@@ -317,6 +327,7 @@ body {
 /* Pre-Game State */
 .countdown-container {
     text-align: center;
+    transition: opacity 0.3s ease-out;
 }
 
 .countdown-label {
@@ -328,6 +339,7 @@ body {
     text-align: center;
     margin-top: 15px;
     margin-bottom: 3px;
+    transition: opacity 0.3s ease-out;
 }
 
 .countdown-time {
@@ -338,6 +350,7 @@ body {
     letter-spacing: 2px;
     text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
     margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
 }
 
 .matchup-preview {
@@ -346,12 +359,14 @@ body {
     justify-content: center;
     gap: 8px;
     margin-top: 10px;
+    transition: opacity 0.3s ease-out;
 }
 
 .preview-logo {
     width: 28px;
     height: 28px;
     filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+    transition: all 0.4s ease-out;
 }
 
 .vs-text {

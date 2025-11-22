@@ -6,11 +6,12 @@ Clean, modular overlay for displaying NBA game stats with ASMR-friendly Blue Neo
 
 ```
 game-stats-overlay/
-├── index.html          - Main overlay (with demo data)
-├── test-states.html    - Interactive state transition tester
-├── styles.css          - All visual styling (finalized design)
-├── game-view.js        - View layer with state management
-└── README.md           - This file
+├── index.html           - Main overlay (with demo data)
+├── test-states.html     - Interactive state transition tester
+├── test-simulation.html - Realistic game simulation (Pre-Game → Final)
+├── styles.css           - All visual styling (finalized design)
+├── game-view.js         - View layer with state management
+└── README.md            - This file
 ```
 
 ## Quick Start
@@ -25,6 +26,12 @@ game-stats-overlay/
 - Open `test-states.html` - Interactive state switcher
 - Click buttons to switch between Pre-Game, Live, Halftime, Final
 - See smooth transitions in action with video background
+
+**Option 3: Realistic game simulation**
+- Open `test-simulation.html` - Full game simulation
+- Auto-plays through: Pre-Game countdown → Q1 → Q2 → Halftime → Q3 → Q4 → Final
+- Adjustable speed: 1x (real-time), 5x, 10x, 20x, 50x
+- Realistic score updates with Slide animation
 
 ## Architecture
 
@@ -50,9 +57,25 @@ The overlay supports 4 different game states with smooth transitions:
 ### State Transition Logic
 
 **Smart Animations:** Only animates what changes
-- Live ↔ Halftime/Final: Only bottom element fades (teams/scores stay visible)
-- Live → Live (Q1→Q3): Full content fades (for score/quarter updates)
-- Pre-Game ↔ anything: Full box fades (size changes)
+
+**Pre-Game → Live** (Sophisticated choreography):
+1. Countdown timer fades out (0.3s)
+2. Box expands downward from top edge (0.5s)
+3. Team logos smoothly move and resize from center to team rows (0.8s)
+4. Team names and scores fade in (0.3s)
+5. "Upcoming" changes to "Live" + Quarter status fades in (0.3s)
+- Total duration: ~2.2s of smooth, ASMR-friendly animation
+
+**Live ↔ Halftime/Final**: 
+- Only bottom element fades (teams/scores stay visible)
+- Quick and clean (0.55s total)
+
+**Live → Live** (Q1→Q3): 
+- Full content fades for score/quarter updates
+- Maintains consistency (0.55s total)
+
+**All other transitions**: 
+- Simple fade in/out for state changes
 
 ## Usage
 
@@ -88,6 +111,9 @@ await gameView.transitionToState('final', {
 
 // Get current state
 const currentState = gameView.getCurrentState(); // 'pregame', 'live', 'halftime', 'final'
+
+// Note: Pre-Game → Live has a special sophisticated transition that's 
+// automatically triggered by transitionToState('live') when coming from 'pregame'
 ```
 
 ### Basic Update Methods
@@ -147,25 +173,50 @@ await gameView.transitionToState('halftime', {
 console.log(gameView.getCurrentState());
 ```
 
+## Game Simulation Features
+
+The `test-simulation.html` provides a realistic game flow simulation:
+
+**Features:**
+- Auto-progression through all game states
+- Realistic score updates (2pt/3pt with proper distribution)
+- Countdown timer that ticks down to zero before transitioning to Live
+- Adjustable simulation speed (1x, 5x, 10x, 20x, 50x)
+- Pause/Resume and Reset controls
+- Real-time info display (current state, time, speed)
+
+**Simulation Flow:**
+1. **Pre-Game**: 10-second countdown → pauses at 00:00:00 (0.5s) → transitions to Live
+2. **Q1-Q4**: 12 minutes each with random scoring
+3. **Halftime**: 5-second break between Q2 and Q3
+4. **Final**: Game over screen with final scores
+
+This simulates how the overlay will behave with real NBA API data polling.
+
 ## Next Steps
 
 **State Management:** ✅ Complete!
 - 4 game states (Pre-Game, Live, Halftime, Final)
-- Smooth transitions with smart content-only animations
+- Sophisticated choreographed transitions (especially Pre-Game → Live)
+- Smart content-only animations (only animates what changes)
 - Ready for real-time data integration
 
 **When ready to add live data:**
 1. Create a `GameDataService` class to fetch NBA API data
 2. Create a `GameController` to connect service → view
-3. Poll API and call `gameView.transitionToState()` when state changes
-4. Keep `GameView` unchanged (loose coupling achieved!)
+3. Poll API every 5-10 seconds
+4. Call `gameView.transitionToState()` when state changes
+5. Call `gameView.updateScore()` when scores update (with animation)
+6. Keep `GameView` unchanged (loose coupling achieved!)
 
 ## Design Specs
 
-- **Position:** 260px from bottom, 20px from left
-- **Size:** 175px wide, auto height
+- **Position:** 260px from bottom, 20px from left (340px from bottom in Pre-Game state)
+- **Size:** 175px wide, auto height (expands downward from top edge)
 - **Opacity:** 0.7
 - **Theme:** Blue Neon with green quarter text
+- **Typography:** Tabular numbers (fixed-width digits) for all scores, times, and countdowns
+- **Transitions:** Choreographed multi-step animations optimized for ASMR viewing
 
 ## Available Score Animations
 
