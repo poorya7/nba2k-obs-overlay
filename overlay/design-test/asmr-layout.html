@@ -6,7 +6,7 @@
     <title>ASMR Basketball Overlay</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -38,51 +38,44 @@
             top: 20px;
             left: 20px;
             z-index: 10;
-            background: rgba(10, 15, 15, 0.7);
-            backdrop-filter: blur(15px);
-            padding: 12px 24px;
-            border-radius: 16px;
-            border: 2px solid rgba(74, 222, 128, 0.4);
-            box-shadow: 0 4px 25px rgba(74, 222, 128, 0.2);
-            display: inline-block;
         }
 
-        .branding-text {
-            font-family: 'Poppins', sans-serif;
-            font-size: 18px;
-            font-weight: 500;
-            color: #f0fdf4;
+        .main-text {
+            font-family: 'Russo One', sans-serif;
+            font-size: 31px;
+            font-weight: 400;
+            color: #ffffff;
             letter-spacing: 1px;
-            text-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7),
+                         0 2px 4px rgba(0, 0, 0, 0.6);
+            opacity: 0.22;
         }
 
-        .asmr-badge {
-            display: inline-block;
-            background: rgba(74, 222, 128, 0.3);
-            color: #4ade80;
-            font-family: 'Inter', sans-serif;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 12px;
-            letter-spacing: 1.5px;
-            margin-left: 10px;
-            text-transform: uppercase;
+        .sub-text {
+            font-family: 'Russo One', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 5px;
+            margin-top: 3px;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
+            opacity: 0.154;
         }
 
-        /* Game Stats - BOTTOM LEFT */
+        /* Game Stats - BOTTOM LEFT - Blue Neon Theme */
         .game-stats {
             position: fixed;
-            top: calc(100vh - 350px);
+            bottom: 260px;
             left: 20px;
             z-index: 10;
-            background: rgba(10, 15, 15, 0.85);
+            background: rgba(10, 20, 40, 0.85);
             backdrop-filter: blur(10px);
-            padding: 20px;
+            padding: 12px 18px;
             border-radius: 16px;
-            width: 200px;
-            box-shadow: 0 8px 40px rgba(74, 222, 128, 0.15);
-            border: 1px solid rgba(74, 222, 128, 0.2);
+            width: 175px;
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            opacity: 0.7;
         }
 
         .live-indicator {
@@ -96,9 +89,9 @@
         .live-dot {
             width: 6px;
             height: 6px;
-            background: #4ade80;
+            background: #3b82f6;
             border-radius: 50%;
-            box-shadow: 0 0 12px rgba(74, 222, 128, 0.8);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
             animation: pulse 2s ease-in-out infinite;
         }
 
@@ -110,16 +103,16 @@
         .live-text {
             font-size: 11px;
             font-weight: 600;
-            color: #4ade80;
+            color: #60a5fa;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
 
         .nba-label {
             font-size: 9px;
             font-weight: 400;
-            color: #86efac;
+            color: #93c5fd;
             letter-spacing: 1.5px;
         }
 
@@ -127,7 +120,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin: 14px 0;
+            margin: 10px 0 8px 0;
         }
 
         .team {
@@ -143,105 +136,32 @@
         }
 
         .team-logo {
-            width: 32px;
-            height: 32px;
-            filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.2));
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
         }
 
         .team-abbr {
             font-size: 14px;
             font-weight: 500;
-            color: #bbf7d0;
+            color: #bfdbfe;
         }
 
         .score {
-            font-size: 28px;
+            font-size: 16px;
             font-weight: 600;
-            color: #f0fdf4;
-            text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+            color: #dbeafe;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
         }
 
         .game-status {
-            font-size: 12px;
+            font-size: 13px;
             color: #86efac;
             font-weight: 400;
-            margin-top: 10px;
+            margin-top: 8px;
             margin-bottom: 0;
             letter-spacing: 1.5px;
             text-align: center;
-        }
-
-        /* MVP Section */
-        .mvp-container {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid rgba(74, 222, 128, 0.2);
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: all 0.5s ease-in-out;
-        }
-
-        .mvp-container.show {
-            max-height: 100px;
-            opacity: 1;
-        }
-
-        .mvp {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-align: left;
-        }
-
-        .mvp-image {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 2px solid rgba(74, 222, 128, 0.3);
-            object-fit: cover;
-        }
-
-        .mvp-info {
-            flex: 1;
-        }
-
-        .mvp-label {
-            font-size: 8px;
-            font-weight: 400;
-            color: #86efac;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-        }
-
-        .mvp-name {
-            font-size: 13px;
-            font-weight: 600;
-            color: #f0fdf4;
-            margin-bottom: 5px;
-        }
-
-        .mvp-stats {
-            display: flex;
-            gap: 10px;
-            font-size: 10px;
-        }
-
-        .stat {
-            color: #bbf7d0;
-        }
-
-        .stat-value {
-            font-weight: 600;
-            color: #f0fdf4;
-            margin-right: 2px;
-            font-size: 11px;
-        }
-
-        .stat-label {
-            font-weight: 400;
-            color: #86efac;
         }
     </style>
 </head>
@@ -252,8 +172,8 @@
 
     <!-- Channel Branding - TOP LEFT -->
     <div class="channel-branding">
-        <span class="branding-text">Silent Basketball</span>
-        <span class="asmr-badge">ASMR</span>
+        <div class="main-text">Silent Basketball</div>
+        <div class="sub-text">ASMR</div>
     </div>
 
     <!-- Game Stats - BOTTOM LEFT -->
@@ -283,46 +203,7 @@
         </div>
         
         <div class="game-status">Q3 · 8:32</div>
-        
-        <div class="mvp-container" id="mvp-container">
-            <div class="mvp">
-                <img class="mvp-image" src="https://a.espncdn.com/i/headshots/nba/players/full/1966.png" alt="LeBron James">
-                <div class="mvp-info">
-                    <div class="mvp-label">MVP</div>
-                    <div class="mvp-name">LeBron</div>
-                    <div class="mvp-stats">
-                        <div class="stat">
-                            <span class="stat-value">28</span>
-                            <span class="stat-label">PTS</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">8</span>
-                            <span class="stat-label">REB</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">11</span>
-                            <span class="stat-label">AST</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-
-    <script>
-        const mvpContainer = document.getElementById('mvp-container');
-        
-        function toggleMVP() {
-            mvpContainer.classList.add('show');
-            
-            setTimeout(() => {
-                mvpContainer.classList.remove('show');
-                setTimeout(toggleMVP, 30000);
-            }, 5000);
-        }
-        
-        setTimeout(toggleMVP, 10000);
-    </script>
 </body>
 </html>
 
