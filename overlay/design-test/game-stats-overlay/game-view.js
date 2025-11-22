@@ -568,12 +568,17 @@ class GameView {
             // Step 2: After expansion, fade out pregame content (0.3s)
             setTimeout(() => {
                 if (countdownContainer) {
-                    countdownContainer.style.transition = 'opacity 0.3s ease-out';
+                    countdownContainer.style.transition = 'opacity 0.3s ease-in';
                     countdownContainer.style.opacity = '0';
                 }
                 if (matchupPreview) {
-                    matchupPreview.style.transition = 'opacity 0.3s ease-out';
+                    matchupPreview.style.transition = 'opacity 0.3s ease-in';
                     matchupPreview.style.opacity = '0';
+                }
+                // Fade out entire live indicator ("Upcoming NBA")
+                if (this.elements.liveIndicator) {
+                    this.elements.liveIndicator.style.transition = 'opacity 0.3s ease-in';
+                    this.elements.liveIndicator.style.opacity = '0';
                 }
 
                 // Step 3: After fade out, remove pregame and fade in new content together (0.3s)
@@ -585,27 +590,35 @@ class GameView {
                     // Change "Upcoming" to "Live"
                     if (liveText) liveText.textContent = 'Live';
 
-                    // Fade in ALL live content together
+                    // Fade in entire live indicator ("Live NBA")
+                    if (this.elements.liveIndicator) {
+                        this.elements.liveIndicator.style.transition = 'opacity 0.3s ease-out';
+                        this.elements.liveIndicator.style.opacity = '1';
+                    }
                     teamLogos.forEach(logo => {
-                        logo.style.transition = 'opacity 0.3s ease-in';
+                        logo.style.transition = 'opacity 0.3s ease-out';
                         logo.style.opacity = '1';
                     });
                     teamAbbrs.forEach(abbr => {
-                        abbr.style.transition = 'opacity 0.3s ease-in';
+                        abbr.style.transition = 'opacity 0.3s ease-out';
                         abbr.style.opacity = '1';
                     });
                     scores.forEach(score => {
-                        score.style.transition = 'opacity 0.3s ease-in';
+                        score.style.transition = 'opacity 0.3s ease-out';
                         score.style.opacity = '1';
                     });
                     if (this.elements.gameStatus) {
-                        this.elements.gameStatus.style.transition = 'opacity 0.3s ease-in';
+                        this.elements.gameStatus.style.transition = 'opacity 0.3s ease-out';
                         this.elements.gameStatus.style.opacity = '1';
                     }
 
                     // Step 4: Final cleanup after fade in completes (0.3s)
                     setTimeout(() => {
                         // Clean up all inline styles
+                        if (this.elements.liveIndicator) {
+                            this.elements.liveIndicator.style.transition = '';
+                            this.elements.liveIndicator.style.opacity = '';
+                        }
                         teamLogos.forEach(logo => {
                             logo.style.transition = '';
                             logo.style.opacity = '';
