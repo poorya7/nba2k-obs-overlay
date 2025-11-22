@@ -4,9 +4,25 @@
  * 
  * Usage:
  *   const gameView = new GameView();
+ *   gameView.transitionToState('live', gameData);
  *   gameView.updateScore('home', 85, true);
- *   gameView.updateTeam('away', 'BOS', 'https://...');
+ *   gameView.hide(); // When no game selected
  */
+
+// Transition timing constants (all in milliseconds)
+const TRANSITION_TIMING = {
+    BOX_EXPAND: 500,
+    FADE_OUT: 300,
+    FADE_IN: 300,
+    CONTENT_FADE_OUT: 250,
+    CONTENT_FADE_IN: 300,
+    FULL_FADE_OUT: 250,
+    FULL_FADE_IN: 300
+};
+
+// Default animation for score changes
+const DEFAULT_SCORE_ANIMATION = 'slide';
+
 class GameView {
     constructor() {
         // Cache DOM elements for performance
@@ -23,7 +39,79 @@ class GameView {
             gameStatsBox: document.querySelector('.game-stats')
         };
         
-        this.currentState = 'live'; // Default state
+        this.currentState = null; // No default state - set by first API call
+        this.isVisible = false;   // Track visibility
+    }
+
+    /**
+     * Show the overlay (when game is selected)
+     */
+    show() {
+        if (this.elements.gameStatsBox && !this.isVisible) {
+            this.elements.gameStatsBox.style.display = 'block';
+            this.isVisible = true;
+        }
+    }
+
+    /**
+     * Hide the overlay (when no game selected)
+     */
+    hide() {
+        if (this.elements.gameStatsBox && this.isVisible) {
+            this.elements.gameStatsBox.style.display = 'none';
+            this.isVisible = false;
+            this.currentState = null;
+        }
+    }
+
+    /**
+     * Validate state data has required fields
+     * @param {string} stateName - State name
+     * @param {Object} data - State data
+     * @returns {boolean} True if valid
+     */
+    validateStateData(stateName, data) {
+        if (!data) {
+            console.error(`Invalid data for state "${stateName}": data is null/undefined`);
+            return false;
+        }
+
+        switch (stateName) {
+            case 'pregame':
+                if (!data.homeTeam || !data.awayTeam) {
+                    console.error('Pre-game state requires homeTeam and awayTeam');
+                    return false;
+                }
+                if (!data.homeTeam.abbr || !data.homeTeam.logoUrl || !data.awayTeam.abbr || !data.awayTeam.logoUrl) {
+                    console.error('Teams must have abbr and logoUrl');
+                    return false;
+                }
+                // countdown is optional
+                return true;
+
+            case 'live':
+                if (!data.home || !data.away) {
+                    console.error('Live state requires home and away team data');
+                    return false;
+                }
+                if (!data.quarter || !data.time) {
+                    console.error('Live state requires quarter and time');
+                    return false;
+                }
+                return true;
+
+            case 'halftime':
+            case 'final':
+                if (!data.home || !data.away) {
+                    console.error(`${stateName} state requires home and away team data`);
+                    return false;
+                }
+                return true;
+
+            default:
+                console.error(`Unknown state: ${stateName}`);
+                return false;
+        }
     }
 
     /**
@@ -53,9 +141,9 @@ class GameView {
      * @param {string} team - 'home' or 'away'
      * @param {number} newScore - New score value
      * @param {boolean} animate - Whether to play animation
-     * @param {string} animType - Animation type ('glow', 'nba', 'bounce', etc.)
+     * @param {string} animType - Animation type ('slide', 'glow', 'nba', 'bounce', etc.)
      */
-    updateScore(team, newScore, animate = false, animType = 'glow') {
+    updateScore(team, newScore, animate = false, animType = DEFAULT_SCORE_ANIMATION) {
         if (team !== 'home' && team !== 'away') {
             console.error('Invalid team. Must be "home" or "away"');
             return;
@@ -67,10 +155,12 @@ class GameView {
         const oldScore = parseInt(scoreElement.textContent) || 0;
         const shouldAnimate = animate && newScore > oldScore;
 
-        scoreElement.textContent = newScore;
-
         if (shouldAnimate) {
-            this.playScoreAnimation(scoreElement, animType);
+            // Use special method for slide animation (needs old value)
+            this.playScoreAnimationWithValue(scoreElement, animType, newScore);
+        } else {
+            // No animation - just update the text
+            scoreElement.textContent = newScore;
         }
     }
 
@@ -79,7 +169,7 @@ class GameView {
      * @param {HTMLElement} element - Score element to animate
      * @param {string} animType - Animation type
      */
-    playScoreAnimation(element, animType = 'glow') {
+    playScoreAnimation(element, animType = DEFAULT_SCORE_ANIMATION) {
         // Remove all animation classes
         const animClasses = ['anim-glow', 'anim-nba', 'anim-bounce', 'anim-flash', 
                             'anim-pop', 'anim-slide-in', 'anim-shake', 'anim-highlight'];
@@ -377,6 +467,16 @@ class GameView {
      */
     transitionToState(stateName, data) {
         return new Promise((resolve) => {
+            // Validate data first
+            if (!this.validateStateData(stateName, data)) {
+                console.error('State transition aborted due to invalid data');
+                resolve();
+                return;
+            }
+
+            // Show overlay if hidden
+            this.show();
+
             // Don't transition if already in this state (but allow live to live transitions)
             if (this.currentState === stateName && stateName !== 'live') {
                 resolve();
@@ -441,8 +541,8 @@ class GameView {
                         }
                         this.elements.gameStatsBox.classList.remove('transitioning');
                         resolve();
-                    }, 300); // Match contentFadeIn duration
-                }, 250); // Match contentFadeOut duration
+                    }, TRANSITION_TIMING.CONTENT_FADE_IN);
+                }, TRANSITION_TIMING.CONTENT_FADE_OUT);
             } else {
                 // Full box transition (Pre-Game involved)
                 
@@ -456,7 +556,7 @@ class GameView {
                 const currentOpacity = window.getComputedStyle(this.elements.gameStatsBox).opacity;
                 
                 // Animate to transparent
-                this.elements.gameStatsBox.style.transition = 'opacity 0.25s ease-out';
+                this.elements.gameStatsBox.style.transition = `opacity ${TRANSITION_TIMING.FULL_FADE_OUT}ms ease-out`;
                 this.elements.gameStatsBox.style.opacity = '0';
 
                 setTimeout(() => {
@@ -464,15 +564,15 @@ class GameView {
                     this.switchToState(stateName, data);
 
                     // Fade back in
-                    this.elements.gameStatsBox.style.transition = 'opacity 0.3s ease-in';
+                    this.elements.gameStatsBox.style.transition = `opacity ${TRANSITION_TIMING.FULL_FADE_IN}ms ease-in`;
                     this.elements.gameStatsBox.style.opacity = currentOpacity;
 
                     setTimeout(() => {
                         this.elements.gameStatsBox.style.transition = '';
                         this.elements.gameStatsBox.classList.remove('transitioning');
                         resolve();
-                    }, 300);
-                }, 250);
+                    }, TRANSITION_TIMING.FULL_FADE_IN);
+                }, TRANSITION_TIMING.FULL_FADE_OUT);
             }
         });
     }
@@ -559,29 +659,29 @@ class GameView {
             if (countdownContainer) countdownContainer.style.position = '';
             if (matchupPreview) matchupPreview.style.position = '';
 
-            // Step 1: Animate box expansion (0.5s)
+            // Step 1: Animate box expansion
             this.elements.gameStatsBox.style.height = currentHeight + 'px';
             this.elements.gameStatsBox.classList.add('expanding');
             void this.elements.gameStatsBox.offsetWidth;
             this.elements.gameStatsBox.style.height = newHeight + 'px';
 
-            // Step 2: After expansion, fade out pregame content (0.3s)
+            // Step 2: After expansion, fade out pregame content
             setTimeout(() => {
                 if (countdownContainer) {
-                    countdownContainer.style.transition = 'opacity 0.3s ease-in';
+                    countdownContainer.style.transition = `opacity ${TRANSITION_TIMING.FADE_OUT}ms ease-in`;
                     countdownContainer.style.opacity = '0';
                 }
                 if (matchupPreview) {
-                    matchupPreview.style.transition = 'opacity 0.3s ease-in';
+                    matchupPreview.style.transition = `opacity ${TRANSITION_TIMING.FADE_OUT}ms ease-in`;
                     matchupPreview.style.opacity = '0';
                 }
                 // Fade out entire live indicator ("Upcoming NBA")
                 if (this.elements.liveIndicator) {
-                    this.elements.liveIndicator.style.transition = 'opacity 0.3s ease-in';
+                    this.elements.liveIndicator.style.transition = `opacity ${TRANSITION_TIMING.FADE_OUT}ms ease-in`;
                     this.elements.liveIndicator.style.opacity = '0';
                 }
 
-                // Step 3: After fade out, remove pregame and fade in new content together (0.3s)
+                // Step 3: After fade out, remove pregame and fade in new content together
                 setTimeout(() => {
                     // Remove pregame content
                     if (countdownContainer) countdownContainer.remove();
@@ -592,27 +692,27 @@ class GameView {
 
                     // Fade in entire live indicator ("Live NBA")
                     if (this.elements.liveIndicator) {
-                        this.elements.liveIndicator.style.transition = 'opacity 0.3s ease-out';
+                        this.elements.liveIndicator.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
                         this.elements.liveIndicator.style.opacity = '1';
                     }
                     teamLogos.forEach(logo => {
-                        logo.style.transition = 'opacity 0.3s ease-out';
+                        logo.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
                         logo.style.opacity = '1';
                     });
                     teamAbbrs.forEach(abbr => {
-                        abbr.style.transition = 'opacity 0.3s ease-out';
+                        abbr.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
                         abbr.style.opacity = '1';
                     });
                     scores.forEach(score => {
-                        score.style.transition = 'opacity 0.3s ease-out';
+                        score.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
                         score.style.opacity = '1';
                     });
                     if (this.elements.gameStatus) {
-                        this.elements.gameStatus.style.transition = 'opacity 0.3s ease-out';
+                        this.elements.gameStatus.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
                         this.elements.gameStatus.style.opacity = '1';
                     }
 
-                    // Step 4: Final cleanup after fade in completes (0.3s)
+                    // Step 4: Final cleanup after fade in completes
                     setTimeout(() => {
                         // Clean up all inline styles
                         if (this.elements.liveIndicator) {
@@ -639,9 +739,9 @@ class GameView {
                         this.elements.gameStatsBox.classList.remove('transitioning', 'expanding');
                         this.elements.gameStatsBox.style.height = '';
                         resolve();
-                    }, 300);
-                }, 300);
-            }, 500);
+                    }, TRANSITION_TIMING.FADE_IN);
+                }, TRANSITION_TIMING.FADE_OUT);
+            }, TRANSITION_TIMING.BOX_EXPAND);
         });
     }
 }
