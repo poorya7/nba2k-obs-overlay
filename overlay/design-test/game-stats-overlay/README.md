@@ -6,11 +6,11 @@ Clean, modular overlay for displaying NBA game stats with ASMR-friendly Blue Neo
 
 ```
 game-stats-overlay/
-├── index.html      - Main overlay (with demo data)
-├── test.html       - Interactive test page with controls
-├── styles.css      - All visual styling (finalized design)
-├── game-view.js    - View layer with clean update methods
-└── README.md       - This file
+├── index.html          - Main overlay (with demo data)
+├── test-states.html    - Interactive state transition tester
+├── styles.css          - All visual styling (finalized design)
+├── game-view.js        - View layer with state management
+└── README.md           - This file
 ```
 
 ## Quick Start
@@ -18,13 +18,13 @@ game-stats-overlay/
 **No server required!** Just open the HTML files directly in your browser.
 
 **Option 1: View with demo data**
-- Open `index.html` - Shows Lakers vs Warriors
+- Open `index.html` - Shows Lakers vs Warriors in Live state
 - Test in console: `gameView.updateScore('home', 100, true)`
 
-**Option 2: Animation testing**
-- Open `test.html` - Test different score animations
-- Click animation buttons to see effects in real-time
-- Choose which animation style you like best
+**Option 2: Test state transitions**
+- Open `test-states.html` - Interactive state switcher
+- Click buttons to switch between Pre-Game, Live, Halftime, Final
+- See smooth transitions in action with video background
 
 ## Architecture
 
@@ -38,9 +38,59 @@ game-stats-overlay/
 - Open/Closed: Easy to extend without modifying existing code
 - Dependency Inversion: View doesn't depend on data source
 
+## Game States
+
+The overlay supports 4 different game states with smooth transitions:
+
+1. **Pre-Game** - Countdown timer with team matchup preview
+2. **Live** - Active gameplay (Q1, Q2, Q3, Q4, OT, 2OT...)
+3. **Halftime** - Shows "Halftime" banner with current scores
+4. **Final** - Shows "Final" banner with final scores
+
+### State Transition Logic
+
+**Smart Animations:** Only animates what changes
+- Live ↔ Halftime/Final: Only bottom element fades (teams/scores stay visible)
+- Live → Live (Q1→Q3): Full content fades (for score/quarter updates)
+- Pre-Game ↔ anything: Full box fades (size changes)
+
 ## Usage
 
-### Basic Methods
+### State Management Methods
+
+```javascript
+// Transition to Pre-Game state
+await gameView.transitionToState('pregame', {
+    homeTeam: { abbr: 'LAL', logoUrl: 'https://...' },
+    awayTeam: { abbr: 'GSW', logoUrl: 'https://...' },
+    countdown: '02:15:34'
+});
+
+// Transition to Live state
+await gameView.transitionToState('live', {
+    home: { abbr: 'LAL', logoUrl: 'https://...', score: 67 },
+    away: { abbr: 'GSW', logoUrl: 'https://...', score: 64 },
+    quarter: 'Q3',
+    time: '8:42'
+});
+
+// Transition to Halftime
+await gameView.transitionToState('halftime', {
+    home: { abbr: 'LAL', logoUrl: 'https://...', score: 54 },
+    away: { abbr: 'GSW', logoUrl: 'https://...', score: 48 }
+});
+
+// Transition to Final
+await gameView.transitionToState('final', {
+    home: { abbr: 'LAL', logoUrl: 'https://...', score: 112 },
+    away: { abbr: 'GSW', logoUrl: 'https://...', score: 108 }
+});
+
+// Get current state
+const currentState = gameView.getCurrentState(); // 'pregame', 'live', 'halftime', 'final'
+```
+
+### Basic Update Methods
 
 ```javascript
 // Update team info
@@ -78,7 +128,7 @@ gameView.reset();
 
 ### Testing in Browser Console
 
-Open `index.html` in a browser and try:
+Open `index.html` or `test-states.html` in a browser and try:
 
 ```javascript
 // Test score animation
@@ -87,16 +137,28 @@ gameView.updateScore('home', 100, true);
 // Test team switch
 gameView.updateTeam('home', 'MIA', 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png');
 
-// Test game status
-gameView.updateGameStatus('OT', '2:30');
+// Test state transition
+await gameView.transitionToState('halftime', {
+    home: { abbr: 'LAL', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png', score: 54 },
+    away: { abbr: 'GSW', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png', score: 48 }
+});
+
+// Check current state
+console.log(gameView.getCurrentState());
 ```
 
 ## Next Steps
 
-When ready to add data fetching:
-1. Create a `GameDataService` class to fetch NBA data
+**State Management:** ✅ Complete!
+- 4 game states (Pre-Game, Live, Halftime, Final)
+- Smooth transitions with smart content-only animations
+- Ready for real-time data integration
+
+**When ready to add live data:**
+1. Create a `GameDataService` class to fetch NBA API data
 2. Create a `GameController` to connect service → view
-3. Keep `GameView` unchanged (loose coupling achieved!)
+3. Poll API and call `gameView.transitionToState()` when state changes
+4. Keep `GameView` unchanged (loose coupling achieved!)
 
 ## Design Specs
 
@@ -107,15 +169,16 @@ When ready to add data fetching:
 
 ## Available Score Animations
 
-Test them all in `test.html`:
+When scores update (via `updateScore()` with `animate: true`), you can choose from:
 
-1. **Glow Pulse** - Subtle green glow with scale (default)
-2. **NBA Style** - Scale up with golden highlight (like real NBA broadcasts)
-3. **Bounce** - Bounces up and down
-4. **Flash** - Quick opacity flash
-5. **Pop** - Pops in with elastic effect
-6. **Slide** - Slides in from left
+1. **Slide** - Slot reel effect (old score slides up, new slides in from bottom) ✨ **Chosen default**
+2. **Glow** - Subtle green glow with scale
+3. **NBA Style** - Scale up with golden highlight
+4. **Bounce** - Bounces up and down
+5. **Flash** - Quick opacity flash
+6. **Pop** - Pops in with elastic effect
 7. **Shake** - Quick shake effect
 8. **Highlight** - Background highlight fade
-9. **None** - No animation
+
+Set animation type via: `gameView.currentAnimation = 'slide'` (or 'glow', 'nba', etc.)
 
