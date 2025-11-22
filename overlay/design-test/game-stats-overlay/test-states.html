@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game States Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 12px;
+            min-width: 200px;
+        }
+
+        .controls h3 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controls button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #93c5fd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .controls button:hover {
+            background: rgba(59, 130, 246, 0.4);
+            color: #dbeafe;
+        }
+
+        .controls button.active {
+            background: rgba(59, 130, 246, 0.6);
+            color: #ffffff;
+            border-color: #3b82f6;
+        }
+
+        .current-state {
+            color: #86efac;
+            font-size: 12px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <video id="gameplay-video" autoplay loop muted>
+        <source src="../../../game.mp4" type="video/mp4">
+    </video>
+
+    <div class="channel-branding">
+        <div class="main-text">Silent Basketball</div>
+        <div class="sub-text">ASMR</div>
+    </div>
+
+    <div class="game-stats">
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span class="live-text">Live</span>
+            <span class="nba-label">NBA</span>
+        </div>
+
+        <div class="teams">
+            <div class="team">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="home" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="Lakers">
+                    <div class="team-abbr" data-abbr="home">LAL</div>
+                </div>
+                <div class="score" data-score="home">0</div>
+            </div>
+            
+            <div class="team">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="away" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="Warriors">
+                    <div class="team-abbr" data-abbr="away">GSW</div>
+                </div>
+                <div class="score" data-score="away">0</div>
+            </div>
+        </div>
+
+        <div class="game-status" data-status>Q1 · 12:00</div>
+    </div>
+
+    <div class="controls">
+        <h3>Game States</h3>
+        <button id="btn-pregame">Pre-Game</button>
+        <button id="btn-live-q1">Live (Q1)</button>
+        <button id="btn-live-q3">Live (Q3)</button>
+        <button id="btn-halftime">Halftime</button>
+        <button id="btn-final">Final</button>
+        <div class="current-state">Current: <span id="state-display">Live</span></div>
+    </div>
+
+    <script>
+        // GameView class (inlined to avoid CORS)
+        class GameView {
+            constructor() {
+                // Cache DOM elements for performance
+                this.elements = {
+                    homeAbbr: document.querySelector('[data-abbr="home"]'),
+                    awayAbbr: document.querySelector('[data-abbr="away"]'),
+                    homeLogo: document.querySelector('[data-logo="home"]'),
+                    awayLogo: document.querySelector('[data-logo="away"]'),
+                    homeScore: document.querySelector('[data-score="home"]'),
+                    awayScore: document.querySelector('[data-score="away"]'),
+                    gameStatus: document.querySelector('[data-status]'),
+                    liveIndicator: document.querySelector('.live-indicator'),
+                    teamsContainer: document.querySelector('.teams'),
+                    gameStatsBox: document.querySelector('.game-stats')
+                };
+                
+                this.currentState = 'live'; // Default state
+            }
+
+            updateTeam(team, abbr, logoUrl) {
+                if (team !== 'home' && team !== 'away') {
+                    console.error('Invalid team. Must be "home" or "away"');
+                    return;
+                }
+
+                const abbrElement = this.elements[`${team}Abbr`];
+                const logoElement = this.elements[`${team}Logo`];
+
+                if (abbrElement) abbrElement.textContent = abbr;
+                if (logoElement) {
+                    logoElement.src = logoUrl;
+                    logoElement.alt = abbr;
+                }
+            }
+
+            updateScore(team, newScore, animate = false) {
+                if (team !== 'home' && team !== 'away') {
+                    console.error('Invalid team. Must be "home" or "away"');
+                    return;
+                }
+
+                const scoreElement = this.elements[`${team}Score`];
+                if (!scoreElement) return;
+
+                scoreElement.textContent = newScore;
+            }
+
+            updateGameStatus(quarter, time) {
+                if (this.elements.gameStatus) {
+                    this.elements.gameStatus.textContent = `${quarter} · ${time}`;
+                }
+            }
+
+            updateAll(gameData) {
+                const { home, away, quarter, time } = gameData;
+
+                if (home) {
+                    if (home.abbr !== undefined && home.logoUrl !== undefined) {
+                        this.updateTeam('home', home.abbr, home.logoUrl);
+                    }
+                    if (home.score !== undefined) {
+                        this.updateScore('home', home.score);
+                    }
+                }
+
+                if (away) {
+                    if (away.abbr !== undefined && away.logoUrl !== undefined) {
+                        this.updateTeam('away', away.abbr, away.logoUrl);
+                    }
+                    if (away.score !== undefined) {
+                        this.updateScore('away', away.score);
+                    }
+                }
+
+                if (quarter !== undefined && time !== undefined) {
+                    this.updateGameStatus(quarter, time);
+                }
+            }
+
+            clearStateElements() {
+                // Remove pregame elements
+                const countdown = this.elements.gameStatsBox.querySelector('.countdown-container');
+                const matchup = this.elements.gameStatsBox.querySelector('.matchup-preview');
+                if (countdown) countdown.remove();
+                if (matchup) matchup.remove();
+
+                // Remove halftime/final banners
+                const halftimeBanner = this.elements.gameStatsBox.querySelector('.halftime-banner');
+                const finalBanner = this.elements.gameStatsBox.querySelector('.final-banner');
+                if (halftimeBanner) halftimeBanner.remove();
+                if (finalBanner) finalBanner.remove();
+
+                // Remove game status
+                if (this.elements.gameStatus) {
+                    this.elements.gameStatus.remove();
+                }
+            }
+
+            showPreGame(data) {
+                this.currentState = 'pregame';
+                this.clearStateElements();
+
+                // Update live indicator
+                const liveText = this.elements.liveIndicator.querySelector('.live-text');
+                if (liveText) liveText.textContent = 'Upcoming';
+
+                // Hide teams container and scores
+                if (this.elements.teamsContainer) {
+                    this.elements.teamsContainer.classList.add('hidden');
+                }
+
+                // Create matchup preview
+                const matchupHTML = `
+                    <div class="matchup-preview">
+                        <img class="preview-logo" src="${data.homeTeam.logoUrl}" alt="${data.homeTeam.abbr}">
+                        <span class="vs-text">vs</span>
+                        <img class="preview-logo" src="${data.awayTeam.logoUrl}" alt="${data.awayTeam.abbr}">
+                    </div>
+                `;
+
+                // Create countdown
+                const countdownHTML = `
+                    <div class="countdown-container">
+                        <div class="countdown-label">Game Starts In</div>
+                        <div class="countdown-time">${data.countdown || '00:00:00'}</div>
+                    </div>
+                `;
+
+                // Insert after live indicator
+                this.elements.liveIndicator.insertAdjacentHTML('afterend', matchupHTML);
+                const matchupElement = this.elements.gameStatsBox.querySelector('.matchup-preview');
+                matchupElement.insertAdjacentHTML('afterend', countdownHTML);
+            }
+
+            showLive(data) {
+                this.currentState = 'live';
+                this.clearStateElements();
+
+                // Update live indicator
+                const liveText = this.elements.liveIndicator.querySelector('.live-text');
+                if (liveText) liveText.textContent = 'Live';
+
+                // Show teams container
+                if (this.elements.teamsContainer) {
+                    this.elements.teamsContainer.classList.remove('hidden');
+                }
+
+                // Update game data
+                this.updateAll(data);
+
+                // Add game status back
+                const statusHTML = `<div class="game-status" data-status>${data.quarter} · ${data.time}</div>`;
+                this.elements.teamsContainer.insertAdjacentHTML('afterend', statusHTML);
+                this.elements.gameStatus = document.querySelector('[data-status]');
+            }
+
+            showHalftime(data) {
+                this.currentState = 'halftime';
+                this.clearStateElements();
+
+                // Update live indicator
+                const liveText = this.elements.liveIndicator.querySelector('.live-text');
+                if (liveText) liveText.textContent = 'Live';
+
+                // Show teams container
+                if (this.elements.teamsContainer) {
+                    this.elements.teamsContainer.classList.remove('hidden');
+                }
+
+                // Update teams and scores
+                this.updateTeam('home', data.home.abbr, data.home.logoUrl);
+                this.updateTeam('away', data.away.abbr, data.away.logoUrl);
+                this.updateScore('home', data.home.score);
+                this.updateScore('away', data.away.score);
+
+                // Add halftime banner
+                const bannerHTML = `
+                    <div class="halftime-banner">
+                        <div class="halftime-text">Halftime</div>
+                    </div>
+                `;
+                this.elements.teamsContainer.insertAdjacentHTML('afterend', bannerHTML);
+            }
+
+            showFinal(data) {
+                this.currentState = 'final';
+                this.clearStateElements();
+
+                // Update live indicator (keep as "Live")
+                const liveText = this.elements.liveIndicator.querySelector('.live-text');
+                if (liveText) liveText.textContent = 'Live';
+
+                // Show teams container
+                if (this.elements.teamsContainer) {
+                    this.elements.teamsContainer.classList.remove('hidden');
+                }
+
+                // Update teams and scores
+                this.updateTeam('home', data.home.abbr, data.home.logoUrl);
+                this.updateTeam('away', data.away.abbr, data.away.logoUrl);
+                this.updateScore('home', data.home.score);
+                this.updateScore('away', data.away.score);
+
+                // Add final banner
+                const bannerHTML = `
+                    <div class="final-banner">
+                        <div class="final-text">Final</div>
+                    </div>
+                `;
+                this.elements.teamsContainer.insertAdjacentHTML('afterend', bannerHTML);
+            }
+
+            getCurrentState() {
+                return this.currentState;
+            }
+        }
+
+        // Initialize GameView
+        const gameView = new GameView();
+
+        // Sample data
+        const sampleData = {
+            homeTeam: { abbr: 'LAL', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png' },
+            awayTeam: { abbr: 'GSW', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png' }
+        };
+
+        // Button handlers
+        function updateActiveButton(buttonId) {
+            document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(buttonId).classList.add('active');
+            document.getElementById('state-display').textContent = gameView.getCurrentState();
+        }
+
+        document.getElementById('btn-pregame').addEventListener('click', () => {
+            gameView.showPreGame({
+                homeTeam: sampleData.homeTeam,
+                awayTeam: sampleData.awayTeam,
+                countdown: '02:15:34'
+            });
+            updateActiveButton('btn-pregame');
+        });
+
+        document.getElementById('btn-live-q1').addEventListener('click', () => {
+            gameView.showLive({
+                home: { ...sampleData.homeTeam, score: 18 },
+                away: { ...sampleData.awayTeam, score: 22 },
+                quarter: 'Q1',
+                time: '7:32'
+            });
+            updateActiveButton('btn-live-q1');
+        });
+
+        document.getElementById('btn-live-q3').addEventListener('click', () => {
+            gameView.showLive({
+                home: { ...sampleData.homeTeam, score: 67 },
+                away: { ...sampleData.awayTeam, score: 64 },
+                quarter: 'Q3',
+                time: '4:18'
+            });
+            updateActiveButton('btn-live-q3');
+        });
+
+        document.getElementById('btn-halftime').addEventListener('click', () => {
+            gameView.showHalftime({
+                home: { ...sampleData.homeTeam, score: 54 },
+                away: { ...sampleData.awayTeam, score: 48 }
+            });
+            updateActiveButton('btn-halftime');
+        });
+
+        document.getElementById('btn-final').addEventListener('click', () => {
+            gameView.showFinal({
+                home: { ...sampleData.homeTeam, score: 112 },
+                away: { ...sampleData.awayTeam, score: 108 }
+            });
+            updateActiveButton('btn-final');
+        });
+
+        // Set initial active button
+        updateActiveButton('btn-live-q1');
+    </script>
+</body>
+</html>
+

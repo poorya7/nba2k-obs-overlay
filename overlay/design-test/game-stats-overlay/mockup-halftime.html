@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halftime State Mockup</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .halftime-banner {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 6px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .halftime-text {
+            font-size: 11px;
+            font-weight: 700;
+            color: #60a5fa;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <video id="gameplay-video" autoplay loop muted>
+        <source src="../../../game.mp4" type="video/mp4">
+    </video>
+
+    <div class="channel-branding">
+        <div class="main-text">Silent Basketball</div>
+        <div class="sub-text">ASMR</div>
+    </div>
+
+    <div class="game-stats">
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span class="live-text">Live</span>
+            <span class="nba-label">NBA</span>
+        </div>
+        
+        <div class="teams">
+            <div class="team">
+                <div class="team-left">
+                    <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="Lakers">
+                    <div class="team-abbr">LAL</div>
+                </div>
+                <div class="score">54</div>
+            </div>
+            
+            <div class="team">
+                <div class="team-left">
+                    <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="Warriors">
+                    <div class="team-abbr">GSW</div>
+                </div>
+                <div class="score">48</div>
+            </div>
+        </div>
+
+        <div class="halftime-banner">
+            <div class="halftime-text">Halftime</div>
+        </div>
+    </div>
+</body>
+</html>
+

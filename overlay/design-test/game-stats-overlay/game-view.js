@@ -17,8 +17,13 @@ class GameView {
             awayLogo: document.querySelector('[data-logo="away"]'),
             homeScore: document.querySelector('[data-score="home"]'),
             awayScore: document.querySelector('[data-score="away"]'),
-            gameStatus: document.querySelector('[data-status]')
+            gameStatus: document.querySelector('[data-status]'),
+            liveIndicator: document.querySelector('.live-indicator'),
+            teamsContainer: document.querySelector('.teams'),
+            gameStatsBox: document.querySelector('.game-stats')
         };
+        
+        this.currentState = 'live'; // Default state
     }
 
     /**
@@ -198,6 +203,168 @@ class GameView {
         this.updateScore('home', 0);
         this.updateScore('away', 0);
         this.updateGameStatus('Q1', '12:00');
+    }
+
+    // ==================== STATE MANAGEMENT ====================
+
+    /**
+     * Clear all state-specific elements from the DOM
+     */
+    clearStateElements() {
+        // Remove pregame elements
+        const countdown = this.elements.gameStatsBox.querySelector('.countdown-container');
+        const matchup = this.elements.gameStatsBox.querySelector('.matchup-preview');
+        if (countdown) countdown.remove();
+        if (matchup) matchup.remove();
+
+        // Remove halftime/final banners
+        const halftimeBanner = this.elements.gameStatsBox.querySelector('.halftime-banner');
+        const finalBanner = this.elements.gameStatsBox.querySelector('.final-banner');
+        if (halftimeBanner) halftimeBanner.remove();
+        if (finalBanner) finalBanner.remove();
+
+        // Remove game status
+        if (this.elements.gameStatus) {
+            this.elements.gameStatus.remove();
+        }
+    }
+
+    /**
+     * Show Pre-Game state
+     * @param {Object} data - {homeTeam: {abbr, logoUrl}, awayTeam: {abbr, logoUrl}, countdown: '02:15:34'}
+     */
+    showPreGame(data) {
+        this.currentState = 'pregame';
+        this.clearStateElements();
+
+        // Update live indicator
+        const liveText = this.elements.liveIndicator.querySelector('.live-text');
+        if (liveText) liveText.textContent = 'Upcoming';
+
+        // Hide teams container and scores
+        if (this.elements.teamsContainer) {
+            this.elements.teamsContainer.classList.add('hidden');
+        }
+
+        // Create matchup preview
+        const matchupHTML = `
+            <div class="matchup-preview">
+                <img class="preview-logo" src="${data.homeTeam.logoUrl}" alt="${data.homeTeam.abbr}">
+                <span class="vs-text">vs</span>
+                <img class="preview-logo" src="${data.awayTeam.logoUrl}" alt="${data.awayTeam.abbr}">
+            </div>
+        `;
+
+        // Create countdown
+        const countdownHTML = `
+            <div class="countdown-container">
+                <div class="countdown-label">Game Starts In</div>
+                <div class="countdown-time">${data.countdown || '00:00:00'}</div>
+            </div>
+        `;
+
+        // Insert after live indicator
+        this.elements.liveIndicator.insertAdjacentHTML('afterend', matchupHTML);
+        const matchupElement = this.elements.gameStatsBox.querySelector('.matchup-preview');
+        matchupElement.insertAdjacentHTML('afterend', countdownHTML);
+    }
+
+    /**
+     * Show Live state (Q1, Q2, Q3, Q4, OT)
+     * @param {Object} data - {home: {abbr, logoUrl, score}, away: {abbr, logoUrl, score}, quarter, time}
+     */
+    showLive(data) {
+        this.currentState = 'live';
+        this.clearStateElements();
+
+        // Update live indicator
+        const liveText = this.elements.liveIndicator.querySelector('.live-text');
+        if (liveText) liveText.textContent = 'Live';
+
+        // Show teams container
+        if (this.elements.teamsContainer) {
+            this.elements.teamsContainer.classList.remove('hidden');
+        }
+
+        // Update game data
+        this.updateAll(data);
+
+        // Add game status back
+        const statusHTML = `<div class="game-status" data-status>${data.quarter} · ${data.time}</div>`;
+        this.elements.teamsContainer.insertAdjacentHTML('afterend', statusHTML);
+        this.elements.gameStatus = document.querySelector('[data-status]');
+    }
+
+    /**
+     * Show Halftime state
+     * @param {Object} data - {home: {abbr, logoUrl, score}, away: {abbr, logoUrl, score}}
+     */
+    showHalftime(data) {
+        this.currentState = 'halftime';
+        this.clearStateElements();
+
+        // Update live indicator
+        const liveText = this.elements.liveIndicator.querySelector('.live-text');
+        if (liveText) liveText.textContent = 'Live';
+
+        // Show teams container
+        if (this.elements.teamsContainer) {
+            this.elements.teamsContainer.classList.remove('hidden');
+        }
+
+        // Update teams and scores
+        this.updateTeam('home', data.home.abbr, data.home.logoUrl);
+        this.updateTeam('away', data.away.abbr, data.away.logoUrl);
+        this.updateScore('home', data.home.score);
+        this.updateScore('away', data.away.score);
+
+        // Add halftime banner
+        const bannerHTML = `
+            <div class="halftime-banner">
+                <div class="halftime-text">Halftime</div>
+            </div>
+        `;
+        this.elements.teamsContainer.insertAdjacentHTML('afterend', bannerHTML);
+    }
+
+    /**
+     * Show Final state
+     * @param {Object} data - {home: {abbr, logoUrl, score}, away: {abbr, logoUrl, score}}
+     */
+    showFinal(data) {
+        this.currentState = 'final';
+        this.clearStateElements();
+
+        // Update live indicator (keep as "Live")
+        const liveText = this.elements.liveIndicator.querySelector('.live-text');
+        if (liveText) liveText.textContent = 'Live';
+
+        // Show teams container
+        if (this.elements.teamsContainer) {
+            this.elements.teamsContainer.classList.remove('hidden');
+        }
+
+        // Update teams and scores
+        this.updateTeam('home', data.home.abbr, data.home.logoUrl);
+        this.updateTeam('away', data.away.abbr, data.away.logoUrl);
+        this.updateScore('home', data.home.score);
+        this.updateScore('away', data.away.score);
+
+        // Add final banner
+        const bannerHTML = `
+            <div class="final-banner">
+                <div class="final-text">Final</div>
+            </div>
+        `;
+        this.elements.teamsContainer.insertAdjacentHTML('afterend', bannerHTML);
+    }
+
+    /**
+     * Get current state
+     * @returns {string} Current state name
+     */
+    getCurrentState() {
+        return this.currentState;
     }
 }
 

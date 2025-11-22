@@ -302,9 +302,108 @@ body {
     font-size: 13px;
     color: #86efac;
     font-weight: 400;
-    margin-top: 8px;
+    margin-top: 10px;
     margin-bottom: 0;
     letter-spacing: 1.5px;
     text-align: center;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* State-specific styles */
+
+/* Pre-Game State */
+.countdown-container {
+    text-align: center;
+}
+
+.countdown-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: #93c5fd;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 3px;
+}
+
+.countdown-time {
+    font-size: 24px;
+    font-weight: 700;
+    color: #dbeafe;
+    text-align: center;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    margin-bottom: 10px;
+}
+
+.matchup-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.preview-logo {
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+}
+
+.vs-text {
+    font-size: 11px;
+    color: #60a5fa;
+    font-weight: 600;
+}
+
+/* Halftime State */
+.halftime-banner {
+    background: rgba(59, 130, 246, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 10px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.halftime-text {
+    font-size: 11px;
+    font-weight: 700;
+    color: #60a5fa;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Final State */
+.final-banner {
+    background: rgba(134, 239, 172, 0.15);
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 10px;
+    border: 1px solid rgba(134, 239, 172, 0.3);
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.final-text {
+    font-size: 11px;
+    font-weight: 700;
+    color: #86efac;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Hidden utility class */
+.hidden {
+    display: none !important;
 }
 
