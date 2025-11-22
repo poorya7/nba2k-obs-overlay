@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Simulation Test</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../core/styles.css">
     <style>
         .controls {
             position: fixed;
@@ -85,7 +85,7 @@
 </head>
 <body>
     <video id="gameplay-video" autoplay loop muted>
-        <source src="../../../game.mp4" type="video/mp4">
+        <source src="../../../../game.mp4" type="video/mp4">
     </video>
 
     <div class="channel-branding">
@@ -146,7 +146,7 @@
         </div>
     </div>
 
-    <script src="game-view.js"></script>
+    <script src="../core/game-view.js"></script>
     <script>
         const gameView = new GameView();
         const sampleData = {
