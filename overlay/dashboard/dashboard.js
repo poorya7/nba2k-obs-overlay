@@ -34,12 +34,10 @@ async function loadGames() {
   const errorEl = document.getElementById('error');
   
   try {
-    console.log('📡 Fetching today\'s games...');
     errorEl.style.display = 'none';
     
     // Fetch games
     allGames = await window.NBAApi.getTodaysGames();
-    console.log(`✅ Found ${allGames.length} games`);
     
     // Populate dropdown
     populateGameSelect(allGames);
@@ -52,7 +50,6 @@ async function loadGames() {
     }
     
   } catch (error) {
-    console.error('❌ Failed to load games:', error);
     errorEl.textContent = `Error loading games: ${error.message}`;
     errorEl.style.display = 'block';
     
@@ -93,13 +90,11 @@ async function handleGameSelection(event) {
     // No game selected
     clearPreview();
     await saveGameSelection(null);
-    console.log('🚫 Game selection cleared');
     return;
   }
   
   // Save selection to server
   await saveGameSelection(gameId);
-  console.log('💾 Saved game selection:', gameId);
   
   // Update preview
   updatePreview(gameId);
@@ -121,10 +116,8 @@ async function saveGameSelection(gameId) {
     if (!response.ok) {
       throw new Error('Failed to save selection');
     }
-    
-    console.log('✅ Selection saved to server');
   } catch (error) {
-    console.error('❌ Failed to save selection:', error);
+    // Silently fail
   }
 }
 
@@ -141,7 +134,6 @@ async function loadSavedSelection() {
     const data = await response.json();
     return data.gameId;
   } catch (error) {
-    console.error('❌ Failed to load saved selection:', error);
     return null;
   }
 }
@@ -209,7 +201,6 @@ function clearPreview() {
  * Refresh games list
  */
 async function refreshGames() {
-  console.log('🔄 Refreshing games...');
   await loadGames();
 }
 
@@ -227,7 +218,7 @@ async function loadCurrentStyle() {
       }
     }
   } catch (error) {
-    console.error('❌ Failed to load style:', error);
+    // Silently fail
   }
   updateStyleDisplay();
 }
@@ -239,8 +230,6 @@ async function nextStyle() {
   currentStyleIndex = (currentStyleIndex + 1) % STYLES.length;
   const selectedStyle = STYLES[currentStyleIndex];
   
-  console.log('🎨 Button clicked! Cycling to:', selectedStyle.name, '(', selectedStyle.id, ')');
-  
   // Save to server
   try {
     const response = await fetch('/api/selected-style', {
@@ -248,14 +237,8 @@ async function nextStyle() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ style: selectedStyle.id })
     });
-    
-    if (response.ok) {
-      console.log('✅ Style saved to server:', selectedStyle.id);
-    } else {
-      console.error('❌ Server returned error:', response.status);
-    }
   } catch (error) {
-    console.error('❌ Failed to save style:', error);
+    // Silently fail
   }
   
   updateStyleDisplay();
@@ -289,7 +272,7 @@ async function loadSimulationState() {
       updateSimulationUI();
     }
   } catch (error) {
-    console.error('❌ Failed to load simulation state:', error);
+    // Silently fail
   }
 }
 
@@ -307,11 +290,10 @@ async function handleSimulationToggle(event) {
     });
     
     if (response.ok) {
-      console.log('🎮 Simulation mode:', enabled ? 'ON' : 'OFF');
       updateSimulationUI();
     }
   } catch (error) {
-    console.error('❌ Failed to toggle simulation:', error);
+    // Silently fail
   }
 }
 
@@ -330,11 +312,10 @@ async function nextSimulationState() {
     });
     
     if (response.ok) {
-      console.log('🎮 Simulation state:', newState);
       updateSimulationUI();
     }
   } catch (error) {
-    console.error('❌ Failed to change state:', error);
+    // Silently fail
   }
 }
 

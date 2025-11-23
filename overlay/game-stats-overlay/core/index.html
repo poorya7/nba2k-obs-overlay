@@ -299,7 +299,6 @@
                 
                 if (stateChanged) {
                     // State changed - switch directly without animation
-                    console.log('🔄 State changed - switching without animation');
                     gameView.switchToState(stateName, formattedData);
                 } else if (scoresChanged) {
                     // Teams or scores changed
@@ -307,33 +306,22 @@
                     
                     if (teamsChanged) {
                         // Teams changed - switch state to update everything
-                        console.log('🔄 Teams changed - switching without animation');
                         gameView.switchToState(stateName, formattedData);
                     } else if (stateName === 'live') {
                         // Only scores changed in live state - slide animation
-                        console.log('🎯 Scores changed - updating with slide animation');
                         gameView.updateScore('home', homeScore, true);
                         gameView.updateScore('away', awayScore, true);
-                    } else {
-                        // Shouldn't happen
-                        console.log('⚠️ Unexpected change');
                     }
-                } else {
-                    // Time or other minor change - shouldn't happen but handle it
-                    console.log('⚠️ Unexpected change');
                 }
                 
                 lastGameData = fullKey;
             } else {
                 // Only time changed - update time silently
                 if (stateName === 'live' && formattedData.time) {
-                    console.log('⏰ Time update only');
                     const statusElement = document.querySelector('[data-status]');
                     if (statusElement) {
                         statusElement.textContent = `${formattedData.quarter} · ${formattedData.time}`;
                     }
-                } else {
-                    console.log('⏭️  No changes');
                 }
             }
         }
@@ -408,8 +396,6 @@
          * Start automatic updates (copied from working overlay)
          */
         function startOverlay() {
-            console.log('🏀 NBA Overlay initialized');
-            
             // Initial update
             updateFromAPI();
             
