@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP Option 4d - Vertical Layout</title>
+    <link rel="stylesheet" href="../../core/styles.css">
+    <style>
+        :root {
+            --mvp-label-size: 10px;
+            --player-name-size: 11.5px;
+            --stat-value-size: 15px;
+            --stat-label-size: 10px;
+            --player-pic-size: 86px;
+            --stats-gap: 10px;
+            --name-to-stats-gap: 11px;
+            --mvp-vertical-position: 5px;
+            --overlay-vertical-offset: 120px;
+        }
+
+        .game-stats {
+            padding-bottom: 16px !important;
+            transform: translateY(var(--overlay-vertical-offset));
+        }
+
+        .mvp-section {
+            margin-top: var(--mvp-vertical-position);
+            padding-top: 12px;
+            border-top: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .mvp-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mvp-content .player-pic {
+            width: var(--player-pic-size);
+            height: var(--player-pic-size);
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+        }
+
+        .mvp-content .player-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .mvp-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            margin-bottom: var(--name-to-stats-gap);
+        }
+
+        .mvp-label {
+            font-size: var(--mvp-label-size);
+            font-weight: 700;
+            color: #fbbf24;
+            letter-spacing: 0.5px;
+        }
+
+        .mvp-content .player-name {
+            font-size: var(--player-name-size);
+            font-weight: 600;
+            color: #93c5fd;
+        }
+
+        .mvp-content .player-stats {
+            display: flex;
+            gap: var(--stats-gap);
+            justify-content: center;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: var(--stat-value-size);
+            font-weight: 700;
+            color: #bfdbfe;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: var(--stat-label-size);
+            font-weight: 600;
+            color: #60a5fa;
+            margin-top: 1px;
+        }
+    </style>
+</head>
+<body>
+    <video id="gameplay-video" autoplay loop muted>
+        <source src="../../../game.mp4" type="video/mp4">
+    </video>
+
+    <div class="channel-branding">
+        <div class="main-text">Silent Basketball</div>
+        <div class="sub-text">ASMR</div>
+    </div>
+
+    <div class="game-stats">
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span class="live-text">Live</span>
+            <span class="nba-label">NBA</span>
+        </div>
+        
+        <div class="teams">
+            <div class="team" data-team="home">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="home" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="Home Team">
+                    <div class="team-abbr" data-abbr="home">LAL</div>
+                </div>
+                <div class="score" data-score="home">102</div>
+            </div>
+            
+            <div class="team" data-team="away">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="away" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="Away Team">
+                    <div class="team-abbr" data-abbr="away">GSW</div>
+                </div>
+                <div class="score" data-score="away">98</div>
+            </div>
+        </div>
+        
+        <div class="game-status" data-status>Q3 · 8:32</div>
+
+        <div class="mvp-section">
+            <div class="mvp-content">
+                <img class="player-pic" src="https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/1966.png" alt="LeBron James">
+                <div class="player-info">
+                    <div class="mvp-header">
+                        <span class="mvp-label">⭐ MVP</span>
+                        <span class="player-name">LeBron James</span>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">34</div>
+                            <div class="stat-label">PTS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">REB</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">AST</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

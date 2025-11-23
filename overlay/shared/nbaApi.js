@@ -33,7 +33,6 @@ async function fetchTodaysGames() {
     const todayDate = getTodayDateString();
     const yesterdayDate = getDateString(-1);
     
-    console.log('📅 Fetching games for:', todayDate, '(and live games from', yesterdayDate, ')');
     
     // Fetch both today's games and yesterday's games
     const [todayResponse, yesterdayResponse] = await Promise.all([
@@ -78,12 +77,10 @@ async function fetchTodaysGames() {
       return false;
     });
     
-    console.log(`✅ Found ${todayGames.length} today's games + ${relevantYesterdayGames.length} relevant from yesterday`);
     
     // Combine: yesterday's games first (so live/recent games appear at top), then today's games
     return [...relevantYesterdayGames, ...todayGames];
   } catch (error) {
-    console.error('❌ Error fetching NBA games:', error);
     throw error;
   }
 }
@@ -162,7 +159,6 @@ function getGameStatus(competition) {
   const status = competition.status.type.name;
   const statusDetail = competition.status.type.detail;
   
-  console.log('🔍 ESPN Status Type:', status, '| Detail:', statusDetail);
   
   if (status === 'STATUS_SCHEDULED') {
     return { 
@@ -216,7 +212,6 @@ function getGameStatus(competition) {
   }
   
   // Unknown status - log it and treat as not live
-  console.warn('⚠️ Unknown game status:', status, statusDetail);
   return { 
     status: 'unknown', 
     text: parseStatusToShortFormat(statusDetail),

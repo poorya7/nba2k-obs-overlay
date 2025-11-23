@@ -57,7 +57,7 @@ class GameView {
      * Hide the overlay (when no game selected)
      */
     hide() {
-        if (this.elements.gameStatsBox && this.isVisible) {
+        if (this.elements.gameStatsBox) {
             this.elements.gameStatsBox.style.display = 'none';
             this.isVisible = false;
             this.currentState = null;

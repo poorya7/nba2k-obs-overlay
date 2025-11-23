@@ -40,8 +40,8 @@
     </div>
 
     <!-- NBA API utilities -->
-    <script src="config.js"></script>
-    <script src="nbaApi.js"></script>
+    <script src="../../shared/config.js"></script>
+    <script src="../../shared/nbaApi.js"></script>
     
     <!-- Game View Controller -->
     <script src="game-view.js"></script>
@@ -196,6 +196,11 @@
                 // No game selected - hide overlay
                 if (!selectedGameId) {
                     gameView.hide();
+                    lastGameData = null; // Reset so next selection is treated as first load
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                    }
                     return;
                 }
                 
@@ -204,6 +209,11 @@
                 
                 if (!game) {
                     gameView.hide();
+                    lastGameData = null; // Reset so next selection is treated as first load
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                    }
                     return;
                 }
                 
@@ -212,6 +222,11 @@
                 
             } catch (error) {
                 gameView.hide();
+                lastGameData = null; // Reset so next selection is treated as first load
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
             }
         }
         
@@ -286,8 +301,9 @@
             
             // Check what changed
             if (!lastGameData) {
-                // First load - do full transition
-                gameView.transitionToState(stateName, formattedData);
+                // First load - show instantly without animation
+                gameView.show();
+                gameView.switchToState(stateName, formattedData);
                 lastGameData = fullKey;
             } else if (lastGameData !== fullKey) {
                 // Something changed - determine what
@@ -308,9 +324,16 @@
                         // Teams changed - switch state to update everything
                         gameView.switchToState(stateName, formattedData);
                     } else if (stateName === 'live') {
-                        // Only scores changed in live state - slide animation
+                        // Scores changed in live state - slide animation for scores
                         gameView.updateScore('home', homeScore, true);
                         gameView.updateScore('away', awayScore, true);
+                        // Also update time silently
+                        if (formattedData.time) {
+                            const statusElement = document.querySelector('[data-status]');
+                            if (statusElement) {
+                                statusElement.textContent = `${formattedData.quarter} · ${formattedData.time}`;
+                            }
+                        }
                     }
                 }
                 
