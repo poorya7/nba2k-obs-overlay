@@ -11,16 +11,16 @@ The NBA 2K OBS Overlay is a local web application that displays live NBA game st
 │                        ESPN NBA API                          │
 │          https://site.api.espn.com/.../scoreboard           │
 └────────────────────────┬────────────────────────────────────┘
-                         │ HTTP GET (every refresh)
+                         │ HTTP GET (every 3 seconds)
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                     Node.js Server                           │
-│                    (server.js - Port 3000)                   │
+│                 (server/server.js - Port 3000)               │
 │                                                               │
 │  • Serves static files (HTML/CSS/JS)                        │
 │  • API: GET/POST /api/selected-game                         │
-│  • API: GET/POST /api/selected-style                        │
-│  • In-memory storage for selected game ID and style         │
+│  • API: GET /api/simulation                                 │
+│  • In-memory storage for selected game ID                   │
 └───────────────────┬─────────────────────┬───────────────────┘
                     │                     │
         ┌───────────▼─────────┐  ┌───────▼───────────┐
@@ -28,7 +28,7 @@ The NBA 2K OBS Overlay is a local web application that displays live NBA game st
         │   /dashboard         │  │  /overlay/        │
         │                      │  │  game-stats       │
         │  • Game selection UI │  │                   │
-        │  • Preview display   │  │  • Live stats     │
+        │  • Simulation mode   │  │  • Live stats     │
         │  • Saves to server   │  │  • Auto-refresh   │
         └──────────────────────┘  └───────────────────┘
 ```
@@ -63,9 +63,26 @@ OBS loads Overlay page
     ├─> Overlay fetches game data from ESPN API
     │   (via NBAApi.getGameById(gameId))
     │
-    ├─> Overlay displays game stats
+    ├─> Overlay displays game stats with animations
     │
-    └─> Repeats every 10 seconds (auto-refresh)
+    └─> Repeats every 3 seconds (auto-refresh)
+```
+
+### 3. Simulation Flow
+
+```
+User enables simulation on Dashboard
+    │
+    ├─> Dashboard sends POST /api/simulation
+    │   with {enabled: true, state: 'live'}
+    │
+    ├─> Overlay fetches GET /api/simulation
+    │
+    ├─> Overlay generates fake game data
+    │
+    ├─> Overlay displays simulated game
+    │
+    └─> User can cycle states on Dashboard
 ```
 
 ## File Structure
@@ -73,76 +90,79 @@ OBS loads Overlay page
 ```
 nba2k-obs-overlay/
 │
-├── server.js                    # Node.js HTTP server
-│   ├── Static file serving
-│   ├── API endpoints for game selection
-│   └── In-memory storage
+├── server/
+│   ├── server.js                # Node.js HTTP server
+│   │   ├── Static file serving
+│   │   ├── API endpoints for game/simulation selection
+│   │   └── In-memory storage
+│   │
+│   └── scripts/                 # Windows startup scripts
+│       ├── start-overlay-server.vbs
+│       └── stop-overlay-server.bat
 │
 ├── overlay/
-│   ├── shared/                  # Shared utilities
+│   ├── shared/                  # Shared utilities (single source of truth)
 │   │   ├── config.js           # Configuration constants
 │   │   └── nbaApi.js           # ESPN API integration
 │   │
 │   ├── dashboard/              # Control Panel
 │   │   ├── index.html         # Dashboard UI
-│   │   ├── dashboard.js       # Selection logic & style switcher
-│   │   └── styles.css         # Dashboard styling
+│   │   ├── dashboard.js       # Selection logic & simulation control
+│   │   └── (references shared/)
 │   │
-│   ├── design-test/            # Design previews
-│   │   ├── index.html         # Design tester UI
-│   │   ├── designs.css        # All layout styles
-│   │   └── preview.js         # Preview logic
-│   │
-│   └── game-stats/            # OBS Overlay
-│       ├── index.html         # Overlay UI
-│       ├── styles.css         # Base overlay styling
-│       ├── pill-colors.css    # Pill color variations
-│       ├── layout-scaling.css # Horizontal/vertical scaling
-│       ├── overlay.js         # Main entry point
-│       ├── GameOverlay.js     # Main controller class
-│       ├── StateRenderer.js   # Multi-layout HTML generation
-│       └── StateTransitions.js # Animation logic
+│   └── game-stats-overlay/    # Modular overlay system
+│       ├── core/              # Production overlay
+│       │   ├── index.html    # Production-ready overlay with API
+│       │   ├── game-view.js  # Core GameView controller class
+│       │   ├── styles.css    # Overlay styling
+│       │   └── (references ../../shared/)
+│       │
+│       └── tests/             # Testing pages
+│           ├── test-states.html      # Interactive state tester
+│           ├── test-simulation.html  # Full game simulation
+│           └── index-full.html       # Full design preview
 │
 ├── docs/                       # Documentation
-├── scripts/                    # Windows startup scripts
+├── backup_old_dashboard/      # Previous implementation (archived)
 └── package.json               # Project metadata
 ```
 
 ## Component Details
 
-### Server (`server.js`)
+### Server (`server/server.js`)
 
 **Purpose:** Central hub that serves files and coordinates game selection between dashboard and overlay.
 
 **Key Features:**
 - Simple HTTP server on port 3000
 - Serves static HTML/CSS/JS files
-- Provides REST API for game selection
+- Provides REST API for game/simulation selection
 - In-memory storage (gameId persists while server runs)
 
 **Routes:**
 - `/` or `/dashboard` → Dashboard UI
-- `/overlay/game-stats` → OBS Overlay
-- `/design-test` → Design preview/tester
+- `/overlay/game-stats` → OBS Overlay (maps to `/overlay/game-stats-overlay/core/index.html`)
 - `/api/selected-game` → Game selection API (GET/POST)
-- `/api/selected-style` → Style selection API (GET/POST)
+- `/api/simulation` → Simulation control API (GET/POST)
 
 ### Shared Utilities (`overlay/shared/`)
+
+**Philosophy:** Single source of truth - used by both dashboard and overlay
 
 #### config.js
 Centralized configuration for:
 - ESPN API endpoint
 - Timezone settings
-- Refresh intervals
-- Storage keys
+- Refresh intervals (3 seconds for overlay)
 
 #### nbaApi.js
 ESPN API integration layer providing:
 - `getTodaysGames()` - Fetch today's games + live/recent games from yesterday
 - `getGameById(id)` - Get specific game details
 - `formatGameTime(date)` - Format game times for display
-- `parseStatusToShortFormat()` - Parse ESPN status to compact format (Q4 3:06)
-- Handles all game states: scheduled, live, halftime, end of period, final
+- `parseStatusToShortFormat()` - Parse ESPN status to compact format (Q4 03:06)
+- `formatSecondsToMMSS()` - Convert decimal seconds to MM:SS format
+- Handles all game states: scheduled, live, halftime, overtime, final
 - Data parsing and normalization
 
 **Smart Game Fetching:**
@@ -152,66 +172,86 @@ ESPN API integration layer providing:
 
 ### Control Dashboard (`overlay/dashboard/`)
 
-**Purpose:** Web interface for selecting which NBA game to display and which style to use.
+**Purpose:** Web interface for selecting which NBA game to display and controlling simulation mode.
 
 **Features:**
 - Dropdown menu with today's NBA games (+ live/recent from yesterday)
 - Preview of selected game with team logos, records, scores
-- **Style Switcher:** Button to cycle through 13 overlay styles in real-time
+- **Simulation Mode:** Toggle and state control for testing
 - Saves selection to server via API
 - Auto-refresh every 60 seconds
-
-**Available Styles:**
-- **Pill (5 colors):** Green, Red, Blue, Purple, Gold
-- **Horizontal (4 styles):** Classic Green, Neon Cyan, Red, White
-- **Vertical (4 styles):** Green, Purple, Blue, Gold
 
 **User Interaction:**
 1. Opens in browser (not visible on stream)
 2. Shows all games (today + live from yesterday)
 3. User picks game from dropdown
-4. User clicks "Next Style" to change overlay appearance
-5. Selections saved immediately
-6. Overlay updates within 2 seconds
+4. Selection saved immediately
+5. Overlay updates within 3 seconds
 
-### Game Overlay (`overlay/game-stats/`)
+### Game Overlay (`overlay/game-stats-overlay/core/`)
 
-**Purpose:** Browser source for OBS that displays live game statistics with multiple layout options.
+**Purpose:** Browser source for OBS that displays live game statistics with smooth ASMR-friendly animations.
 
 **Architecture:**
 - **Modular Design:** Following SOLID/DRY principles
-- **GameOverlay.js:** Main controller orchestrating all components
-- **StateRenderer.js:** HTML generation for all layout types
-- **StateTransitions.js:** Smooth animations between game states
-- **Multiple CSS files:** Base styles + layout-specific styles
+- **GameView class:** Core controller managing all overlay logic
+- **Inline integration:** Production HTML includes API polling and simulation logic
+- **Shared dependencies:** Uses `../../shared/` for config and API client
+
+**Key Files:**
+- **index.html:** Production overlay with polling logic, simulation support, state detection
+- **game-view.js:** GameView class with show/hide, state transitions, score animations
+- **styles.css:** All overlay styling (pill design, animations, colors)
 
 **Features:**
-- Transparent/solid background (OBS-ready)
-- 13 different styles (pill/horizontal/vertical layouts)
+- Transparent background (OBS-ready)
+- Clean pill-style design
 - Team logos, names, records
-- Live scores with glow animation on score changes
-- Game status (scheduled, live, halftime, end of quarter, final, overtime)
-- Auto-refresh every 10 seconds (game data) and 2 seconds (style changes)
+- Live scores with slide animation (slot-machine effect)
+- Game status (scheduled, live, halftime, overtime, final)
+- **Fast refresh:** Updates every 3 seconds
+- **Smart updates:** Only animates what changed (no unnecessary fading)
+- **Pregame countdown:** Updates every second
 - Hides completely when server is down or no game selected
 
 **Display States:**
-- **Pregame:** Countdown timer until game starts
-- **Live:** Real-time scores, quarter, time remaining
-- **Halftime:** Halftime indicator with current scores
-- **End of Quarter:** Shows "Q# End" when clock hits 0:00
-- **Overtime:** OT indicator with time
-- **Final:** Final scores
+- **Pregame:** Countdown timer with "Upcoming NBA" indicator
+- **Live:** Real-time scores, quarter, time remaining with "Live NBA" indicator
+- **Halftime:** "Halftime" status with current scores
+- **Overtime:** "OT" indicator with time
+- **Final:** "Final" status with final scores
 
-**Layout Types:**
-- **Pill (15% larger):** Compact horizontal pill with all states
-- **Horizontal Bar (20% larger):** Wide bar format, multiple color schemes
-- **Vertical Sidebar (20% larger):** Tall sidebar format, multiple color schemes
+**Animation Strategy:**
+- **Score changes:** Slide animation only (old score slides up and fades, new score slides in)
+- **State changes:** Instant content swap (no fading)
+- **First load:** Instant appearance (no animation)
+- **Time updates:** Silent (no animation when only time changes)
 
 **Smart Features:**
-- Auto-detects game state from ESPN API
-- Smooth transitions between states (pill layout only)
-- Score change animations
+- Detects game state from ESPN API
+- Compares data to determine what changed (state, scores, time)
+- Calls appropriate GameView methods based on change type
 - Handles midnight rollover (keeps yesterday's live games visible)
+- Simulation mode respects dashboard state selection
+
+### Test Pages (`overlay/game-stats-overlay/tests/`)
+
+**Purpose:** Testing tools for development and debugging.
+
+**test-states.html:**
+- Interactive buttons to trigger state changes
+- Mimics production overlay logic exactly
+- Tests all game states and transitions
+
+**test-simulation.html:**
+- Full game simulation with auto-progression
+- Automatic score changes every few seconds
+- Tests all animation scenarios
+
+**index-full.html:**
+- Full design preview with video background
+- Shows overlay in context with stream branding
+- Useful for visual design review
 
 ## Technology Stack
 
@@ -224,6 +264,7 @@ ESPN API integration layer providing:
 - **Vanilla JavaScript** - No frameworks
 - **HTML5/CSS3** - Modern web standards
 - **Fetch API** - HTTP requests to ESPN and local server
+- **ES6 Classes** - GameView controller
 
 ### External Services
 - **ESPN NBA Scoreboard API** - Live game data (no API key required)
@@ -238,46 +279,63 @@ ESPN API integration layer providing:
 ```javascript
 // In-memory storage (resets on server restart)
 let selectedGameId = null;
+let simulationState = { enabled: false, state: 'pregame' };
 ```
 
 **Persistence:** Game selection persists while server is running. Resets on restart.
 
-### Client State
-- **Dashboard:** Fetches fresh game list on each load
-- **Overlay:** Polls server every 10 seconds for updates
-- **No localStorage:** Server is source of truth
+### Client State (Overlay)
+```javascript
+// Tracks last known data to detect changes
+let lastGameData = null; // JSON string of {state, quarter, homeScore, awayScore}
+let countdownInterval = null; // Pregame countdown timer
+let countdownSeconds = 0; // Current countdown value
+```
+
+**Update Logic:**
+1. Fetch game data from API
+2. Create comparison keys (state key + score key)
+3. Compare with last known data
+4. If state changed → instant switch
+5. If only scores changed → slide animation
+6. If only time changed → silent update
+7. Update lastGameData
 
 ## Refresh Strategy
 
 ### Dashboard
 - Fetches games once on page load
-- Manual refresh to get updated game list
+- Auto-refresh every 60 seconds
+- Manual refresh available
 - Immediately saves selection to server
 
 ### Overlay
-- **10 second refresh interval**
+- **3 second refresh interval** (fast response to score changes)
 - Fetches selected gameId from server
-- Fetches game data from ESPN API
-- Updates display with latest scores/status
+- Fetches game data from ESPN API (or generates simulation data)
+- Updates display with smart animation logic
+- Pregame countdown updates every second (separate interval)
 
-### Why 10 seconds?
-- Balance between freshness and API load
-- ESPN updates scores frequently during live games
-- Fast enough for streaming purposes
-- Configurable in overlay.js (`setInterval` value)
+### Why 3 seconds?
+- Fast enough for real-time scoring updates
+- Stays well under ESPN API rate limits
+- Provides smooth streaming experience
+- ~1,200 API calls per hour during a 3-hour stream
 
 ## Network Communication
 
 ### ESPN API Calls
 ```
 Dashboard → ESPN API: GET scoreboard (on page load)
-Overlay → ESPN API: GET scoreboard (every 10 seconds)
+Overlay → ESPN API: GET scoreboard (every 3 seconds)
 ```
 
 ### Internal API Calls
 ```
 Dashboard → Server: POST /api/selected-game (on selection)
-Overlay → Server: GET /api/selected-game (every 10 seconds)
+Dashboard → Server: POST /api/simulation (on simulation toggle)
+Overlay → Server: GET /api/selected-game (every 3 seconds)
+Overlay → Server: GET /api/simulation (every 3 seconds)
 ```
 
 ## Scalability Considerations
@@ -290,7 +348,7 @@ Overlay → Server: GET /api/selected-game (every 10 seconds)
 
 ### Why These Choices?
 - **Simplicity:** Personal streaming tool, not production service
-- **No dependencies:** Just Node.js, no npm packages needed
+- **No dependencies:** Just Node.js core modules
 - **Fast setup:** Works immediately after `npm start`
 - **Local only:** Designed for localhost usage
 
@@ -304,29 +362,30 @@ If needed for multiple users:
 ## Error Handling
 
 ### Network Errors
-- ESPN API down → Display error message
-- Server unreachable → Retry on next interval
+- ESPN API down → Overlay hides, retries every 3 seconds
+- Server unreachable → Overlay hides, retries every 3 seconds
 
 ### Data Errors
 - No games today → Dashboard shows "No games today"
-- Invalid game ID → Overlay shows error
+- Invalid game ID → Overlay hides
 - Missing data → Use fallback values (e.g., "0" for score)
 
 ### Recovery
-- Overlay auto-retries every 10 seconds
+- Overlay auto-retries every 3 seconds
 - No manual intervention needed
-- Errors logged to browser console
+- Clean production (no console spam)
 
 ## Performance
 
 ### Optimization Strategies
-- **Minimal DOM updates:** Only update when data changes
+- **Minimal DOM updates:** Only update what changed
 - **Efficient API calls:** Single fetch per refresh interval
-- **Small payload:** ESPN API returns only today's games
+- **Small payload:** ESPN API returns focused data
 - **No heavy libraries:** Vanilla JS keeps bundle small
+- **Smart comparison:** JSON string comparison for change detection
 
 ### Resource Usage
-- **CPU:** Negligible (simple HTTP server)
+- **CPU:** Negligible (simple HTTP server + DOM updates)
 - **Memory:** < 50MB (Node.js + small in-memory state)
 - **Network:** ~2KB per API call to ESPN
 - **Bandwidth:** Minimal (local server + lightweight API)
@@ -336,7 +395,7 @@ If needed for multiple users:
 ### Requirements
 - Modern browser with ES6+ support
 - Fetch API support
-- CSS3 backdrop-filter support (for blur effects)
+- CSS3 animations support
 
 ### Tested On
 - Chrome/Edge (Chromium) - Full support ✅
@@ -348,4 +407,3 @@ If needed for multiple users:
 - Full ES6 support
 - Hardware acceleration available
 - Transparent background support
-

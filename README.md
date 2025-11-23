@@ -4,15 +4,17 @@ Live NBA game stats overlay for your NBA 2K streams. Shows real-time scores, qua
 
 ## ✨ Features
 
-- **13 Different Styles**: Pill, horizontal, and vertical layouts with multiple color schemes
+- **Clean ASMR Design**: Minimalist pill-style overlay with smooth animations
+- **Fast Updates**: Game data refreshes every 3 seconds for responsive score changes
+- **Smooth Animations**: Score slide animation (slot-machine effect), instant state changes
 - **Live Game Stats**: Real-time scores, quarter/time, team logos, records
-- **Smart Dashboard**: Easy game selection + style switcher
-- **Auto-Updates**: Game data every 10 seconds, style changes within 2 seconds
-- **State Detection**: Pregame, live, halftime, end of quarter, overtime, final
-- **Midnight Support**: Games from yesterday stay visible if still live or recently finished
+- **Smart Dashboard**: Easy game selection + simulation mode for testing
+- **State Detection**: Pregame (with countdown), live, halftime, overtime, final
+- **Simulation Mode**: Test overlay with fake data that cycles through all states
 - **Modular Architecture**: Clean, maintainable code following SOLID/DRY principles
-- **Clean Design**: Professional overlay with transparent/solid background options
-- **OBS Ready**: Browser source compatible, hides gracefully on errors
+- **OBS Ready**: Browser source compatible, hides gracefully when no game selected
+- **No Console Spam**: Clean production build with no debug logs
+- **Auto-start Support**: Windows scripts for automatic server launch on boot
 
 ## 🚀 Quick Start
 
@@ -32,9 +34,9 @@ http://localhost:3000/dashboard
 ```
 
 - Select today's game from the dropdown (includes yesterday's live/recent games)
-- Click "Next Style" to cycle through 13 different overlay designs
-- Preview shows team info, scores, and current style
-- Selections are saved automatically
+- **OR** enable "Simulation Mode" to test overlay with fake data
+- Preview shows team info and scores
+- Selection is saved automatically
 
 ### 3. Add Overlay to OBS
 
@@ -44,73 +46,85 @@ http://localhost:3000/dashboard
 4. Check "Shutdown source when not visible" for better performance
 5. Position and scale overlay as needed on your stream!
 
-**Tip**: Use the style switcher in the dashboard to preview different designs live on your stream!
-
 ## 📁 Project Structure
 
 ```
-overlay/
-├── shared/
-│   ├── config.js         # Configuration (ESPN API, refresh rates)
-│   └── nbaApi.js         # ESPN API integration + smart fetching
-├── dashboard/
-│   ├── index.html        # Control panel UI
-│   ├── dashboard.js      # Game selection + style switcher
-│   └── styles.css        # Dashboard styling
-├── design-test/
-│   ├── designs.css       # All 13 overlay styles
-│   └── preview.js        # Design preview logic
-└── game-stats/
-    ├── index.html        # Overlay display
-    ├── styles.css        # Base overlay styling
-    ├── pill-colors.css   # Pill color variations
-    ├── layout-scaling.css# Horizontal/vertical scaling
-    ├── overlay.js        # Main entry point
-    ├── GameOverlay.js    # Main controller (modular)
-    ├── StateRenderer.js  # HTML generation (3 layouts)
-    └── StateTransitions.js # Animation logic
-
-server.js                 # Local web server + APIs
-package.json             # NPM configuration
+nba2k-obs-overlay/
+├── server/
+│   ├── server.js                  # Node.js HTTP server + APIs
+│   └── scripts/                   # Windows auto-start scripts
+│
+├── overlay/
+│   ├── shared/                    # Shared utilities (single source of truth)
+│   │   ├── config.js              # Configuration
+│   │   └── nbaApi.js              # ESPN API client
+│   │
+│   ├── dashboard/                 # Control panel
+│   │   ├── index.html             # Dashboard UI
+│   │   └── dashboard.js           # Game selection + simulation
+│   │
+│   └── game-stats-overlay/        # Modular overlay system
+│       ├── core/                  # Production overlay
+│       │   ├── index.html         # Production overlay with API integration
+│       │   ├── game-view.js       # GameView controller class
+│       │   └── styles.css         # All overlay styling
+│       │
+│       └── tests/                 # Testing pages
+│           ├── test-states.html   # Interactive state tester
+│           ├── test-simulation.html # Full game simulation
+│           └── index-full.html    # Full design preview
+│
+└── docs/                          # Complete documentation
+    ├── FEATURES.md
+    ├── ARCHITECTURE.md
+    ├── API.md
+    ├── DEVELOPMENT.md
+    └── SETUP_AUTOSTART.md
 ```
 
-## 🎨 Available Styles
+## 🎨 Design
 
-**Pill Layouts (5 colors)**
-- Green, Red, Blue, Purple, Gold
-- Compact horizontal design
-- Perfect for top-left/right corner
-- 15% larger than original
-
-**Horizontal Bars (4 styles)**
-- Classic Green, Neon Cyan, Red, White
-- Wide format for bottom/top of screen
-- 20% larger for visibility
-
-**Vertical Sidebars (4 styles)**
-- Green, Purple, Blue, Gold
-- Tall format for left/right side
-- 20% larger for visibility
-
-**Live Switching**: Use the dashboard button to cycle through all styles in real-time!
+**Clean ASMR Pill Style**
+- Minimalist horizontal pill design
+- Smooth slot-machine score animations
+- Instant state transitions (no unnecessary fading)
+- Transparent background with subtle backdrop blur
+- "Upcoming NBA" → "Live NBA" indicator
+- Perfect for top-left/right corner placement
 
 ## ⚙️ Configuration
 
 Edit `overlay/shared/config.js` to customize:
 
-- **Refresh Intervals**: How often overlay updates
-- **Timezone**: Display timezone for game times
+- **Refresh Intervals**: How often overlay updates (default: 3 seconds)
+- **Timezone**: Display timezone for game times (default: Eastern)
 - **ESPN API Endpoint**: Change data source if needed
 
 ## 🎮 How It Works
 
 1. **Dashboard** fetches today's games + yesterday's live/recent games from ESPN API
-2. You select which game to display and which style to use
-3. Selections saved to **server** (in-memory)
-4. **Overlay** reads selections and displays live stats with chosen style
-5. Overlay auto-refreshes game data every 10 seconds, checks for style changes every 2 seconds
-6. Smart state detection: pregame, live, halftime, end of quarter, overtime, final
-7. Graceful handling: overlay hides when server is down or no game selected
+2. You select which game to display **OR** enable simulation mode for testing
+3. Selection saved to **server** (in-memory)
+4. **Overlay** polls server every 3 seconds for selected game
+5. Overlay fetches live game data from ESPN API
+6. **Smart updates**: Only animates what changed
+   - Score changes → Slide animation
+   - State changes → Instant content swap
+   - Time changes → Silent update
+7. Pregame countdown updates every second
+8. Graceful handling: overlay hides when no game selected
+
+## 🧪 Simulation Mode
+
+Perfect for testing without waiting for live games!
+
+1. Open dashboard: `http://localhost:3000/dashboard`
+2. Check "Enable Simulation Mode"
+3. Click "Next State" to cycle through states
+4. Overlay shows fake game with:
+   - Automatic score changes every poll
+   - Realistic team data (Lakers vs Warriors)
+   - State progression (pregame → live → halftime → overtime → final)
 
 ## 📡 Data Source
 
@@ -121,6 +135,8 @@ https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard
 
 No API key needed! ✨
 
+**Rate Limiting**: 3-second polling = ~1,200 requests per 3-hour stream (well within limits)
+
 ## 🔧 Troubleshooting
 
 **Overlay not updating?**
@@ -130,32 +146,54 @@ No API key needed! ✨
 
 **No games showing?**
 - Check if there are NBA games today (or yesterday if past midnight)
-- Try clicking "Refresh Games" in dashboard
+- Try simulation mode to verify overlay works
 - Check console for ESPN API errors
 
 **Overlay disappeared?**
-- This is normal! It hides when server is down or no game selected
+- This is normal! It hides when no game selected
 - Select a game in dashboard to make it reappear
+- Or enable simulation mode for testing
 
-**Style changes not working?**
-- Hard refresh overlay page (Ctrl+Shift+R)
-- In OBS: Right-click browser source → Refresh
-- Check console logs for "🎨 Style changed to"
+**Time showing as "8.7" instead of "00:08"?**
+- Fixed! All times now display as MM:SS format
 
-**"End of Quarter" showing as scheduled?**
-- Fixed! Now properly detects STATUS_END_PERIOD as live
+**Overlay "blinking" or fading unnecessarily?**
+- Fixed! Only score numbers animate (slide effect)
+- State changes are instant (no fading)
 
 **Games disappeared at midnight?**
 - Fixed! Yesterday's live/recent games (< 2hrs) now stay visible
 
+**Server not starting on Windows boot?**
+- See `docs/SETUP_AUTOSTART.md` for auto-start setup
+- Copy VBScript to Windows Startup folder
+
 ## 💡 Tips
 
-- **Style Switcher**: Click "Next Style" in dashboard to cycle through all 13 designs live on stream
+- **Fast Response**: 3-second polling means scores update almost immediately
+- **Simulation Mode**: Test all states and animations without waiting for live games
+- **Test Pages**: Visit `test-states.html` for interactive testing
+- **Clean Console**: No debug logs in production for professional setup
 - **Midnight Support**: Games from yesterday stay visible if still live or finished < 2 hours ago
-- **Fast Updates**: Game data refreshes every 10 seconds, style changes apply within 2 seconds
 - **OBS Setup**: Set browser source to 1920x1080 for best quality, then scale in OBS
-- **Error Handling**: Overlay automatically hides if server is down or no game selected
-- **Design Tester**: Visit `http://localhost:3000/design-test` to preview all styles with real data
+- **Countdown Timer**: Pregame countdown updates every second (not just every 3 seconds)
+- **Smart Animations**: Only what changes is animated (no unnecessary blinking)
+
+## 📚 Documentation
+
+Complete documentation in `/docs`:
+- **FEATURES.md** - Complete feature list
+- **ARCHITECTURE.md** - System design and data flow
+- **API.md** - Complete API reference
+- **DEVELOPMENT.md** - Development guide and customization
+- **SETUP_AUTOSTART.md** - Windows auto-start setup
+
+## 🔄 Auto-Start on Windows
+
+1. Copy `server/scripts/start-overlay-server.vbs` to Windows Startup folder
+2. Server will launch silently on boot
+3. No console window, runs in background
+4. See `docs/SETUP_AUTOSTART.md` for detailed instructions
 
 ## 📝 License
 
@@ -164,4 +202,3 @@ MIT
 ---
 
 **Made for Silent Basketball (HushSwish)** 🏀🤫
-

@@ -7,7 +7,7 @@ Complete guide for developing, modifying, and extending the NBA 2K OBS Overlay.
 - [Getting Started](#getting-started)
 - [Development Workflow](#development-workflow)
 - [Code Organization](#code-organization)
-- [Modifying the Overlay Design](#modifying-the-overlay-design)
+- [Modifying the Overlay](#modifying-the-overlay)
 - [Adding New Features](#adding-new-features)
 - [Testing](#testing)
 - [Troubleshooting](#troubleshooting)
@@ -29,7 +29,7 @@ Complete guide for developing, modifying, and extending the NBA 2K OBS Overlay.
 
 1. **Clone/Download the project**
    ```bash
-   cd nba2k-obs-overlay
+   cd "nba2k obs overlay"
    ```
 
 2. **No dependencies to install!**
@@ -40,6 +40,12 @@ Complete guide for developing, modifying, and extending the NBA 2K OBS Overlay.
    ```bash
    npm start
    ```
+   
+   Or from the server folder:
+   ```bash
+   cd server
+   node server.js
+   ```
 
 4. **Open in browser**
    - Dashboard: `http://localhost:3000/dashboard`
@@ -48,17 +54,32 @@ Complete guide for developing, modifying, and extending the NBA 2K OBS Overlay.
 ### Project Structure Overview
 
 ```
-overlay/
-├── shared/              # Shared code (used by both dashboard & overlay)
-│   ├── config.js       # Configuration constants
-│   └── nbaApi.js       # ESPN API client
-├── dashboard/          # Control panel for game selection
-│   ├── index.html     
-│   └── dashboard.js   
-└── game-stats/         # OBS overlay display
-    ├── index.html     
-    ├── styles.css      # Overlay styling (customize here!)
-    └── overlay.js     
+nba2k-obs-overlay/
+├── server/
+│   ├── server.js           # Node.js HTTP server
+│   └── scripts/            # Auto-start scripts
+│
+├── overlay/
+│   ├── shared/             # Shared utilities (single source of truth)
+│   │   ├── config.js       # Configuration constants
+│   │   └── nbaApi.js       # ESPN API client
+│   │
+│   ├── dashboard/          # Control panel
+│   │   ├── index.html      # Dashboard UI
+│   │   └── dashboard.js    # Game selection & simulation logic
+│   │
+│   └── game-stats-overlay/ # Modular overlay system
+│       ├── core/           # Production overlay
+│       │   ├── index.html  # Production overlay with API integration
+│       │   ├── game-view.js # GameView controller class
+│       │   └── styles.css  # All overlay styling
+│       │
+│       └── tests/          # Testing pages
+│           ├── test-states.html      # Interactive state tester
+│           ├── test-simulation.html  # Full game simulation
+│           └── index-full.html       # Full design preview
+│
+└── docs/                   # Documentation
 ```
 
 ---
@@ -76,11 +97,11 @@ The server serves static files, so changes are reflected immediately:
 ### Typical Development Cycle
 
 ```bash
-# Terminal 1: Keep server running
+# Terminal: Keep server running
 npm start
 
 # Make changes to files
-# → Edit overlay/game-stats/styles.css
+# → Edit overlay/game-stats-overlay/core/styles.css
 # → Refresh browser to see changes
 
 # Test in OBS
@@ -93,15 +114,14 @@ npm start
 ```
 Dashboard:
 1. Open http://localhost:3000/dashboard
-2. F12 to open DevTools
-3. Check Console for logs/errors
-4. Select a game
+2. F12 to open DevTools (check Console tab)
+3. Select a game or enable simulation mode
 
 Overlay:
 1. Open http://localhost:3000/overlay/game-stats
-2. F12 to open DevTools  
-3. Check Console for update logs
-4. Watch auto-refresh every 10 seconds
+2. F12 to open DevTools
+3. Watch auto-refresh every 3 seconds
+4. Check that animations are smooth
 ```
 
 ---
@@ -110,86 +130,92 @@ Overlay:
 
 ### File Responsibilities
 
-#### `server.js`
+#### `server/server.js`
 - **Purpose:** HTTP server and API
 - **When to modify:** 
   - Adding new routes
   - Changing port
-  - Adding new API endpoints
-  - Modifying MIME types
+  - Adding new API endpoints (game selection, simulation)
+  - Modifying file serving logic
 
 #### `overlay/shared/config.js`
-- **Purpose:** Centralized configuration
+- **Purpose:** Centralized configuration (used by both dashboard & overlay)
 - **When to modify:**
   - Changing timezone
   - Updating ESPN API URL
   - Adjusting refresh intervals
-  - Adding config options
 
 #### `overlay/shared/nbaApi.js`
-- **Purpose:** ESPN API integration
+- **Purpose:** ESPN API integration (used by both dashboard & overlay)
 - **When to modify:**
   - Changing data parsing logic
   - Adding new API methods
-  - Modifying date/time formatting
+  - Modifying date/time formatting (e.g., MM:SS conversion)
   - Handling new ESPN data fields
 
 #### `overlay/dashboard/dashboard.js`
-- **Purpose:** Game selection UI logic
+- **Purpose:** Game selection UI and simulation control
 - **When to modify:**
   - Changing dropdown behavior
   - Adding preview features
   - Modifying game filtering
-  - Adding new dashboard features
+  - Adding simulation controls
 
-#### `overlay/game-stats/overlay.js`
-- **Purpose:** Overlay display logic
+#### `overlay/game-stats-overlay/core/game-view.js`
+- **Purpose:** Core GameView controller class
 - **When to modify:**
-  - Changing refresh interval
-  - Modifying display logic
-  - Adding animations
-  - Changing data display
+  - Changing animation logic (score slide, state transitions)
+  - Modifying show/hide behavior
+  - Adding new state rendering methods
+  - Adjusting animation timings
 
-#### `overlay/game-stats/styles.css`
-- **Purpose:** Overlay visual design
+#### `overlay/game-stats-overlay/core/index.html`
+- **Purpose:** Production overlay with API integration
+- **When to modify:**
+  - Changing HTML structure
+  - Modifying API polling logic
+  - Adjusting simulation data generation
+  - Changing data comparison/update logic
+
+#### `overlay/game-stats-overlay/core/styles.css`
+- **Purpose:** All overlay visual design
 - **When to modify:** 
   - Changing colors/fonts
   - Adjusting layout
-  - Adding animations
+  - Modifying animations (slide, fade)
   - Customizing appearance
 
 ---
 
-## Modifying the Overlay Design
+## Modifying the Overlay
 
 ### Changing Colors
 
-Edit `overlay/game-stats/styles.css`:
+Edit `overlay/game-stats-overlay/core/styles.css`:
 
 ```css
-/* Main accent color (scores, borders) */
-.team-score {
-  color: #4CAF50;  /* ← Change this */
-  text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+/* Main accent color */
+:root {
+  --accent-color: #4CAF50;  /* ← Change this for green theme */
 }
 
 /* Background */
-.game-card {
+.game-stats {
   background: rgba(0, 0, 0, 0.45);  /* ← Adjust transparency */
   backdrop-filter: blur(10px);       /* ← Adjust blur */
 }
 
 /* Border accent */
-.game-card {
-  border-bottom: 3px solid #4CAF50;  /* ← Change color */
+.game-stats {
+  border-bottom: 3px solid var(--accent-color);
 }
 ```
 
 ### Changing Fonts
 
-1. **Add font to HTML** (`overlay/game-stats/index.html`):
+1. **Add font to HTML** (`overlay/game-stats-overlay/core/index.html`):
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@600;800&display=swap" rel="stylesheet">
 ```
 
 2. **Use font in CSS**:
@@ -199,212 +225,109 @@ Edit `overlay/game-stats/styles.css`:
 }
 ```
 
-### Changing Layout
-
-#### Make it horizontal instead of vertical:
+### Adjusting Animations
 
 ```css
-/* Change from column to row */
-.teams-container {
-  flex-direction: row;  /* was: column */
-  gap: 40px;
+/* Modify slide animation timing */
+.score-slide-out {
+  animation-duration: 0.35s;  /* Fade out speed */
+}
+
+.score-slide-in {
+  animation-duration: 0.3s;   /* Slide in speed */
+  animation-delay: 0.08s;     /* Delay before slide in */
 }
 ```
 
-#### Adjust sizing:
+### Changing Refresh Interval
 
-```css
-/* Larger team logos */
-.team-logo {
-  width: 60px;   /* was: 50px */
-  height: 60px;
-}
-
-/* Bigger scores */
-.team-score {
-  font-size: 48px;  /* was: 36px */
-}
-```
-
-### Adding Animations
-
-```css
-/* Pulse effect for live games */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-.status-live {
-  animation: pulse 2s infinite;
-}
-
-/* Glow effect */
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(76, 175, 80, 1); }
-}
-
-.game-card {
-  animation: glow 2s infinite;
-}
-```
-
-### Common Customizations
-
-#### Remove team records:
+Edit `overlay/shared/config.js`:
 
 ```javascript
-// In overlay/game-stats/overlay.js
-// Comment out or remove these lines:
-// <div class="team-record">${game.awayTeam.record}</div>
+// Change from 3 seconds to 5 seconds
+const REFRESH_INTERVAL = 5000;
 ```
 
-#### Show abbreviation instead of full name:
+Then update the `setInterval` call in `overlay/game-stats-overlay/core/index.html`:
 
 ```javascript
-// In overlay/game-stats/overlay.js, replace:
-<div class="team-name">${formatTeamName(game.awayTeam.name)}</div>
-
-// With:
-<div class="team-name">${game.awayTeam.abbreviation}</div>
-```
-
-#### Always show scores (even before game starts):
-
-```javascript
-// In overlay/game-stats/overlay.js, change:
-const showScores = game.isLive || game.isFinal;
-
-// To:
-const showScores = true;
+setInterval(updateFromAPI, 5000); // Match config value
 ```
 
 ---
 
 ## Adding New Features
 
-### Example: Add Team Colors
+### Example: Add Team Colors to Border
 
-1. **Extend ESPN data parsing** (`overlay/shared/nbaApi.js`):
+1. **Extend data parsing** (`overlay/shared/nbaApi.js`):
 
 ```javascript
-function parseGameData(game) {
-  // ... existing code ...
-  
-  awayTeam: {
-    // ... existing fields ...
-    color: awayTeam.team.color || '000000',  // ← Add this
-  }
+// In parseGameData function, add:
+awayTeam: {
+  // ... existing fields ...
+  color: awayTeam.team.color || '000000',
 }
 ```
 
-2. **Use in overlay** (`overlay/game-stats/styles.css`):
-
-```css
-.team-logo {
-  border: 3px solid;
-  border-color: var(--team-color);
-}
-```
-
-3. **Apply dynamically** (`overlay/game-stats/overlay.js`):
+2. **Use in GameView** (`overlay/game-stats-overlay/core/game-view.js`):
 
 ```javascript
-// In displayGame() function:
-container.innerHTML = `
-  <div class="team" style="--team-color: #${game.awayTeam.color}">
-    <!-- team content -->
-  </div>
-`;
+// In showLive method, add:
+const homeColor = data.home.color;
+const awayColor = data.away.color;
+
+this.elements.homeTeam.style.borderColor = `#${homeColor}`;
+this.elements.awayTeam.style.borderColor = `#${awayColor}`;
 ```
 
 ### Example: Add Sound on Score Change
 
-1. **Add audio file** to project root:
+1. **Add audio file** to `overlay/game-stats-overlay/core/sounds/`:
    ```
    sounds/score.mp3
    ```
 
-2. **Load sound** (`overlay/game-stats/overlay.js`):
+2. **Modify score update logic** (`overlay/game-stats-overlay/core/index.html`):
 
 ```javascript
-let lastScore = { away: 0, home: 0 };
-
-function displayGame(game) {
-  // Check if score changed
-  if (game.awayTeam.score > lastScore.away || 
-      game.homeTeam.score > lastScore.home) {
-    playSound();
-  }
-  
-  // Update last score
-  lastScore = {
-    away: game.awayTeam.score,
-    home: game.homeTeam.score
-  };
-  
-  // ... rest of display logic
-}
-
-function playSound() {
-  const audio = new Audio('/sounds/score.mp3');
+// In detectStateAndUpdate, when scores change:
+if (scoresChanged) {
+  // Play sound
+  const audio = new Audio('sounds/score.mp3');
   audio.volume = 0.3;
   audio.play();
-}
-```
-
-### Example: Add Game Clock Countdown
-
-1. **Extract clock from status** (`overlay/shared/nbaApi.js`):
-
-```javascript
-function getGameStatus(competition) {
-  const detail = competition.status.type.detail;
   
-  // Parse "Q3 8:32" format
-  const match = detail.match(/Q(\d)\s+(\d+:\d+)/);
-  
-  return {
-    // ... existing fields ...
-    quarter: match ? match[1] : null,
-    clock: match ? match[2] : null
-  };
+  // Update scores
+  gameView.updateScore('home', homeScore, true);
+  gameView.updateScore('away', awayScore, true);
 }
-```
-
-2. **Display separately** (`overlay/game-stats/overlay.js`):
-
-```html
-<div class="game-clock">${game.quarter} • ${game.clock}</div>
-```
-
-### Example: Add Multiple Game Display
-
-1. **Modify server** to store array of games:
-
-```javascript
-// In server.js, change:
-let selectedGameIds = [];  // instead of single gameId
-```
-
-2. **Modify overlay** to fetch multiple:
-
-```javascript
-// In overlay.js:
-const games = await Promise.all(
-  selectedGameIds.map(id => window.NBAApi.getGameById(id))
-);
-
-// Display in grid
-games.forEach(game => {
-  // Append each game card
-});
 ```
 
 ---
 
 ## Testing
+
+### Using Test Pages
+
+**test-states.html** - Interactive state tester:
+```
+http://localhost:3000/overlay/game-stats-overlay/tests/test-states.html
+
+• Buttons to trigger each state (pregame, live, halftime, etc.)
+• Score increment buttons
+• Mimics production overlay logic exactly
+• Great for testing animations
+```
+
+**test-simulation.html** - Full game simulation:
+```
+http://localhost:3000/overlay/game-stats-overlay/tests/test-simulation.html
+
+• Automatic score changes
+• State progression
+• Tests all animation scenarios
+```
 
 ### Testing in Browser
 
@@ -422,54 +345,34 @@ console.log(game);
 // Monitor refresh cycle
 setInterval(() => {
   console.log('Refresh tick:', new Date().toLocaleTimeString());
-}, 10000);
+}, 3000);
 ```
 
 ### Testing in OBS
 
 1. **Add Browser Source**
    - URL: `http://localhost:3000/overlay/game-stats`
-   - Width: 600, Height: 800 (adjust as needed)
+   - Width: 1920, Height: 1080
 
 2. **Enable Interact Mode**
    - Right-click source → Interact
    - Opens embedded browser with DevTools
 
 3. **Test Transparency**
-   - Use chroma key if needed
    - Verify transparent background works
+   - Check chroma key if needed
 
 4. **Test Refresh**
-   - Watch overlay update every 10 seconds
-   - Verify no flicker or layout shift
+   - Watch overlay update every 3 seconds
+   - Verify smooth animations (no blinking)
 
-### Testing Error States
+### Testing Simulation Mode
 
-```javascript
-// In overlay.js, temporarily add:
-
-// Test "no game selected"
-// Comment out the gameId check
-
-// Test "game not found"  
-const game = await window.NBAApi.getGameById('invalid-id');
-
-// Test network error
-// Disconnect internet, watch error handling
-```
-
-### Performance Testing
-
-```javascript
-// Monitor memory usage
-console.log(performance.memory);
-
-// Monitor API timing
-const start = performance.now();
-await window.NBAApi.getTodaysGames();
-const end = performance.now();
-console.log(`API took ${end - start}ms`);
-```
+1. Open dashboard: `http://localhost:3000/dashboard`
+2. Check "Enable Simulation Mode"
+3. Click "Next State" to cycle through states
+4. Watch overlay respond with animations
+5. Verify scores change automatically in simulation
 
 ---
 
@@ -483,7 +386,7 @@ console.log(`API took ${end - start}ms`);
 
 **Fix:**
 1. Open `http://localhost:3000/dashboard`
-2. Select a game from dropdown
+2. Select a game from dropdown (or enable simulation)
 3. Refresh overlay
 
 #### Overlay Not Updating
@@ -492,15 +395,21 @@ console.log(`API took ${end - start}ms`);
 
 **Debug:**
 1. F12 → Console
-2. Look for errors
-3. Check if interval is still running:
-   ```javascript
-   console.log(refreshInterval); // Should be a number
-   ```
+2. Look for errors (red text)
+3. Check Network tab for failed requests
+
+#### Overlay "Blinking" or Fading Unnecessarily
+
+**Cause:** Incorrect update logic.
+
+**Debug:**
+1. Check that `lastGameData` comparison is working correctly
+2. Verify only scores are animating (not entire overlay)
+3. Ensure `switchToState` is used for state changes (not `transitionToState`)
 
 #### ESPN API Not Responding
 
-**Cause:** ESPN API down or rate limiting.
+**Cause:** ESPN API down or network issue.
 
 **Debug:**
 1. Test API manually:
@@ -516,65 +425,17 @@ console.log(`API took ${end - start}ms`);
 
 **Fix:**
 ```javascript
-// In server.js, change:
+// In server/server.js, change:
 const PORT = 3001;  // Use different port
 ```
 
-#### Transparent Background Not Working
+#### Time Showing as "8.7" Instead of "00:08"
 
-**Cause:** Browser doesn't support backdrop-filter.
+**Cause:** ESPN returns decimal seconds for times under 1 minute.
 
 **Fix:**
-```css
-/* Fallback background */
-.game-card {
-  background: rgba(0, 0, 0, 0.8);  /* More opaque */
-  backdrop-filter: blur(10px);
-}
-
-/* Or remove blur entirely */
-.game-card {
-  background: rgba(0, 0, 0, 0.8);
-  /* Remove backdrop-filter */
-}
-```
-
-### Debugging Tips
-
-#### Enable Verbose Logging
-
-```javascript
-// In overlay.js, add detailed logs:
-console.log('🔄 Updating overlay...', new Date().toISOString());
-console.log('📡 Selected game ID:', selectedGameId);
-console.log('📊 Game data:', game);
-console.log('✅ Display updated');
-```
-
-#### Watch Network Requests
-
-```javascript
-// Browser DevTools → Network tab
-// Filter by: Fetch/XHR
-// Monitor:
-// - ESPN API calls (every 10 seconds)
-// - Local API calls (/api/selected-game)
-```
-
-#### Monitor Refresh Interval
-
-```javascript
-// Track refresh timing
-let lastUpdate = Date.now();
-
-async function updateOverlay() {
-  const now = Date.now();
-  console.log(`Time since last update: ${now - lastUpdate}ms`);
-  lastUpdate = now;
-  
-  // ... rest of function
-}
-```
+- This should already be handled by `formatSecondsToMMSS` in `nbaApi.js`
+- If not working, check that function is being called correctly
 
 ---
 
@@ -601,155 +462,67 @@ const formatTeamName = (name) => name.split(' ');
 ### Error Handling
 
 ```javascript
-// ✅ Good: Specific error handling
+// ✅ Good: Graceful degradation
 try {
   const game = await NBAApi.getGameById(id);
+  displayGame(game);
 } catch (error) {
-  if (error.name === 'NetworkError') {
-    showNetworkError();
-  } else {
-    showGenericError();
-  }
+  hideOverlay(); // Don't show broken/error state
 }
 
-// ❌ Bad: Silent failures
+// ❌ Bad: Show error to viewer
 try {
   const game = await NBAApi.getGameById(id);
 } catch (error) {
-  // Do nothing
+  showError("API ERROR: " + error); // Bad for streaming!
 }
 ```
 
 ### Performance
 
 ```javascript
-// ✅ Good: Cache data when possible
-let cachedGames = null;
-let cacheTime = 0;
-
-async function getTodaysGames() {
-  const now = Date.now();
-  if (cachedGames && now - cacheTime < 60000) {
-    return cachedGames;
-  }
-  cachedGames = await fetchGames();
-  cacheTime = now;
-  return cachedGames;
+// ✅ Good: Update only what changed
+if (scoresChanged) {
+  gameView.updateScore('home', homeScore, true);
+  gameView.updateScore('away', awayScore, true);
 }
 
-// ❌ Bad: Fetch on every access
-async function getTodaysGames() {
-  return await fetchGames();  // Called many times
-}
+// ❌ Bad: Full re-render for every change
+gameView.transitionToState(stateName, formattedData);
 ```
 
-### DOM Updates
+### Modularity
 
 ```javascript
-// ✅ Good: Minimal DOM manipulation
-const html = buildGameHTML(game);
-container.innerHTML = html;  // Single update
+// ✅ Good: Reuse shared files
+<script src="../../shared/nbaApi.js"></script>
 
-// ❌ Bad: Multiple DOM updates
-container.querySelector('.score').textContent = game.score;
-container.querySelector('.status').textContent = game.status;
-// ... many more updates
-```
-
-### Configuration
-
-```javascript
-// ✅ Good: Use config constants
-const REFRESH_INTERVAL = window.NBA_CONFIG.REFRESH_INTERVAL;
-setInterval(update, REFRESH_INTERVAL);
-
-// ❌ Bad: Magic numbers
-setInterval(update, 10000);  // What is 10000?
+// ❌ Bad: Duplicate code
+// Copy-pasting nbaApi.js into each folder
 ```
 
 ---
 
 ## Advanced Topics
 
-### Custom Refresh Strategy
+### Custom Animation Timings
 
-Instead of fixed interval, refresh based on game state:
-
-```javascript
-function getRefreshInterval(game) {
-  if (game.isLive) {
-    return 5000;   // 5 seconds for live games
-  } else if (game.isFinal) {
-    return 60000;  // 1 minute for final games
-  } else {
-    return 30000;  // 30 seconds for scheduled
-  }
-}
-
-async function updateOverlay() {
-  const game = await fetchGame();
-  displayGame(game);
-  
-  // Schedule next update based on game state
-  const interval = getRefreshInterval(game);
-  setTimeout(updateOverlay, interval);
-}
-```
-
-### Server-Sent Events (SSE)
-
-Push updates instead of polling:
+Modify `overlay/game-stats-overlay/core/game-view.js`:
 
 ```javascript
-// Server side (server.js)
-const clients = [];
-
-app.get('/api/game-updates', (req, res) => {
-  res.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache'
-  });
-  
-  clients.push(res);
-  
-  // Send update to all clients
-  function broadcastUpdate(gameData) {
-    clients.forEach(client => {
-      client.write(`data: ${JSON.stringify(gameData)}\n\n`);
-    });
-  }
-});
-
-// Client side (overlay.js)
-const eventSource = new EventSource('/api/game-updates');
-eventSource.onmessage = (event) => {
-  const game = JSON.parse(event.data);
-  displayGame(game);
-};
+// In updateScore method:
+const FADE_OUT_DURATION = 350;  // ms
+const SLIDE_IN_DURATION = 300;  // ms
+const SLIDE_DELAY = 80;         // ms between fade out and slide in
 ```
 
-### Multiple Overlays
+### Server Auto-start on Windows
 
-Run different overlays simultaneously:
+See `docs/SETUP_AUTOSTART.md` for detailed instructions.
 
-1. Create new folder: `overlay/compact-stats/`
-2. Copy game-stats files
-3. Modify styling for compact view
-4. Add route in `server.js`:
-   ```javascript
-   if (filePath === './compact') {
-     filePath = './overlay/compact-stats/index.html';
-   }
-   ```
-5. Use in OBS: `http://localhost:3000/compact`
-
----
-
-## Deployment Considerations
-
-### Running on System Startup
-
-See `docs/SETUP_AUTOSTART.md` for Windows auto-start configuration.
+Quick summary:
+1. Copy `server/scripts/start-overlay-server.vbs` to Windows Startup folder
+2. Server will launch silently on boot
 
 ### Remote Access
 
@@ -758,12 +531,11 @@ To access from other devices on your network:
 1. **Find your local IP:**
    ```bash
    ipconfig  # Windows
-   ifconfig  # Mac/Linux
    ```
 
 2. **Update server binding:**
    ```javascript
-   // In server.js, change:
+   // In server/server.js:
    server.listen(PORT, '0.0.0.0', () => {
      console.log('Server accessible from network');
    });
@@ -778,22 +550,11 @@ To access from other devices on your network:
 
 ---
 
-## Contributing
-
-When making changes:
-
-1. ✅ Test in browser first
-2. ✅ Test in OBS
-3. ✅ Check console for errors
-4. ✅ Verify auto-refresh still works
-5. ✅ Test with no games, scheduled games, live games
-6. ✅ Update documentation if needed
-
 ## Getting Help
 
 - Check browser console for errors (F12)
 - Review `docs/ARCHITECTURE.md` for system overview
 - Review `docs/API.md` for API reference
 - Test ESPN API directly to verify it's working
-- Check if games are actually scheduled for today
-
+- Use test pages to isolate issues
+- Enable simulation mode for testing without live games

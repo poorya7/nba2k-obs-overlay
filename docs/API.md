@@ -106,52 +106,61 @@ console.log(data.success); // true
 
 ---
 
-#### GET /api/selected-style
+#### GET /api/simulation
 
-**Description:** Retrieve the currently selected overlay style.
+**Description:** Retrieve the current simulation mode status.
 
 **Request:**
 ```http
-GET /api/selected-style
+GET /api/simulation
 ```
 
 **Response:**
 ```json
 {
-  "style": "pill-green"
+  "enabled": true,
+  "state": "live"
 }
 ```
+
+**Simulation States:**
+- `"pregame"` - Pregame countdown
+- `"live"` - Live game in progress
+- `"halftime"` - Halftime break
+- `"overtime"` - Overtime period
+- `"final"` - Game finished
 
 **Status Codes:**
 - `200 OK` - Success
 
 **Example (JavaScript):**
 ```javascript
-const response = await fetch('/api/selected-style');
+const response = await fetch('/api/simulation');
 const data = await response.json();
-console.log(data.style); // "pill-green", "horizontal-cyan", etc.
+console.log(data.enabled); // true or false
+console.log(data.state); // "live", "pregame", etc.
 ```
 
 ---
 
-#### POST /api/selected-style
+#### POST /api/simulation
 
-**Description:** Set the currently selected overlay style.
+**Description:** Set the simulation mode status and state.
 
 **Request:**
 ```http
-POST /api/selected-style
+POST /api/simulation
 Content-Type: application/json
 
 {
-  "style": "horizontal-cyan"
+  "enabled": true,
+  "state": "live"
 }
 ```
 
-**Available Styles:**
-- Pill: `pill-green`, `pill-red`, `pill-blue`, `pill-purple`, `pill-gold`
-- Horizontal: `horizontal-green`, `horizontal-cyan`, `horizontal-red`, `horizontal-white`
-- Vertical: `vertical-green`, `vertical-purple`, `vertical-blue`, `vertical-gold`
+**Request Body:**
+- `enabled` (boolean) - Whether simulation mode is active
+- `state` (string) - Current simulation state (pregame, live, halftime, overtime, final)
 
 **Response:**
 ```json
@@ -166,13 +175,19 @@ Content-Type: application/json
 
 **Example (JavaScript):**
 ```javascript
-const response = await fetch('/api/selected-style', {
+const response = await fetch('/api/simulation', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
   },
-  body: JSON.stringify({ style: 'horizontal-cyan' })
+  body: JSON.stringify({ 
+    enabled: true,
+    state: 'live'
+  })
 });
+
+const data = await response.json();
+console.log(data.success); // true
 ```
 
 ---
@@ -368,7 +383,7 @@ window.NBA_CONFIG = {
   TIMEZONE: 'America/New_York',
   
   // Refresh interval (milliseconds)
-  REFRESH_INTERVAL: 10000, // 10 seconds
+  REFRESH_INTERVAL: 3000, // 3 seconds
   
   // Storage key for selected game
   STORAGE_KEY: 'nba-overlay-selected-game'
@@ -394,9 +409,9 @@ window.NBA_CONFIG = {
 
 #### REFRESH_INTERVAL
 - **Type:** Number (milliseconds)
-- **Default:** `10000` (10 seconds)
+- **Default:** `3000` (3 seconds)
 - **Purpose:** How often overlay updates
-- **Configurable in:** `overlay/game-stats/overlay.js`
+- **Note:** Fast polling for responsive live score updates
 
 ---
 
@@ -557,7 +572,7 @@ console.log(`Status: ${game.statusText}`);
 setInterval(async () => {
   const updatedGame = await window.NBAApi.getGameById(gameId);
   // Update display...
-}, 10000);
+}, 3000); // 3 second refresh
 ```
 
 ### Error Handling Best Practices
@@ -602,8 +617,9 @@ async function updateOverlay() {
 
 ### ESPN API
 - **No official rate limit** documented
-- **Best practice:** Don't refresh more than once per 5 seconds
-- **Current implementation:** 10 second refresh (safe)
+- **Best practice:** Don't refresh more than once per second
+- **Current implementation:** 3 second refresh (safe and responsive)
+- **Stream usage:** ~1,200 requests per hour during 3-hour stream
 
 ### Local Server
 - **No rate limiting** implemented
