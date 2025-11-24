@@ -26,6 +26,7 @@ Complete list of features in the NBA 2K OBS Overlay system.
 - **Transparent Background**: Integrates seamlessly with OBS
 - **Scalable**: Optimized for 1920x1080 streams
 - **Customizable Position**: Place anywhere on your stream
+- **MVP Overlay**: Integrated player spotlight section that automatically displays during breaks
 
 ### Game States
 Automatically detects and displays:
@@ -50,6 +51,17 @@ Intelligently handles all ESPN API statuses:
 - **Decimal time**: "31.2 - 3rd Quarter" → "Q3 00:31" (converts to MM:SS)
 - **Halftime**: Multiple variations recognized
 - **Overtime**: "3:45 - Overtime" → "OT 03:45"
+
+### MVP Player Overlay
+Automatic player spotlight that displays during game breaks:
+- **Auto-Display Logic**: Shows during halftime (10s delay), timeouts (20s delay), end of quarters (3s delay), and final (5s delay)
+- **Smart Timing**: Displays for 15 seconds, repeats every 2 minutes during halftime and final states
+- **Player Data**: Shows MVP's name, photo, team logo, and key stats (PTS, REB, AST)
+- **MVP Calculation**: Automatically determines leading player based on combined PTS + REB + AST from ESPN boxscore
+- **Smooth Animations**: Box expands downward, content fades in with horizontal slide
+- **Dynamic Font Sizing**: Adjusts player name font size for long names to prevent clipping
+- **Data Caching**: Prevents redundant API calls during game breaks
+- **Integrated Design**: Matches main game stats box styling and color scheme
 
 ## Technical Features
 

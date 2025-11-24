@@ -277,16 +277,50 @@ const time = window.NBAApi.formatGameTime("2024-03-15T02:00Z");
 console.log(time); // "7:00 PM" (in configured timezone)
 ```
 
+#### getMVPForGame(gameId)
+
+**Description:** Fetch MVP player data for a specific game by fetching boxscore and determining the leading player.
+
+**Signature:**
+```javascript
+async function getMVPForGame(gameId: string): Promise<MvpPlayerData | null>
+```
+
+**Parameters:**
+- `gameId` (string) - ESPN game ID (e.g., "401585136")
+
+**Returns:** MVP player data object or `null` if unavailable
+
+**MVP Logic:** Player with highest combined PTS + REB + AST
+
+**Example:**
+```javascript
+const mvp = await window.NBAApi.getMVPForGame('401585136');
+if (mvp) {
+  console.log(mvp.name);      // "LeBron James"
+  console.log(mvp.pts);       // 34
+  console.log(mvp.reb);       // 8
+  console.log(mvp.ast);       // 7
+  console.log(mvp.teamLogo);  // "https://..."
+}
+```
+
 ---
 
 ## ESPN API Integration
 
-The system uses ESPN's public NBA Scoreboard API.
+The system uses ESPN's public NBA APIs:
 
-### Endpoint
+### Scoreboard Endpoint
 
 ```
 https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard
+```
+
+### Summary Endpoint (Boxscore)
+
+```
+https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary/{gameId}
 ```
 
 ### Query Parameters
@@ -376,8 +410,9 @@ Configuration is defined in `overlay/shared/config.js`.
 
 ```javascript
 window.NBA_CONFIG = {
-  // ESPN API endpoint
+  // ESPN API endpoints
   ESPN_NBA_SCOREBOARD: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard',
+  ESPN_NBA_GAME_SUMMARY: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary',
   
   // Timezone for game time display
   TIMEZONE: 'America/New_York',
@@ -397,6 +432,12 @@ window.NBA_CONFIG = {
 - **Default:** `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard`
 - **Purpose:** ESPN API endpoint for NBA games
 - **Note:** No API key required
+
+#### ESPN_NBA_GAME_SUMMARY
+- **Type:** String (URL)
+- **Default:** `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary`
+- **Purpose:** ESPN API endpoint for game boxscore and detailed stats (used for MVP data)
+- **Note:** Append `/{gameId}` to fetch specific game details
 
 #### TIMEZONE
 - **Type:** String (IANA timezone)
@@ -508,6 +549,33 @@ interface StatusInfo {
   text: string;                  // Display text
   isLive: boolean;
   isFinal: boolean;
+}
+```
+
+### MVP Player Data
+
+Data structure for MVP player information.
+
+```typescript
+interface MvpPlayerData {
+  name: string;                  // Full player name: "LeBron James"
+  photoUrl: string;              // Headshot URL from ESPN
+  pts: number;                   // Points scored
+  reb: number;                   // Rebounds
+  ast: number;                   // Assists
+  teamLogo: string;              // Team logo URL
+}
+```
+
+**Example:**
+```json
+{
+  "name": "LeBron James",
+  "photoUrl": "https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/1966.png",
+  "pts": 34,
+  "reb": 8,
+  "ast": 7,
+  "teamLogo": "https://a.espncdn.com/i/teamlogos/nba/500/lal.png"
 }
 ```
 

@@ -112,9 +112,12 @@ nba2k-obs-overlay/
 │   │
 │   └── game-stats-overlay/    # Modular overlay system
 │       ├── core/              # Production overlay
-│       │   ├── index.html    # Production-ready overlay with API
-│       │   ├── game-view.js  # Core GameView controller class
-│       │   ├── styles.css    # Overlay styling
+│       │   ├── index.html         # Production-ready overlay with API
+│       │   ├── game-view.js       # Core GameView controller class
+│       │   ├── mvp-view.js        # MVP overlay view controller
+│       │   ├── mvp-controller.js  # MVP automatic display logic
+│       │   ├── mvp-integration.js # MVP data fetching & caching
+│       │   ├── styles.css         # Overlay styling (includes MVP)
 │       │   └── (references ../../shared/)
 │       │
 │       └── tests/             # Testing pages

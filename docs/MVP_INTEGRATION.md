@@ -18,9 +18,11 @@ The `MvpView` class manages the MVP (Most Valuable Player) section of the game s
 
 ```
 overlay/game-stats-overlay/core/
-├── mvp-view.js          # MvpView class
+├── mvp-view.js          # MvpView class (view layer)
+├── mvp-controller.js    # MvpController class (automatic display logic)
+├── mvp-integration.js   # MVP data fetching & caching
 ├── styles.css           # MVP styles (lines 459+)
-└── index.html           # MVP HTML structure
+└── index.html           # MVP HTML structure + integration
 ```
 
 ## Usage
@@ -39,9 +41,10 @@ mvpController.onGameStateChange('halftime', mvpPlayerData);
 ```
 
 **Automatic Display Timing:**
-- **Halftime**: Shows 25s after halftime starts, displays for 8s, repeats up to 3 times
-- **End of Game (Final)**: Shows 5s after game ends, displays for 8s
-- **Timeouts**: Shows 20s into timeout, displays for 8s (if timeout state available)
+- **Halftime**: Shows 10s after halftime starts, displays for 15s, repeats every 2 minutes (max 3 times)
+- **End of Game (Final)**: Shows 5s after game ends, displays for 15s, repeats every 2 minutes (max 3 times)
+- **Timeouts**: Shows 20s into timeout, displays for 15s (if timeout state available)
+- **End of Quarters**: Shows 3s after quarter ends, displays for 15s
 - **Live Play**: Automatically hides if visible
 
 This matches real NBA broadcast behavior!
@@ -60,7 +63,8 @@ mvpView.show({
     photoUrl: 'https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/1966.png',
     pts: 34,
     reb: 8,
-    ast: 7
+    ast: 7,
+    teamLogo: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png'
 });
 
 // Hide
@@ -107,6 +111,38 @@ if (mvpView.getVisibility()) {
 ```
 
 ## API Reference
+
+### `MVPIntegration` Module
+
+Handles MVP data fetching and caching. Available as `window.MVPIntegration`.
+
+#### Methods
+
+##### `notifyMVPStateChange(mvpController, mvpView, stateName, gameId)`
+Fetches MVP data and notifies the controller of state change.
+
+**Parameters**:
+- `mvpController` (MvpController): MVP controller instance
+- `mvpView` (MvpView): MVP view instance
+- `stateName` (string): Game state ('live', 'halftime', 'final', etc.)
+- `gameId` (string): ESPN game ID
+
+**Returns**: `Promise<void>`
+
+##### `getMvpPlayerData(gameId)`
+Fetches and caches MVP player data from ESPN boxscore API.
+
+**Parameters**:
+- `gameId` (string): ESPN game ID
+
+**Returns**: `Promise<Object | null>` - MVP player data with caching
+
+##### `clearMVPCache()`
+Clears cached MVP data (called when game changes).
+
+**Returns**: `void`
+
+---
 
 ### `MvpController` Class (Recommended)
 
@@ -174,6 +210,7 @@ Shows the MVP section with animation.
   - `pts` (number): Points
   - `reb` (number): Rebounds
   - `ast` (number): Assists
+  - `teamLogo` (string): Team logo URL
 
 **Returns**: `void`
 
@@ -212,7 +249,7 @@ const MVP_ANIMATION_TIMING = {
     BOX_SHRINK_DURATION: 500,      // Box shrink duration
     
     // Layout constants
-    MVP_SECTION_HEIGHT: 174,       // Total content height
+    MVP_SECTION_HEIGHT: 185,       // Total content height (increased for team logo)
     MVP_SECTION_PADDING_TOP: 12,   // Top padding when visible
     MVP_SECTION_MARGIN_TOP: 5      // Top margin when visible
 };
@@ -220,28 +257,30 @@ const MVP_ANIMATION_TIMING = {
 
 ## Display Timing
 
-**MVP Display Duration**: 8 seconds (matches real NBA broadcasts)
+**MVP Display Duration**: 15 seconds (matches real NBA broadcasts)
 
 **Automatic Display Delays** (`mvp-controller.js`):
 ```javascript
 const MVP_DISPLAY_TIMING = {
-    DISPLAY_DURATION: 8000,        // MVP stays visible for 8 seconds
+    DISPLAY_DURATION: 15000,       // MVP stays visible for 15 seconds
     
     DELAY_BEFORE_SHOW: {
         TIMEOUT: 20000,            // Show 20s into timeout
-        HALFTIME: 25000,           // Show 25s into halftime
+        HALFTIME: 10000,           // Show 10s into halftime
         END_QUARTER: 3000,         // Show 3s after quarter ends
         END_GAME: 5000             // Show 5s after game ends
     },
     
-    // Halftime repeat logic
-    HALFTIME_REPEAT_INTERVAL: 180000,  // Show again every 3 minutes
-    HALFTIME_MAX_SHOWS: 3               // Max 3 times during halftime
+    // Halftime & Final repeat logic
+    HALFTIME_REPEAT_INTERVAL: 120000,  // Show again every 2 minutes
+    HALFTIME_MAX_SHOWS: 3,              // Max 3 times during halftime
+    FINAL_REPEAT_INTERVAL: 120000,     // Show again every 2 minutes
+    FINAL_MAX_SHOWS: 3                  // Max 3 times during final
 };
 ```
 
 **Why delays?**  
-Real NBA broadcasts don't show stats immediately when breaks start. They wait 20-30 seconds to show replays first, then display player stats. This creates a more natural, broadcast-quality feel.
+Real NBA broadcasts don't show stats immediately when breaks start. They wait 10-20 seconds to show replays first, then display player stats. This creates a more natural, broadcast-quality feel.
 
 ## Integration Example
 
@@ -353,7 +392,19 @@ All MVP styles are in `styles.css` starting at line 459. The styles follow the s
 .mvp-content .stat-value {
     font-size: 15px;    /* Stat numbers size */
 }
+
+.mvp-team-logo {
+    width: 24px;        /* Team logo size */
+    height: 24px;
+    margin-right: 4px;
+}
 ```
+
+**Dynamic Font Sizing**:
+The MVP view automatically adjusts player name font size based on length to prevent clipping:
+- Names > 18 chars: 9.5px
+- Names > 15 chars: 10.5px
+- Default: 11.5px
 
 ## Testing
 
@@ -369,17 +420,19 @@ Open in a browser to see:
 Based on real NBA broadcast behavior:
 
 ✅ **Automatically shows during**:
-- **Halftime**: After 25s, displays for 8s, repeats up to 3 times over the break
-- **End of Game (Final)**: After 5s, displays for 8s
-- **Timeouts**: After 20s, displays for 8s (if timeout state is available from API)
-- **End of Quarters**: After 3s, displays for 8s (if quarter transition is detected)
+- **Halftime**: After 10s, displays for 15s, repeats every 2 minutes (max 3 times total)
+- **End of Game (Final)**: After 5s, displays for 15s, repeats every 2 minutes (max 3 times total)
+- **Timeouts**: After 20s, displays for 15s (if timeout state is available from API)
+- **End of Quarters**: After 3s, displays for 15s (if quarter transition is detected)
 
 ❌ **Automatically hides during**:
 - Live play
 - Pregame
 - Any active game situations
 
-**Display duration**: 8 seconds (matches real NBA broadcast timing)
+**Display duration**: 15 seconds (matches real NBA broadcast timing)
+
+**MVP Determination**: The MVP is determined as the player with the highest combined PTS + REB + AST, fetched from ESPN's boxscore API.
 
 ## Performance Considerations
 
