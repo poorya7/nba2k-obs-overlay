@@ -17,6 +17,13 @@
             --mvp-vertical-position: 5px;
             --overlay-vertical-offset: 120px;
             --box-top-position: 210px;
+            --open-box-duration: 500;
+            --open-delay: 300;
+            --open-fade-duration: 300;
+            --slide-amount: 15px;
+            --close-fade-duration: 350;
+            --close-delay: 300;
+            --close-box-duration: 500;
         }
 
         .game-stats {
@@ -29,10 +36,8 @@
             margin-top: var(--mvp-vertical-position);
             padding-top: 12px;
             border-top: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .mvp-section.hidden {
-            display: none;
+            overflow: hidden;
+            transition: height 0.5s ease-out, padding-top 0.5s ease-out, margin-top 0.5s ease-out;
         }
 
         .mvp-content {
@@ -40,6 +45,7 @@
             flex-direction: column;
             align-items: center;
             gap: 6px;
+            transition: opacity 0.3s ease-in, transform 0.3s ease-out;
         }
 
         .mvp-content .player-pic {
@@ -118,8 +124,8 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            z-index: 1000;
             transition: all 0.2s;
+            z-index: 1000;
         }
 
         .test-button:hover {
@@ -168,7 +174,7 @@
         
         <div class="game-status" data-status>Q3 · 8:32</div>
 
-        <div class="mvp-section hidden">
+        <div class="mvp-section">
             <div class="mvp-content">
                 <img class="player-pic" src="https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/1966.png" alt="LeBron James">
                 <div class="player-info">
@@ -198,9 +204,65 @@
     <script>
         const button = document.querySelector('.test-button');
         const mvpSection = document.querySelector('.mvp-section');
+        const mvpContent = document.querySelector('.mvp-content');
+        let isVisible = false;
 
+        // Animation values
+        const openBoxMs = 500;
+        const openDelay = 300;
+        const openFadeMs = 300;
+        const slideAmount = 15;
+        const closeFadeMs = 350;
+        const closeDelay = 300;
+        const closeBoxMs = 500;
+
+        // Set initial hidden state
+        mvpSection.style.height = '0px';
+        mvpSection.style.paddingTop = '0px';
+        mvpSection.style.marginTop = '0px';
+        mvpSection.style.borderTop = 'none';
+        mvpContent.style.opacity = '0';
+        mvpContent.style.transform = `translateX(-${slideAmount}px)`;
+        
         button.addEventListener('click', () => {
-            mvpSection.classList.toggle('hidden');
+
+            if (isVisible) {
+                // Hide: fade out content only (no horizontal movement)
+                mvpContent.style.opacity = '0';
+                mvpContent.style.transition = `opacity ${closeFadeMs}ms ease-in`;
+                
+                // Then collapse box with close duration
+                setTimeout(() => {
+                    mvpSection.style.transition = `height ${closeBoxMs}ms ease-out, padding-top ${closeBoxMs}ms ease-out, margin-top ${closeBoxMs}ms ease-out`;
+                    mvpSection.style.height = '0px';
+                    mvpSection.style.paddingTop = '0px';
+                    mvpSection.style.marginTop = '0px';
+                    mvpSection.style.borderTop = 'none';
+                }, closeDelay);
+                
+                // Reset position for next opening
+                setTimeout(() => {
+                    mvpContent.style.transform = `translateX(-${slideAmount}px)`;
+                }, closeDelay + closeBoxMs);
+                
+                isVisible = false;
+            } else {
+                // Show: expand box first with open duration
+                mvpSection.style.transition = `height ${openBoxMs}ms ease-out, padding-top ${openBoxMs}ms ease-out, margin-top ${openBoxMs}ms ease-out`;
+                mvpSection.style.height = '174px';
+                mvpSection.style.paddingTop = '12px';
+                mvpSection.style.marginTop = '5px';
+                mvpSection.style.borderTop = '1px solid rgba(59, 130, 246, 0.3)';
+                
+                // Then fade in content with open fade duration and slide from left
+                setTimeout(() => {
+                    mvpContent.style.transition = `opacity ${openFadeMs}ms ease-in, transform ${openFadeMs}ms ease-out`;
+                    mvpContent.style.opacity = '1';
+                    mvpContent.style.transform = 'translateX(0)';
+                }, openDelay);
+                
+                isVisible = true;
+            }
         });
     </script>
 </body>
