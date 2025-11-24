@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Games - Blue Neon (Original)</title>
+    <link rel="stylesheet" href="../core/styles.css">
+    <style>
+        /* Other Games Overlay - Blue Neon Theme */
+        .other-games-overlay {
+            position: fixed;
+            top: 155px;
+            right: 20px;
+            z-index: 10;
+        }
+        
+        .other-game-card {
+            background: rgba(10, 20, 40, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 10px 14px;
+            border-radius: 14px;
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            opacity: 0.7;
+            min-width: 160px;
+        }
+        
+        .game-in-card {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .other-game-teams {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .other-game-team {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        
+        .other-game-team-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+        
+        .other-game-logo {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+        
+        .other-game-abbr {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        
+        .other-game-score {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            font-variant-numeric: tabular-nums;
+            min-width: 24px;
+            text-align: right;
+        }
+        
+        .other-game-status {
+            text-align: center;
+            font-size: 9px;
+            font-weight: 600;
+            color: #a5b4fc;
+            letter-spacing: 0.5px;
+            padding-top: 6px;
+        }
+        
+        .other-game-status.live {
+            color: #3b82f6; /* Blue to match current overlay */
+        }
+        
+        .other-game-status.live .game-time {
+            color: #4ade80; /* Green for quarter/time */
+        }
+        
+        .other-game-status.final {
+            color: #4ade80; /* Green */
+        }
+        
+        .other-game-status.pregame {
+            color: #fbbf24; /* Yellow */
+        }
+        
+        .game-divider.thick {
+            height: 2px;
+            background: rgba(59, 130, 246, 0.5);
+            margin: 12px 0;
+        }
+        
+    </style>
+</head>
+<body>
+    <video id="gameplay-video" autoplay loop muted>
+        <source src="../../game.mp4" type="video/mp4">
+    </video>
+
+    <!-- Channel Branding -->
+    <div class="channel-branding">
+        <div class="main-text">Silent Basketball</div>
+        <div class="sub-text">ASMR</div>
+    </div>
+
+    <!-- Current Game Stats Overlay -->
+    <div class="game-stats">
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span class="live-text">Live</span>
+            <span class="nba-label">NBA</span>
+        </div>
+        
+        <div class="teams">
+            <div class="team" data-team="home">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="home" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="Home Team">
+                    <div class="team-abbr" data-abbr="home">LAL</div>
+                </div>
+                <div class="score" data-score="home">82</div>
+            </div>
+            
+            <div class="team" data-team="away">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="away" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="Away Team">
+                    <div class="team-abbr" data-abbr="away">GSW</div>
+                </div>
+                <div class="score" data-score="away">78</div>
+            </div>
+        </div>
+        
+        <div class="game-status" data-status>Q3 · 8:32</div>
+    </div>
+
+    <!-- Other Games Overlay -->
+    <div class="other-games-overlay">
+        <div class="other-game-card">
+            <div class="game-in-card">
+                <div class="other-game-teams">
+                    <div class="other-game-team">
+                        <div class="other-game-team-left">
+                            <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" alt="BOS">
+                            <span class="other-game-abbr">BOS</span>
+                            <span style="margin: 0 4px; color: #94a3b8; font-size: 10px;">@</span>
+                            <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/mia.png" alt="MIA">
+                            <span class="other-game-abbr">MIA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="other-game-status pregame">Starts in 02:15:30</div>
+            </div>
+            
+            <div class="game-divider thick"></div>
+            
+            <div class="game-in-card">
+                <div class="other-game-status live" style="padding-top: 0; padding-bottom: 6px; border-bottom: 1px solid rgba(59, 130, 246, 0.2); margin-bottom: 8px;">LIVE</div>
+                <div class="other-game-teams">
+                    <div class="other-game-team">
+                        <div class="other-game-team-left">
+                            <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/den.png" alt="DEN">
+                            <span class="other-game-abbr">DEN</span>
+                        </div>
+                        <span class="other-game-score">94</span>
+                    </div>
+                    <div class="other-game-team">
+                        <div class="other-game-team-left">
+                            <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/phx.png" alt="PHX">
+                            <span class="other-game-abbr">PHX</span>
+                        </div>
+                        <span class="other-game-score">88</span>
+                    </div>
+                </div>
+                <div class="other-game-status"><span class="game-time" style="color: #4ade80;">Q4 · 5:23</span></div>
+            </div>
+            
+            <div class="game-divider thick"></div>
+            
+            <div class="game-in-card">
+                <div class="other-game-teams">
+                    <div class="other-game-team">
+                        <div class="other-game-team-left">
+                            <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/dal.png" alt="DAL">
+                            <span class="other-game-abbr">DAL</span>
+                        </div>
+                        <span class="other-game-score">112</span>
+                    </div>
+                    <div class="other-game-team">
+                        <div class="other-game-team-left">
+                            <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/sac.png" alt="SAC">
+                            <span class="other-game-abbr">SAC</span>
+                        </div>
+                        <span class="other-game-score">108</span>
+                    </div>
+                </div>
+                <div class="other-game-status final">FINAL</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../core/game-view.js"></script>
+    <script>
+        const gameView = new GameView();
+        gameView.updateAll({
+            home: { abbr: 'LAL', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png', score: 82 },
+            away: { abbr: 'GSW', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png', score: 78 },
+            quarter: 'Q3',
+            time: '8:32'
+        });
+        window.gameView = gameView;
+        console.log('Color Scheme: Blue Neon (Original)');
+    </script>
+</body>
+</html>
+
