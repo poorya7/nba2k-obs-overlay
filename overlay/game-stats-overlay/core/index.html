@@ -37,17 +37,46 @@
         </div>
         
         <div class="game-status" data-status>Q1 · 12:00</div>
+
+        <!-- MVP Player Section -->
+        <div class="mvp-section">
+            <div class="mvp-content">
+                <img class="player-pic" src="" alt="MVP Player">
+                <div class="player-info">
+                    <div class="mvp-header">
+                        <span class="mvp-label">⭐ MVP</span>
+                        <span class="player-name">---</span>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" data-stat="pts">0</div>
+                            <div class="stat-label">PTS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" data-stat="reb">0</div>
+                            <div class="stat-label">REB</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" data-stat="ast">0</div>
+                            <div class="stat-label">AST</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- NBA API utilities -->
     <script src="../../shared/config.js"></script>
     <script src="../../shared/nbaApi.js"></script>
     
-    <!-- Game View Controller -->
+    <!-- View Controllers -->
     <script src="game-view.js"></script>
+    <script src="mvp-view.js"></script>
     <script>
-        // Initialize GameView
+        // Initialize View Controllers
         const gameView = new GameView();
+        const mvpView = new MvpView();
         
         // Track last game data to avoid unnecessary transitions
         let lastGameData = null;

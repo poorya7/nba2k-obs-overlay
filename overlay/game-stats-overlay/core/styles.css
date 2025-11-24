@@ -57,7 +57,7 @@ body {
 /* Game Stats - Blue Neon Theme */
 .game-stats {
     position: fixed;
-    bottom: 260px;
+    top: 210px;
     left: 20px;
     z-index: 10;
     background: rgba(10, 20, 40, 0.85);
@@ -452,5 +452,88 @@ body {
     to {
         opacity: 1;
     }
+}
+
+/* ========================================
+   MVP Player Section
+   ======================================== */
+
+.mvp-section {
+    margin-top: 5px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(59, 130, 246, 0.3);
+    overflow: hidden;
+    /* Transitions are controlled dynamically by MvpView */
+}
+
+.mvp-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    /* Transitions are controlled dynamically by MvpView */
+}
+
+.mvp-content .player-pic {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    border: 2px solid #60a5fa;
+    object-fit: cover;
+}
+
+.mvp-content .player-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.mvp-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 11px;
+}
+
+.mvp-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #fbbf24;
+    letter-spacing: 0.5px;
+}
+
+.mvp-content .player-name {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #93c5fd;
+}
+
+.mvp-content .player-stats {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.mvp-content .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mvp-content .stat-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #bfdbfe;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.mvp-content .stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #60a5fa;
+    margin-top: 1px;
 }
 
