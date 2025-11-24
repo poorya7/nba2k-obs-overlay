@@ -108,13 +108,11 @@
         async function getMvpPlayerData(gameId) {
             // Return cached data if same game
             if (cachedMVPData && cachedMVPGameId === gameId) {
-                console.log('Using cached MVP data for game:', gameId);
                 return cachedMVPData;
             }
             
             // Clear cache if different game
             if (cachedMVPGameId && cachedMVPGameId !== gameId) {
-                console.log('Game changed, clearing MVP cache');
                 clearMVPCache();
             }
             
@@ -145,7 +143,6 @@
             try {
                 // Hide MVP immediately if it's showing old data from different game
                 if (mvpView.getVisibility() && cachedMVPGameId && cachedMVPGameId !== gameId) {
-                    console.log('Hiding old MVP data before fetching new game');
                     mvpView.hide();
                 }
                 

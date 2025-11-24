@@ -306,13 +306,6 @@ async function fetchGameBoxscore(gameId) {
     }
     
     const data = await response.json();
-    
-    // Log team names to verify we got the right game
-    if (data.boxscore && data.boxscore.teams) {
-      const teams = data.boxscore.teams.map(t => t.team?.displayName || t.team?.abbreviation || 'Unknown');
-      console.log('Boxscore teams:', teams.join(' vs '));
-    }
-    
     return data;
   } catch (error) {
     console.error('Error fetching boxscore:', error);
@@ -410,16 +403,12 @@ function getLeadingPlayer(boxscoreData) {
  */
 async function getMVPForGame(gameId) {
   try {
-    console.log('Fetching MVP for game:', gameId);
     const boxscore = await fetchGameBoxscore(gameId);
     if (!boxscore) {
-      console.warn('No boxscore data available for game:', gameId);
       return null;
     }
     
-    const mvp = getLeadingPlayer(boxscore);
-    console.log('MVP found:', mvp);
-    return mvp;
+    return getLeadingPlayer(boxscore);
   } catch (error) {
     console.error('Error getting MVP for game', gameId, ':', error);
     return null;
