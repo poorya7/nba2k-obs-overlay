@@ -25,16 +25,35 @@ overlay/game-stats-overlay/core/
 
 ## Usage
 
-### Initialization
+### Automatic Mode (Recommended)
+
+The MVP section automatically displays during game breaks with realistic NBA broadcast timing:
 
 ```javascript
-// Initialize MvpView (typically done at app startup)
+// Initialize MVP system (done at app startup)
 const mvpView = new MvpView();
+const mvpController = new MvpController(mvpView);
+
+// Notify controller when game state changes
+mvpController.onGameStateChange('halftime', mvpPlayerData);
 ```
 
-### Show MVP Section
+**Automatic Display Timing:**
+- **Halftime**: Shows 25s after halftime starts, displays for 8s, repeats up to 3 times
+- **End of Game (Final)**: Shows 5s after game ends, displays for 8s
+- **Timeouts**: Shows 20s into timeout, displays for 8s (if timeout state available)
+- **Live Play**: Automatically hides if visible
+
+This matches real NBA broadcast behavior!
+
+### Manual Mode
+
+For manual control (testing, special cases):
 
 ```javascript
+// Initialize MvpView only
+const mvpView = new MvpView();
+
 // Show with player data
 mvpView.show({
     name: 'LeBron James',
@@ -43,9 +62,12 @@ mvpView.show({
     reb: 8,
     ast: 7
 });
+
+// Hide
+mvpView.hide();
 ```
 
-**What happens**:
+**Show Animation**:
 1. Player data is updated immediately
 2. Box expands (500ms)
 3. Delay (300ms)
@@ -53,13 +75,7 @@ mvpView.show({
 
 **Total duration**: ~1100ms
 
-### Hide MVP Section
-
-```javascript
-mvpView.hide();
-```
-
-**What happens**:
+**Hide Animation**:
 1. Content fades out (350ms) - no horizontal movement
 2. Delay (300ms)
 3. Box shrinks (500ms)
@@ -92,7 +108,53 @@ if (mvpView.getVisibility()) {
 
 ## API Reference
 
-### `MvpView` Class
+### `MvpController` Class (Recommended)
+
+#### Constructor
+```javascript
+new MvpController(mvpView)
+```
+Initializes the MVP controller with automatic display logic.
+
+**Parameters**:
+- `mvpView` (MvpView): Instance of MvpView
+
+#### Methods
+
+##### `onGameStateChange(newState, mvpPlayerData)`
+Call when game state changes to trigger automatic MVP display.
+
+**Parameters**:
+- `newState` (string): 'pregame', 'live', 'halftime', 'final', 'overtime'
+- `mvpPlayerData` (Object): Player data (name, photoUrl, pts, reb, ast)
+
+**Returns**: `void`
+
+**Behavior**:
+- **halftime**: Shows MVP after 25s, repeats up to 3 times
+- **final**: Shows MVP after 5s
+- **live/pregame**: Hides MVP if visible
+
+##### `manualShow(mvpPlayerData)`
+Manually trigger MVP display (bypasses automatic timing).
+
+**Parameters**: Same as show()
+
+**Returns**: `void`
+
+##### `manualHide()`
+Manually hide MVP and clear all timers.
+
+**Returns**: `void`
+
+##### `getCurrentState()`
+Get current game state.
+
+**Returns**: `string` - Current state
+
+---
+
+### `MvpView` Class (Low-Level)
 
 #### Constructor
 ```javascript
@@ -156,9 +218,51 @@ const MVP_ANIMATION_TIMING = {
 };
 ```
 
+## Display Timing
+
+**MVP Display Duration**: 8 seconds (matches real NBA broadcasts)
+
+**Automatic Display Delays** (`mvp-controller.js`):
+```javascript
+const MVP_DISPLAY_TIMING = {
+    DISPLAY_DURATION: 8000,        // MVP stays visible for 8 seconds
+    
+    DELAY_BEFORE_SHOW: {
+        TIMEOUT: 20000,            // Show 20s into timeout
+        HALFTIME: 25000,           // Show 25s into halftime
+        END_QUARTER: 3000,         // Show 3s after quarter ends
+        END_GAME: 5000             // Show 5s after game ends
+    },
+    
+    // Halftime repeat logic
+    HALFTIME_REPEAT_INTERVAL: 180000,  // Show again every 3 minutes
+    HALFTIME_MAX_SHOWS: 3               // Max 3 times during halftime
+};
+```
+
+**Why delays?**  
+Real NBA broadcasts don't show stats immediately when breaks start. They wait 20-30 seconds to show replays first, then display player stats. This creates a more natural, broadcast-quality feel.
+
 ## Integration Example
 
-### Basic Integration
+### Automatic Integration (Recommended)
+
+```javascript
+// Initialize MVP system
+const mvpView = new MvpView();
+const mvpController = new MvpController(mvpView);
+
+// When game state changes (from your game update logic)
+function onGameDataUpdate(gameData) {
+    const gameState = determineGameState(gameData); // 'live', 'halftime', 'final'
+    const mvpPlayer = getLeadingScorer(gameData);   // Get MVP player data
+    
+    // Automatically handles timing and display
+    mvpController.onGameStateChange(gameState, mvpPlayer);
+}
+```
+
+### Basic Integration (Manual)
 
 ```javascript
 // Initialize view
@@ -262,19 +366,20 @@ Open in a browser to see:
 
 ## When to Show MVP
 
-Based on the design requirements:
+Based on real NBA broadcast behavior:
 
-✅ **Show during**:
-- Timeouts
-- Halftime
-- End of quarters
-- End of game
+✅ **Automatically shows during**:
+- **Halftime**: After 25s, displays for 8s, repeats up to 3 times over the break
+- **End of Game (Final)**: After 5s, displays for 8s
+- **Timeouts**: After 20s, displays for 8s (if timeout state is available from API)
+- **End of Quarters**: After 3s, displays for 8s (if quarter transition is detected)
 
-❌ **Do NOT show during**:
+❌ **Automatically hides during**:
 - Live play
-- Active game situations
+- Pregame
+- Any active game situations
 
-**Recommended display duration**: 6 seconds
+**Display duration**: 8 seconds (matches real NBA broadcast timing)
 
 ## Performance Considerations
 

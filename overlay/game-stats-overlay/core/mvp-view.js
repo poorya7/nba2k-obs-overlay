@@ -24,7 +24,7 @@ const MVP_ANIMATION_TIMING = {
     BOX_SHRINK_DURATION: 500,
     
     // Layout constants
-    MVP_SECTION_HEIGHT: 174,
+    MVP_SECTION_HEIGHT: 185,
     MVP_SECTION_PADDING_TOP: 12,
     MVP_SECTION_MARGIN_TOP: 5
 };
@@ -37,6 +37,7 @@ class MvpView {
             mvpContent: document.querySelector('.mvp-content'),
             playerPic: document.querySelector('.mvp-content .player-pic'),
             playerName: document.querySelector('.mvp-content .player-name'),
+            playerTeamLogo: document.querySelector('.mvp-content .player-team-logo'),
             statValues: {
                 pts: document.querySelector('.mvp-content .stat-value[data-stat="pts"]'),
                 reb: document.querySelector('.mvp-content .stat-value[data-stat="reb"]'),
@@ -154,9 +155,28 @@ class MvpView {
             this.elements.playerPic.alt = playerData.name || 'MVP Player';
         }
 
-        // Update player name
+        // Update team logo
+        if (playerData.teamLogo && this.elements.playerTeamLogo) {
+            this.elements.playerTeamLogo.src = playerData.teamLogo;
+            this.elements.playerTeamLogo.alt = playerData.teamAbbr || 'Team';
+        }
+
+        // Update player name with dynamic font sizing
         if (playerData.name && this.elements.playerName) {
             this.elements.playerName.textContent = playerData.name;
+            
+            // Adjust font size if name is too long
+            const nameLength = playerData.name.length;
+            if (nameLength > 18) {
+                // Long name - make it smaller
+                this.elements.playerName.style.fontSize = '9.5px';
+            } else if (nameLength > 15) {
+                // Medium-long name
+                this.elements.playerName.style.fontSize = '10.5px';
+            } else {
+                // Normal name - use default
+                this.elements.playerName.style.fontSize = '11.5px';
+            }
         }
 
         // Update stats

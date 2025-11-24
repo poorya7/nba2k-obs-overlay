@@ -45,7 +45,10 @@
                 <div class="player-info">
                     <div class="mvp-header">
                         <span class="mvp-label">⭐ MVP</span>
-                        <span class="player-name">---</span>
+                        <div class="player-name-row">
+                            <img class="player-team-logo" src="" alt="Team">
+                            <span class="player-name">---</span>
+                        </div>
                     </div>
                     <div class="player-stats">
                         <div class="stat-item">
@@ -73,13 +76,87 @@
     <!-- View Controllers -->
     <script src="game-view.js"></script>
     <script src="mvp-view.js"></script>
+    <script src="mvp-controller.js"></script>
     <script>
         // Initialize View Controllers
         const gameView = new GameView();
         const mvpView = new MvpView();
+        const mvpController = new MvpController(mvpView);
         
         // Track last game data to avoid unnecessary transitions
         let lastGameData = null;
+        let lastGameState = null;
+        
+        // Cache MVP data (so we don't spam API during timeouts)
+        let cachedMVPData = null;
+        let cachedMVPGameId = null;
+        
+        /**
+         * Clear MVP cache (called when game changes)
+         */
+        function clearMVPCache() {
+            cachedMVPData = null;
+            cachedMVPGameId = null;
+        }
+        
+        /**
+         * Get MVP player data for current game
+         * Fetches from ESPN boxscore and caches result
+         * @param {string} gameId - ESPN game ID
+         * @returns {Promise<Object|null>} MVP player data
+         */
+        async function getMvpPlayerData(gameId) {
+            // Return cached data if same game
+            if (cachedMVPData && cachedMVPGameId === gameId) {
+                console.log('Using cached MVP data for game:', gameId);
+                return cachedMVPData;
+            }
+            
+            // Clear cache if different game
+            if (cachedMVPGameId && cachedMVPGameId !== gameId) {
+                console.log('Game changed, clearing MVP cache');
+                clearMVPCache();
+            }
+            
+            try {
+                // Fetch MVP from ESPN boxscore
+                const mvpData = await window.NBAApi.getMVPForGame(gameId);
+                
+                if (mvpData) {
+                    // Cache it
+                    cachedMVPData = mvpData;
+                    cachedMVPGameId = gameId;
+                    return mvpData;
+                }
+                
+                return null;
+            } catch (error) {
+                console.error('Error getting MVP data:', error);
+                return null;
+            }
+        }
+        
+        /**
+         * Notify MVP controller of game state change (with error handling)
+         * @param {string} stateName - Game state
+         * @param {string} gameId - ESPN game ID
+         */
+        async function notifyMVPStateChange(stateName, gameId) {
+            try {
+                // Hide MVP immediately if it's showing old data from different game
+                if (mvpView.getVisibility() && cachedMVPGameId && cachedMVPGameId !== gameId) {
+                    console.log('Hiding old MVP data before fetching new game');
+                    mvpView.hide();
+                }
+                
+                const mvpData = await getMvpPlayerData(gameId);
+                if (mvpData) {
+                    mvpController.onGameStateChange(stateName, mvpData);
+                }
+            } catch (error) {
+                console.error('Failed to update MVP state:', error);
+            }
+        }
         
         // Countdown interval for pregame state
         let countdownInterval = null;
@@ -225,6 +302,8 @@
                 // No game selected - hide overlay
                 if (!selectedGameId) {
                     gameView.hide();
+                    mvpView.hide();
+                    clearMVPCache();
                     lastGameData = null; // Reset so next selection is treated as first load
                     if (countdownInterval) {
                         clearInterval(countdownInterval);
@@ -247,9 +326,10 @@
                 }
                 
                 // Step 4: Auto-detect state and update view
-                detectStateAndUpdate(game);
+                detectStateAndUpdate(game, selectedGameId);
                 
             } catch (error) {
+                console.error('ERROR in updateFromAPI:', error);
                 gameView.hide();
                 lastGameData = null; // Reset so next selection is treated as first load
                 if (countdownInterval) {
@@ -261,8 +341,10 @@
         
         /**
          * Detect game state and update view (copied from working overlay)
+         * @param {Object} game - Game data
+         * @param {string} gameId - ESPN game ID
          */
-        function detectStateAndUpdate(game) {
+        function detectStateAndUpdate(game, gameId) {
             let stateName = 'pregame';
             
             // Determine state (logic from GameOverlay.js)
@@ -334,6 +416,10 @@
                 gameView.show();
                 gameView.switchToState(stateName, formattedData);
                 lastGameData = fullKey;
+                
+                // Initialize MVP controller with initial state
+                lastGameState = stateName;
+                notifyMVPStateChange(stateName, gameId);
             } else if (lastGameData !== fullKey) {
                 // Something changed - determine what
                 const lastStateKey = lastGameData.split('}')[0] + '}';
@@ -345,6 +431,12 @@
                 if (stateChanged) {
                     // State changed - switch directly without animation
                     gameView.switchToState(stateName, formattedData);
+                    
+                    // Notify MVP controller of state change
+                    if (lastGameState !== stateName) {
+                        lastGameState = stateName;
+                        notifyMVPStateChange(stateName, gameId);
+                    }
                 } else if (scoresChanged) {
                     // Teams or scores changed
                     const teamsChanged = (lastScoreKey.includes(homeAbbr) === false) || (lastScoreKey.includes(awayAbbr) === false);
@@ -352,6 +444,10 @@
                     if (teamsChanged) {
                         // Teams changed - switch state to update everything
                         gameView.switchToState(stateName, formattedData);
+                        
+                        // Game changed - notify MVP controller (even if state didn't change)
+                        lastGameState = stateName;
+                        notifyMVPStateChange(stateName, gameId);
                     } else if (stateName === 'live') {
                         // Scores changed in live state - slide animation for scores
                         gameView.updateScore('home', homeScore, true);

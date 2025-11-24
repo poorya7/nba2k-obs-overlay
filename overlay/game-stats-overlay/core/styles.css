@@ -504,6 +504,18 @@ body {
     letter-spacing: 0.5px;
 }
 
+.player-name-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.player-team-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
 .mvp-content .player-name {
     font-size: 11.5px;
     font-weight: 600;

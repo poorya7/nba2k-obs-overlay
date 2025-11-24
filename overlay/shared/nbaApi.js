@@ -289,12 +289,150 @@ function formatGameTime(dateString) {
   });
 }
 
+/**
+ * Fetch game boxscore from ESPN API
+ * @param {string} gameId - ESPN game ID
+ * @returns {Promise<Object|null>} Boxscore data or null
+ */
+async function fetchGameBoxscore(gameId) {
+  try {
+    // Try summary endpoint first (has game leaders)
+    const summaryUrl = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${gameId}`;
+    const response = await fetch(summaryUrl);
+    
+    if (!response.ok) {
+      console.warn('ESPN summary API request failed:', response.status);
+      return null;
+    }
+    
+    const data = await response.json();
+    
+    // Log team names to verify we got the right game
+    if (data.boxscore && data.boxscore.teams) {
+      const teams = data.boxscore.teams.map(t => t.team?.displayName || t.team?.abbreviation || 'Unknown');
+      console.log('Boxscore teams:', teams.join(' vs '));
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Error fetching boxscore:', error);
+    return null;
+  }
+}
+
+/**
+ * Parse player stats from ESPN stats array
+ * @param {Array} stats - Stats array from ESPN
+ * @param {Array} labels - Stat labels from ESPN
+ * @returns {Object} Parsed stats object
+ */
+function parsePlayerStats(stats, labels) {
+  const parsed = { pts: 0, reb: 0, ast: 0 };
+  
+  if (!stats || !labels || stats.length !== labels.length) {
+    return parsed;
+  }
+  
+  // Find indices by label name (more robust than hardcoded indices)
+  labels.forEach((label, index) => {
+    const statValue = parseInt(stats[index]) || 0;
+    
+    if (label === 'PTS') {
+      parsed.pts = statValue;
+    } else if (label === 'REB') {
+      parsed.reb = statValue;
+    } else if (label === 'AST') {
+      parsed.ast = statValue;
+    }
+  });
+  
+  return parsed;
+}
+
+/**
+ * Get leading player (MVP) from boxscore data
+ * @param {Object} boxscoreData - Boxscore data from ESPN
+ * @returns {Object|null} MVP player data or null
+ */
+function getLeadingPlayer(boxscoreData) {
+  if (!boxscoreData || !boxscoreData.boxscore || !boxscoreData.boxscore.players) {
+    return null;
+  }
+  
+  let leadingPlayer = null;
+  let highestScore = -1;
+  
+  // Loop through both teams
+  boxscoreData.boxscore.players.forEach(team => {
+    if (!team.statistics || !team.statistics[0]) {
+      return;
+    }
+    
+    const statGroup = team.statistics[0];
+    const labels = statGroup.labels || [];
+    const athletes = statGroup.athletes || [];
+    const teamInfo = team.team || {};
+    
+    // Loop through players
+    athletes.forEach(athlete => {
+      if (!athlete.stats || !athlete.athlete) {
+        return;
+      }
+      
+      // Parse stats using labels (more robust)
+      const stats = parsePlayerStats(athlete.stats, labels);
+      
+      // Calculate game score: PTS + REB + AST (simple metric)
+      const gameScore = stats.pts + stats.reb + stats.ast;
+      
+      if (gameScore > highestScore) {
+        highestScore = gameScore;
+        leadingPlayer = {
+          name: athlete.athlete.displayName || athlete.athlete.shortName || 'Unknown Player',
+          photoUrl: athlete.athlete.headshot?.href || `https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/${athlete.athlete.id}.png`,
+          teamLogo: teamInfo.logo || '',
+          teamAbbr: teamInfo.abbreviation || '',
+          pts: stats.pts,
+          reb: stats.reb,
+          ast: stats.ast
+        };
+      }
+    });
+  });
+  
+  return leadingPlayer;
+}
+
+/**
+ * Get MVP player for a game (fetches boxscore and finds leading player)
+ * @param {string} gameId - ESPN game ID
+ * @returns {Promise<Object|null>} MVP player data or null
+ */
+async function getMVPForGame(gameId) {
+  try {
+    console.log('Fetching MVP for game:', gameId);
+    const boxscore = await fetchGameBoxscore(gameId);
+    if (!boxscore) {
+      console.warn('No boxscore data available for game:', gameId);
+      return null;
+    }
+    
+    const mvp = getLeadingPlayer(boxscore);
+    console.log('MVP found:', mvp);
+    return mvp;
+  } catch (error) {
+    console.error('Error getting MVP for game', gameId, ':', error);
+    return null;
+  }
+}
+
 // Export functions
 if (typeof window !== 'undefined') {
   window.NBAApi = {
     getTodaysGames: getTodaysGamesParsed,
     getGameById,
-    formatGameTime
+    formatGameTime,
+    getMVPForGame
   };
 }
 

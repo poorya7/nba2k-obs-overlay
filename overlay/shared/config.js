@@ -3,6 +3,7 @@
 const CONFIG = {
   // ESPN API endpoints
   ESPN_NBA_SCOREBOARD: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard',
+  ESPN_NBA_SUMMARY: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary',
   
   // Refresh intervals (milliseconds)
   OVERLAY_REFRESH_INTERVAL: 30000, // 30 seconds
