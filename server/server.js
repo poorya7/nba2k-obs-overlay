@@ -6,13 +6,165 @@ const path = require('path');
 
 const PORT = 3000;
 
-// In-memory storage for selected game ID and style
-let selectedGameId = null;
-let selectedStyle = 'pill-green'; // default style
+// ==================== STATE MANAGEMENT ====================
 
-// Simulation mode for testing
-let simulationEnabled = false;
-let simulationState = 'pregame'; // pregame, live, halftime, overtime, final
+class StateStore {
+  constructor() {
+    this.selectedGameId = null;
+    this.selectedStyle = 'pill-green';
+    this.simulation = {
+      enabled: false,
+      state: 'pregame'
+    };
+    this.quarter = {
+      current: null,        // 'Q1', 'Q2', 'Q3', 'Q4', or null
+      startTime: null       // timestamp when quarter started
+    };
+  }
+
+  // Game selection
+  getGameId() { return this.selectedGameId; }
+  setGameId(id) { this.selectedGameId = id; }
+
+  // Style selection
+  getStyle() { return this.selectedStyle; }
+  setStyle(style) { this.selectedStyle = style; }
+
+  // Simulation
+  getSimulation() { return { ...this.simulation }; }
+  setSimulation(updates) {
+    if (updates.enabled !== undefined) this.simulation.enabled = updates.enabled;
+    if (updates.state !== undefined) this.simulation.state = updates.state;
+  }
+
+  // Quarter tracking
+  getQuarter() { return { ...this.quarter }; }
+  setQuarter(quarter) {
+    this.quarter.current = quarter;
+    this.quarter.startTime = quarter ? Date.now() : null;
+  }
+  clearQuarter() {
+    this.quarter.current = null;
+    this.quarter.startTime = null;
+  }
+}
+
+const state = new StateStore();
+
+// ==================== UTILITIES ====================
+
+/**
+ * Parse JSON body from request
+ * @param {http.IncomingMessage} req 
+ * @returns {Promise<Object>}
+ */
+function parseJsonBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        resolve(JSON.parse(body));
+      } catch (error) {
+        reject(new Error('Invalid JSON'));
+      }
+    });
+    req.on('error', reject);
+  });
+}
+
+/**
+ * Send JSON response
+ * @param {http.ServerResponse} res 
+ * @param {number} statusCode 
+ * @param {Object} data 
+ */
+function sendJson(res, statusCode, data) {
+  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(data));
+}
+
+// ==================== API ROUTE HANDLERS ====================
+
+// GET /api/selected-game
+function handleGetSelectedGame(req, res) {
+  sendJson(res, 200, { gameId: state.getGameId() });
+}
+
+// POST /api/selected-game
+async function handlePostSelectedGame(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    state.setGameId(data.gameId);
+    console.log('✅ Game selected:', data.gameId);
+    sendJson(res, 200, { success: true });
+  } catch (error) {
+    sendJson(res, 400, { error: error.message });
+  }
+}
+
+// GET /api/selected-style
+function handleGetSelectedStyle(req, res) {
+  sendJson(res, 200, { style: state.getStyle() });
+}
+
+// POST /api/selected-style
+async function handlePostSelectedStyle(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    state.setStyle(data.style);
+    console.log('🎨 Style changed:', data.style);
+    sendJson(res, 200, { success: true });
+  } catch (error) {
+    sendJson(res, 400, { error: error.message });
+  }
+}
+
+// GET /api/simulation
+function handleGetSimulation(req, res) {
+  sendJson(res, 200, state.getSimulation());
+}
+
+// POST /api/simulation
+async function handlePostSimulation(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    state.setSimulation(data);
+    const sim = state.getSimulation();
+    console.log('🎮 Simulation:', sim.enabled ? 'ON' : 'OFF', '| State:', sim.state);
+    sendJson(res, 200, { success: true });
+  } catch (error) {
+    sendJson(res, 400, { error: error.message });
+  }
+}
+
+// GET /api/quarter
+function handleGetQuarter(req, res) {
+  sendJson(res, 200, state.getQuarter());
+}
+
+// POST /api/quarter
+async function handlePostQuarter(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    
+    if (data.quarter === null || data.quarter === '') {
+      // Clear quarter (game done)
+      state.clearQuarter();
+      console.log('🏁 Quarter cleared');
+    } else {
+      // Start new quarter
+      state.setQuarter(data.quarter);
+      console.log('🏀 Quarter started:', data.quarter);
+    }
+    
+    sendJson(res, 200, { success: true, quarter: state.getQuarter() });
+  } catch (error) {
+    sendJson(res, 400, { error: error.message });
+  }
+}
+
+// ==================== STATIC FILE SERVING ====================
 
 // MIME types for different file extensions
 const MIME_TYPES = {
@@ -27,95 +179,44 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-const server = http.createServer((req, res) => {
+// ==================== ROUTING ====================
+
+const API_ROUTES = {
+  'GET /api/selected-game': handleGetSelectedGame,
+  'POST /api/selected-game': handlePostSelectedGame,
+  'GET /api/selected-style': handleGetSelectedStyle,
+  'POST /api/selected-style': handlePostSelectedStyle,
+  'GET /api/simulation': handleGetSimulation,
+  'POST /api/simulation': handlePostSimulation,
+  'GET /api/quarter': handleGetQuarter,
+  'POST /api/quarter': handlePostQuarter
+};
+
+/**
+ * Route API request to handler
+ * @param {http.IncomingMessage} req 
+ * @param {http.ServerResponse} res 
+ * @returns {boolean} True if route was handled
+ */
+async function routeApiRequest(req, res) {
+  const routeKey = `${req.method} ${req.url}`;
+  const handler = API_ROUTES[routeKey];
+  
+  if (handler) {
+    await handler(req, res);
+    return true;
+  }
+  
+  return false;
+}
+
+// ==================== HTTP SERVER ====================
+
+const server = http.createServer(async (req, res) => {
   console.log(`📡 ${req.method} ${req.url}`);
 
-  // API endpoints for game selection
-  if (req.url === '/api/selected-game' && req.method === 'GET') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ gameId: selectedGameId }));
-    return;
-  }
-
-  if (req.url === '/api/selected-game' && req.method === 'POST') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      try {
-        const data = JSON.parse(body);
-        selectedGameId = data.gameId;
-        console.log('✅ Game selected:', selectedGameId);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true }));
-      } catch (error) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Invalid JSON' }));
-      }
-    });
-    return;
-  }
-
-  // API endpoints for style selection
-  if (req.url === '/api/selected-style' && req.method === 'GET') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ style: selectedStyle }));
-    return;
-  }
-
-  if (req.url === '/api/selected-style' && req.method === 'POST') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      try {
-        const data = JSON.parse(body);
-        selectedStyle = data.style;
-        console.log('🎨 Style changed:', selectedStyle);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true }));
-      } catch (error) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Invalid JSON' }));
-      }
-    });
-    return;
-  }
-
-  // API endpoints for simulation mode
-  if (req.url === '/api/simulation' && req.method === 'GET') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ 
-      enabled: simulationEnabled,
-      state: simulationState
-    }));
-    return;
-  }
-
-  if (req.url === '/api/simulation' && req.method === 'POST') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      try {
-        const data = JSON.parse(body);
-        if (data.enabled !== undefined) {
-          simulationEnabled = data.enabled;
-        }
-        if (data.state !== undefined) {
-          simulationState = data.state;
-        }
-        console.log('🎮 Simulation:', simulationEnabled ? 'ON' : 'OFF', '| State:', simulationState);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true }));
-      } catch (error) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Invalid JSON' }));
-      }
-    });
+  // Try API routes first
+  if (await routeApiRequest(req, res)) {
     return;
   }
 

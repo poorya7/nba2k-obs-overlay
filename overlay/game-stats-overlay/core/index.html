@@ -88,6 +88,10 @@
         let lastGameData = null;
         let lastGameState = null;
         
+        // Track if overlay has been shown for current game session
+        let overlayHasBeenShown = false;
+        let lastSelectedGameId = null;
+        
         // Countdown interval for pregame state
         let countdownInterval = null;
         let countdownSeconds = 0;
@@ -229,18 +233,70 @@
                 const data = await response.json();
                 const selectedGameId = data.gameId;
                 
-                // No game selected - hide overlay
+                // Check if game changed - reset overlay shown flag
+                if (selectedGameId !== lastSelectedGameId) {
+                    overlayHasBeenShown = false;
+                    lastSelectedGameId = selectedGameId;
+                }
+                
+                // No game selected - hide overlay and reset
                 if (!selectedGameId) {
                     gameView.hide();
                     mvpView.hide();
                     window.MVPIntegration.clearMVPCache();
-                    lastGameData = null; // Reset so next selection is treated as first load
+                    lastGameData = null;
+                    overlayHasBeenShown = false;
+                    lastSelectedGameId = null;
                     if (countdownInterval) {
                         clearInterval(countdownInterval);
                         countdownInterval = null;
                     }
                     return;
                 }
+                
+                // Step 2.5: Check quarter tracking
+                const quarterResponse = await fetch('/api/quarter');
+                const quarterData = await quarterResponse.json();
+                
+                if (!quarterData.current || !quarterData.startTime) {
+                    // No quarter started OR game done - hide overlay and reset
+                    gameView.hide();
+                    mvpView.hide();
+                    window.MVPIntegration.clearMVPCache();
+                    lastGameData = null;
+                    overlayHasBeenShown = false;
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                    }
+                    return;
+                }
+                
+                // Only apply 10-second delay if overlay hasn't been shown yet
+                if (!overlayHasBeenShown) {
+                    // Only check delay for Q1 (first quarter of the game)
+                    if (quarterData.current === 'Q1') {
+                        const timeSinceStart = Date.now() - quarterData.startTime;
+                        const SHOW_DELAY = 10000; // 10 seconds
+                        
+                        if (timeSinceStart < SHOW_DELAY) {
+                            // Not enough time passed - hide overlay and wait
+                            gameView.hide();
+                            mvpView.hide();
+                            window.MVPIntegration.clearMVPCache();
+                            lastGameData = null;
+                            if (countdownInterval) {
+                                clearInterval(countdownInterval);
+                                countdownInterval = null;
+                            }
+                            return;
+                        }
+                    }
+                    // If we reach here, overlay will be shown - set flag
+                    overlayHasBeenShown = true;
+                }
+                
+                // Quarter active - show overlay (either passed 10s check or already been shown)
                 
                 // Step 3: Fetch game data from ESPN API
                 const game = await window.NBAApi.getGameById(selectedGameId);

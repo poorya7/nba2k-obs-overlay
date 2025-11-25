@@ -81,7 +81,7 @@
       background: #f9fafb;
       border: 2px solid #e5e7eb;
       border-radius: 12px;
-      padding: 24px;
+      padding: 16px;
       display: none;
     }
 
@@ -93,11 +93,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
 
     .preview-time {
-      font-size: 14px;
+      font-size: 13px;
       color: #6b7280;
     }
 
@@ -133,7 +133,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 12px;
     }
 
     .preview-team {
@@ -142,31 +142,27 @@
     }
 
     .preview-team img {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 8px;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 6px;
     }
 
     .preview-team-name {
       font-weight: 600;
       color: #1f2937;
+      font-size: 13px;
       margin-bottom: 4px;
     }
 
-    .preview-team-record {
-      font-size: 12px;
-      color: #6b7280;
-    }
-
     .preview-team-score {
-      font-size: 32px;
+      font-size: 24px;
       font-weight: 700;
       color: #1f2937;
-      margin-top: 8px;
+      margin-top: 4px;
     }
 
     .preview-vs {
-      font-size: 18px;
+      font-size: 14px;
       color: #9ca3af;
       font-weight: 600;
     }
@@ -223,12 +219,74 @@
     .refresh-btn:active {
       transform: translateY(0);
     }
+
+    /* Quarter Buttons */
+    .quarter-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .quarter-btn {
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quarter-btn:hover {
+      border-color: #667eea;
+      color: #667eea;
+    }
+
+    .quarter-btn.active {
+      background: #667eea;
+      border-color: #667eea;
+      color: white;
+    }
+
+    .quarter-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .done-btn {
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .done-btn:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .done-btn.active {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: white;
+    }
+
+    .done-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🏀 NBA Game Overlay Control</h1>
-    <p class="subtitle">Select which game to display on your stream</p>
 
     <div id="error" class="error" style="display: none;"></div>
 
@@ -237,6 +295,22 @@
       <select id="gameSelect">
         <option value="">Loading games...</option>
       </select>
+    </div>
+
+    <div class="section" id="quarterSection" style="display: none;">
+      <div class="section-title">🏀 Quarter Tracking</div>
+      <div class="quarter-buttons">
+        <button class="quarter-btn" data-quarter="Q1">Q1</button>
+        <button class="quarter-btn" data-quarter="Q2">Q2</button>
+        <button class="quarter-btn" data-quarter="Q3">Q3</button>
+        <button class="quarter-btn" data-quarter="Q4">Q4</button>
+        <button class="done-btn" id="doneBtn">Done</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div id="loading" class="loading">Select a game to see preview</div>
+      <div id="preview" class="preview-card"></div>
     </div>
 
     <div class="section">
@@ -256,18 +330,6 @@
           <button id="nextStateBtn" class="refresh-btn" style="margin-top: 0;">▶ Next State</button>
         </div>
       </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Preview</div>
-      <div id="loading" class="loading">Select a game to see preview</div>
-      <div id="preview" class="preview-card"></div>
-    </div>
-
-    <div class="info-box">
-      <strong>📺 OBS Setup:</strong>
-      Add a Browser Source with this URL:<br>
-      <code>http://localhost:3000/overlay/game-stats</code>
     </div>
   </div>
 

@@ -1,7 +1,75 @@
 // Dashboard Controller - Game Selection & Preview
 
-let allGames = [];
+// ==================== API CLIENT ====================
 
+class ApiClient {
+  /**
+   * Generic GET request
+   * @param {string} endpoint 
+   * @returns {Promise<Object>}
+   */
+  async get(endpoint) {
+    try {
+      const response = await fetch(endpoint);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      return null;
+    }
+  }
+
+  /**
+   * Generic POST request
+   * @param {string} endpoint 
+   * @param {Object} data 
+   * @returns {Promise<Object>}
+   */
+  async post(endpoint, data) {
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      return null;
+    }
+  }
+
+  // Specific API methods
+  async getSelectedGame() {
+    return this.get('/api/selected-game');
+  }
+
+  async setSelectedGame(gameId) {
+    return this.post('/api/selected-game', { gameId });
+  }
+
+  async getSimulation() {
+    return this.get('/api/simulation');
+  }
+
+  async setSimulation(updates) {
+    return this.post('/api/simulation', updates);
+  }
+
+  async getQuarter() {
+    return this.get('/api/quarter');
+  }
+
+  async setQuarter(quarter) {
+    return this.post('/api/quarter', { quarter });
+  }
+}
+
+const api = new ApiClient();
+
+// ==================== STATE ====================
+
+let allGames = [];
+let currentQuarter = null;
 
 // Simulation state
 const SIMULATION_STATES = ['pregame', 'live', 'halftime', 'overtime', 'final'];
@@ -16,11 +84,22 @@ async function init() {
   document.getElementById('simulationToggle').addEventListener('change', handleSimulationToggle);
   document.getElementById('nextStateBtn').addEventListener('click', nextSimulationState);
   
-  // Load simulation state
-  await loadSimulationState();
+  // Quarter tracking event listeners
+  document.querySelectorAll('.quarter-btn').forEach(btn => {
+    btn.addEventListener('click', () => handleQuarterClick(btn.dataset.quarter));
+  });
+  document.getElementById('doneBtn').addEventListener('click', handleGameDone);
   
-  // Load games
-  await loadGames();
+  // Clear server state on dashboard load (fresh start)
+  await api.setSelectedGame(null);
+  await api.setQuarter(null);
+  
+  // Load state from server
+  await loadSimulationState();
+  await loadQuarterState();
+  
+  // Load games (don't restore selection on initial load)
+  await loadGames(false);
   
   // Auto-refresh every minute
   setInterval(refreshGames, window.NBA_CONFIG.DASHBOARD_REFRESH_INTERVAL);
@@ -28,31 +107,36 @@ async function init() {
 
 /**
  * Load today's games from ESPN API
+ * @param {boolean} restoreSelection - Whether to restore previous selection (for auto-refresh)
  */
-async function loadGames() {
+async function loadGames(restoreSelection = false) {
   const selectEl = document.getElementById('gameSelect');
   const errorEl = document.getElementById('error');
   
   try {
     errorEl.style.display = 'none';
     
-    // Fetch games
+    // Save current selection before refresh
+    const currentSelection = selectEl.value;
+    
+    // Fetch games from ESPN
     allGames = await window.NBAApi.getTodaysGames();
     
     // Populate dropdown
     populateGameSelect(allGames);
     
-    // Restore previous selection from server
-    const savedGameId = await loadSavedSelection();
-    if (savedGameId) {
-      selectEl.value = savedGameId;
-      updatePreview(savedGameId);
+    // Restore selection if requested (during auto-refresh)
+    if (restoreSelection && currentSelection) {
+      selectEl.value = currentSelection;
+      if (selectEl.value) {
+        updatePreview(selectEl.value);
+        showQuarterSection();
+      }
     }
     
   } catch (error) {
     errorEl.textContent = `Error loading games: ${error.message}`;
     errorEl.style.display = 'block';
-    
     selectEl.innerHTML = '<option value="">Failed to load games</option>';
   }
 }
@@ -87,54 +171,104 @@ async function handleGameSelection(event) {
   const gameId = event.target.value;
   
   if (!gameId) {
-    // No game selected
     clearPreview();
-    await saveGameSelection(null);
+    hideQuarterSection();
+    await api.setSelectedGame(null);
     return;
   }
   
-  // Save selection to server
-  await saveGameSelection(gameId);
+  // Reset quarter tracking when new game selected
+  currentQuarter = null;
+  await api.setQuarter(null);
   
-  // Update preview
+  // Save to server and update preview
+  await api.setSelectedGame(gameId);
   updatePreview(gameId);
+  showQuarterSection();
+  updateQuarterUI();
 }
 
 /**
- * Save game selection to server
+ * Show quarter tracking section
  */
-async function saveGameSelection(gameId) {
-  try {
-    const response = await fetch('/api/selected-game', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ gameId })
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to save selection');
-    }
-  } catch (error) {
-    // Silently fail
+function showQuarterSection() {
+  document.getElementById('quarterSection').style.display = 'block';
+  updateQuarterUI();
+}
+
+/**
+ * Hide quarter tracking section
+ */
+function hideQuarterSection() {
+  document.getElementById('quarterSection').style.display = 'none';
+  // Clear button states when hiding
+  document.querySelectorAll('.quarter-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('doneBtn').classList.remove('active');
+}
+
+/**
+ * Load quarter state from server
+ */
+async function loadQuarterState() {
+  const data = await api.getQuarter();
+  if (data) {
+    currentQuarter = data.current;
+    updateQuarterUI();
   }
 }
 
 /**
- * Load saved game selection from server
+ * Handle quarter button click
  */
-async function loadSavedSelection() {
-  try {
-    const response = await fetch('/api/selected-game');
-    if (!response.ok) {
-      throw new Error('Failed to load selection');
+async function handleQuarterClick(quarter) {
+  // Toggle: if clicking the active quarter, unselect it
+  if (currentQuarter === quarter) {
+    currentQuarter = null;
+    await api.setQuarter(null);
+  } else {
+    // Clear 'done' state if switching from done to a quarter
+    currentQuarter = quarter;
+    await api.setQuarter(quarter);
+  }
+  updateQuarterUI();
+}
+
+/**
+ * Handle game done button click
+ */
+async function handleGameDone() {
+  // Toggle: if already done, clear it
+  if (currentQuarter === 'done') {
+    currentQuarter = null;
+    await api.setQuarter(null);
+  } else {
+    currentQuarter = 'done';
+    await api.setQuarter(null); // Send null to server (no active quarter)
+  }
+  updateQuarterUI();
+}
+
+/**
+ * Update quarter button states
+ */
+function updateQuarterUI() {
+  const doneBtn = document.getElementById('doneBtn');
+  
+  // Update quarter buttons
+  document.querySelectorAll('.quarter-btn').forEach(btn => {
+    if (btn.dataset.quarter === currentQuarter) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
     }
-    
-    const data = await response.json();
-    return data.gameId;
-  } catch (error) {
-    return null;
+  });
+  
+  // Done button is only active if currentQuarter is 'done' (not just null)
+  // We need to track this as a separate state
+  if (currentQuarter === 'done') {
+    doneBtn.classList.add('active');
+  } else {
+    doneBtn.classList.remove('active');
   }
 }
 
@@ -171,14 +305,12 @@ function updatePreview(gameId) {
       <div class="preview-team">
         <img src="${game.awayTeam.logo}" alt="${game.awayTeam.name}">
         <div class="preview-team-name">${game.awayTeam.name}</div>
-        <div class="preview-team-record">${game.awayTeam.record}</div>
         ${showScores ? `<div class="preview-team-score">${game.awayTeam.score}</div>` : ''}
       </div>
       <div class="preview-vs">${showScores ? '-' : 'vs'}</div>
       <div class="preview-team">
         <img src="${game.homeTeam.logo}" alt="${game.homeTeam.name}">
         <div class="preview-team-name">${game.homeTeam.name}</div>
-        <div class="preview-team-record">${game.homeTeam.record}</div>
         ${showScores ? `<div class="preview-team-score">${game.homeTeam.score}</div>` : ''}
       </div>
     </div>
@@ -198,27 +330,22 @@ function clearPreview() {
 }
 
 /**
- * Refresh games list
+ * Refresh games list (auto-refresh, keep selection)
  */
 async function refreshGames() {
-  await loadGames();
+  await loadGames(true); // Restore selection during auto-refresh
 }
 
 /**
  * Load current style from server
  */
 async function loadCurrentStyle() {
-  try {
-    const response = await fetch('/api/selected-style');
-    if (response.ok) {
-      const data = await response.json();
-      const styleIndex = STYLES.findIndex(s => s.id === data.style);
-      if (styleIndex !== -1) {
-        currentStyleIndex = styleIndex;
-      }
+  const data = await api.get('/api/selected-style');
+  if (data) {
+    const styleIndex = STYLES.findIndex(s => s.id === data.style);
+    if (styleIndex !== -1) {
+      currentStyleIndex = styleIndex;
     }
-  } catch (error) {
-    // Silently fail
   }
   updateStyleDisplay();
 }
@@ -229,18 +356,7 @@ async function loadCurrentStyle() {
 async function nextStyle() {
   currentStyleIndex = (currentStyleIndex + 1) % STYLES.length;
   const selectedStyle = STYLES[currentStyleIndex];
-  
-  // Save to server
-  try {
-    const response = await fetch('/api/selected-style', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ style: selectedStyle.id })
-    });
-  } catch (error) {
-    // Silently fail
-  }
-  
+  await api.post('/api/selected-style', { style: selectedStyle.id });
   updateStyleDisplay();
 }
 
@@ -256,23 +372,17 @@ function updateStyleDisplay() {
  * Load simulation state from server
  */
 async function loadSimulationState() {
-  try {
-    const response = await fetch('/api/simulation');
-    if (response.ok) {
-      const data = await response.json();
-      const toggle = document.getElementById('simulationToggle');
-      toggle.checked = data.enabled;
-      
-      // Find state index
-      const stateIndex = SIMULATION_STATES.indexOf(data.state);
-      if (stateIndex !== -1) {
-        currentSimulationStateIndex = stateIndex;
-      }
-      
-      updateSimulationUI();
+  const data = await api.getSimulation();
+  if (data) {
+    const toggle = document.getElementById('simulationToggle');
+    toggle.checked = data.enabled;
+    
+    const stateIndex = SIMULATION_STATES.indexOf(data.state);
+    if (stateIndex !== -1) {
+      currentSimulationStateIndex = stateIndex;
     }
-  } catch (error) {
-    // Silently fail
+    
+    updateSimulationUI();
   }
 }
 
@@ -281,20 +391,8 @@ async function loadSimulationState() {
  */
 async function handleSimulationToggle(event) {
   const enabled = event.target.checked;
-  
-  try {
-    const response = await fetch('/api/simulation', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ enabled })
-    });
-    
-    if (response.ok) {
-      updateSimulationUI();
-    }
-  } catch (error) {
-    // Silently fail
-  }
+  await api.setSimulation({ enabled });
+  updateSimulationUI();
 }
 
 /**
@@ -303,20 +401,8 @@ async function handleSimulationToggle(event) {
 async function nextSimulationState() {
   currentSimulationStateIndex = (currentSimulationStateIndex + 1) % SIMULATION_STATES.length;
   const newState = SIMULATION_STATES[currentSimulationStateIndex];
-  
-  try {
-    const response = await fetch('/api/simulation', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ state: newState })
-    });
-    
-    if (response.ok) {
-      updateSimulationUI();
-    }
-  } catch (error) {
-    // Silently fail
-  }
+  await api.setSimulation({ state: newState });
+  updateSimulationUI();
 }
 
 /**
