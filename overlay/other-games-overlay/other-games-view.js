@@ -61,12 +61,8 @@ class OtherGamesView {
         setTimeout(() => {
             document.querySelectorAll('.other-game-logo').forEach(img => {
                 img.addEventListener('error', function() {
-                    console.error('Failed to load image:', this.src, 'Alt:', this.alt);
                     // Just hide broken images - the abbreviation below will still show
                     this.style.visibility = 'hidden';
-                });
-                img.addEventListener('load', function() {
-                    console.log('Successfully loaded image:', this.alt);
                 });
             });
         }, 0);

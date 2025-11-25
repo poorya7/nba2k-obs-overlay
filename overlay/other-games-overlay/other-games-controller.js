@@ -44,11 +44,6 @@ class OtherGamesController {
      */
     init(games) {
         this.games = this.sortGames(games);
-        console.log('Games sorted:', this.games.map(g => g.state));
-        console.log('Game logos:', this.games.map(g => ({
-            away: g.away.abbr + ' -> ' + g.away.logo,
-            home: g.home.abbr + ' -> ' + g.home.logo
-        })));
         
         // Render first set
         this.view.renderGames(this.games, 0, this.gamesPerSet);
