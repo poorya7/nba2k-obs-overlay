@@ -9,15 +9,12 @@ class OtherGamesView {
     }
 
     /**
-     * Format countdown time
+     * Format countdown time (uses shared utility)
      * @param {number} seconds - Seconds until game starts
      * @returns {string} Formatted time (HH:MM:SS)
      */
     formatCountdown(seconds) {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        return window.formatCountdown(seconds); // Use shared utility from gameUtils.js
     }
 
     /**
@@ -35,7 +32,7 @@ class OtherGamesView {
             
             if (game.state === 'pregame') {
                 html += this._renderPregameGame(game, actualGameIndex);
-            } else if (game.state === 'live') {
+            } else if (game.state === 'live' || game.state === 'halftime') {
                 html += this._renderLiveGame(game);
             } else { // final
                 html += this._renderFinalGame(game);
@@ -73,6 +70,10 @@ class OtherGamesView {
      * @private
      */
     _renderPregameGame(game, gameIndex) {
+        const countdown = game.secondsUntilStart !== undefined 
+            ? this.formatCountdown(game.secondsUntilStart) 
+            : '00:00:00';
+        
         return `
             <div class="game-in-card">
                 <div class="other-game-teams">
@@ -87,7 +88,7 @@ class OtherGamesView {
                     </div>
                 </div>
                 <div class="other-game-status pregame countdown-timer" data-game-index="${gameIndex}">
-                    Starts in ${this.formatCountdown(game.secondsUntilStart)}
+                    Starts in ${countdown}
                 </div>
             </div>
         `;

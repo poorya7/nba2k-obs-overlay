@@ -4,15 +4,16 @@
  */
 
 class OtherGamesController {
-    constructor(view) {
+    constructor(view, onComplete = null) {
         this.view = view;
         this.games = [];
         this.currentSet = 0;
         this.gamesPerSet = 3;
-        this.displayDuration = 16000; // 16 seconds
+        this.displayDuration = 5000; // 5 seconds (testing - change to 16000 for production)
         this.fadeDuration = 200; // 0.2 seconds
         this.cycleInterval = null;
         this.countdownInterval = null;
+        this.onComplete = onComplete; // Callback when all sets shown
     }
 
     /**
@@ -44,6 +45,7 @@ class OtherGamesController {
      */
     init(games) {
         this.games = this.sortGames(games);
+        this.currentSet = 0; // Reset to first set
         
         // Render first set
         this.view.renderGames(this.games, 0, this.gamesPerSet);
@@ -57,11 +59,24 @@ class OtherGamesController {
      * Move to next set of games
      */
     async nextSet() {
+        const totalSets = Math.ceil(this.games.length / this.gamesPerSet);
+        const nextSetIndex = this.currentSet + 1;
+        
+        // Check if we've shown all sets
+        if (nextSetIndex >= totalSets) {
+            // Stop cycling and call completion callback
+            this.stopCycle();
+            this.stopCountdown();
+            if (this.onComplete) {
+                this.onComplete();
+            }
+            return;
+        }
+        
+        // Continue to next set
         await this.view.fadeOut(this.fadeDuration);
-        
-        this.currentSet = (this.currentSet + 1) % Math.ceil(this.games.length / this.gamesPerSet);
+        this.currentSet = nextSetIndex;
         this.view.renderGames(this.games, this.currentSet * this.gamesPerSet, this.gamesPerSet);
-        
         await this.view.fadeIn(this.fadeDuration);
     }
 

@@ -5,6 +5,9 @@
     top: 155px;
     right: 20px;
     z-index: 10;
+    display: none; /* Hidden by default, shown when games available */
+    opacity: 0;
+    will-change: opacity; /* Optimize fade animations */
 }
 
 .other-game-card {
@@ -88,6 +91,7 @@
 
 .other-game-status.pregame {
     color: #fbbf24;
+    font-variant-numeric: tabular-nums;
 }
 
 .game-time {

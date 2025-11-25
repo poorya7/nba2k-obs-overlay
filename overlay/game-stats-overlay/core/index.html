@@ -72,6 +72,8 @@
     <!-- NBA API utilities -->
     <script src="../../shared/config.js"></script>
     <script src="../../shared/nbaApi.js"></script>
+    <script src="../../shared/gameUtils.js"></script>
+    <script src="../../shared/apiClient.js"></script>
     
     <!-- View Controllers -->
     <script src="game-view.js"></script>
@@ -79,6 +81,9 @@
     <script src="mvp-controller.js"></script>
     <script src="mvp-integration.js"></script>
     <script>
+        // Initialize API Client
+        const api = new ApiClient();
+        
         // Initialize View Controllers
         const gameView = new GameView();
         const mvpView = new MvpView();
@@ -262,22 +267,20 @@
         async function updateFromAPI() {
             try {
                 // Step 1: Check if simulation mode is enabled
-                const simResponse = await fetch('/api/simulation');
-                const simData = await simResponse.json();
+                const simData = await api.getSimulation();
                 
-                if (simData.enabled) {
+                if (simData && simData.enabled) {
                     const fakeGame = generateSimulationData(simData.state);
                     detectStateAndUpdate(fakeGame);
                     return;
                 }
                 
                 // Step 2: Get selected game ID from server
-                const response = await fetch('/api/selected-game');
-                if (!response.ok) {
+                const data = await api.getSelectedGame();
+                if (!data) {
                     throw new Error('Failed to fetch selection');
                 }
                 
-                const data = await response.json();
                 const selectedGameId = data.gameId;
                 
                 // Check if game changed - reset overlay shown flag
@@ -295,8 +298,7 @@
                 }
                 
                 // Step 2.5: Check quarter tracking
-                const quarterResponse = await fetch('/api/quarter');
-                const quarterData = await quarterResponse.json();
+                const quarterData = await api.getQuarter();
                 
                 if (!shouldShowOverlayBasedOnQuarter(quarterData)) {
                     // Hide overlay and reset (but keep game tracking)
@@ -330,22 +332,8 @@
          * @param {string} gameId - ESPN game ID
          */
         function detectStateAndUpdate(game, gameId) {
-            let stateName = 'pregame';
-            
-            // Determine state (logic from GameOverlay.js)
-            if (game.isFinal) {
-                stateName = 'final';
-            } else if (game.isLive) {
-                // Check if halftime
-                if (game.statusText.toLowerCase().includes('halftime')) {
-                    stateName = 'halftime';
-                } else {
-                    stateName = 'live';
-                }
-            } else {
-                // Scheduled game
-                stateName = 'pregame';
-            }
+            // Use shared utility to determine state
+            const stateName = detectGameState(game);
             
             // Format data for GameView
             const formattedData = formatGameDataForView(game, stateName);
@@ -480,10 +468,8 @@
             // State-specific formatting
             switch (stateName) {
                 case 'pregame':
-                    // Calculate countdown
-                    const gameTime = new Date(game.date).getTime();
-                    const now = Date.now();
-                    const secondsUntilGame = Math.max(0, Math.floor((gameTime - now) / 1000));
+                    // Calculate countdown using shared utility
+                    const secondsUntilGame = calculateSecondsUntilStart(game.date);
                     
                     // Update global countdown seconds for the countdown interval
                     countdownSeconds = secondsUntilGame;
@@ -495,10 +481,12 @@
                     };
                 
                 case 'live':
+                    // Use shared utility for formatting live status
+                    const liveStatus = formatLiveGameStatus(game.statusText);
                     return {
                         ...baseData,
-                        quarter: game.statusText.split(' ')[0], // e.g., "Q3" from "Q3 8:32"
-                        time: game.statusText.split(' ')[1] || '12:00' // e.g., "8:32"
+                        quarter: liveStatus.quarter,
+                        time: liveStatus.time
                     };
                 
                 case 'halftime':
@@ -513,17 +501,7 @@
         /**
          * Format countdown time (HH:MM:SS or MM:SS)
          */
-        function formatCountdown(totalSeconds) {
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-            
-            if (hours > 0) {
-                return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            } else {
-                return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            }
-        }
+        // formatCountdown is now in shared/gameUtils.js
         
         /**
          * Start automatic updates (copied from working overlay)
