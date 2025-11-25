@@ -57,14 +57,14 @@ body {
 /* Game Stats - Blue Neon Theme */
 .game-stats {
     position: fixed;
-    top: 210px;
+    top: 370px;
     left: 20px;
     z-index: 10;
     background: rgba(10, 20, 40, 0.85);
     backdrop-filter: blur(10px);
-    padding: 12px 18px;
+    padding: 13px 19.5px;
     border-radius: 16px;
-    width: 175px;
+    width: 180px;
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.3);
     display: none; /* Hidden by default, shown by JavaScript */
     border: 1px solid rgba(59, 130, 246, 0.4);
@@ -82,7 +82,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .live-dot {
@@ -100,7 +100,7 @@ body {
 }
 
 .live-text {
-    font-size: 11px;
+    font-size: 19.8px; /* 11px * 1.8 */
     font-weight: 600;
     color: #60a5fa;
     letter-spacing: 1.5px;
@@ -109,7 +109,7 @@ body {
 }
 
 .nba-label {
-    font-size: 9px;
+    font-size: 16.2px; /* 9px * 1.8 */
     font-weight: 400;
     color: #93c5fd;
     letter-spacing: 1.5px;
@@ -118,7 +118,7 @@ body {
 .teams {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0px;
     margin: 10px 0 8px 0;
     transition: opacity 0.3s ease-in;
 }
@@ -126,7 +126,8 @@ body {
 .team {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 32px;
 }
 
 .team-left {
@@ -143,13 +144,13 @@ body {
 }
 
 .team-abbr {
-    font-size: 14px;
+    font-size: 16.1px; /* 14px * 1.15 */
     font-weight: 500;
     color: #bfdbfe;
 }
 
 .score {
-    font-size: 16px;
+    font-size: 18.4px; /* 16px * 1.15 */
     font-weight: 600;
     color: #dbeafe;
     text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
@@ -309,7 +310,7 @@ body {
 }
 
 .game-status {
-    font-size: 13px;
+    font-size: 16.25px; /* 13px * 1.25 */
     color: #86efac;
     font-weight: 400;
     margin-top: 10px;
@@ -390,7 +391,7 @@ body {
 }
 
 .halftime-text {
-    font-size: 11px;
+    font-size: 13.75px; /* 11px * 1.25 */
     font-weight: 700;
     color: #60a5fa;
     letter-spacing: 2px;
@@ -476,8 +477,8 @@ body {
 }
 
 .mvp-content .player-pic {
-    width: 86px;
-    height: 86px;
+    width: 99px; /* 86px * 1.15 */
+    height: 99px; /* 86px * 1.15 */
     border-radius: 50%;
     border: 2px solid #60a5fa;
     object-fit: cover;
@@ -499,7 +500,7 @@ body {
 }
 
 .mvp-label {
-    font-size: 10px;
+    font-size: 11.5px; /* 10px * 1.15 */
     font-weight: 700;
     color: #fbbf24;
     letter-spacing: 0.5px;
@@ -512,13 +513,13 @@ body {
 }
 
 .player-team-logo {
-    width: 24px;
-    height: 24px;
+    width: 27.6px; /* 24px * 1.15 */
+    height: 27.6px; /* 24px * 1.15 */
     object-fit: contain;
 }
 
 .mvp-content .player-name {
-    font-size: 11.5px;
+    font-size: 13.225px; /* 11.5px * 1.15 */
     font-weight: 600;
     color: #93c5fd;
 }
@@ -536,7 +537,7 @@ body {
 }
 
 .mvp-content .stat-value {
-    font-size: 15px;
+    font-size: 17.25px; /* 15px * 1.15 */
     font-weight: 700;
     color: #bfdbfe;
     font-variant-numeric: tabular-nums;
@@ -544,7 +545,7 @@ body {
 }
 
 .mvp-content .stat-label {
-    font-size: 10px;
+    font-size: 11.5px; /* 10px * 1.15 */
     font-weight: 600;
     color: #60a5fa;
     margin-top: 1px;

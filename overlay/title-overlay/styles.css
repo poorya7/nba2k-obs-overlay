@@ -1,5 +1,7 @@
 /* Title Overlay Styles */
 
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+
 body {
     margin: 0;
     padding: 0;
@@ -17,7 +19,7 @@ body {
 
 .main-text {
     font-family: 'Russo One', sans-serif;
-    font-size: 31px;
+    font-size: 35.65px; /* 31px * 1.15 */
     font-weight: 400;
     color: #ffffff;
     letter-spacing: 1px;
@@ -28,12 +30,12 @@ body {
 
 .sub-text {
     font-family: 'Russo One', sans-serif;
-    font-size: 14px;
+    font-size: 16.1px; /* 14px * 1.15 */
     font-weight: 400;
     color: #ffffff;
     letter-spacing: 5px;
     margin-top: 3px;
     text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
-    opacity: 0.154;
+    opacity: 0.24;
 }
 
