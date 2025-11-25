@@ -44,21 +44,41 @@ class GameView {
     }
 
     /**
-     * Show the overlay (when game is selected)
+     * Show the overlay (when game is selected) with fade in
      */
     show() {
         if (this.elements.gameStatsBox && !this.isVisible) {
+            // Set to display block but transparent
             this.elements.gameStatsBox.style.display = 'block';
+            this.elements.gameStatsBox.style.opacity = '0';
+            
+            // Force reflow
+            void this.elements.gameStatsBox.offsetWidth;
+            
+            // Fade in
+            this.elements.gameStatsBox.style.transition = 'opacity 0.3s ease-in';
+            this.elements.gameStatsBox.style.opacity = '1';
+            
             this.isVisible = true;
         }
     }
 
     /**
-     * Hide the overlay (when no game selected)
+     * Hide the overlay (when no game selected) with fade out
      */
     hide() {
-        if (this.elements.gameStatsBox) {
-            this.elements.gameStatsBox.style.display = 'none';
+        if (this.elements.gameStatsBox && this.isVisible) {
+            // Fade out
+            this.elements.gameStatsBox.style.transition = 'opacity 0.3s ease-out';
+            this.elements.gameStatsBox.style.opacity = '0';
+            
+            // After fade completes, set display none
+            setTimeout(() => {
+                if (this.elements.gameStatsBox) {
+                    this.elements.gameStatsBox.style.display = 'none';
+                }
+            }, 300);
+            
             this.isVisible = false;
             this.currentState = null;
         }
