@@ -24,9 +24,9 @@ const MVP_ANIMATION_TIMING = {
     BOX_SHRINK_DURATION: 500,
     
     // Layout constants
-    MVP_SECTION_HEIGHT: 185,
-    MVP_SECTION_PADDING_TOP: 12,
-    MVP_SECTION_MARGIN_TOP: 5
+    MVP_SECTION_HEIGHT: 290,
+    MVP_SECTION_PADDING_TOP: 11,
+    MVP_SECTION_MARGIN_TOP: 6
 };
 
 class MvpView {
@@ -121,11 +121,16 @@ class MvpView {
         const content = this.elements.mvpContent;
         const timing = MVP_ANIMATION_TIMING;
 
-        // Step 1: Fade out content (no horizontal movement)
-        content.style.opacity = '0';
+        // Step 1: Set transition FIRST
         content.style.transition = `opacity ${timing.CONTENT_FADE_OUT_DURATION}ms ease-in`;
+        
+        // Force reflow to ensure transition is applied
+        void content.offsetWidth;
+        
+        // Step 2: Now change opacity (will animate)
+        content.style.opacity = '0';
 
-        // Step 2: Collapse box (after delay)
+        // Step 3: Collapse box (after delay)
         setTimeout(() => {
             section.style.transition = `height ${timing.BOX_SHRINK_DURATION}ms ease-out, padding-top ${timing.BOX_SHRINK_DURATION}ms ease-out, margin-top ${timing.BOX_SHRINK_DURATION}ms ease-out`;
             section.style.height = '0px';
@@ -164,19 +169,6 @@ class MvpView {
         // Update player name with dynamic font sizing
         if (playerData.name && this.elements.playerName) {
             this.elements.playerName.textContent = playerData.name;
-            
-            // Adjust font size if name is too long
-            const nameLength = playerData.name.length;
-            if (nameLength > 18) {
-                // Long name - make it smaller
-                this.elements.playerName.style.fontSize = '9.5px';
-            } else if (nameLength > 15) {
-                // Medium-long name
-                this.elements.playerName.style.fontSize = '10.5px';
-            } else {
-                // Normal name - use default
-                this.elements.playerName.style.fontSize = '11.5px';
-            }
         }
 
         // Update stats

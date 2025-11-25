@@ -62,14 +62,14 @@ body {
     z-index: 10;
     background: rgba(10, 20, 40, 0.85);
     backdrop-filter: blur(10px);
-    padding: 13px 19.5px;
+    padding: 13px 19.5px 18px 19.5px;
     border-radius: 16px;
-    width: 180px;
+    width: 235px;
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.3);
     display: none; /* Hidden by default, shown by JavaScript */
     border: 1px solid rgba(59, 130, 246, 0.4);
     opacity: 0.7;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* Smooth height transition for pregame expansion */
@@ -81,13 +81,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    margin-bottom: 16px;
+    gap: 8px; /* 6px * 1.34 */
+    margin-bottom: 24px; /* 18px * 1.34 */
 }
 
 .live-dot {
-    width: 6px;
-    height: 6px;
+    width: 8px; /* 6px * 1.34 */
+    height: 8px; /* 6px * 1.34 */
     background: #3b82f6;
     border-radius: 50%;
     box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
@@ -100,7 +100,7 @@ body {
 }
 
 .live-text {
-    font-size: 19.8px; /* 11px * 1.8 */
+    font-size: 15.95px; /* 11px * 1.45 */
     font-weight: 600;
     color: #60a5fa;
     letter-spacing: 1.5px;
@@ -109,7 +109,7 @@ body {
 }
 
 .nba-label {
-    font-size: 16.2px; /* 9px * 1.8 */
+    font-size: 13.05px; /* 9px * 1.45 */
     font-weight: 400;
     color: #93c5fd;
     letter-spacing: 1.5px;
@@ -118,39 +118,38 @@ body {
 .teams {
     display: flex;
     flex-direction: column;
-    gap: 0px;
-    margin: 10px 0 8px 0;
+    gap: 11px; /* 8px * 1.34 */
+    margin: 13px 0 11px 0; /* 10px * 1.34, 8px * 1.34 */
     transition: opacity 0.3s ease-in;
 }
 
 .team {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 32px;
+    justify-content: space-between;
 }
 
 .team-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 11px; /* 8px * 1.34 */
 }
 
 .team-logo {
-    width: 36px;
-    height: 36px;
+    width: 48px; /* 36px * 1.34 */
+    height: 48px; /* 36px * 1.34 */
     filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
     transition: all 0.4s ease-out;
 }
 
 .team-abbr {
-    font-size: 16.1px; /* 14px * 1.15 */
+    font-size: 18.76px; /* 14px * 1.34 */
     font-weight: 500;
     color: #bfdbfe;
 }
 
 .score {
-    font-size: 18.4px; /* 16px * 1.15 */
+    font-size: 21.44px; /* 16px * 1.34 */
     font-weight: 600;
     color: #dbeafe;
     text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
@@ -310,14 +309,14 @@ body {
 }
 
 .game-status {
-    font-size: 16.25px; /* 13px * 1.25 */
+    font-size: 17.42px; /* 13px * 1.34 */
     color: #86efac;
     font-weight: 400;
-    margin-top: 10px;
+    margin-top: 13px; /* 10px * 1.34 */
     margin-bottom: 0;
     letter-spacing: 1.5px;
     text-align: center;
-    height: 28px;
+    height: 37px; /* 28px * 1.34 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -333,25 +332,25 @@ body {
 }
 
 .countdown-label {
-    font-size: 10px;
+    font-size: 13.4px; /* 10px * 1.34 */
     font-weight: 500;
     color: #93c5fd;
     letter-spacing: 2px;
     text-transform: uppercase;
     text-align: center;
-    margin-top: 15px;
-    margin-bottom: 3px;
+    margin-top: 20px; /* 15px * 1.34 */
+    margin-bottom: 4px; /* 3px * 1.34 */
     transition: opacity 0.3s ease-out;
 }
 
 .countdown-time {
-    font-size: 24px;
+    font-size: 32.16px; /* 24px * 1.34 */
     font-weight: 700;
     color: #dbeafe;
     text-align: center;
     letter-spacing: 2px;
     text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-    margin-bottom: 10px;
+    margin-bottom: 13px; /* 10px * 1.34 */
     font-variant-numeric: tabular-nums;
 }
 
@@ -359,20 +358,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    margin-top: 10px;
+    gap: 11px; /* 8px * 1.34 */
+    margin-top: 13px; /* 10px * 1.34 */
     transition: opacity 0.3s ease-out;
 }
 
 .preview-logo {
-    width: 28px;
-    height: 28px;
+    width: 37px; /* 28px * 1.34 */
+    height: 37px; /* 28px * 1.34 */
     filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
     transition: all 0.4s ease-out;
 }
 
 .vs-text {
-    font-size: 11px;
+    font-size: 14.74px; /* 11px * 1.34 */
     color: #60a5fa;
     font-weight: 600;
 }
@@ -380,18 +379,18 @@ body {
 /* Halftime State */
 .halftime-banner {
     background: rgba(59, 130, 246, 0.2);
-    border-radius: 8px;
+    border-radius: 11px; /* 8px * 1.34 */
     text-align: center;
-    margin-top: 10px;
+    margin-top: 20px; /* 15px * 1.34 */
     border: 1px solid rgba(59, 130, 246, 0.3);
-    height: 28px;
+    height: 37px; /* 28px * 1.34 */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .halftime-text {
-    font-size: 13.75px; /* 11px * 1.25 */
+    font-size: 14.74px; /* 11px * 1.34 */
     font-weight: 700;
     color: #60a5fa;
     letter-spacing: 2px;
@@ -401,18 +400,18 @@ body {
 /* Final State */
 .final-banner {
     background: rgba(134, 239, 172, 0.15);
-    border-radius: 8px;
+    border-radius: 11px; /* 8px * 1.34 */
     text-align: center;
-    margin-top: 10px;
+    margin-top: 13px; /* 10px * 1.34 */
     border: 1px solid rgba(134, 239, 172, 0.3);
-    height: 28px;
+    height: 37px; /* 28px * 1.34 */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .final-text {
-    font-size: 11px;
+    font-size: 14.74px; /* 11px * 1.34 */
     font-weight: 700;
     color: #86efac;
     letter-spacing: 2px;
@@ -461,83 +460,102 @@ body {
    ======================================== */
 
 .mvp-section {
-    margin-top: 5px;
-    padding-top: 12px;
+    margin-top: 6px;
+    padding-top: 11px;
     border-top: 1px solid rgba(59, 130, 246, 0.3);
     overflow: hidden;
-    /* Transitions are controlled dynamically by MvpView */
+    display: flex;
+    justify-content: center;
+    /* Height and transitions are controlled dynamically by MvpView */
 }
 
 .mvp-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 11px;
     /* Transitions are controlled dynamically by MvpView */
 }
 
+.photo-container {
+    position: relative;
+    display: inline-block;
+}
+
 .mvp-content .player-pic {
-    width: 99px; /* 86px * 1.15 */
-    height: 99px; /* 86px * 1.15 */
+    width: 115px; /* 86px * 1.34 */
+    height: 115px; /* 86px * 1.34 */
     border-radius: 50%;
     border: 2px solid #60a5fa;
     object-fit: cover;
+    display: block;
 }
 
 .mvp-content .player-info {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
+    text-align: center;
 }
 
 .mvp-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    margin-bottom: 11px;
+    gap: 15px;
+    margin-bottom: 23px;
+    width: 100%;
+    justify-content: center;
 }
 
 .mvp-label {
-    font-size: 11.5px; /* 10px * 1.15 */
+    font-size: 17.2px;
     font-weight: 700;
     color: #fbbf24;
     letter-spacing: 0.5px;
-}
-
-.player-name-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    text-align: center;
+    width: 100%;
 }
 
 .player-team-logo {
-    width: 27.6px; /* 24px * 1.15 */
-    height: 27.6px; /* 24px * 1.15 */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    border: 2px solid #0f172a;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.95);
     object-fit: contain;
+    padding: 2px;
 }
 
 .mvp-content .player-name {
-    font-size: 13.225px; /* 11.5px * 1.15 */
+    font-size: 17.3px;
     font-weight: 600;
     color: #93c5fd;
 }
 
 .mvp-content .player-stats {
     display: flex;
-    gap: 10px;
+    gap: 22px;
     justify-content: center;
+    width: 100%;
+    align-items: center;
 }
 
 .mvp-content .stat-item {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .mvp-content .stat-value {
-    font-size: 17.25px; /* 15px * 1.15 */
+    font-size: 22.3px;
     font-weight: 700;
     color: #bfdbfe;
     font-variant-numeric: tabular-nums;
@@ -545,7 +563,7 @@ body {
 }
 
 .mvp-content .stat-label {
-    font-size: 11.5px; /* 10px * 1.15 */
+    font-size: 16.8px;
     font-weight: 600;
     color: #60a5fa;
     margin-top: 1px;
