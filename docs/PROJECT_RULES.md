@@ -219,3 +219,24 @@ When user reports a bug:
 - Don't assume a feature should work a certain way
 - When in doubt: **ASK**
 
+### 9. CODE REUSE AND REFACTORING
+
+**CRITICAL: When refactoring or adding new features:**
+1. **USE what already works** - Don't write code from scratch if similar functionality exists
+2. **COPY established patterns** - Look at how existing overlays/components solve the problem
+3. **REUSE existing code** - Extract and adapt working code rather than reinventing
+4. **CHECK the codebase FIRST** - Before implementing, find similar implementations and use their approach
+
+**Examples:**
+- Adding a new overlay? Copy structure from existing overlay (game-stats-overlay)
+- Need to display team logos? Use the exact same approach as the main overlay
+- Refactoring? Keep the working logic, just organize it better
+
+**DON'T:**
+- Write new implementations when existing ones work
+- "Improve" or "fix" things that aren't broken
+- Invent new patterns when established ones exist
+- Waste time solving already-solved problems
+
+**The user has ADHD - wasting their time by reinventing solutions is unacceptable.**
+

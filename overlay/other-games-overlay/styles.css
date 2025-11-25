@@ -1,0 +1,102 @@
+/* Other Games Overlay Styles */
+
+.other-games-overlay {
+    position: fixed;
+    top: 155px;
+    right: 20px;
+    z-index: 10;
+}
+
+.other-game-card {
+    background: rgba(10, 20, 40, 0.85);
+    backdrop-filter: blur(10px);
+    padding: 10px 14px;
+    border-radius: 14px;
+    box-shadow: 0 8px 40px rgba(59, 130, 246, 0.3);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    opacity: 0.7;
+    min-width: 160px;
+}
+
+.game-in-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.other-game-teams {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.other-game-team {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.other-game-team-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.other-game-logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.other-game-abbr {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.other-game-score {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+    min-width: 24px;
+    text-align: right;
+}
+
+.other-game-status {
+    text-align: center;
+    font-size: 9px;
+    font-weight: 600;
+    color: #a5b4fc;
+    letter-spacing: 0.5px;
+    padding-top: 6px;
+}
+
+.other-game-status.live {
+    color: #3b82f6;
+    padding-top: 0;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+
+.other-game-status.final {
+    color: #4ade80;
+}
+
+.other-game-status.pregame {
+    color: #fbbf24;
+}
+
+.game-time {
+    color: #4ade80;
+}
+
+.game-divider.thick {
+    height: 2px;
+    background: rgba(59, 130, 246, 0.5);
+    margin: 12px 0;
+}
+
