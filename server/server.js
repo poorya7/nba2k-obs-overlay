@@ -14,7 +14,8 @@ class StateStore {
     this.selectedStyle = 'pill-green';
     this.simulation = {
       enabled: false,
-      state: 'pregame'
+      state: 'pregame',
+      showMVP: false
     };
     this.quarter = {
       current: null,        // 'Q1', 'Q2', 'Q3', 'Q4', or null
@@ -35,6 +36,7 @@ class StateStore {
   setSimulation(updates) {
     if (updates.enabled !== undefined) this.simulation.enabled = updates.enabled;
     if (updates.state !== undefined) this.simulation.state = updates.state;
+    if (updates.showMVP !== undefined) this.simulation.showMVP = updates.showMVP;
   }
 
   // Quarter tracking

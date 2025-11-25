@@ -521,158 +521,49 @@
         window.gameView = gameView;
         window.updateFromAPI = updateFromAPI; // For manual testing
         
-        // ==================== MVP TEST MODE ====================
         
-        let mvpTestMode = false;
-        let mvpTestInterval = null;
+        // ==================== SIMULATED MVP ====================
         
-        const testPlayerData = {
+        const simulatedMVPData = {
             name: 'Giannis Antetokounmpo',
             photoUrl: 'https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/3032977.png',
-            pts: 34,
-            reb: 12,
-            ast: 8,
+            pts: 32,
+            reb: 11,
+            ast: 6,
             teamLogo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png'
         };
         
-        function toggleMVPTestMode() {
-            mvpTestMode = !mvpTestMode;
-            const toggleBtn = document.getElementById('mvp-test-toggle');
-            const testPanel = document.getElementById('mvp-test-panel');
-            
-            if (mvpTestMode) {
-                toggleBtn.classList.add('active');
-                toggleBtn.textContent = '✓ MVP Test ON';
-                testPanel.style.display = 'block';
+        // Check if we should show simulated MVP (controlled by dashboard)
+        let lastSimMVPState = false;
+        
+        async function checkSimulatedMVP() {
+            try {
+                const simData = await api.getSimulation();
                 
-                // Show MVP immediately with test data
-                mvpView.show(testPlayerData);
-                
-                // Keep refreshing to ensure it stays visible
-                mvpTestInterval = setInterval(() => {
-                    mvpView.show(testPlayerData);
-                }, 1000);
-            } else {
-                toggleBtn.classList.remove('active');
-                toggleBtn.textContent = 'MVP Test OFF';
-                testPanel.style.display = 'none';
-                
-                // Stop test interval
-                if (mvpTestInterval) {
-                    clearInterval(mvpTestInterval);
-                    mvpTestInterval = null;
+                // Only check simulated MVP if simulation mode is on
+                if (simData && simData.enabled && simData.showMVP) {
+                    if (!lastSimMVPState) {
+                        // Just turned on - show MVP
+                        mvpView.show(simulatedMVPData);
+                        lastSimMVPState = true;
+                    }
+                } else {
+                    if (lastSimMVPState) {
+                        // Just turned off - hide MVP
+                        mvpView.hide();
+                        lastSimMVPState = false;
+                    }
                 }
-                
-                // Hide MVP
-                mvpView.hide();
+            } catch (e) {
+                // Ignore errors
             }
         }
         
-        function updateTestPlayerName() {
-            const nameInput = document.getElementById('mvp-test-name');
-            testPlayerData.name = nameInput.value || 'Giannis Antetokounmpo';
-            
-            if (mvpTestMode) {
-                mvpView.show(testPlayerData);
-            }
-        }
-        
-        // Expose for console testing
-        window.toggleMVPTestMode = toggleMVPTestMode;
-        window.mvpView = mvpView;
+        // Check simulated MVP state periodically (only when in simulation mode)
+        checkSimulatedMVP(); // Initial check
+        setInterval(checkSimulatedMVP, 1000);
         
     </script>
     
-    <!-- MVP Test Mode UI -->
-    <div class="mvp-test-controls">
-        <button id="mvp-test-toggle" onclick="toggleMVPTestMode()">MVP Test OFF</button>
-        <div id="mvp-test-panel" style="display: none;">
-            <label>Player Name:</label>
-            <input 
-                type="text" 
-                id="mvp-test-name" 
-                value="Giannis Antetokounmpo"
-                oninput="updateTestPlayerName()"
-                placeholder="Enter player name"
-            />
-            <small>Try: "LeBron James", "Kareem Abdul-Jabbar", "Jr."</small>
-        </div>
-    </div>
-    
-    <style>
-        .mvp-test-controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.95);
-            padding: 15px;
-            border-radius: 10px;
-            z-index: 10001;
-            border: 2px solid #3b82f6;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            min-width: 250px;
-        }
-        
-        .mvp-test-controls button {
-            width: 100%;
-            padding: 10px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            background: #374151;
-            color: #fff;
-            border: 2px solid #4b5563;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 10px;
-        }
-        
-        .mvp-test-controls button:hover {
-            background: #4b5563;
-            border-color: #6b7280;
-        }
-        
-        .mvp-test-controls button.active {
-            background: #3b82f6;
-            border-color: #60a5fa;
-            color: #fff;
-        }
-        
-        #mvp-test-panel {
-            padding-top: 5px;
-        }
-        
-        #mvp-test-panel label {
-            display: block;
-            color: #93c5fd;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        
-        #mvp-test-panel input {
-            width: 100%;
-            padding: 8px 12px;
-            font-size: 13px;
-            background: #1f2937;
-            color: #fff;
-            border: 2px solid #374151;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            box-sizing: border-box;
-        }
-        
-        #mvp-test-panel input:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-        
-        #mvp-test-panel small {
-            display: block;
-            color: #6b7280;
-            font-size: 11px;
-            line-height: 1.4;
-        }
-    </style>
 </body>
 </html>

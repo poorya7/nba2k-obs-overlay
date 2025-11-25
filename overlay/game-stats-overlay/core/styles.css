@@ -332,25 +332,25 @@ body {
 }
 
 .countdown-label {
-    font-size: 13.4px; /* 10px * 1.34 */
+    font-size: 13.3px;
     font-weight: 500;
     color: #93c5fd;
     letter-spacing: 2px;
     text-transform: uppercase;
     text-align: center;
-    margin-top: 20px; /* 15px * 1.34 */
-    margin-bottom: 4px; /* 3px * 1.34 */
+    margin-top: 27px;
+    margin-bottom: 4px;
     transition: opacity 0.3s ease-out;
 }
 
 .countdown-time {
-    font-size: 32.16px; /* 24px * 1.34 */
+    font-size: 24px;
     font-weight: 700;
     color: #dbeafe;
     text-align: center;
     letter-spacing: 2px;
     text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-    margin-bottom: 13px; /* 10px * 1.34 */
+    margin-bottom: 13px;
     font-variant-numeric: tabular-nums;
 }
 

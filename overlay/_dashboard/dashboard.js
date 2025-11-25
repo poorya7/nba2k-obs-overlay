@@ -20,6 +20,7 @@ async function init() {
   document.getElementById('gameSelect').addEventListener('change', handleGameSelection);
   document.getElementById('simulationToggle').addEventListener('change', handleSimulationToggle);
   document.getElementById('nextStateBtn').addEventListener('click', nextSimulationState);
+  document.getElementById('simMVPToggle').addEventListener('click', toggleSimMVP);
   
   // Quarter tracking event listeners
   document.querySelectorAll('.quarter-btn').forEach(btn => {
@@ -312,7 +313,13 @@ async function loadSimulationState() {
   const data = await api.getSimulation();
   if (data) {
     const toggle = document.getElementById('simulationToggle');
+    const mvpBtn = document.getElementById('simMVPToggle');
     toggle.checked = data.enabled;
+    
+    // Set MVP button state
+    const showMVP = data.showMVP || false;
+    mvpBtn.dataset.state = showMVP ? 'on' : 'off';
+    mvpBtn.textContent = showMVP ? 'ON' : 'OFF';
     
     const stateIndex = SIMULATION_STATES.indexOf(data.state);
     if (stateIndex !== -1) {
@@ -329,7 +336,32 @@ async function loadSimulationState() {
 async function handleSimulationToggle(event) {
   const enabled = event.target.checked;
   await api.setSimulation({ enabled });
+  
+  // Reset MVP button when simulation is disabled
+  if (!enabled) {
+    const mvpBtn = document.getElementById('simMVPToggle');
+    mvpBtn.dataset.state = 'off';
+    mvpBtn.textContent = 'OFF';
+    await api.setSimulation({ showMVP: false });
+  }
+  
   updateSimulationUI();
+}
+
+/**
+ * Toggle simulated MVP button
+ */
+async function toggleSimMVP() {
+  const mvpBtn = document.getElementById('simMVPToggle');
+  const isOn = mvpBtn.dataset.state === 'on';
+  
+  // Toggle state
+  const newState = !isOn;
+  mvpBtn.dataset.state = newState ? 'on' : 'off';
+  mvpBtn.textContent = newState ? 'ON' : 'OFF';
+  
+  // Update server
+  await api.setSimulation({ showMVP: newState });
 }
 
 /**
