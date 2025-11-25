@@ -209,6 +209,53 @@
             };
         }
         
+        // ==================== HELPER FUNCTIONS ====================
+        
+        /**
+         * Reset overlay state and hide everything
+         */
+        function resetAndHideOverlay() {
+            gameView.hide();
+            mvpView.hide();
+            window.MVPIntegration.clearMVPCache();
+            lastGameData = null;
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }
+        
+        /**
+         * Check quarter tracking and determine if overlay should show
+         * @param {Object} quarterData - Quarter data from API
+         * @returns {boolean} True if overlay should show, false if should hide
+         */
+        function shouldShowOverlayBasedOnQuarter(quarterData) {
+            // No quarter started OR game done
+            if (!quarterData.current || !quarterData.startTime) {
+                return false;
+            }
+            
+            // Only apply 10-second delay if overlay hasn't been shown yet
+            if (!overlayHasBeenShown) {
+                // Only check delay for Q1 (first quarter of the game)
+                if (quarterData.current === 'Q1') {
+                    const timeSinceStart = Date.now() - quarterData.startTime;
+                    const SHOW_DELAY = 10000; // 10 seconds
+                    
+                    if (timeSinceStart < SHOW_DELAY) {
+                        return false; // Not enough time passed
+                    }
+                }
+                // If we reach here, overlay will be shown - set flag
+                overlayHasBeenShown = true;
+            }
+            
+            return true; // Show overlay
+        }
+        
+        // ==================== MAIN UPDATE FUNCTION ====================
+        
         /**
          * Update overlay from API (copied from working overlay/game-stats/GameOverlay.js)
          */
@@ -241,16 +288,9 @@
                 
                 // No game selected - hide overlay and reset
                 if (!selectedGameId) {
-                    gameView.hide();
-                    mvpView.hide();
-                    window.MVPIntegration.clearMVPCache();
-                    lastGameData = null;
+                    resetAndHideOverlay();
                     overlayHasBeenShown = false;
                     lastSelectedGameId = null;
-                    if (countdownInterval) {
-                        clearInterval(countdownInterval);
-                        countdownInterval = null;
-                    }
                     return;
                 }
                 
@@ -258,56 +298,20 @@
                 const quarterResponse = await fetch('/api/quarter');
                 const quarterData = await quarterResponse.json();
                 
-                if (!quarterData.current || !quarterData.startTime) {
-                    // No quarter started OR game done - hide overlay and reset
-                    gameView.hide();
-                    mvpView.hide();
-                    window.MVPIntegration.clearMVPCache();
-                    lastGameData = null;
+                if (!shouldShowOverlayBasedOnQuarter(quarterData)) {
+                    // Hide overlay and reset (but keep game tracking)
+                    resetAndHideOverlay();
                     overlayHasBeenShown = false;
-                    if (countdownInterval) {
-                        clearInterval(countdownInterval);
-                        countdownInterval = null;
-                    }
                     return;
                 }
                 
-                // Only apply 10-second delay if overlay hasn't been shown yet
-                if (!overlayHasBeenShown) {
-                    // Only check delay for Q1 (first quarter of the game)
-                    if (quarterData.current === 'Q1') {
-                        const timeSinceStart = Date.now() - quarterData.startTime;
-                        const SHOW_DELAY = 10000; // 10 seconds
-                        
-                        if (timeSinceStart < SHOW_DELAY) {
-                            // Not enough time passed - hide overlay and wait
-                            gameView.hide();
-                            mvpView.hide();
-                            window.MVPIntegration.clearMVPCache();
-                            lastGameData = null;
-                            if (countdownInterval) {
-                                clearInterval(countdownInterval);
-                                countdownInterval = null;
-                            }
-                            return;
-                        }
-                    }
-                    // If we reach here, overlay will be shown - set flag
-                    overlayHasBeenShown = true;
-                }
-                
-                // Quarter active - show overlay (either passed 10s check or already been shown)
+                // Quarter active - show overlay
                 
                 // Step 3: Fetch game data from ESPN API
                 const game = await window.NBAApi.getGameById(selectedGameId);
                 
                 if (!game) {
-                    gameView.hide();
-                    lastGameData = null; // Reset so next selection is treated as first load
-                    if (countdownInterval) {
-                        clearInterval(countdownInterval);
-                        countdownInterval = null;
-                    }
+                    resetAndHideOverlay();
                     return;
                 }
                 
@@ -316,12 +320,7 @@
                 
             } catch (error) {
                 console.error('ERROR in updateFromAPI:', error);
-                gameView.hide();
-                lastGameData = null; // Reset so next selection is treated as first load
-                if (countdownInterval) {
-                    clearInterval(countdownInterval);
-                    countdownInterval = null;
-                }
+                resetAndHideOverlay();
             }
         }
         
