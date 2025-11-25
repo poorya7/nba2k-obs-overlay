@@ -60,11 +60,11 @@ nba2k-obs-overlay/
 │   └── scripts/            # Auto-start scripts
 │
 ├── overlay/
-│   ├── shared/             # Shared utilities (single source of truth)
+│   ├── _shared/            # Shared utilities (single source of truth)
 │   │   ├── config.js       # Configuration constants
 │   │   └── nbaApi.js       # ESPN API client
 │   │
-│   ├── dashboard/          # Control panel
+│   ├── _dashboard/         # Control panel
 │   │   ├── index.html      # Dashboard UI
 │   │   └── dashboard.js    # Game selection & simulation logic
 │   │
@@ -138,14 +138,14 @@ Overlay:
   - Adding new API endpoints (game selection, simulation)
   - Modifying file serving logic
 
-#### `overlay/shared/config.js`
+#### `overlay/_shared/config.js`
 - **Purpose:** Centralized configuration (used by both dashboard & overlay)
 - **When to modify:**
   - Changing timezone
   - Updating ESPN API URL
   - Adjusting refresh intervals
 
-#### `overlay/shared/nbaApi.js`
+#### `overlay/_shared/nbaApi.js`
 - **Purpose:** ESPN API integration (used by both dashboard & overlay)
 - **When to modify:**
   - Changing data parsing logic
@@ -153,7 +153,7 @@ Overlay:
   - Modifying date/time formatting (e.g., MM:SS conversion)
   - Handling new ESPN data fields
 
-#### `overlay/dashboard/dashboard.js`
+#### `overlay/_dashboard/dashboard.js`
 - **Purpose:** Game selection UI and simulation control
 - **When to modify:**
   - Changing dropdown behavior
@@ -241,7 +241,7 @@ Edit `overlay/game-stats-overlay/core/styles.css`:
 
 ### Changing Refresh Interval
 
-Edit `overlay/shared/config.js`:
+Edit `overlay/_shared/config.js`:
 
 ```javascript
 // Change from 3 seconds to 5 seconds
@@ -260,7 +260,7 @@ setInterval(updateFromAPI, 5000); // Match config value
 
 ### Example: Add Team Colors to Border
 
-1. **Extend data parsing** (`overlay/shared/nbaApi.js`):
+1. **Extend data parsing** (`overlay/_shared/nbaApi.js`):
 
 ```javascript
 // In parseGameData function, add:
@@ -495,7 +495,7 @@ gameView.transitionToState(stateName, formattedData);
 
 ```javascript
 // ✅ Good: Reuse shared files
-<script src="../../shared/nbaApi.js"></script>
+<script src="../../_shared/nbaApi.js"></script>
 
 // ❌ Bad: Duplicate code
 // Copy-pasting nbaApi.js into each folder

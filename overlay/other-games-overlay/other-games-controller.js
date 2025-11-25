@@ -62,6 +62,9 @@ class OtherGamesController {
         const totalSets = Math.ceil(this.games.length / this.gamesPerSet);
         const nextSetIndex = this.currentSet + 1;
         
+        // FOR TESTING: Loop forever instead of stopping
+        // TODO: Change back to fade-out behavior after testing
+        /*
         // Check if we've shown all sets
         if (nextSetIndex >= totalSets) {
             // Stop cycling and call completion callback
@@ -72,10 +75,11 @@ class OtherGamesController {
             }
             return;
         }
+        */
         
-        // Continue to next set
+        // Continue to next set (loop back to 0 if at end)
         await this.view.fadeOut(this.fadeDuration);
-        this.currentSet = nextSetIndex;
+        this.currentSet = nextSetIndex >= totalSets ? 0 : nextSetIndex;
         this.view.renderGames(this.games, this.currentSet * this.gamesPerSet, this.gamesPerSet);
         await this.view.fadeIn(this.fadeDuration);
     }

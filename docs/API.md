@@ -404,7 +404,7 @@ ESPN returns a complex JSON structure. Key fields used:
 
 ## Configuration
 
-Configuration is defined in `overlay/shared/config.js`.
+Configuration is defined in `overlay/_shared/config.js`.
 
 ### Config Object
 

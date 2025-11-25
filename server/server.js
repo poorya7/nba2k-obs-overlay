@@ -225,13 +225,17 @@ const server = http.createServer(async (req, res) => {
   
   // Default routes
   if (filePath === './') {
-    filePath = './overlay/dashboard/index.html';
+    filePath = './overlay/_dashboard/index.html';
   } else if (filePath === './dashboard' || filePath === './dashboard/') {
-    filePath = './overlay/dashboard/index.html';
+    filePath = './overlay/_dashboard/index.html';
   } else if (filePath === './overlay/game-stats' || filePath === './overlay/game-stats/') {
     filePath = './overlay/game-stats-overlay/core/index.html';
   } else if (filePath === './overlay/other-games' || filePath === './overlay/other-games/') {
     filePath = './overlay/other-games-overlay/index.html';
+  } else if (filePath === './overlay/title' || filePath === './overlay/title/') {
+    filePath = './overlay/title-overlay/index.html';
+  } else if (filePath === './test' || filePath === './test/') {
+    filePath = './overlay/_tests/index.html';
   } else if (filePath === './design-test' || filePath === './design-test/') {
     filePath = './overlay/design-test/index.html';
   } else if (filePath === './overlay/design-test' || filePath === './overlay/design-test/') {
@@ -273,6 +277,7 @@ server.listen(PORT, () => {
   console.log('📺 Control Dashboard: http://localhost:' + PORT + '/dashboard');
   console.log('🏀 Game Overlay (OBS): http://localhost:' + PORT + '/overlay/game-stats');
   console.log('🎯 Other Games (OBS): http://localhost:' + PORT + '/overlay/other-games');
+  console.log('📝 Title Overlay (OBS): http://localhost:' + PORT + '/overlay/title');
   console.log('🎨 Design Tester: http://localhost:' + PORT + '/design-test');
   console.log('');
   console.log('Press Ctrl+C to stop the server');

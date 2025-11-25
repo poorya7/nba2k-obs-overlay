@@ -1,0 +1,39 @@
+/* Title Overlay Styles */
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: transparent;
+}
+
+/* Channel Branding - TOP LEFT */
+.channel-branding {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.main-text {
+    font-family: 'Russo One', sans-serif;
+    font-size: 31px;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7),
+                 0 2px 4px rgba(0, 0, 0, 0.6);
+    opacity: 0.22;
+}
+
+.sub-text {
+    font-family: 'Russo One', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: 5px;
+    margin-top: 3px;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
+    opacity: 0.154;
+}
+

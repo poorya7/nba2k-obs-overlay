@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Overlays Test - Static Preview</title>
+    
+    <!-- Import all overlay styles -->
+    <link rel="stylesheet" href="../game-stats-overlay/core/styles.css">
+    <link rel="stylesheet" href="../other-games-overlay/styles.css">
+    <link rel="stylesheet" href="../title-overlay/styles.css">
+</head>
+<body>
+    <!-- Background Video -->
+    <video id="gameplay-video" autoplay loop muted>
+        <source src="../game.mp4" type="video/mp4">
+    </video>
+
+    <!-- Title Overlay -->
+    <div class="channel-branding">
+        <div class="main-text">Silent Basketball</div>
+        <div class="sub-text">ASMR</div>
+    </div>
+
+    <!-- Main Game Stats Overlay -->
+    <div class="game-stats" style="display: block;">
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span class="live-text">Live</span>
+            <span class="nba-label">NBA</span>
+        </div>
+        
+        <div class="teams">
+            <!-- Home Team -->
+            <div class="team" data-team="home">
+                <div class="team-left">
+                    <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/phx.png" alt="PHX">
+                    <div class="team-abbr">PHX</div>
+                </div>
+                <div class="score">94</div>
+            </div>
+            
+            <!-- Away Team -->
+            <div class="team" data-team="away">
+                <div class="team-left">
+                    <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/den.png" alt="DEN">
+                    <div class="team-abbr">DEN</div>
+                </div>
+                <div class="score">88</div>
+            </div>
+        </div>
+        
+        <div class="game-status">Q4 · 5:23</div>
+    </div>
+
+    <!-- Other Games Overlay -->
+    <div class="other-games-overlay" style="display: block;">
+        <div class="other-game-card">
+            <div id="games-container">
+                <!-- Final Game 1 -->
+                <div class="game-in-card">
+                    <div class="other-game-teams">
+                        <div class="other-game-team">
+                            <div class="other-game-team-left">
+                                <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/dal.png" alt="DAL">
+                                <span class="other-game-abbr">DAL</span>
+                            </div>
+                            <span class="other-game-score">112</span>
+                        </div>
+                        <div class="other-game-team">
+                            <div class="other-game-team-left">
+                                <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/sac.png" alt="SAC">
+                                <span class="other-game-abbr">SAC</span>
+                            </div>
+                            <span class="other-game-score">108</span>
+                        </div>
+                    </div>
+                    <div class="other-game-status final">FINAL</div>
+                </div>
+
+                <div class="game-divider thick"></div>
+
+                <!-- Live Game -->
+                <div class="game-in-card">
+                    <div class="other-game-status live">LIVE</div>
+                    <div class="other-game-teams">
+                        <div class="other-game-team">
+                            <div class="other-game-team-left">
+                                <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/mem.png" alt="MEM">
+                                <span class="other-game-abbr">MEM</span>
+                            </div>
+                            <span class="other-game-score">55</span>
+                        </div>
+                        <div class="other-game-team">
+                            <div class="other-game-team-left">
+                                <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/nyk.png" alt="NYK">
+                                <span class="other-game-abbr">NYK</span>
+                            </div>
+                            <span class="other-game-score">62</span>
+                        </div>
+                    </div>
+                    <div class="other-game-status">
+                        <span class="game-time" style="color: #4ade80;">Q2 · 8:15</span>
+                    </div>
+                </div>
+
+                <div class="game-divider thick"></div>
+
+                <!-- Upcoming Game -->
+                <div class="game-in-card">
+                    <div class="other-game-teams">
+                        <div class="other-game-team">
+                            <div class="other-game-team-left">
+                                <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" alt="BOS">
+                                <span class="other-game-abbr">BOS</span>
+                                <span style="margin: 0 4px; color: #94a3b8; font-size: 10px;">@</span>
+                                <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/mia.png" alt="MIA">
+                                <span class="other-game-abbr">MIA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="other-game-status pregame">
+                        Starts in 02:15:30
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Additional styles to override display for test page */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #gameplay-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+    </style>
+</body>
+</html>

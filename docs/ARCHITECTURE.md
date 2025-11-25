@@ -101,14 +101,14 @@ nba2k-obs-overlay/
 │       └── stop-overlay-server.bat
 │
 ├── overlay/
-│   ├── shared/                  # Shared utilities (single source of truth)
+│   ├── _shared/                 # Shared utilities (single source of truth)
 │   │   ├── config.js           # Configuration constants
 │   │   └── nbaApi.js           # ESPN API integration
 │   │
-│   ├── dashboard/              # Control Panel
+│   ├── _dashboard/             # Control Panel
 │   │   ├── index.html         # Dashboard UI
 │   │   ├── dashboard.js       # Selection logic & simulation control
-│   │   └── (references shared/)
+│   │   └── (references _shared/)
 │   │
 │   └── game-stats-overlay/    # Modular overlay system
 │       ├── core/              # Production overlay
@@ -118,7 +118,7 @@ nba2k-obs-overlay/
 │       │   ├── mvp-controller.js  # MVP automatic display logic
 │       │   ├── mvp-integration.js # MVP data fetching & caching
 │       │   ├── styles.css         # Overlay styling (includes MVP)
-│       │   └── (references ../../shared/)
+│       │   └── (references ../../_shared/)
 │       │
 │       └── tests/             # Testing pages
 │           ├── test-states.html      # Interactive state tester
@@ -148,7 +148,7 @@ nba2k-obs-overlay/
 - `/api/selected-game` → Game selection API (GET/POST)
 - `/api/simulation` → Simulation control API (GET/POST)
 
-### Shared Utilities (`overlay/shared/`)
+### Shared Utilities (`overlay/_shared/`)
 
 **Philosophy:** Single source of truth - used by both dashboard and overlay
 
@@ -173,7 +173,7 @@ ESPN API integration layer providing:
 - Includes yesterday's games if still in progress or finished within last 2 hours
 - Prevents games from disappearing at midnight during late streams
 
-### Control Dashboard (`overlay/dashboard/`)
+### Control Dashboard (`overlay/_dashboard/`)
 
 **Purpose:** Web interface for selecting which NBA game to display and controlling simulation mode.
 
@@ -199,7 +199,7 @@ ESPN API integration layer providing:
 - **Modular Design:** Following SOLID/DRY principles
 - **GameView class:** Core controller managing all overlay logic
 - **Inline integration:** Production HTML includes API polling and simulation logic
-- **Shared dependencies:** Uses `../../shared/` for config and API client
+- **Shared dependencies:** Uses `../../_shared/` for config and API client
 
 **Key Files:**
 - **index.html:** Production overlay with polling logic, simulation support, state detection
