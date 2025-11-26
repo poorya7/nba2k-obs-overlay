@@ -38,256 +38,50 @@
     <script src="../_shared/gameUtils.js"></script>
     <script src="../_shared/apiClient.js"></script>
     
+    <!-- Core Controllers (Refactored modular architecture) -->
+    <script src="state-manager.js"></script>
+    <script src="simulation-manager.js"></script>
     <script src="other-games-view.js"></script>
     <script src="other-games-controller.js"></script>
+    <script src="app-controller.js"></script>
+    
     <script>
-        // Initialize API Client
+        // ==================== CLEAN INITIALIZATION ====================
+        // All business logic extracted into modular classes
+        
+        // Initialize dependencies
         const api = new ApiClient();
+        const nbaApi = window.NBAApi;
+        const view = new OtherGamesView();
+        const stateManager = new StateManager();
+        const simulationManager = new SimulationManager();
         
-        // Initialize view
-        const otherGamesView = new OtherGamesView();
-        let otherGamesController = null;
+        // Initialize main app controller with all dependencies
+        const appController = new AppController({
+            api,
+            nbaApi,
+            view,
+            stateManager
+        });
         
-        // Track if overlay should be visible
-        let overlayVisible = false;
-        let lastQuarterStartTime = null;
-        let hasShownForCurrentQuarter = false; // Track if we've already shown overlay for this quarter
+        // Start the overlay when DOM is ready
+        window.addEventListener('DOMContentLoaded', () => {
+            appController.start();
+        });
         
-        // Test delay: 5 seconds (change to 120000 for production = 2 minutes)
-        const SHOW_DELAY_MS = 5000;
+        // Expose for debugging/testing
+        window.appController = appController;
+        window.simulationManager = simulationManager;
         
-        /**
-         * Show overlay with fade-in animation
+        /* OLD CODE REMOVED - Now in modular classes:
+         * - showOverlay() → AppController
+         * - hideOverlay() → AppController
+         * - updateFromAPI() → AppController
+         * - shouldShowOverlay() → AppController
+         * - transformGameData() → AppController
+         * - sampleGames → SimulationManager
+         * - All state variables → StateManager
          */
-        function showOverlay() {
-            const overlay = document.querySelector('.other-games-overlay');
-            if (!overlay || overlayVisible) return;
-            
-            // Set to display block but transparent
-            overlay.style.display = 'block';
-            overlay.style.opacity = '0';
-            
-            // Force reflow
-            void overlay.offsetWidth;
-            
-            // Fade in
-            overlay.style.transition = 'opacity 0.3s ease-in';
-            overlay.style.opacity = '1';
-            
-            overlayVisible = true;
-        }
-        
-        /**
-         * Hide overlay with fade-out animation
-         */
-        function hideOverlay() {
-            const overlay = document.querySelector('.other-games-overlay');
-            if (!overlay || !overlayVisible) return;
-            
-            // Fade out
-            overlay.style.transition = 'opacity 0.3s ease-out';
-            overlay.style.opacity = '0';
-            
-            // After fade completes, set display none
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 300);
-            
-            overlayVisible = false;
-            if (otherGamesController) {
-                otherGamesController.stopCycle();
-                otherGamesController.stopCountdown();
-            }
-        }
-        
-        /**
-         * Fetch and update other games data
-         */
-        async function updateFromAPI() {
-            try {
-                // Get selected game ID
-                const selectionData = await api.getSelectedGame();
-                const selectedGameId = selectionData ? selectionData.gameId : null;
-                
-                // Get quarter timing
-                const quarterData = await api.getQuarter();
-                
-                // Determine if overlay should be visible
-                const shouldShow = shouldShowOverlay(quarterData);
-                
-                // If overlay is already showing, let it finish cycling - don't interrupt it
-                if (overlayVisible) {
-                    // Just update countdown data
-                    if (otherGamesController) {
-                        otherGamesController.games = otherGamesController.sortGames(formattedGames);
-                    }
-                    return;
-                }
-                
-                if (!shouldShow) {
-                    return; // Not time to show yet
-                }
-                
-                // Fetch all today's games
-                const allGames = await NBAApi.getTodaysGames();
-                
-                // Filter out the selected game
-                const otherGames = allGames.filter(game => game.id !== selectedGameId);
-                
-                if (otherGames.length === 0) {
-                    return; // No other games to show
-                }
-                
-                // Transform API data to view format
-                const formattedGames = otherGames.map(game => transformGameData(game));
-                
-                // Show overlay (we only reach here if !overlayVisible and shouldShow is true)
-                showOverlay();
-                hasShownForCurrentQuarter = true; // Mark as shown for this quarter
-                // Create new controller with completion callback
-                otherGamesController = new OtherGamesController(otherGamesView, hideOverlay);
-                otherGamesController.init(formattedGames);
-                
-            } catch (error) {
-                // Silently handle errors
-            }
-        }
-        
-        /**
-         * Check if overlay should be shown based on quarter timing
-         */
-        function shouldShowOverlay(quarterData) {
-            if (!quarterData || !quarterData.current || !quarterData.startTime) {
-                hasShownForCurrentQuarter = false;
-                return false;
-            }
-            
-            const timeSinceQuarterStart = Date.now() - quarterData.startTime;
-            
-            // Track quarter changes - reset flag when quarter changes
-            if (quarterData.startTime !== lastQuarterStartTime) {
-                lastQuarterStartTime = quarterData.startTime;
-                hasShownForCurrentQuarter = false; // Reset for new quarter
-            }
-            
-            // Don't show if we've already shown it for this quarter
-            if (hasShownForCurrentQuarter) {
-                return false;
-            }
-            
-            // Show overlay if enough time has passed since quarter start
-            return timeSinceQuarterStart >= SHOW_DELAY_MS;
-        }
-        
-        /**
-         * Transform ESPN API game data to view format
-         */
-        function transformGameData(game) {
-            // Use shared utility to determine state
-            const state = detectGameState(game);
-            
-            const baseGame = {
-                state: state,
-                away: {
-                    logo: game.awayTeam.logo,
-                    abbr: game.awayTeam.abbreviation,
-                    score: parseInt(game.awayTeam.score) || 0
-                },
-                home: {
-                    logo: game.homeTeam.logo,
-                    abbr: game.homeTeam.abbreviation,
-                    score: parseInt(game.homeTeam.score) || 0
-                }
-            };
-            
-            if (state === 'pregame') {
-                // Use shared utility for countdown calculation
-                baseGame.secondsUntilStart = calculateSecondsUntilStart(game.date);
-            } else if (state === 'live') {
-                // Use shared utility for formatting live status
-                baseGame.quarter = formatLiveGameStatus(game.statusText).formatted;
-            } else if (state === 'halftime') {
-                // Halftime shows as text
-                baseGame.quarter = 'Halftime';
-            } else if (state === 'final') {
-                baseGame.status = 'FINAL';
-            }
-            
-            return baseGame;
-        }
-        
-        // Start polling for updates
-        updateFromAPI();
-        setInterval(updateFromAPI, 5000);  // Poll every 5 seconds
-        
-        
-        // ===== SAMPLE DATA FOR TESTING (REMOVE AFTER API INTEGRATION) =====
-        const sampleGames = [
-            { 
-                state: 'pregame', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png', abbr: 'BOS' },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png', abbr: 'MIA' },
-                secondsUntilStart: 8130 // 2:15:30
-            },
-            { 
-                state: 'live', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/den.png', abbr: 'DEN', score: 94 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phx.png', abbr: 'PHX', score: 88 },
-                quarter: 'Q4 · 5:23'
-            },
-            { 
-                state: 'final', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/dal.png', abbr: 'DAL', score: 112 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sac.png', abbr: 'SAC', score: 108 },
-                status: 'FINAL'
-            },
-            { 
-                state: 'pregame', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/chi.png', abbr: 'CHI' },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png', abbr: 'MIL' },
-                secondsUntilStart: 13500 // 3:45:00
-            },
-            { 
-                state: 'live', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mem.png', abbr: 'MEM', score: 55 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/nyk.png', abbr: 'NYK', score: 62 },
-                quarter: 'Q2 · 8:15'
-            },
-            { 
-                state: 'live', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/atl.png', abbr: 'ATL', score: 78 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/cle.png', abbr: 'CLE', score: 81 },
-                quarter: 'Q3 · 2:34'
-            },
-            { 
-                state: 'final', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/utah.png', abbr: 'UTA', score: 98 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/okc.png', abbr: 'OKC', score: 105 },
-                status: 'FINAL'
-            },
-            { 
-                state: 'pregame', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/por.png', abbr: 'POR' },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lac.png', abbr: 'LAC' },
-                secondsUntilStart: 15615 // 4:20:15
-            },
-            { 
-                state: 'live', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/min.png', abbr: 'MIN', score: 42 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/ind.png', abbr: 'IND', score: 38 },
-                quarter: 'Q1 · 4:52'
-            },
-            { 
-                state: 'final', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/det.png', abbr: 'DET', score: 87 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/tor.png', abbr: 'TOR', score: 92 },
-                status: 'FINAL'
-            }
-        ];
-        
-        // UNCOMMENT BELOW TO TEST WITH SAMPLE DATA INSTEAD OF API
-        // otherGamesController.init(sampleGames);
-        // ===== END SAMPLE DATA =====
     </script>
 </body>
 </html>
