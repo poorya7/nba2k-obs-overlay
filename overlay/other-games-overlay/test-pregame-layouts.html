@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregame Layout Test - Choose Your Style</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: #ffffff;
+            padding: 40px;
+            margin: 0;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #3b82f6;
+        }
+
+        .page-header p {
+            font-size: 16px;
+            color: #94a3b8;
+        }
+
+        .layout-comparison {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .layout-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fbbf24;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .option-description {
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+            max-width: 220px;
+            margin-bottom: 10px;
+        }
+
+        /* Option-specific styles */
+        
+        /* Option A: Logo, Team, Team, Logo (logos bookend teams) */
+        .pregame-option-a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 11px;
+        }
+
+        .pregame-option-a .at-symbol {
+            margin: 0 4px;
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        /* Option B: Team, Logo, Logo, Team (teams bookend logos) */
+        .pregame-option-b {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 11px;
+        }
+
+        .pregame-option-b .at-symbol {
+            margin: 0 4px;
+            color: #94a3b8;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>🏀 Pregame Layout Test</h1>
+        <p>Which layout looks best for upcoming games? Choose your favorite!</p>
+        <p style="font-size: 14px; color: #64748b; margin-top: 8px;">
+            A = Logos bookend teams | B = Teams bookend logos<br>
+            Try @, "at", or "AT" separators
+        </p>
+    </div>
+
+    <div class="layout-comparison">
+        <!-- Option A1: Logo, Team, @, Team, Logo -->
+        <div class="layout-option">
+            <div class="option-label">Option A1</div>
+            <div class="option-description">🏀 LAL @ GSW 🏀<br>(with @ symbol)</div>
+            <div class="other-game-card">
+                <div class="game-in-card">
+                    <div class="pregame-option-a">
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="LAL">
+                        <span class="other-game-abbr">LAL</span>
+                        <span class="at-symbol">@</span>
+                        <span class="other-game-abbr">GSW</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="GSW">
+                    </div>
+                    <div class="other-game-status pregame">
+                        Starts in 02:15:30
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option A2: Logo, Team, at, Team, Logo -->
+        <div class="layout-option">
+            <div class="option-label">Option A2</div>
+            <div class="option-description">🏀 LAL at GSW 🏀<br>(with "at")</div>
+            <div class="other-game-card">
+                <div class="game-in-card">
+                    <div class="pregame-option-a">
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="LAL">
+                        <span class="other-game-abbr">LAL</span>
+                        <span class="at-symbol">at</span>
+                        <span class="other-game-abbr">GSW</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="GSW">
+                    </div>
+                    <div class="other-game-status pregame">
+                        Starts in 02:15:30
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option A3: Logo, Team, AT, Team, Logo -->
+        <div class="layout-option">
+            <div class="option-label">Option A3</div>
+            <div class="option-description">🏀 LAL AT GSW 🏀<br>(with "AT")</div>
+            <div class="other-game-card">
+                <div class="game-in-card">
+                    <div class="pregame-option-a">
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="LAL">
+                        <span class="other-game-abbr">LAL</span>
+                        <span class="at-symbol">AT</span>
+                        <span class="other-game-abbr">GSW</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="GSW">
+                    </div>
+                    <div class="other-game-status pregame">
+                        Starts in 02:15:30
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option B1: Team, Logo, @, Logo, Team -->
+        <div class="layout-option">
+            <div class="option-label">Option B1</div>
+            <div class="option-description">LAL 🏀 @ 🏀 GSW<br>(with @ symbol)</div>
+            <div class="other-game-card">
+                <div class="game-in-card">
+                    <div class="pregame-option-b">
+                        <span class="other-game-abbr">LAL</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="LAL">
+                        <span class="at-symbol">@</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="GSW">
+                        <span class="other-game-abbr">GSW</span>
+                    </div>
+                    <div class="other-game-status pregame">
+                        Starts in 02:15:30
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option B2: Team, Logo, at, Logo, Team -->
+        <div class="layout-option">
+            <div class="option-label">Option B2</div>
+            <div class="option-description">LAL 🏀 at 🏀 GSW<br>(with "at")</div>
+            <div class="other-game-card">
+                <div class="game-in-card">
+                    <div class="pregame-option-b">
+                        <span class="other-game-abbr">LAL</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="LAL">
+                        <span class="at-symbol">at</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="GSW">
+                        <span class="other-game-abbr">GSW</span>
+                    </div>
+                    <div class="other-game-status pregame">
+                        Starts in 02:15:30
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option B3: Team, Logo, AT, Logo, Team -->
+        <div class="layout-option">
+            <div class="option-label">Option B3</div>
+            <div class="option-description">LAL 🏀 AT 🏀 GSW<br>(with "AT")</div>
+            <div class="other-game-card">
+                <div class="game-in-card">
+                    <div class="pregame-option-b">
+                        <span class="other-game-abbr">LAL</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="LAL">
+                        <span class="at-symbol">AT</span>
+                        <img class="other-game-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/gsw.png" alt="GSW">
+                        <span class="other-game-abbr">GSW</span>
+                    </div>
+                    <div class="other-game-status pregame">
+                        Starts in 02:15:30
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animate countdown for demo purposes
+        let seconds = 2 * 3600 + 15 * 60 + 30; // 02:15:30
+
+        function formatCountdown(secs) {
+            const hours = Math.floor(secs / 3600);
+            const minutes = Math.floor((secs % 3600) / 60);
+            const seconds = secs % 60;
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        setInterval(() => {
+            if (seconds > 0) {
+                seconds--;
+                document.querySelectorAll('.other-game-status.pregame').forEach(el => {
+                    el.textContent = 'Starts in ' + formatCountdown(seconds);
+                });
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
+

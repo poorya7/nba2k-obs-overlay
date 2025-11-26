@@ -78,9 +78,9 @@ class OtherGamesView {
             <div class="game-in-card">
                 <div class="other-game-teams">
                     <div class="other-game-team">
-                        <div class="other-game-team-left">
-                            <img class="other-game-logo" src="${game.away.logo}" alt="${game.away.abbr}" crossorigin="anonymous">
+                        <div class="other-game-team-left pregame-layout">
                             <span class="other-game-abbr">${game.away.abbr}</span>
+                            <img class="other-game-logo" src="${game.away.logo}" alt="${game.away.abbr}" crossorigin="anonymous">
                             <span style="margin: 0 4px; color: #94a3b8; font-size: 10px;">@</span>
                             <img class="other-game-logo" src="${game.home.logo}" alt="${game.home.abbr}" crossorigin="anonymous">
                             <span class="other-game-abbr">${game.home.abbr}</span>
