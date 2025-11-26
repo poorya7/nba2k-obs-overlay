@@ -3,11 +3,12 @@
 // Uses existing working utilities - not reinventing the wheel
 
 class AppController {
-    constructor({ api, nbaApi, view, stateManager }) {
+    constructor({ api, nbaApi, view, stateManager, simulationManager }) {
         this.api = api;
         this.nbaApi = nbaApi;
         this.view = view;
         this.stateManager = stateManager;
+        this.simulationManager = simulationManager;
         
         this.otherGamesController = null;
         this.updateInterval = null;
@@ -86,44 +87,89 @@ class AppController {
      */
     async updateFromAPI() {
         try {
-            // Get selected game ID
+            // Check if simulation mode is enabled
+            const simState = await this.api.getSimulation();
+            const simEnabled = simState && simState.enabled;
+            
+            // Get selected game ID (even in sim mode, track it for changes)
             const selectionData = await this.api.getSelectedGame();
             const selectedGameId = selectionData ? selectionData.gameId : null;
             
-            // Get quarter timing
-            const quarterData = await this.api.getQuarter();
+            // Detect simulation mode changes - reset overlay if changed
+            if (this.stateManager.hasSimulationStateChanged(simEnabled)) {
+                this.hideOverlay();
+                this.stateManager.updateSimulationState(simEnabled);
+                this.stateManager.resetQuarterTracking(); // Allow it to show again
+                // Wait for hide animation to complete before showing again
+                setTimeout(() => {
+                    this.updateFromAPI(); // Trigger immediate reload with new mode
+                }, 400); // 300ms fade + 100ms buffer
+                return; // Exit this cycle, let the setTimeout handle the reload
+            }
             
-            // Determine if overlay should be visible
-            const shouldShow = this.shouldShowOverlay(quarterData);
+            // Detect selected game changes - reset overlay if changed
+            if (this.stateManager.hasSelectedGameChanged(selectedGameId)) {
+                this.hideOverlay();
+                this.stateManager.updateSelectedGame(selectedGameId);
+                this.stateManager.resetQuarterTracking(); // Allow it to show again
+                // Wait for hide animation to complete before showing again
+                setTimeout(() => {
+                    this.updateFromAPI(); // Trigger immediate reload with new game
+                }, 400); // 300ms fade + 100ms buffer
+                return; // Exit this cycle, let the setTimeout handle the reload
+            }
             
             // If overlay is already showing, let it finish cycling - don't interrupt it
             if (this.stateManager.isOverlayVisible()) {
                 return;
             }
             
+            // Determine if overlay should be visible
+            let shouldShow;
+            if (simEnabled) {
+                // In simulation mode, always show (bypass timing checks)
+                shouldShow = true;
+            } else {
+                // In real mode, check quarter timing
+                const quarterData = await this.api.getQuarter();
+                shouldShow = this.shouldShowOverlay(quarterData);
+            }
+            
             if (!shouldShow) {
                 return; // Not time to show yet
             }
             
-            // Fetch all today's games
-            const allGames = await this.nbaApi.getTodaysGames();
+            let formattedGames;
             
-            // Filter out the selected game
-            const otherGames = allGames.filter(game => game.id !== selectedGameId);
-            
-            if (otherGames.length === 0) {
-                return; // No other games to show
+            if (simEnabled) {
+                // SIMULATION MODE: Use sample games
+                formattedGames = this.simulationManager.getSampleGames();
+            } else {
+                // REAL MODE: Fetch from ESPN API
+                // Fetch all today's games
+                const allGames = await this.nbaApi.getTodaysGames();
+                
+                // Filter out the selected game
+                const otherGames = allGames.filter(game => game.id !== selectedGameId);
+                
+                if (otherGames.length === 0) {
+                    return; // No other games to show
+                }
+                
+                // Transform API data to view format
+                formattedGames = otherGames.map(game => this.transformGameData(game));
             }
             
-            // Transform API data to view format
-            const formattedGames = otherGames.map(game => this.transformGameData(game));
+            if (formattedGames.length === 0) {
+                return; // No games to show
+            }
             
             // Show overlay (we only reach here if !overlayVisible and shouldShow is true)
             this.showOverlay();
             this.stateManager.markAsShownForCurrentQuarter(); // Mark as shown for this quarter
             
-            // Create new controller with completion callback
-            this.otherGamesController = new OtherGamesController(this.view, () => this.hideOverlay());
+            // Create new controller with completion callback and simulation mode flag
+            this.otherGamesController = new OtherGamesController(this.view, () => this.hideOverlay(), simEnabled);
             this.otherGamesController.init(formattedGames);
             
         } catch (error) {

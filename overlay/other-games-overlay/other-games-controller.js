@@ -4,12 +4,15 @@
  */
 
 class OtherGamesController {
-    constructor(view, onComplete = null) {
+    constructor(view, onComplete = null, isSimulationMode = false) {
         this.view = view;
         this.games = [];
         this.currentSet = 0;
         this.gamesPerSet = 3;
-        this.displayDuration = 5000; // 5 seconds (testing - change to 16000 for production)
+        this.isSimulationMode = isSimulationMode;
+        
+        // Timing: Fast for simulation, slow for production
+        this.displayDuration = isSimulationMode ? 12000 : 16000; // 12s sim, 16s production
         this.fadeDuration = 200; // 0.2 seconds
         this.cycleInterval = null;
         this.countdownInterval = null;
@@ -62,24 +65,28 @@ class OtherGamesController {
         const totalSets = Math.ceil(this.games.length / this.gamesPerSet);
         const nextSetIndex = this.currentSet + 1;
         
-        // FOR TESTING: Loop forever instead of stopping
-        // TODO: Change back to fade-out behavior after testing
-        /*
         // Check if we've shown all sets
         if (nextSetIndex >= totalSets) {
-            // Stop cycling and call completion callback
-            this.stopCycle();
-            this.stopCountdown();
-            if (this.onComplete) {
-                this.onComplete();
+            if (this.isSimulationMode) {
+                // Simulation mode: Loop back to start
+                await this.view.fadeOut(this.fadeDuration);
+                this.currentSet = 0;
+                this.view.renderGames(this.games, 0, this.gamesPerSet);
+                await this.view.fadeIn(this.fadeDuration);
+            } else {
+                // Production mode: Stop cycling and hide overlay
+                this.stopCycle();
+                this.stopCountdown();
+                if (this.onComplete) {
+                    this.onComplete();
+                }
             }
             return;
         }
-        */
         
-        // Continue to next set (loop back to 0 if at end)
+        // Continue to next set
         await this.view.fadeOut(this.fadeDuration);
-        this.currentSet = nextSetIndex >= totalSets ? 0 : nextSetIndex;
+        this.currentSet = nextSetIndex;
         this.view.renderGames(this.games, this.currentSet * this.gamesPerSet, this.gamesPerSet);
         await this.view.fadeIn(this.fadeDuration);
     }

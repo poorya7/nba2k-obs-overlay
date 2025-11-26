@@ -10,9 +10,15 @@ class StateManager {
         this.lastQuarterStartTime = null;
         this.hasShownForCurrentQuarter = false;
         
+        // Simulation mode tracking
+        this.lastSimulationEnabled = null;
+        
+        // Selected game tracking
+        this.lastSelectedGameId = null;
+        
         // Timing configuration
-        // Test delay: 5 seconds (change to 120000 for production = 2 minutes)
-        this.SHOW_DELAY_MS = 5000;
+        // Production: 2 minutes after quarter starts
+        this.SHOW_DELAY_MS = 120000; // 2 minutes
     }
     
     // Overlay visibility
@@ -46,6 +52,32 @@ class StateManager {
     
     getShowDelayMs() {
         return this.SHOW_DELAY_MS;
+    }
+    
+    // Simulation mode tracking
+    hasSimulationStateChanged(currentSimEnabled) {
+        if (this.lastSimulationEnabled === null) {
+            this.lastSimulationEnabled = currentSimEnabled;
+            return false;
+        }
+        return this.lastSimulationEnabled !== currentSimEnabled;
+    }
+    
+    updateSimulationState(simEnabled) {
+        this.lastSimulationEnabled = simEnabled;
+    }
+    
+    // Selected game tracking
+    hasSelectedGameChanged(currentGameId) {
+        if (this.lastSelectedGameId === null) {
+            this.lastSelectedGameId = currentGameId;
+            return false;
+        }
+        return this.lastSelectedGameId !== currentGameId;
+    }
+    
+    updateSelectedGame(gameId) {
+        this.lastSelectedGameId = gameId;
     }
 }
 
