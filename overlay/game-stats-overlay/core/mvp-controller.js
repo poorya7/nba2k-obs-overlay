@@ -10,7 +10,7 @@
 // MVP Display timing constants (matching real NBA broadcasts)
 const MVP_DISPLAY_TIMING = {
     // How long MVP stays visible
-    DISPLAY_DURATION: 15000, // 15 seconds
+    DISPLAY_DURATION: 20000, // 20 seconds
     
     // Delays before showing MVP (feels more natural)
     DELAY_BEFORE_SHOW: {

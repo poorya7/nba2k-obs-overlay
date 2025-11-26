@@ -167,8 +167,18 @@ class AppController {
         // USES existing utility from gameUtils.js
         const stateName = window.detectGameState(game);
 
-        // Format data for GameView
-        const formattedData = this.formatGameDataForView(game, stateName);
+        // Extract current scores
+        const currentHomeScore = parseInt(game.homeTeam.score) || 0;
+        const currentAwayScore = parseInt(game.awayTeam.score) || 0;
+        
+        // Check if scores changed
+        const scoreChanges = this.stateManager.hasScoresChanged(currentHomeScore, currentAwayScore);
+
+        // Format data for GameView (with animation flags)
+        const formattedData = this.formatGameDataForView(game, stateName, scoreChanges);
+
+        // Update stored scores
+        this.stateManager.updateScores(currentHomeScore, currentAwayScore);
 
         // Create comparison keys for different types of changes
         const homeScore = formattedData.home?.score ?? formattedData.homeTeam?.score ?? 0;
@@ -269,9 +279,9 @@ class AppController {
                         gameId
                     );
                 } else if (stateName === 'live') {
-                    // Scores changed in live state - slide animation for scores
-                    this.gameView.updateScore('home', homeScore, true);
-                    this.gameView.updateScore('away', awayScore, true);
+                    // Scores changed in live state - use animate flags from formattedData
+                    this.gameView.updateScore('home', homeScore, formattedData.home.animate);
+                    this.gameView.updateScore('away', awayScore, formattedData.away.animate);
                     // Also update time silently
                     if (formattedData.time) {
                         const statusElement = document.querySelector('[data-status]');
@@ -304,20 +314,23 @@ class AppController {
      * USES existing utilities from gameUtils.js
      * @param {Object} game - ESPN game data
      * @param {string} stateName - Game state
+     * @param {Object} scoreChanges - { homeChanged, awayChanged }
      * @returns {Object}
      */
-    formatGameDataForView(game, stateName) {
+    formatGameDataForView(game, stateName, scoreChanges = { homeChanged: false, awayChanged: false }) {
         // Base team data (used by all states)
         const baseData = {
             home: {
                 abbr: game.homeTeam.abbreviation,
                 logoUrl: game.homeTeam.logo,
-                score: parseInt(game.homeTeam.score) || 0
+                score: parseInt(game.homeTeam.score) || 0,
+                animate: scoreChanges.homeChanged // Add animation flag
             },
             away: {
                 abbr: game.awayTeam.abbreviation,
                 logoUrl: game.awayTeam.logo,
-                score: parseInt(game.awayTeam.score) || 0
+                score: parseInt(game.awayTeam.score) || 0,
+                animate: scoreChanges.awayChanged // Add animation flag
             }
         };
 

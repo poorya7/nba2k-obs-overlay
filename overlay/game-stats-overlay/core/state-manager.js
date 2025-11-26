@@ -13,6 +13,10 @@ class StateManager {
         this.lastSelectedGameId = null;
         this.overlayHasBeenShown = false;
         
+        // Score tracking for animations
+        this.lastHomeScore = null;
+        this.lastAwayScore = null;
+        
         // Countdown state (for pregame)
         this.countdownInterval = null;
         this.countdownSeconds = 0;
@@ -165,12 +169,36 @@ class StateManager {
     }
 
     /**
+     * Check if scores have changed
+     * @param {number} homeScore
+     * @param {number} awayScore
+     * @returns {Object} { homeChanged: boolean, awayChanged: boolean }
+     */
+    hasScoresChanged(homeScore, awayScore) {
+        const homeChanged = this.lastHomeScore !== null && this.lastHomeScore !== homeScore;
+        const awayChanged = this.lastAwayScore !== null && this.lastAwayScore !== awayScore;
+        return { homeChanged, awayChanged };
+    }
+
+    /**
+     * Update stored scores
+     * @param {number} homeScore
+     * @param {number} awayScore
+     */
+    updateScores(homeScore, awayScore) {
+        this.lastHomeScore = homeScore;
+        this.lastAwayScore = awayScore;
+    }
+
+    /**
      * Reset all state (called when game changes or overlay hides)
      */
     reset() {
         this.lastGameData = null;
         this.stopCountdown();
         this.countdownSeconds = 0;
+        this.lastHomeScore = null;
+        this.lastAwayScore = null;
     }
 
     /**
