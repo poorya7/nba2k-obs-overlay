@@ -306,6 +306,77 @@
       border-color: #10b981;
       color: white;
     }
+
+    /* Quarter Timer */
+    .quarter-timer {
+      margin-top: 16px;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .quarter-timer.show {
+      display: block;
+    }
+
+    .timer-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .timer-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .timer-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #667eea;
+      font-variant-numeric: tabular-nums;
+      font-family: 'Courier New', monospace;
+    }
+
+    .timer-info {
+      font-size: 13px;
+      color: #6b7280;
+      padding-top: 12px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .timer-milestone {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .timer-milestone:last-child {
+      margin-bottom: 0;
+    }
+
+    .milestone-label {
+      color: #374151;
+      font-weight: 500;
+    }
+
+    .milestone-status {
+      font-weight: 600;
+    }
+
+    .milestone-status.pending {
+      color: #f59e0b;
+    }
+
+    .milestone-status.passed {
+      color: #10b981;
+    }
   </style>
 </head>
 <body>
@@ -329,6 +400,20 @@
         <button class="quarter-btn" data-quarter="Q3">Q3</button>
         <button class="quarter-btn" data-quarter="Q4">Q4</button>
         <button class="done-btn" id="doneBtn">Done</button>
+      </div>
+      
+      <!-- Quarter Timer -->
+      <div class="quarter-timer" id="quarterTimer">
+        <div class="timer-main">
+          <div class="timer-label">Time Since Quarter Start</div>
+          <div class="timer-value" id="timerValue">00:00</div>
+        </div>
+        <div class="timer-info">
+          <div class="timer-milestone">
+            <span class="milestone-label">📊 Other Games Overlay:</span>
+            <span class="milestone-status pending" id="otherGamesStatus">Shows at 01:00</span>
+          </div>
+        </div>
       </div>
     </div>
 

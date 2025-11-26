@@ -12,7 +12,7 @@ class OtherGamesController {
         this.isSimulationMode = isSimulationMode;
         
         // Timing: Fast for simulation, slow for production
-        this.displayDuration = isSimulationMode ? 12000 : 16000; // 12s sim, 16s production
+        this.displayDuration = isSimulationMode ? 12000 : 18000; // 12s sim, 18s production
         this.fadeDuration = 200; // 0.2 seconds
         this.cycleInterval = null;
         this.countdownInterval = null;

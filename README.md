@@ -8,9 +8,11 @@ Live NBA game stats overlay for your NBA 2K streams. Shows real-time scores, qua
 - **Fast Updates**: Game data refreshes every 3 seconds for responsive score changes
 - **Smooth Animations**: Score slide animation (slot-machine effect), instant state changes
 - **Live Game Stats**: Real-time scores, quarter/time, team logos, records
-- **Smart Dashboard**: Easy game selection + simulation mode for testing
+- **MVP Player Overlay**: Automatic player spotlight (17s display, repeats every 1 minute during breaks)
+- **Other Games Overlay**: Shows scores from other NBA games (appears 1 minute into each quarter)
+- **Smart Dashboard**: Easy game selection + quarter timer + simulation mode for testing
 - **State Detection**: Pregame (with countdown), live, halftime, overtime, final
-- **Simulation Mode**: Test overlay with fake data that cycles through all states
+- **Simulation Mode**: Test overlays with fake data that cycles through all states
 - **Modular Architecture**: Clean, maintainable code following SOLID/DRY principles
 - **OBS Ready**: Browser source compatible, hides gracefully when no game selected
 - **No Console Spam**: Clean production build with no debug logs
@@ -34,17 +36,26 @@ http://localhost:3000/dashboard
 ```
 
 - Select today's game from the dropdown (includes yesterday's live/recent games)
-- **OR** enable "Simulation Mode" to test overlay with fake data
+- Click quarter buttons (Q1-Q4) to track game progress
+- **Quarter Timer**: Shows elapsed time since quarter started, indicates when overlays will appear
+- **OR** enable "Simulation Mode" to test overlays with fake data
 - Preview shows team info and scores
 - Selection is saved automatically
 
-### 3. Add Overlay to OBS
+### 3. Add Overlays to OBS
 
+**Main Game Stats Overlay:**
 1. In OBS, add a **Browser Source**
 2. Set URL to: `http://localhost:3000/overlay/game-stats`
 3. Set Width: `1920` Height: `1080`
 4. Check "Shutdown source when not visible" for better performance
 5. Position and scale overlay as needed on your stream!
+
+**Other Games Overlay (Optional):**
+1. Add another **Browser Source**
+2. Set URL to: `http://localhost:3000/overlay/other-games`
+3. Set Width: `1920` Height: `1080`
+4. This overlay shows scores from other NBA games (appears 1 minute into each quarter, 18s per page)
 
 ## 📁 Project Structure
 
@@ -55,24 +66,32 @@ nba2k-obs-overlay/
 │   └── scripts/                   # Windows auto-start scripts
 │
 ├── overlay/
-│   ├── shared/                    # Shared utilities (single source of truth)
+│   ├── _shared/                   # Shared utilities (single source of truth)
 │   │   ├── config.js              # Configuration
-│   │   └── nbaApi.js              # ESPN API client
+│   │   ├── nbaApi.js              # ESPN API client
+│   │   └── apiClient.js           # Server communication
 │   │
-│   ├── dashboard/                 # Control panel
+│   ├── _dashboard/                # Control panel
 │   │   ├── index.html             # Dashboard UI
-│   │   └── dashboard.js           # Game selection + simulation
+│   │   └── dashboard.js           # Game selection + quarter timer + simulation
 │   │
-│   └── game-stats-overlay/        # Modular overlay system
-│       ├── core/                  # Production overlay
-│       │   ├── index.html         # Production overlay with API integration
-│       │   ├── game-view.js       # GameView controller class
-│       │   └── styles.css         # All overlay styling
-│       │
-│       └── tests/                 # Testing pages
-│           ├── test-states.html   # Interactive state tester
-│           ├── test-simulation.html # Full game simulation
-│           └── index-full.html    # Full design preview
+│   ├── game-stats-overlay/        # Main game overlay (modular)
+│   │   └── core/
+│   │       ├── index.html         # Production overlay
+│   │       ├── app-controller.js  # Main controller
+│   │       ├── state-manager.js   # State tracking
+│   │       ├── game-view.js       # View rendering
+│   │       ├── mvp-view.js        # MVP section view
+│   │       ├── mvp-controller.js  # MVP auto-display logic
+│   │       └── styles.css         # All styling
+│   │
+│   └── other-games-overlay/       # Other games scores (modular)
+│       ├── index.html             # Production overlay
+│       ├── app-controller.js      # Main controller
+│       ├── state-manager.js       # State + timing
+│       ├── simulation-manager.js  # Fake data generator
+│       ├── other-games-controller.js # Game cycling logic
+│       └── styles.css             # Styling
 │
 └── docs/                          # Complete documentation
     ├── FEATURES.md
@@ -171,7 +190,10 @@ No API key needed! ✨
 ## 💡 Tips
 
 - **Fast Response**: 3-second polling means scores update almost immediately
+- **Quarter Timer**: Use the dashboard timer to know exactly when overlays will appear (e.g., other-games at 1:00)
 - **Simulation Mode**: Test all states and animations without waiting for live games
+- **MVP Display**: Shows for 17 seconds, repeats every 1 minute during halftime/final (max 3 times)
+- **Other Games**: Appears 1 minute after each quarter starts, cycles through games once
 - **Test Pages**: Visit `test-states.html` for interactive testing
 - **Clean Console**: No debug logs in production for professional setup
 - **Midnight Support**: Games from yesterday stay visible if still live or finished < 2 hours ago

@@ -41,10 +41,10 @@ mvpController.onGameStateChange('halftime', mvpPlayerData);
 ```
 
 **Automatic Display Timing:**
-- **Halftime**: Shows 10s after halftime starts, displays for 15s, repeats every 2 minutes (max 3 times)
-- **End of Game (Final)**: Shows 5s after game ends, displays for 15s, repeats every 2 minutes (max 3 times)
-- **Timeouts**: Shows 20s into timeout, displays for 15s (if timeout state available)
-- **End of Quarters**: Shows 3s after quarter ends, displays for 15s
+- **Halftime**: Shows 10s after halftime starts, displays for 17s, repeats every 1 minute (max 3 times)
+- **End of Game (Final)**: Shows 5s after game ends, displays for 17s, repeats every 1 minute (max 3 times)
+- **Timeouts**: Shows 20s into timeout, displays for 17s (if timeout state available)
+- **End of Quarters**: Shows 3s after quarter ends, displays for 17s
 - **Live Play**: Automatically hides if visible
 
 This matches real NBA broadcast behavior!
@@ -167,8 +167,8 @@ Call when game state changes to trigger automatic MVP display.
 **Returns**: `void`
 
 **Behavior**:
-- **halftime**: Shows MVP after 25s, repeats up to 3 times
-- **final**: Shows MVP after 5s
+- **halftime**: Shows MVP after 10s, displays for 17s, repeats every 1 minute (up to 3 times)
+- **final**: Shows MVP after 5s, displays for 17s, repeats every 1 minute (up to 3 times)
 - **live/pregame**: Hides MVP if visible
 
 ##### `manualShow(mvpPlayerData)`
@@ -257,12 +257,12 @@ const MVP_ANIMATION_TIMING = {
 
 ## Display Timing
 
-**MVP Display Duration**: 15 seconds (matches real NBA broadcasts)
+**MVP Display Duration**: 17 seconds (optimized for stream pacing)
 
 **Automatic Display Delays** (`mvp-controller.js`):
 ```javascript
 const MVP_DISPLAY_TIMING = {
-    DISPLAY_DURATION: 15000,       // MVP stays visible for 15 seconds
+    DISPLAY_DURATION: 17000,       // MVP stays visible for 17 seconds
     
     DELAY_BEFORE_SHOW: {
         TIMEOUT: 20000,            // Show 20s into timeout
@@ -272,10 +272,10 @@ const MVP_DISPLAY_TIMING = {
     },
     
     // Halftime & Final repeat logic
-    HALFTIME_REPEAT_INTERVAL: 120000,  // Show again every 2 minutes
-    HALFTIME_MAX_SHOWS: 3,              // Max 3 times during halftime
-    FINAL_REPEAT_INTERVAL: 120000,     // Show again every 2 minutes
-    FINAL_MAX_SHOWS: 3                  // Max 3 times during final
+    HALFTIME_REPEAT_INTERVAL: 60000,  // Show again every 1 minute
+    HALFTIME_MAX_SHOWS: 3,             // Max 3 times during halftime
+    FINAL_REPEAT_INTERVAL: 60000,     // Show again every 1 minute
+    FINAL_MAX_SHOWS: 3                 // Max 3 times during final
 };
 ```
 
@@ -420,17 +420,17 @@ Open in a browser to see:
 Based on real NBA broadcast behavior:
 
 ✅ **Automatically shows during**:
-- **Halftime**: After 10s, displays for 15s, repeats every 2 minutes (max 3 times total)
-- **End of Game (Final)**: After 5s, displays for 15s, repeats every 2 minutes (max 3 times total)
-- **Timeouts**: After 20s, displays for 15s (if timeout state is available from API)
-- **End of Quarters**: After 3s, displays for 15s (if quarter transition is detected)
+- **Halftime**: After 10s, displays for 17s, repeats every 1 minute (max 3 times total)
+- **End of Game (Final)**: After 5s, displays for 17s, repeats every 1 minute (max 3 times total)
+- **Timeouts**: After 20s, displays for 17s (if timeout state is available from API)
+- **End of Quarters**: After 3s, displays for 17s (if quarter transition is detected)
 
 ❌ **Automatically hides during**:
 - Live play
 - Pregame
 - Any active game situations
 
-**Display duration**: 15 seconds (matches real NBA broadcast timing)
+**Display duration**: 17 seconds (optimized for stream pacing)
 
 **MVP Determination**: The MVP is determined as the player with the highest combined PTS + REB + AST, fetched from ESPN's boxscore API.
 

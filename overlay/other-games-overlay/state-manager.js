@@ -17,8 +17,8 @@ class StateManager {
         this.lastSelectedGameId = null;
         
         // Timing configuration
-        // Production: 2 minutes after quarter starts
-        this.SHOW_DELAY_MS = 120000; // 2 minutes
+        // Production: 1 minute after quarter starts
+        this.SHOW_DELAY_MS = 60000; // 1 minute
     }
     
     // Overlay visibility

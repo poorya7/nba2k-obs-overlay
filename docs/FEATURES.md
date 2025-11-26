@@ -12,12 +12,22 @@ Complete list of features in the NBA 2K OBS Overlay system.
 - **Status Indicators**: 🔴 LIVE, ✅ FINAL, ⏰ Scheduled time
 - **Auto-refresh**: Updates every 60 seconds
 - **Persistent Selection**: Game choice saved to server
+- **Quarter Timer**: Displays elapsed time since quarter started, shows when overlays will trigger (e.g., "Other Games shows at 01:00")
+
+### Quarter Tracking & Timer
+- **Visual Tracking**: Click quarter buttons (Q1-Q4) to track current game period
+- **Elapsed Timer**: Large display showing MM:SS time since quarter started
+- **Overlay Indicators**: Shows when overlays will trigger (e.g., "Other Games shows at 01:00")
+- **Auto-Reset**: Timer resets when switching quarters
+- **Done Button**: Mark stream as complete to hide all overlays
 
 ### Simulation Mode
-- **Testing Tool**: Enable simulation mode to test overlay without live games
+- **Testing Tool**: Enable simulation mode to test overlays without live games
 - **State Control**: Cycle through pregame, live, halftime, overtime, and final states
 - **Auto-progression**: Simulated games automatically progress through states
 - **Score Animation Testing**: Scores change automatically to test animations
+- **Simulated MVP**: Toggle to show/hide test MVP data in simulation mode
+- **Simulated Other Games**: Displays 10 fake games when simulation is active
 
 ## Overlay Features
 
@@ -55,13 +65,22 @@ Intelligently handles all ESPN API statuses:
 ### MVP Player Overlay
 Automatic player spotlight that displays during game breaks:
 - **Auto-Display Logic**: Shows during halftime (10s delay), timeouts (20s delay), end of quarters (3s delay), and final (5s delay)
-- **Smart Timing**: Displays for 15 seconds, repeats every 2 minutes during halftime and final states
+- **Smart Timing**: Displays for 17 seconds, repeats every 1 minute during halftime and final states (max 3 times)
 - **Player Data**: Shows MVP's name, photo, team logo, and key stats (PTS, REB, AST)
 - **MVP Calculation**: Automatically determines leading player based on combined PTS + REB + AST from ESPN boxscore
 - **Smooth Animations**: Box expands downward, content fades in with horizontal slide
 - **Dynamic Font Sizing**: Adjusts player name font size for long names to prevent clipping
 - **Data Caching**: Prevents redundant API calls during game breaks
 - **Integrated Design**: Matches main game stats box styling and color scheme
+
+### Other Games Overlay
+Shows scores from other NBA games during your stream:
+- **Smart Timing**: Appears 1 minute after each quarter starts in real mode
+- **Display Duration**: Shows each page of games for 18 seconds
+- **Pagination**: Groups games 3 per page, cycles through all games once per quarter
+- **Vertical Alignment**: Centered vertically with main game stats overlay for consistent positioning
+- **Simulation Mode**: Shows 10 fake games when simulation is enabled for testing
+- **Auto-Update**: Automatically refreshes when simulation mode or selected game changes
 
 ## Technical Features
 

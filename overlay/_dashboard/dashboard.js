@@ -12,6 +12,10 @@ let currentQuarter = null;
 const SIMULATION_STATES = ['pregame', 'live', 'halftime', 'overtime', 'final'];
 let currentSimulationStateIndex = 0;
 
+// Quarter Timer
+let quarterStartTime = null;
+let timerInterval = null;
+
 /**
  * Initialize dashboard on page load
  */
@@ -152,6 +156,11 @@ async function loadQuarterState() {
   if (data) {
     currentQuarter = data.current;
     updateQuarterUI();
+    
+    // Start timer if a quarter is active (not 'done')
+    if (currentQuarter && currentQuarter !== 'done') {
+      startTimer();
+    }
   }
 }
 
@@ -163,10 +172,12 @@ async function handleQuarterClick(quarter) {
   if (currentQuarter === quarter) {
     currentQuarter = null;
     await api.setQuarter(null);
+    stopTimer();
   } else {
     // Clear 'done' state if switching from done to a quarter
     currentQuarter = quarter;
     await api.setQuarter(quarter);
+    startTimer();
   }
   updateQuarterUI();
 }
@@ -182,6 +193,7 @@ async function handleGameDone() {
   } else {
     currentQuarter = 'done';
     await api.setQuarter(null); // Send null to server (no active quarter)
+    stopTimer();
   }
   updateQuarterUI();
 }
@@ -399,6 +411,78 @@ function updateSimulationUI() {
     'final': '✅ Final'
   };
   stateDisplay.textContent = stateNames[state] || state;
+}
+
+// ==================== QUARTER TIMER ====================
+
+/**
+ * Start the quarter timer
+ */
+function startTimer() {
+  quarterStartTime = Date.now();
+  updateTimerDisplay();
+  
+  // Clear any existing interval
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
+  
+  // Update every second
+  timerInterval = setInterval(updateTimerDisplay, 1000);
+}
+
+/**
+ * Stop the quarter timer
+ */
+function stopTimer() {
+  quarterStartTime = null;
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  
+  // Hide timer display
+  const timerElement = document.getElementById('quarterTimer');
+  if (timerElement) {
+    timerElement.classList.remove('show');
+  }
+}
+
+/**
+ * Update the timer display
+ */
+function updateTimerDisplay() {
+  if (!quarterStartTime) return;
+  
+  const timerElement = document.getElementById('quarterTimer');
+  const timerValue = document.getElementById('timerValue');
+  const otherGamesStatus = document.getElementById('otherGamesStatus');
+  
+  if (!timerElement || !timerValue || !otherGamesStatus) return;
+  
+  // Calculate elapsed time
+  const elapsedMs = Date.now() - quarterStartTime;
+  const elapsedSeconds = Math.floor(elapsedMs / 1000);
+  const minutes = Math.floor(elapsedSeconds / 60);
+  const seconds = elapsedSeconds % 60;
+  
+  // Format as MM:SS
+  const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  timerValue.textContent = timeStr;
+  
+  // Show timer
+  timerElement.classList.add('show');
+  
+  // Update other games overlay status (shows at 1:00)
+  const OTHER_GAMES_DELAY_SECONDS = 60; // 1 minute
+  if (elapsedSeconds < OTHER_GAMES_DELAY_SECONDS) {
+    const remaining = OTHER_GAMES_DELAY_SECONDS - elapsedSeconds;
+    otherGamesStatus.textContent = `Shows in ${remaining}s`;
+    otherGamesStatus.className = 'milestone-status pending';
+  } else {
+    otherGamesStatus.textContent = `✓ Shown at 01:00`;
+    otherGamesStatus.className = 'milestone-status passed';
+  }
 }
 
 // Initialize on page load

@@ -10,7 +10,7 @@
 // MVP Display timing constants (matching real NBA broadcasts)
 const MVP_DISPLAY_TIMING = {
     // How long MVP stays visible
-    DISPLAY_DURATION: 20000, // 20 seconds
+    DISPLAY_DURATION: 17000, // 17 seconds
     
     // Delays before showing MVP (feels more natural)
     DELAY_BEFORE_SHOW: {
@@ -21,11 +21,11 @@ const MVP_DISPLAY_TIMING = {
     },
     
     // For halftime, show multiple times
-    HALFTIME_REPEAT_INTERVAL: 120000, // Show again every 2 minutes during halftime
+    HALFTIME_REPEAT_INTERVAL: 60000, // Show again every 1 minute during halftime
     HALFTIME_MAX_SHOWS: 3,             // Show max 3 times during halftime
     
     // For final, show multiple times
-    FINAL_REPEAT_INTERVAL: 120000,    // Show again every 2 minutes after game ends
+    FINAL_REPEAT_INTERVAL: 60000,    // Show again every 1 minute after game ends
     FINAL_MAX_SHOWS: 3                 // Show max 3 times after final
 };
 

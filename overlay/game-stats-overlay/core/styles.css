@@ -62,9 +62,9 @@ body {
     z-index: 10;
     background: rgba(10, 20, 40, 0.85);
     backdrop-filter: blur(10px);
-    padding: 13px 19.5px 18px 19.5px;
+    padding: 13px 15.5px 18px 15.5px; /* Adjusted padding */
     border-radius: 16px;
-    width: 235px;
+    width: 190px; /* Adjusted width */
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.3);
     display: none; /* Hidden by default, shown by JavaScript */
     border: 1px solid rgba(59, 130, 246, 0.4);
@@ -82,7 +82,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px; /* 6px * 1.34 */
-    margin-bottom: 24px; /* 18px * 1.34 */
+    margin-bottom: 17px; /* Adjusted gap after live text */
 }
 
 .live-dot {
@@ -100,7 +100,7 @@ body {
 }
 
 .live-text {
-    font-size: 15.95px; /* 11px * 1.45 */
+    font-size: 16.5px; /* Adjusted for stream readability */
     font-weight: 600;
     color: #60a5fa;
     letter-spacing: 1.5px;
@@ -118,7 +118,7 @@ body {
 .teams {
     display: flex;
     flex-direction: column;
-    gap: 11px; /* 8px * 1.34 */
+    gap: 3px; /* Adjusted team gap */
     margin: 13px 0 11px 0; /* 10px * 1.34, 8px * 1.34 */
     transition: opacity 0.3s ease-in;
 }
@@ -143,13 +143,13 @@ body {
 }
 
 .team-abbr {
-    font-size: 18.76px; /* 14px * 1.34 */
+    font-size: 16.26px; /* Adjusted for stream readability */
     font-weight: 500;
     color: #bfdbfe;
 }
 
 .score {
-    font-size: 21.44px; /* 16px * 1.34 */
+    font-size: 16.94px; /* Adjusted for stream readability */
     font-weight: 600;
     color: #dbeafe;
     text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
@@ -309,10 +309,10 @@ body {
 }
 
 .game-status {
-    font-size: 17.42px; /* 13px * 1.34 */
+    font-size: 15.42px; /* Adjusted for stream readability */
     color: #86efac;
     font-weight: 400;
-    margin-top: 13px; /* 10px * 1.34 */
+    margin-top: 11px; /* Adjusted gap before quarter/time */
     margin-bottom: 0;
     letter-spacing: 1.5px;
     text-align: center;
