@@ -80,489 +80,59 @@
     <script src="mvp-view.js"></script>
     <script src="mvp-controller.js"></script>
     <script src="mvp-integration.js"></script>
+    
+    <!-- Core Controllers (Refactored modular architecture) -->
+    <script src="state-manager.js"></script>
+    <script src="simulation-manager.js"></script>
+    <script src="app-controller.js"></script>
+    
     <script>
-        // Initialize API Client
-        const api = new ApiClient();
+        // ==================== CLEAN INITIALIZATION ====================
+        // All business logic extracted into modular classes
         
-        // Initialize View Controllers
+        // Initialize dependencies
+        const api = new ApiClient();
+        const nbaApi = window.NBAApi;
         const gameView = new GameView();
         const mvpView = new MvpView();
         const mvpController = new MvpController(mvpView);
+        const mvpIntegration = window.MVPIntegration;
         
-        // Track last game data to avoid unnecessary transitions
-        let lastGameData = null;
-        let lastGameState = null;
+        // Initialize core managers
+        const stateManager = new StateManager();
+        const simulationManager = new SimulationManager();
         
-        // Track if overlay has been shown for current game session
-        let overlayHasBeenShown = false;
-        let lastSelectedGameId = null;
+        // Initialize main app controller with all dependencies
+        const appController = new AppController({
+            api,
+            nbaApi,
+            gameView,
+            mvpView,
+            mvpController,
+            mvpIntegration,
+            stateManager,
+            simulationManager
+        });
         
-        // Countdown interval for pregame state
-        let countdownInterval = null;
-        let countdownSeconds = 0;
+        // Start the overlay when DOM is ready
+        window.addEventListener('DOMContentLoaded', () => {
+            appController.start();
+        });
         
-        // Simulation state
-        let simulationData = {
-            homeScore: 0,
-            awayScore: 0,
-            quarter: 'Q1',
-            timeSeconds: 720, // 12:00 in seconds
-            state: 'live'
-        };
-        
-        /**
-         * Generate fake game data for simulation
-         * @param {string} serverState - State from dashboard ('pregame', 'live', 'halftime', 'final')
-         */
-        function generateSimulationData(serverState) {
-            // Always increment scores for testing
-            if (Math.random() < 0.5) {
-                simulationData.homeScore += Math.random() < 0.7 ? 2 : 3; // 2pt or 3pt
-            } else {
-                simulationData.awayScore += Math.random() < 0.7 ? 2 : 3;
-            }
-            
-            // Use dashboard-selected state or auto-progress
-            if (serverState) {
-                simulationData.state = serverState;
-                
-                // Set appropriate quarter/time based on state
-                if (serverState === 'pregame') {
-                    simulationData.quarter = 'Q1';
-                    simulationData.timeSeconds = 720;
-                } else if (serverState === 'live') {
-                    // Keep current quarter or default to Q3 if not set
-                    if (!simulationData.quarter || simulationData.quarter === 'Q1') {
-                        simulationData.quarter = 'Q3';
-                    }
-                    if (simulationData.timeSeconds <= 0) {
-                        simulationData.timeSeconds = 420; // 7:00
-                    }
-                    // Tick down time
-                    simulationData.timeSeconds -= Math.floor(Math.random() * 15) + 5;
-                } else if (serverState === 'halftime') {
-                    simulationData.quarter = 'Q2';
-                    simulationData.timeSeconds = 0;
-                } else if (serverState === 'overtime') {
-                    simulationData.quarter = 'OT';
-                    simulationData.timeSeconds -= Math.floor(Math.random() * 15) + 5;
-                    if (simulationData.timeSeconds <= 0) simulationData.timeSeconds = 300; // 5:00
-                } else if (serverState === 'final') {
-                    simulationData.quarter = 'Q4';
-                    simulationData.timeSeconds = 0;
-                }
-            } else {
-                // Auto-progress mode (tick down time)
-                simulationData.timeSeconds -= Math.floor(Math.random() * 15) + 5;
-                
-                if (simulationData.timeSeconds <= 0) {
-                    if (simulationData.quarter === 'Q1') {
-                        simulationData.quarter = 'Q2';
-                        simulationData.timeSeconds = 720;
-                    } else if (simulationData.quarter === 'Q2') {
-                        simulationData.state = 'halftime';
-                        simulationData.timeSeconds = 0;
-                    } else if (simulationData.state === 'halftime') {
-                        simulationData.state = 'live';
-                        simulationData.quarter = 'Q3';
-                        simulationData.timeSeconds = 720;
-                    } else if (simulationData.quarter === 'Q3') {
-                        simulationData.quarter = 'Q4';
-                        simulationData.timeSeconds = 720;
-                    } else if (simulationData.quarter === 'Q4') {
-                        simulationData.state = 'final';
-                        simulationData.timeSeconds = 0;
-                    }
-                }
-            }
-            
-            // Format time as MM:SS
-            const minutes = Math.floor(simulationData.timeSeconds / 60);
-            const seconds = simulationData.timeSeconds % 60;
-            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            // Return fake game object matching ESPN API format
-            let statusText;
-            if (simulationData.state === 'pregame') {
-                // For pregame, show countdown (simplified to 5 mins for testing)
-                statusText = 'Scheduled';
-            } else if (simulationData.state === 'halftime') {
-                statusText = 'Halftime';
-            } else if (simulationData.state === 'final') {
-                statusText = 'Final';
-            } else {
-                // Live or overtime
-                statusText = `${simulationData.quarter} ${timeString}`;
-            }
-            
-            return {
-                id: 'simulation',
-                homeTeam: {
-                    abbreviation: 'LAL',
-                    logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png',
-                    score: simulationData.homeScore
-                },
-                awayTeam: {
-                    abbreviation: 'GSW',
-                    logo: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png',
-                    score: simulationData.awayScore
-                },
-                isLive: simulationData.state === 'live' || simulationData.state === 'overtime' || simulationData.state === 'halftime',
-                isFinal: simulationData.state === 'final',
-                statusText: statusText,
-                date: new Date().toISOString()
-            };
-        }
-        
-        // ==================== HELPER FUNCTIONS ====================
-        
-        /**
-         * Reset overlay state and hide everything
-         */
-        function resetAndHideOverlay() {
-            gameView.hide();
-            mvpView.hide();
-            window.MVPIntegration.clearMVPCache();
-            lastGameData = null;
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
-            }
-        }
-        
-        /**
-         * Check quarter tracking and determine if overlay should show
-         * @param {Object} quarterData - Quarter data from API
-         * @returns {boolean} True if overlay should show, false if should hide
-         */
-        function shouldShowOverlayBasedOnQuarter(quarterData) {
-            // No quarter started OR game done
-            if (!quarterData.current || !quarterData.startTime) {
-                return false;
-            }
-            
-            // Only apply 10-second delay if overlay hasn't been shown yet
-            if (!overlayHasBeenShown) {
-                // Only check delay for Q1 (first quarter of the game)
-                if (quarterData.current === 'Q1') {
-                    const timeSinceStart = Date.now() - quarterData.startTime;
-                    const SHOW_DELAY = 10000; // 10 seconds
-                    
-                    if (timeSinceStart < SHOW_DELAY) {
-                        return false; // Not enough time passed
-                    }
-                }
-                // If we reach here, overlay will be shown - set flag
-                overlayHasBeenShown = true;
-            }
-            
-            return true; // Show overlay
-        }
-        
-        // ==================== MAIN UPDATE FUNCTION ====================
-        
-        /**
-         * Update overlay from API (copied from working overlay/game-stats/GameOverlay.js)
-         */
-        async function updateFromAPI() {
-            try {
-                // Step 1: Check if simulation mode is enabled
-                const simData = await api.getSimulation();
-                
-                if (simData && simData.enabled) {
-                    const fakeGame = generateSimulationData(simData.state);
-                    detectStateAndUpdate(fakeGame);
-                    return;
-                }
-                
-                // Step 2: Get selected game ID from server
-                const data = await api.getSelectedGame();
-                if (!data) {
-                    throw new Error('Failed to fetch selection');
-                }
-                
-                const selectedGameId = data.gameId;
-                
-                // Check if game changed - reset overlay shown flag
-                if (selectedGameId !== lastSelectedGameId) {
-                    overlayHasBeenShown = false;
-                    lastSelectedGameId = selectedGameId;
-                }
-                
-                // No game selected - hide overlay and reset
-                if (!selectedGameId) {
-                    resetAndHideOverlay();
-                    overlayHasBeenShown = false;
-                    lastSelectedGameId = null;
-                    return;
-                }
-                
-                // Step 2.5: Check quarter tracking
-                const quarterData = await api.getQuarter();
-                
-                if (!shouldShowOverlayBasedOnQuarter(quarterData)) {
-                    // Hide overlay and reset (but keep game tracking)
-                    resetAndHideOverlay();
-                    overlayHasBeenShown = false;
-                    return;
-                }
-                
-                // Quarter active - show overlay
-                
-                // Step 3: Fetch game data from ESPN API
-                const game = await window.NBAApi.getGameById(selectedGameId);
-                
-                if (!game) {
-                    resetAndHideOverlay();
-                    return;
-                }
-                
-                // Step 4: Auto-detect state and update view
-                detectStateAndUpdate(game, selectedGameId);
-                
-            } catch (error) {
-                console.error('ERROR in updateFromAPI:', error);
-                resetAndHideOverlay();
-            }
-        }
-        
-        /**
-         * Detect game state and update view (copied from working overlay)
-         * @param {Object} game - Game data
-         * @param {string} gameId - ESPN game ID
-         */
-        function detectStateAndUpdate(game, gameId) {
-            // Use shared utility to determine state
-            const stateName = detectGameState(game);
-            
-            // Format data for GameView
-            const formattedData = formatGameDataForView(game, stateName);
-            
-            // Create comparison keys for different types of changes
-            // Extract scores and team info consistently regardless of data format
-            const homeScore = formattedData.home?.score ?? formattedData.homeTeam?.score ?? 0;
-            const awayScore = formattedData.away?.score ?? formattedData.awayTeam?.score ?? 0;
-            const homeAbbr = formattedData.home?.abbr ?? formattedData.homeTeam?.abbr ?? '';
-            const awayAbbr = formattedData.away?.abbr ?? formattedData.awayTeam?.abbr ?? '';
-            
-            const stateKey = JSON.stringify({
-                state: stateName,
-                quarter: formattedData.quarter
-            });
-            
-            const scoreKey = JSON.stringify({
-                homeScore: homeScore,
-                awayScore: awayScore,
-                homeAbbr: homeAbbr,
-                awayAbbr: awayAbbr
-            });
-            
-            const fullKey = stateKey + scoreKey;
-            
-            // Manage countdown interval for pregame state
-            if (stateName === 'pregame') {
-                if (!countdownInterval) {
-                    // Start countdown interval that ticks every second
-                    countdownInterval = setInterval(() => {
-                        if (countdownSeconds > 0) {
-                            countdownSeconds--;
-                            gameView.updateCountdown(formatCountdown(countdownSeconds));
-                        } else {
-                            // Countdown finished, trigger API update to check if game started
-                            clearInterval(countdownInterval);
-                            countdownInterval = null;
-                            updateFromAPI();
-                        }
-                    }, 1000);
-                }
-            } else {
-                // Not pregame - clear countdown interval if it exists
-                if (countdownInterval) {
-                    clearInterval(countdownInterval);
-                    countdownInterval = null;
-                }
-            }
-            
-            // Check what changed
-            if (!lastGameData) {
-                // First load - show instantly without animation
-                gameView.show();
-                gameView.switchToState(stateName, formattedData);
-                lastGameData = fullKey;
-                
-                // Initialize MVP controller with initial state
-                lastGameState = stateName;
-                window.MVPIntegration.notifyMVPStateChange(mvpController, mvpView, stateName, gameId);
-            } else if (lastGameData !== fullKey) {
-                // Something changed - determine what
-                const lastStateKey = lastGameData.split('}')[0] + '}';
-                const lastScoreKey = lastGameData.split('}')[1] + '}';
-                
-                const stateChanged = stateKey !== lastStateKey;
-                const scoresChanged = scoreKey !== lastScoreKey;
-                
-                if (stateChanged) {
-                    // State changed - switch directly without animation
-                    gameView.switchToState(stateName, formattedData);
-                    
-                    // Notify MVP controller of state change
-                    if (lastGameState !== stateName) {
-                        lastGameState = stateName;
-                        window.MVPIntegration.notifyMVPStateChange(mvpController, mvpView, stateName, gameId);
-                    }
-                } else if (scoresChanged) {
-                    // Teams or scores changed
-                    const teamsChanged = (lastScoreKey.includes(homeAbbr) === false) || (lastScoreKey.includes(awayAbbr) === false);
-                    
-                    if (teamsChanged) {
-                        // Teams changed - switch state to update everything
-                        gameView.switchToState(stateName, formattedData);
-                        
-                        // Game changed - notify MVP controller (even if state didn't change)
-                        lastGameState = stateName;
-                        window.MVPIntegration.notifyMVPStateChange(mvpController, mvpView, stateName, gameId);
-                    } else if (stateName === 'live') {
-                        // Scores changed in live state - slide animation for scores
-                        gameView.updateScore('home', homeScore, true);
-                        gameView.updateScore('away', awayScore, true);
-                        // Also update time silently
-                        if (formattedData.time) {
-                            const statusElement = document.querySelector('[data-status]');
-                            if (statusElement) {
-                                statusElement.textContent = `${formattedData.quarter} · ${formattedData.time}`;
-                            }
-                        }
-                    }
-                }
-                
-                lastGameData = fullKey;
-            } else {
-                // Only time changed - update time silently
-                if (stateName === 'live' && formattedData.time) {
-                    const statusElement = document.querySelector('[data-status]');
-                    if (statusElement) {
-                        statusElement.textContent = `${formattedData.quarter} · ${formattedData.time}`;
-                    }
-                }
-            }
-        }
-        
-        /**
-         * Format ESPN API game data for GameView
-         */
-        function formatGameDataForView(game, stateName) {
-            // Base team data (used by all states)
-            const baseData = {
-                home: {
-                    abbr: game.homeTeam.abbreviation,
-                    logoUrl: game.homeTeam.logo,
-                    score: parseInt(game.homeTeam.score) || 0
-                },
-                away: {
-                    abbr: game.awayTeam.abbreviation,
-                    logoUrl: game.awayTeam.logo,
-                    score: parseInt(game.awayTeam.score) || 0
-                }
-            };
-            
-            // State-specific formatting
-            switch (stateName) {
-                case 'pregame':
-                    // Calculate countdown using shared utility
-                    const secondsUntilGame = calculateSecondsUntilStart(game.date);
-                    
-                    // Update global countdown seconds for the countdown interval
-                    countdownSeconds = secondsUntilGame;
-                    
-                    return {
-                        homeTeam: baseData.home,
-                        awayTeam: baseData.away,
-                        countdown: formatCountdown(secondsUntilGame)
-                    };
-                
-                case 'live':
-                    // Use shared utility for formatting live status
-                    const liveStatus = formatLiveGameStatus(game.statusText);
-                    return {
-                        ...baseData,
-                        quarter: liveStatus.quarter,
-                        time: liveStatus.time
-                    };
-                
-                case 'halftime':
-                case 'final':
-                    return baseData;
-                
-                default:
-                    return baseData;
-            }
-        }
-        
-        /**
-         * Format countdown time (HH:MM:SS or MM:SS)
-         */
-        // formatCountdown is now in shared/gameUtils.js
-        
-        /**
-         * Start automatic updates (copied from working overlay)
-         */
-        function startOverlay() {
-            // Initial update
-            updateFromAPI();
-            
-            // Auto-refresh every 3 seconds for responsive live updates
-            setInterval(updateFromAPI, 3000);
-        }
-        
-        // Start when page loads
-        window.addEventListener('DOMContentLoaded', startOverlay);
-        
-        // Make gameView globally available for testing
+        // Expose for debugging/testing
+        window.appController = appController;
         window.gameView = gameView;
-        window.updateFromAPI = updateFromAPI; // For manual testing
         
-        
-        // ==================== SIMULATED MVP ====================
-        
-        const simulatedMVPData = {
-            name: 'Giannis Antetokounmpo',
-            photoUrl: 'https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/3032977.png',
-            pts: 32,
-            reb: 11,
-            ast: 6,
-            teamLogo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png'
-        };
-        
-        // Check if we should show simulated MVP (controlled by dashboard)
-        let lastSimMVPState = false;
-        
-        async function checkSimulatedMVP() {
-            try {
-                const simData = await api.getSimulation();
-                
-                // Only check simulated MVP if simulation mode is on
-                if (simData && simData.enabled && simData.showMVP) {
-                    if (!lastSimMVPState) {
-                        // Just turned on - show MVP
-                        mvpView.show(simulatedMVPData);
-                        lastSimMVPState = true;
-                    }
-                } else {
-                    if (lastSimMVPState) {
-                        // Just turned off - hide MVP
-                        mvpView.hide();
-                        lastSimMVPState = false;
-                    }
-                }
-            } catch (e) {
-                // Ignore errors
-            }
-        }
-        
-        // Check simulated MVP state periodically (only when in simulation mode)
-        checkSimulatedMVP(); // Initial check
-        setInterval(checkSimulatedMVP, 1000);
-        
+        /* OLD CODE REMOVED - Now in modular classes:
+         * - generateSimulationData() → SimulationManager
+         * - resetAndHideOverlay() → AppController
+         * - shouldShowOverlayBasedOnQuarter() → AppController
+         * - updateFromAPI() → AppController
+         * - detectStateAndUpdate() → AppController
+         * - formatGameDataForView() → AppController
+         * - checkSimulatedMVP() → AppController
+         * - All state variables → StateManager
+         */
     </script>
     
 </body>

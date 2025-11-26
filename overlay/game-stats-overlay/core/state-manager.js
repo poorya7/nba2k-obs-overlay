@@ -1,0 +1,187 @@
+/**
+ * StateManager - Centralized state management for the overlay
+ * Single Responsibility: Track and manage all overlay state
+ * 
+ * Replaces scattered global variables with a clean state object
+ */
+
+class StateManager {
+    constructor() {
+        // Game tracking state
+        this.lastGameData = null;
+        this.lastGameState = null;
+        this.lastSelectedGameId = null;
+        this.overlayHasBeenShown = false;
+        
+        // Countdown state (for pregame)
+        this.countdownInterval = null;
+        this.countdownSeconds = 0;
+        
+        // Simulated MVP state
+        this.lastSimMVPState = false;
+    }
+
+    /**
+     * Check if game data has changed
+     * @param {string} newGameData - Serialized game data key
+     * @returns {boolean}
+     */
+    hasGameDataChanged(newGameData) {
+        return this.lastGameData !== newGameData;
+    }
+
+    /**
+     * Update game data tracking
+     * @param {string} gameData - Serialized game data key
+     */
+    setGameData(gameData) {
+        this.lastGameData = gameData;
+    }
+
+    /**
+     * Check if game state has changed
+     * @param {string} newState - Game state name
+     * @returns {boolean}
+     */
+    hasGameStateChanged(newState) {
+        return this.lastGameState !== newState;
+    }
+
+    /**
+     * Update game state tracking
+     * @param {string} state - Game state name
+     */
+    setGameState(state) {
+        this.lastGameState = state;
+    }
+
+    /**
+     * Check if game ID has changed
+     * @param {string} newGameId - Game ID
+     * @returns {boolean}
+     */
+    hasGameIdChanged(newGameId) {
+        return this.lastSelectedGameId !== newGameId;
+    }
+
+    /**
+     * Update game ID tracking and reset overlay shown flag if changed
+     * @param {string} gameId - Game ID
+     */
+    setGameId(gameId) {
+        if (this.hasGameIdChanged(gameId)) {
+            this.overlayHasBeenShown = false;
+            this.lastSelectedGameId = gameId;
+        }
+    }
+
+    /**
+     * Reset overlay shown flag
+     */
+    resetOverlayShown() {
+        this.overlayHasBeenShown = false;
+    }
+
+    /**
+     * Mark overlay as shown
+     */
+    markOverlayAsShown() {
+        this.overlayHasBeenShown = true;
+    }
+
+    /**
+     * Check if overlay has been shown
+     * @returns {boolean}
+     */
+    isOverlayShown() {
+        return this.overlayHasBeenShown;
+    }
+
+    /**
+     * Start countdown interval
+     * @param {Function} callback - Called every second with decremented seconds
+     */
+    startCountdown(callback) {
+        if (this.countdownInterval) {
+            this.stopCountdown();
+        }
+
+        this.countdownInterval = setInterval(() => {
+            if (this.countdownSeconds > 0) {
+                this.countdownSeconds--;
+                callback(this.countdownSeconds);
+            }
+        }, 1000);
+    }
+
+    /**
+     * Stop countdown interval
+     */
+    stopCountdown() {
+        if (this.countdownInterval) {
+            clearInterval(this.countdownInterval);
+            this.countdownInterval = null;
+        }
+    }
+
+    /**
+     * Set countdown seconds
+     * @param {number} seconds
+     */
+    setCountdownSeconds(seconds) {
+        this.countdownSeconds = seconds;
+    }
+
+    /**
+     * Get countdown seconds
+     * @returns {number}
+     */
+    getCountdownSeconds() {
+        return this.countdownSeconds;
+    }
+
+    /**
+     * Check if countdown is active
+     * @returns {boolean}
+     */
+    isCountdownActive() {
+        return this.countdownInterval !== null;
+    }
+
+    /**
+     * Update simulated MVP state
+     * @param {boolean} state
+     */
+    setSimMVPState(state) {
+        this.lastSimMVPState = state;
+    }
+
+    /**
+     * Get simulated MVP state
+     * @returns {boolean}
+     */
+    getSimMVPState() {
+        return this.lastSimMVPState;
+    }
+
+    /**
+     * Reset all state (called when game changes or overlay hides)
+     */
+    reset() {
+        this.lastGameData = null;
+        this.stopCountdown();
+        this.countdownSeconds = 0;
+    }
+
+    /**
+     * Full reset (called when no game selected)
+     */
+    fullReset() {
+        this.reset();
+        this.lastGameState = null;
+        this.overlayHasBeenShown = false;
+        this.lastSelectedGameId = null;
+        this.lastSimMVPState = false;
+    }
+}
+
