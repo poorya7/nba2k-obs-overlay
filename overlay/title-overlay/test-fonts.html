@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title Font Comparison</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f172a;
+            padding: 40px;
+            font-family: sans-serif;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 16px;
+            color: #94a3b8;
+        }
+
+        .comparison-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .font-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .label {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fbbf24;
+            text-align: center;
+        }
+
+        .font-info {
+            font-size: 13px;
+            color: #64748b;
+            text-align: center;
+            max-width: 250px;
+        }
+
+        /* Preview boxes with dark background like real overlay */
+        .preview-box {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 30px 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* Current font: Russo One */
+        .russo-one-text .main-text {
+            font-family: 'Russo One', sans-serif;
+            font-size: 35.65px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7),
+                         0 2px 4px rgba(0, 0, 0, 0.6);
+            opacity: 0.22;
+        }
+
+        .russo-one-text .sub-text {
+            font-family: 'Russo One', sans-serif;
+            font-size: 16.1px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 5px;
+            margin-top: 3px;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
+            opacity: 0.24;
+        }
+
+        /* Fallback font: sans-serif (Arial/Helvetica) */
+        .fallback-text .main-text {
+            font-family: sans-serif;
+            font-size: 35.65px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7),
+                         0 2px 4px rgba(0, 0, 0, 0.6);
+            opacity: 0.22;
+        }
+
+        .fallback-text .sub-text {
+            font-family: sans-serif;
+            font-size: 16.1px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 5px;
+            margin-top: 3px;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
+            opacity: 0.24;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>🎨 Title Font Comparison</h1>
+        <p>Which font looks better for the stream title?</p>
+    </div>
+
+    <div class="comparison-container">
+        <!-- Current Font: Russo One -->
+        <div class="font-option">
+            <div class="label">Current Font</div>
+            <div class="preview-box">
+                <div class="russo-one-text">
+                    <div class="main-text">Silent Basketball</div>
+                    <div class="sub-text">ASMR</div>
+                </div>
+            </div>
+            <div class="font-info">
+                <strong>Russo One</strong><br>
+                (Google Font - imported)
+            </div>
+        </div>
+
+        <!-- Fallback Font: sans-serif -->
+        <div class="font-option">
+            <div class="label">Fallback Font</div>
+            <div class="preview-box">
+                <div class="fallback-text">
+                    <div class="main-text">Silent Basketball</div>
+                    <div class="sub-text">ASMR</div>
+                </div>
+            </div>
+            <div class="font-info">
+                <strong>Sans-serif</strong><br>
+                (System default - Arial/Helvetica)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Log actual fonts being used
+        console.log('Current font:', window.getComputedStyle(document.querySelector('.russo-one-text .main-text')).fontFamily);
+        console.log('Fallback font:', window.getComputedStyle(document.querySelector('.fallback-text .main-text')).fontFamily);
+    </script>
+</body>
+</html>
+
