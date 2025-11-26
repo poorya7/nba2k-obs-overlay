@@ -3,11 +3,12 @@
 
 .other-games-overlay {
     position: fixed;
-    top: 155px;
+    top: 461.5px; /* Aligned with game-stats-overlay vertical center */
+    transform: translateY(-50%); /* Center this element at that point */
     right: 20px;
     z-index: 10;
     display: none; /* Hidden by default, shown when games available */
-    will-change: opacity; /* Optimize fade animations */
+    will-change: opacity, transform; /* Optimize fade and transform animations */
 }
 
 .other-game-card {
