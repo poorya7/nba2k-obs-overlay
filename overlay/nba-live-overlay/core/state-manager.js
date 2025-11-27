@@ -23,6 +23,14 @@ class StateManager {
         
         // Simulated MVP state
         this.lastSimMVPState = false;
+        
+        // Mode tracking (CURRENT_GAME or OTHER_GAMES)
+        this.currentMode = 'CURRENT_GAME';
+        
+        // Other games tracking
+        this.lastQuarterStartTime = null;
+        this.hasShownOtherGamesThisQuarter = false;
+        this.OTHER_GAMES_DELAY_MS = 60000; // 60 seconds
     }
 
     /**
@@ -210,6 +218,56 @@ class StateManager {
         this.overlayHasBeenShown = false;
         this.lastSelectedGameId = null;
         this.lastSimMVPState = false;
+        this.currentMode = 'CURRENT_GAME';
+        this.hasShownOtherGamesThisQuarter = false;
+    }
+
+    /**
+     * Mode management
+     */
+    setMode(mode) {
+        this.currentMode = mode;
+    }
+
+    getMode() {
+        return this.currentMode;
+    }
+
+    /**
+     * Other games quarter tracking
+     */
+    updateQuarterTracking(quarterStartTime) {
+        if (quarterStartTime !== this.lastQuarterStartTime) {
+            this.lastQuarterStartTime = quarterStartTime;
+            this.hasShownOtherGamesThisQuarter = false;
+        }
+    }
+
+    markOtherGamesShownThisQuarter() {
+        this.hasShownOtherGamesThisQuarter = true;
+    }
+
+    hasShownOtherGamesThisQuarter() {
+        return this.hasShownOtherGamesThisQuarter;
+    }
+
+    shouldShowOtherGames(quarterData) {
+        if (!quarterData || !quarterData.current || !quarterData.startTime) {
+            return false;
+        }
+
+        const timeSinceQuarterStart = Date.now() - quarterData.startTime;
+        
+        // Track quarter changes
+        this.updateQuarterTracking(quarterData.startTime);
+        
+        // Don't show if we've already shown it for this quarter
+        if (this.hasShownOtherGamesThisQuarter) {
+            return false;
+        }
+        
+        // Show if enough time has passed (60 seconds)
+        return timeSinceQuarterStart >= this.OTHER_GAMES_DELAY_MS;
     }
 }
 

@@ -15,6 +15,7 @@ class AppController {
         this.mvpView = dependencies.mvpView;
         this.mvpController = dependencies.mvpController;
         this.mvpIntegration = dependencies.mvpIntegration;
+        this.otherGamesView = dependencies.otherGamesView;
         this.stateManager = dependencies.stateManager;
         this.simulationManager = dependencies.simulationManager;
 
@@ -25,6 +26,9 @@ class AppController {
         // Timers
         this.updateTimer = null;
         this.simMVPTimer = null;
+        
+        // Other games controller (initialized when needed)
+        this.otherGamesController = null;
     }
 
     /**
@@ -103,7 +107,19 @@ class AppController {
 
             // Quarter active - show overlay
 
-            // Step 3: Fetch game data from ESPN API
+            // Step 3: Check if we should show other games
+            if (this.stateManager.shouldShowOtherGames(quarterData)) {
+                await this.showOtherGamesMode(selectedGameId);
+                return; // Other games is showing, don't update current game
+            }
+
+            // Step 4: Ensure we're in current game mode
+            if (this.stateManager.getMode() !== 'CURRENT_GAME') {
+                // Shouldn't happen, but safety check
+                return;
+            }
+
+            // Step 5: Fetch game data from ESPN API
             const game = await this.nbaApi.getGameById(selectedGameId);
 
             if (!game) {
@@ -111,7 +127,7 @@ class AppController {
                 return;
             }
 
-            // Step 4: Auto-detect state and update view
+            // Step 6: Auto-detect state and update view
             this.detectStateAndUpdate(game, selectedGameId);
 
         } catch (error) {
@@ -127,6 +143,17 @@ class AppController {
         this.gameView.hide();
         this.mvpView.hide();
         this.mvpIntegration.clearMVPCache();
+        
+        // Hide other games overlay
+        const otherGamesOverlay = document.getElementById('other-games');
+        if (otherGamesOverlay) {
+            otherGamesOverlay.style.display = 'none';
+        }
+        if (this.otherGamesController) {
+            this.otherGamesController.destroy();
+            this.otherGamesController = null;
+        }
+        
         this.stateManager.reset();
     }
 
@@ -392,6 +419,116 @@ class AppController {
         } catch (e) {
             // Ignore errors
         }
+    }
+
+    /**
+     * Show other games mode
+     * @param {string} selectedGameId - ID of selected game to exclude
+     */
+    async showOtherGamesMode(selectedGameId) {
+        // Switch to other games mode
+        this.stateManager.setMode('OTHER_GAMES');
+        this.stateManager.markOtherGamesShownThisQuarter();
+
+        // Hide current game overlay
+        this.gameView.hide();
+        this.mvpView.hide();
+
+        // Fetch all today's games
+        const allGames = await this.nbaApi.getTodaysGames();
+        if (!allGames || allGames.length === 0) {
+            // No games, return to current game mode
+            this.returnToCurrentGameMode();
+            return;
+        }
+
+        // Filter out the selected game
+        const otherGames = allGames
+            .filter(game => game.id !== selectedGameId)
+            .map(game => this.transformGameDataForOtherGames(game));
+
+        if (otherGames.length === 0) {
+            // No other games, return to current game mode
+            this.returnToCurrentGameMode();
+            return;
+        }
+
+        // Show other games overlay
+        const otherGamesOverlay = document.getElementById('other-games');
+        if (otherGamesOverlay) {
+            otherGamesOverlay.style.display = 'block';
+            otherGamesOverlay.style.opacity = '1';
+        }
+
+        // Initialize other games controller with callback
+        this.otherGamesController = new OtherGamesController(
+            this.otherGamesView,
+            () => this.returnToCurrentGameMode(), // Callback when cycling completes
+            false // Production mode (not simulation)
+        );
+
+        // Start cycling
+        this.otherGamesController.init(otherGames);
+    }
+
+    /**
+     * Return to current game mode
+     */
+    returnToCurrentGameMode() {
+        // Hide other games overlay
+        const otherGamesOverlay = document.getElementById('other-games');
+        if (otherGamesOverlay) {
+            otherGamesOverlay.style.opacity = '0';
+            setTimeout(() => {
+                otherGamesOverlay.style.display = 'none';
+            }, 300);
+        }
+
+        // Clean up other games controller
+        if (this.otherGamesController) {
+            this.otherGamesController.destroy();
+            this.otherGamesController = null;
+        }
+
+        // Switch back to current game mode
+        this.stateManager.setMode('CURRENT_GAME');
+
+        // Show current game overlay again (will be updated on next API poll)
+        this.gameView.show();
+    }
+
+    /**
+     * Transform game data for other games view
+     * Uses same logic as other-games-overlay
+     */
+    transformGameDataForOtherGames(game) {
+        const state = window.detectGameState(game);
+        
+        const baseGame = {
+            state: state,
+            away: {
+                logo: game.awayTeam.logo,
+                abbr: game.awayTeam.abbreviation,
+                score: parseInt(game.awayTeam.score) || 0
+            },
+            home: {
+                logo: game.homeTeam.logo,
+                abbr: game.homeTeam.abbreviation,
+                score: parseInt(game.homeTeam.score) || 0
+            }
+        };
+        
+        if (state === 'pregame') {
+            baseGame.secondsUntilStart = window.calculateSecondsUntilStart(game.date);
+        } else if (state === 'live') {
+            baseGame.quarter = window.formatLiveGameStatus(game.statusText).formatted;
+        } else if (state === 'halftime') {
+            baseGame.quarter = 'Halftime';
+        } else if (state === 'final') {
+            baseGame.status = 'FINAL';
+        }
+        
+        return baseGame;
     }
 }
 

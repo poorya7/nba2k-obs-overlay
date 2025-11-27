@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Game Stats Overlay - OBS Browser Source Ready -->
+    <!-- Current Game Stats Overlay -->
     <div class="game-stats">
         <div class="live-indicator">
             <div class="live-dot"></div>
@@ -69,6 +69,15 @@
         </div>
     </div>
 
+    <!-- Other Games Overlay -->
+    <div class="other-games-overlay" id="other-games">
+        <div class="other-game-card">
+            <div id="games-container">
+                <!-- Games will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
     <!-- NBA API utilities -->
     <script src="../../_shared/config.js"></script>
     <script src="../../_shared/nbaApi.js"></script>
@@ -80,6 +89,8 @@
     <script src="mvp-view.js"></script>
     <script src="mvp-controller.js"></script>
     <script src="mvp-integration.js"></script>
+    <script src="other-games-view.js"></script>
+    <script src="other-games-controller.js"></script>
     
     <!-- Core Controllers (Refactored modular architecture) -->
     <script src="state-manager.js"></script>
@@ -97,6 +108,7 @@
         const mvpView = new MvpView();
         const mvpController = new MvpController(mvpView);
         const mvpIntegration = window.MVPIntegration;
+        const otherGamesView = new OtherGamesView();
         
         // Initialize core managers
         const stateManager = new StateManager();
@@ -110,6 +122,7 @@
             mvpView,
             mvpController,
             mvpIntegration,
+            otherGamesView,
             stateManager,
             simulationManager
         });
