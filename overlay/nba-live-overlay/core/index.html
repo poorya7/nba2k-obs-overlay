@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/overlay/nba-live-overlay/core/">
+    <title>NBA Game Stats Overlay</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Game Stats Overlay - OBS Browser Source Ready -->
+    <div class="game-stats">
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span class="live-text">Live</span>
+            <span class="nba-label">NBA</span>
+        </div>
+        
+        <div class="teams">
+            <!-- Home Team -->
+            <div class="team" data-team="home">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="home" src="" alt="Home Team">
+                    <div class="team-abbr" data-abbr="home">---</div>
+                </div>
+                <div class="score" data-score="home">0</div>
+            </div>
+            
+            <!-- Away Team -->
+            <div class="team" data-team="away">
+                <div class="team-left">
+                    <img class="team-logo" data-logo="away" src="" alt="Away Team">
+                    <div class="team-abbr" data-abbr="away">---</div>
+                </div>
+                <div class="score" data-score="away">0</div>
+            </div>
+        </div>
+        
+        <div class="game-status" data-status>Q1 · 12:00</div>
+
+        <!-- MVP Player Section -->
+        <div class="mvp-section">
+            <div class="mvp-content">
+                <div class="photo-container">
+                    <img class="player-pic" src="" alt="MVP Player">
+                    <img class="player-team-logo" src="" alt="Team">
+                </div>
+                <div class="player-info">
+                    <div class="mvp-header">
+                        <span class="mvp-label">⭐ MVP</span>
+                        <span class="player-name">---</span>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" data-stat="pts">0</div>
+                            <div class="stat-label">PTS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" data-stat="reb">0</div>
+                            <div class="stat-label">REB</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" data-stat="ast">0</div>
+                            <div class="stat-label">AST</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NBA API utilities -->
+    <script src="../../_shared/config.js"></script>
+    <script src="../../_shared/nbaApi.js"></script>
+    <script src="../../_shared/gameUtils.js"></script>
+    <script src="../../_shared/apiClient.js"></script>
+    
+    <!-- View Controllers -->
+    <script src="game-view.js"></script>
+    <script src="mvp-view.js"></script>
+    <script src="mvp-controller.js"></script>
+    <script src="mvp-integration.js"></script>
+    
+    <!-- Core Controllers (Refactored modular architecture) -->
+    <script src="state-manager.js"></script>
+    <script src="simulation-manager.js"></script>
+    <script src="app-controller.js"></script>
+    
+    <script>
+        // ==================== CLEAN INITIALIZATION ====================
+        // All business logic extracted into modular classes
+        
+        // Initialize dependencies
+        const api = new ApiClient();
+        const nbaApi = window.NBAApi;
+        const gameView = new GameView();
+        const mvpView = new MvpView();
+        const mvpController = new MvpController(mvpView);
+        const mvpIntegration = window.MVPIntegration;
+        
+        // Initialize core managers
+        const stateManager = new StateManager();
+        const simulationManager = new SimulationManager();
+        
+        // Initialize main app controller with all dependencies
+        const appController = new AppController({
+            api,
+            nbaApi,
+            gameView,
+            mvpView,
+            mvpController,
+            mvpIntegration,
+            stateManager,
+            simulationManager
+        });
+        
+        // Start the overlay when DOM is ready
+        window.addEventListener('DOMContentLoaded', () => {
+            appController.start();
+        });
+        
+        // Expose for debugging/testing
+        window.appController = appController;
+        window.gameView = gameView;
+        
+        /* OLD CODE REMOVED - Now in modular classes:
+         * - generateSimulationData() → SimulationManager
+         * - resetAndHideOverlay() → AppController
+         * - shouldShowOverlayBasedOnQuarter() → AppController
+         * - updateFromAPI() → AppController
+         * - detectStateAndUpdate() → AppController
+         * - formatGameDataForView() → AppController
+         * - checkSimulatedMVP() → AppController
+         * - All state variables → StateManager
+         */
+    </script>
+
+</body>
+</html>
