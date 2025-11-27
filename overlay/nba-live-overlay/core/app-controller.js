@@ -20,8 +20,10 @@ class AppController {
         this.simulationManager = dependencies.simulationManager;
 
         // Configuration
-        this.updateInterval = 3000; // 3 seconds
+        this.baseUpdateInterval = 3000; // 3 seconds base
+        this.updateInterval = 3000; // Current interval (adjusted for time multiplier)
         this.simMVPCheckInterval = 1000; // 1 second
+        this.lastTimeMultiplier = 1; // Track multiplier changes
         
         // Timers
         this.updateTimer = null;
@@ -38,7 +40,7 @@ class AppController {
         // Initial update
         this.updateFromAPI();
 
-        // Auto-refresh every 3 seconds
+        // Auto-refresh (will adjust dynamically based on sim mode)
         this.updateTimer = setInterval(() => this.updateFromAPI(), this.updateInterval);
 
         // Check simulated MVP state periodically
@@ -68,37 +70,58 @@ class AppController {
         try {
             // Step 1: Check if simulation mode is enabled
             const simData = await this.api.getSimulation();
+            const isSimMode = simData && simData.enabled;
 
-            if (simData && simData.enabled) {
-                const fakeGame = this.simulationManager.generateGameData(simData.state);
-                this.detectStateAndUpdate(fakeGame);
-                return;
+            // Step 2: Get selected game ID from server (not needed for sim mode)
+            let selectedGameId = null;
+            
+            if (!isSimMode) {
+                const data = await this.api.getSelectedGame();
+                if (!data) {
+                    throw new Error('Failed to fetch selection');
+                }
+
+                selectedGameId = data.gameId;
+
+                // Check if game changed - reset overlay shown flag
+                if (this.stateManager.hasGameIdChanged(selectedGameId)) {
+                    this.stateManager.setGameId(selectedGameId);
+                }
+
+                // No game selected - hide overlay and reset
+                if (!selectedGameId) {
+                    this.resetAndHideOverlay();
+                    this.stateManager.fullReset();
+                    return;
+                }
+            } else {
+                // In sim mode, use a fake game ID
+                selectedGameId = 'sim-game';
+                if (this.stateManager.hasGameIdChanged(selectedGameId)) {
+                    this.stateManager.setGameId(selectedGameId);
+                }
             }
 
-            // Step 2: Get selected game ID from server
-            const data = await this.api.getSelectedGame();
-            if (!data) {
-                throw new Error('Failed to fetch selection');
-            }
-
-            const selectedGameId = data.gameId;
-
-            // Check if game changed - reset overlay shown flag
-            if (this.stateManager.hasGameIdChanged(selectedGameId)) {
-                this.stateManager.setGameId(selectedGameId);
-            }
-
-            // No game selected - hide overlay and reset
-            if (!selectedGameId) {
-                this.resetAndHideOverlay();
-                this.stateManager.fullReset();
-                return;
-            }
-
-            // Step 2.5: Check quarter tracking
+            // Step 3: Check quarter tracking
             const quarterData = await this.api.getQuarter();
+            
+            // Get time multiplier for fast forward
+            const timeMultiplier = isSimMode ? (simData.timeMultiplier || 1) : 1;
+            
+            // Track multiplier for calculations
+            if (timeMultiplier !== this.lastTimeMultiplier) {
+                this.lastTimeMultiplier = timeMultiplier;
+            }
+            
+            // In sim mode, always use fast polling (300ms) for responsiveness
+            const desiredInterval = isSimMode ? 300 : this.baseUpdateInterval;
+            if (this.updateInterval !== desiredInterval && this.updateTimer) {
+                this.updateInterval = desiredInterval;
+                clearInterval(this.updateTimer);
+                this.updateTimer = setInterval(() => this.updateFromAPI(), this.updateInterval);
+            }
 
-            if (!this.shouldShowOverlayBasedOnQuarter(quarterData)) {
+            if (!this.shouldShowOverlayBasedOnQuarter(quarterData, timeMultiplier)) {
                 // Hide overlay and reset (but keep game tracking)
                 this.resetAndHideOverlay();
                 this.stateManager.resetOverlayShown();
@@ -107,27 +130,32 @@ class AppController {
 
             // Quarter active - show overlay
 
-            // Step 3: Check if we should show other games
-            if (this.stateManager.shouldShowOtherGames(quarterData)) {
+            // Step 4: Check if we should show other games
+            if (this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier)) {
                 await this.showOtherGamesMode(selectedGameId);
                 return; // Other games is showing, don't update current game
             }
 
-            // Step 4: Ensure we're in current game mode
+            // Step 5: Ensure we're in current game mode
             if (this.stateManager.getMode() !== 'CURRENT_GAME') {
                 // Shouldn't happen, but safety check
                 return;
             }
 
-            // Step 5: Fetch game data from ESPN API
-            const game = await this.nbaApi.getGameById(selectedGameId);
+            // Step 6: Fetch or generate game data
+            let game;
+            if (isSimMode) {
+                game = this.simulationManager.generateGameData(simData.state);
+            } else {
+                game = await this.nbaApi.getGameById(selectedGameId);
+            }
 
             if (!game) {
                 this.resetAndHideOverlay();
                 return;
             }
 
-            // Step 6: Auto-detect state and update view
+            // Step 7: Auto-detect state and update view
             this.detectStateAndUpdate(game, selectedGameId);
 
         } catch (error) {
@@ -160,9 +188,10 @@ class AppController {
     /**
      * Check if overlay should be shown based on quarter tracking
      * @param {Object} quarterData - Quarter tracking data from server
+     * @param {number} timeMultiplier - Time acceleration multiplier (1 = normal, 10 = fast forward)
      * @returns {boolean}
      */
-    shouldShowOverlayBasedOnQuarter(quarterData) {
+    shouldShowOverlayBasedOnQuarter(quarterData, timeMultiplier = 1) {
         if (!quarterData.current || !quarterData.startTime) {
             return false;
         }
@@ -171,10 +200,11 @@ class AppController {
         if (!this.stateManager.isOverlayShown()) {
             // Only check delay for Q1 (first quarter of the game)
             if (quarterData.current === 'Q1') {
-                const timeSinceStart = Date.now() - quarterData.startTime;
+                const realTimeSinceStart = Date.now() - quarterData.startTime;
+                const acceleratedTime = realTimeSinceStart * timeMultiplier;
                 const SHOW_DELAY = 10000; // 10 seconds
 
-                if (timeSinceStart < SHOW_DELAY) {
+                if (acceleratedTime < SHOW_DELAY) {
                     return false; // Not enough time passed
                 }
             }
@@ -434,18 +464,30 @@ class AppController {
         this.gameView.hide();
         this.mvpView.hide();
 
-        // Fetch all today's games
-        const allGames = await this.nbaApi.getTodaysGames();
-        if (!allGames || allGames.length === 0) {
-            // No games, return to current game mode
-            this.returnToCurrentGameMode();
-            return;
-        }
+        // Check if simulation mode is enabled
+        const simData = await this.api.getSimulation();
+        const isSimMode = simData && simData.enabled;
+        const timeMultiplier = isSimMode ? (simData.timeMultiplier || 1) : 1;
 
-        // Filter out the selected game
-        const otherGames = allGames
-            .filter(game => game.id !== selectedGameId)
-            .map(game => this.transformGameDataForOtherGames(game));
+        let otherGames;
+        
+        if (isSimMode) {
+            // Use sim games
+            otherGames = this.simulationManager.getSampleGames();
+        } else {
+            // Fetch all today's games
+            const allGames = await this.nbaApi.getTodaysGames();
+            if (!allGames || allGames.length === 0) {
+                // No games, return to current game mode
+                this.returnToCurrentGameMode();
+                return;
+            }
+
+            // Filter out the selected game and transform
+            otherGames = allGames
+                .filter(game => game.id !== selectedGameId)
+                .map(game => this.transformGameDataForOtherGames(game));
+        }
 
         if (otherGames.length === 0) {
             // No other games, return to current game mode
@@ -464,7 +506,8 @@ class AppController {
         this.otherGamesController = new OtherGamesController(
             this.otherGamesView,
             () => this.returnToCurrentGameMode(), // Callback when cycling completes
-            false // Production mode (not simulation)
+            isSimMode, // Pass sim mode flag
+            timeMultiplier // Pass time multiplier for fast forward
         );
 
         // Start cycling

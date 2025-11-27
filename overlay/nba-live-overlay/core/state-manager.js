@@ -251,12 +251,13 @@ class StateManager {
         return this.hasShownOtherGamesThisQuarter;
     }
 
-    shouldShowOtherGames(quarterData) {
+    shouldShowOtherGames(quarterData, timeMultiplier = 1) {
         if (!quarterData || !quarterData.current || !quarterData.startTime) {
             return false;
         }
 
-        const timeSinceQuarterStart = Date.now() - quarterData.startTime;
+        const realTimeSinceQuarterStart = Date.now() - quarterData.startTime;
+        const acceleratedTime = realTimeSinceQuarterStart * timeMultiplier;
         
         // Track quarter changes
         this.updateQuarterTracking(quarterData.startTime);
@@ -266,8 +267,8 @@ class StateManager {
             return false;
         }
         
-        // Show if enough time has passed (60 seconds)
-        return timeSinceQuarterStart >= this.OTHER_GAMES_DELAY_MS;
+        // Show if enough time has passed (60 seconds accelerated)
+        return acceleratedTime >= this.OTHER_GAMES_DELAY_MS;
     }
 }
 

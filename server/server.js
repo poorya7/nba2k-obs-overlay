@@ -15,7 +15,8 @@ class StateStore {
     this.simulation = {
       enabled: false,
       state: 'pregame',
-      showMVP: false
+      showMVP: false,
+      timeMultiplier: 1  // 1x normal, 10x for fast forward
     };
     this.quarter = {
       current: null,        // 'Q1', 'Q2', 'Q3', 'Q4', or null
@@ -37,6 +38,7 @@ class StateStore {
     if (updates.enabled !== undefined) this.simulation.enabled = updates.enabled;
     if (updates.state !== undefined) this.simulation.state = updates.state;
     if (updates.showMVP !== undefined) this.simulation.showMVP = updates.showMVP;
+    if (updates.timeMultiplier !== undefined) this.simulation.timeMultiplier = updates.timeMultiplier;
   }
 
   // Quarter tracking

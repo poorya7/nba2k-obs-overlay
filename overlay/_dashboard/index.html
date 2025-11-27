@@ -309,11 +309,7 @@
 
     /* Quarter Timer */
     .quarter-timer {
-      margin-top: 16px;
-      padding: 16px;
-      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
+      margin-top: 12px;
       display: none;
     }
 
@@ -321,61 +317,71 @@
       display: block;
     }
 
-    .timer-main {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .timer-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #6b7280;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
     .timer-value {
-      font-size: 32px;
+      font-size: 25px;
       font-weight: 700;
       color: #667eea;
       font-variant-numeric: tabular-nums;
       font-family: 'Courier New', monospace;
+      text-align: center;
     }
 
-    .timer-info {
+
+    /* Mode Selector */
+    .mode-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mode-option {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-option:hover {
+      border-color: #667eea;
+      background: #f9fafb;
+    }
+
+    .mode-option:has(input:checked) {
+      border-color: #667eea;
+      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    }
+
+    .mode-radio {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .mode-radio input[type="radio"] {
+      margin-top: 2px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #667eea;
+    }
+
+    .mode-radio label {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .mode-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .mode-desc {
       font-size: 13px;
       color: #6b7280;
-      padding-top: 12px;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .timer-milestone {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-
-    .timer-milestone:last-child {
-      margin-bottom: 0;
-    }
-
-    .milestone-label {
-      color: #374151;
-      font-weight: 500;
-    }
-
-    .milestone-status {
-      font-weight: 600;
-    }
-
-    .milestone-status.pending {
-      color: #f59e0b;
-    }
-
-    .milestone-status.passed {
-      color: #10b981;
     }
   </style>
 </head>
@@ -385,15 +391,32 @@
 
     <div id="error" class="error" style="display: none;"></div>
 
+    <!-- Mode Selection -->
     <div class="section">
-      <label class="section-title" for="gameSelect">Today's Games</label>
-      <select id="gameSelect">
-        <option value="">Loading games...</option>
-      </select>
+      <div class="mode-selector">
+        <div class="mode-option" id="liveGameMode">
+          <div class="mode-radio">
+            <input type="radio" name="mode" value="live" id="liveRadio" checked>
+            <label for="liveRadio">
+              <div class="mode-title">🏀 Live Game</div>
+              <div class="mode-desc">Select from today's NBA games</div>
+            </label>
+          </div>
+        </div>
+        <div class="mode-option" id="simGameMode">
+          <div class="mode-radio">
+            <input type="radio" name="mode" value="sim" id="simRadio">
+            <label for="simRadio">
+              <div class="mode-title">🎮 Simulation</div>
+              <div class="mode-desc">Test with fake data</div>
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- Quarter Tracking (shown for both modes) -->
     <div class="section" id="quarterSection" style="display: none;">
-      <div class="section-title">🏀 Quarter Tracking</div>
       <div class="quarter-buttons">
         <button class="quarter-btn" data-quarter="Q1">Q1</button>
         <button class="quarter-btn" data-quarter="Q2">Q2</button>
@@ -404,48 +427,26 @@
       
       <!-- Quarter Timer -->
       <div class="quarter-timer" id="quarterTimer">
-        <div class="timer-main">
-          <div class="timer-label">Time Since Quarter Start</div>
-          <div class="timer-value" id="timerValue">00:00</div>
-        </div>
-        <div class="timer-info">
-          <div class="timer-milestone">
-            <span class="milestone-label">📊 Other Games Overlay:</span>
-            <span class="milestone-status pending" id="otherGamesStatus">Shows at 01:00</span>
-          </div>
-        </div>
+        <div class="timer-value" id="timerValue">00:00</div>
       </div>
     </div>
 
-    <div class="section">
+    <!-- Simulation Controls (shown when Simulation mode is active) -->
+    <div class="section" id="simulationSection" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button id="simMVPToggle" class="mvp-toggle-btn" data-state="off" style="flex: 1;">MVP</button>
+        <button id="fastForwardToggle" class="mvp-toggle-btn" data-state="off" style="flex: 1;">Fast Forward</button>
+      </div>
+    </div>
+
+    <!-- Live Game Selection (shown when Live Game mode is active) -->
+    <div class="section" id="liveGameSection">
+      <label class="section-title" for="gameSelect">Today's Games</label>
+      <select id="gameSelect">
+        <option value="">Loading games...</option>
+      </select>
       <div id="loading" class="loading">Select a game to see preview</div>
       <div id="preview" class="preview-card"></div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">🎮 Simulation Mode (Testing)</div>
-      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-          <input type="checkbox" id="simulationToggle" style="width: 20px; height: 20px; cursor: pointer;">
-          <span style="font-size: 14px; font-weight: 600; color: #1f2937;">Enable Simulation Mode</span>
-        </label>
-      </div>
-      <div id="simulationControls" style="display: none;">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-          <div style="flex: 1;">
-            <div id="currentState" style="font-size: 16px; font-weight: 600; color: #1f2937; margin-bottom: 4px;">Pregame</div>
-            <div style="font-size: 12px; color: #6b7280;">Current game state</div>
-          </div>
-          <button id="nextStateBtn" class="refresh-btn" style="margin-top: 0;">▶ Next State</button>
-        </div>
-        <div style="display: flex; align-items: center; gap: 12px; margin-top: 16px;">
-          <div style="flex: 1;">
-            <div style="font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 2px;">Simulated MVP</div>
-            <div style="font-size: 12px; color: #6b7280;">Show test MVP in overlay</div>
-          </div>
-          <button id="simMVPToggle" class="mvp-toggle-btn" data-state="off">OFF</button>
-        </div>
-      </div>
     </div>
   </div>
 

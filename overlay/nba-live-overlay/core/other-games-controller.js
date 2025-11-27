@@ -4,15 +4,17 @@
  */
 
 class OtherGamesController {
-    constructor(view, onComplete = null, isSimulationMode = false) {
+    constructor(view, onComplete = null, isSimulationMode = false, timeMultiplier = 1) {
         this.view = view;
         this.games = [];
         this.currentSet = 0;
         this.gamesPerSet = 3;
         this.isSimulationMode = isSimulationMode;
+        this.timeMultiplier = timeMultiplier;
         
-        // Timing: Fast for simulation, slow for production
-        this.displayDuration = isSimulationMode ? 12000 : 18000; // 12s sim, 18s production
+        // Timing: Base times divided by multiplier for fast forward
+        const baseDuration = isSimulationMode ? 12000 : 18000;
+        this.displayDuration = baseDuration / timeMultiplier; // Faster with FF
         this.fadeDuration = 200; // 0.2 seconds
         this.cycleInterval = null;
         this.countdownInterval = null;
@@ -67,19 +69,11 @@ class OtherGamesController {
         
         // Check if we've shown all sets
         if (nextSetIndex >= totalSets) {
-            if (this.isSimulationMode) {
-                // Simulation mode: Loop back to start
-                await this.view.fadeOut(this.fadeDuration);
-                this.currentSet = 0;
-                this.view.renderGames(this.games, 0, this.gamesPerSet);
-                await this.view.fadeIn(this.fadeDuration);
-            } else {
-                // Production mode: Stop cycling and hide overlay
-                this.stopCycle();
-                this.stopCountdown();
-                if (this.onComplete) {
-                    this.onComplete();
-                }
+            // Stop cycling and hide overlay
+            this.stopCycle();
+            this.stopCountdown();
+            if (this.onComplete) {
+                this.onComplete();
             }
             return;
         }

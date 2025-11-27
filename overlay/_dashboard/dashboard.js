@@ -8,13 +8,10 @@ const api = new ApiClient();
 let allGames = [];
 let currentQuarter = null;
 
-// Simulation state
-const SIMULATION_STATES = ['pregame', 'live', 'halftime', 'overtime', 'final'];
-let currentSimulationStateIndex = 0;
-
 // Quarter Timer
 let quarterStartTime = null;
 let timerInterval = null;
+let currentTimeMultiplier = 1; // For fast forward
 
 /**
  * Initialize dashboard on page load
@@ -22,9 +19,10 @@ let timerInterval = null;
 async function init() {
   // Setup event listeners
   document.getElementById('gameSelect').addEventListener('change', handleGameSelection);
-  document.getElementById('simulationToggle').addEventListener('change', handleSimulationToggle);
-  document.getElementById('nextStateBtn').addEventListener('click', nextSimulationState);
+  document.getElementById('liveRadio').addEventListener('change', handleModeChange);
+  document.getElementById('simRadio').addEventListener('change', handleModeChange);
   document.getElementById('simMVPToggle').addEventListener('click', toggleSimMVP);
+  document.getElementById('fastForwardToggle').addEventListener('click', toggleFastForward);
   
   // Quarter tracking event listeners
   document.querySelectorAll('.quarter-btn').forEach(btn => {
@@ -42,6 +40,9 @@ async function init() {
   
   // Load games (don't restore selection on initial load)
   await loadGames(false);
+  
+  // Initialize mode UI
+  updateModeUI();
   
   // Auto-refresh every minute
   setInterval(refreshGames, window.NBA_CONFIG.DASHBOARD_REFRESH_INTERVAL);
@@ -178,6 +179,12 @@ async function handleQuarterClick(quarter) {
     currentQuarter = quarter;
     await api.setQuarter(quarter);
     startTimer();
+    
+    // If in sim mode, set simulation state to 'live' with this quarter
+    const simRadio = document.getElementById('simRadio');
+    if (simRadio && simRadio.checked) {
+      await api.setSimulation({ state: 'live' });
+    }
   }
   updateQuarterUI();
 }
@@ -324,40 +331,91 @@ function updateStyleDisplay() {
 async function loadSimulationState() {
   const data = await api.getSimulation();
   if (data) {
-    const toggle = document.getElementById('simulationToggle');
+    const simRadio = document.getElementById('simRadio');
+    const liveRadio = document.getElementById('liveRadio');
     const mvpBtn = document.getElementById('simMVPToggle');
-    toggle.checked = data.enabled;
+    const ffBtn = document.getElementById('fastForwardToggle');
+    
+    // Set radio button based on enabled state
+    if (data.enabled) {
+      simRadio.checked = true;
+      liveRadio.checked = false;
+    } else {
+      liveRadio.checked = true;
+      simRadio.checked = false;
+    }
     
     // Set MVP button state
     const showMVP = data.showMVP || false;
     mvpBtn.dataset.state = showMVP ? 'on' : 'off';
-    mvpBtn.textContent = showMVP ? 'ON' : 'OFF';
+    mvpBtn.textContent = 'MVP';
     
-    const stateIndex = SIMULATION_STATES.indexOf(data.state);
-    if (stateIndex !== -1) {
-      currentSimulationStateIndex = stateIndex;
-    }
-    
-    updateSimulationUI();
+    // Set Fast Forward button state
+    const timeMultiplier = data.timeMultiplier || 1;
+    const isFastForward = timeMultiplier > 1;
+    ffBtn.dataset.state = isFastForward ? 'on' : 'off';
+    ffBtn.textContent = 'Fast Forward';
+    currentTimeMultiplier = timeMultiplier; // Update local state
   }
 }
 
 /**
- * Handle simulation toggle
+ * Handle mode change (Live vs Simulation)
  */
-async function handleSimulationToggle(event) {
-  const enabled = event.target.checked;
-  await api.setSimulation({ enabled });
+async function handleModeChange() {
+  const simRadio = document.getElementById('simRadio');
+  const isSimMode = simRadio.checked;
   
-  // Reset MVP button when simulation is disabled
-  if (!enabled) {
+  // Update server
+  await api.setSimulation({ enabled: isSimMode });
+  
+  // Reset MVP button when switching to live mode
+  if (!isSimMode) {
     const mvpBtn = document.getElementById('simMVPToggle');
     mvpBtn.dataset.state = 'off';
     mvpBtn.textContent = 'OFF';
     await api.setSimulation({ showMVP: false });
+    
+    // Clear game selection when switching to live mode
+    const selectEl = document.getElementById('gameSelect');
+    selectEl.value = '';
+    await api.setSelectedGame(null);
+    clearPreview();
   }
   
-  updateSimulationUI();
+  // Update UI
+  updateModeUI();
+}
+
+/**
+ * Update mode-specific UI sections
+ */
+function updateModeUI() {
+  const simRadio = document.getElementById('simRadio');
+  const isSimMode = simRadio.checked;
+  
+  const liveGameSection = document.getElementById('liveGameSection');
+  const simulationSection = document.getElementById('simulationSection');
+  const quarterSection = document.getElementById('quarterSection');
+  
+  if (isSimMode) {
+    // Simulation mode
+    liveGameSection.style.display = 'none';
+    simulationSection.style.display = 'block';
+    quarterSection.style.display = 'block';
+  } else {
+    // Live game mode
+    liveGameSection.style.display = 'block';
+    simulationSection.style.display = 'none';
+    
+    // Only show quarter section if a game is selected
+    const selectEl = document.getElementById('gameSelect');
+    if (selectEl.value) {
+      quarterSection.style.display = 'block';
+    } else {
+      quarterSection.style.display = 'none';
+    }
+  }
 }
 
 /**
@@ -370,48 +428,51 @@ async function toggleSimMVP() {
   // Toggle state
   const newState = !isOn;
   mvpBtn.dataset.state = newState ? 'on' : 'off';
-  mvpBtn.textContent = newState ? 'ON' : 'OFF';
+  mvpBtn.textContent = 'MVP';
   
   // Update server
   await api.setSimulation({ showMVP: newState });
 }
 
 /**
- * Cycle to next simulation state
+ * Toggle fast forward button
  */
-async function nextSimulationState() {
-  currentSimulationStateIndex = (currentSimulationStateIndex + 1) % SIMULATION_STATES.length;
-  const newState = SIMULATION_STATES[currentSimulationStateIndex];
-  await api.setSimulation({ state: newState });
-  updateSimulationUI();
-}
-
-/**
- * Update simulation UI
- */
-function updateSimulationUI() {
-  const toggle = document.getElementById('simulationToggle');
-  const controls = document.getElementById('simulationControls');
-  const stateDisplay = document.getElementById('currentState');
+async function toggleFastForward() {
+  const ffBtn = document.getElementById('fastForwardToggle');
+  const isOn = ffBtn.dataset.state === 'on';
   
-  // Show/hide controls based on toggle
-  if (toggle.checked) {
-    controls.style.display = 'block';
+  // Toggle state
+  const newState = !isOn;
+  ffBtn.dataset.state = newState ? 'on' : 'off';
+  ffBtn.textContent = 'Fast Forward';
+  
+  // Calculate current virtual time before changing multiplier
+  if (quarterStartTime) {
+    const realElapsed = Date.now() - quarterStartTime;
+    const virtualElapsed = realElapsed * currentTimeMultiplier;
+    
+    // Update multiplier
+    const newMultiplier = newState ? 10 : 1;
+    
+    // Adjust start time to preserve virtual time
+    quarterStartTime = Date.now() - (virtualElapsed / newMultiplier);
+    
+    currentTimeMultiplier = newMultiplier;
+    
+    // Restart timer with new update interval
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      const updateInterval = 1000 / currentTimeMultiplier;
+      timerInterval = setInterval(updateTimerDisplay, updateInterval);
+    }
   } else {
-    controls.style.display = 'none';
+    currentTimeMultiplier = newState ? 10 : 1;
   }
   
-  // Update state display with nice formatting
-  const state = SIMULATION_STATES[currentSimulationStateIndex];
-  const stateNames = {
-    'pregame': '⏰ Pregame',
-    'live': '🔴 Live (Q3 8:32)',
-    'halftime': '⏸️ Halftime',
-    'overtime': '🔥 Overtime (OT 3:45)',
-    'final': '✅ Final'
-  };
-  stateDisplay.textContent = stateNames[state] || state;
+  // Update server (10x when on, 1x when off)
+  await api.setSimulation({ timeMultiplier: currentTimeMultiplier });
 }
+
 
 // ==================== QUARTER TIMER ====================
 
@@ -427,8 +488,9 @@ function startTimer() {
     clearInterval(timerInterval);
   }
   
-  // Update every second
-  timerInterval = setInterval(updateTimerDisplay, 1000);
+  // Update interval based on multiplier (faster updates for fast forward)
+  const updateInterval = 1000 / currentTimeMultiplier; // 100ms when 10x
+  timerInterval = setInterval(updateTimerDisplay, updateInterval);
 }
 
 /**
@@ -456,13 +518,13 @@ function updateTimerDisplay() {
   
   const timerElement = document.getElementById('quarterTimer');
   const timerValue = document.getElementById('timerValue');
-  const otherGamesStatus = document.getElementById('otherGamesStatus');
   
-  if (!timerElement || !timerValue || !otherGamesStatus) return;
+  if (!timerElement || !timerValue) return;
   
-  // Calculate elapsed time
-  const elapsedMs = Date.now() - quarterStartTime;
-  const elapsedSeconds = Math.floor(elapsedMs / 1000);
+  // Calculate elapsed time (accelerated if fast forward is on)
+  const realElapsedMs = Date.now() - quarterStartTime;
+  const acceleratedMs = realElapsedMs * currentTimeMultiplier;
+  const elapsedSeconds = Math.floor(acceleratedMs / 1000);
   const minutes = Math.floor(elapsedSeconds / 60);
   const seconds = elapsedSeconds % 60;
   
@@ -472,17 +534,6 @@ function updateTimerDisplay() {
   
   // Show timer
   timerElement.classList.add('show');
-  
-  // Update other games overlay status (shows at 1:00)
-  const OTHER_GAMES_DELAY_SECONDS = 60; // 1 minute
-  if (elapsedSeconds < OTHER_GAMES_DELAY_SECONDS) {
-    const remaining = OTHER_GAMES_DELAY_SECONDS - elapsedSeconds;
-    otherGamesStatus.textContent = `Shows in ${remaining}s`;
-    otherGamesStatus.className = 'milestone-status pending';
-  } else {
-    otherGamesStatus.textContent = `✓ Shown at 01:00`;
-    otherGamesStatus.className = 'milestone-status passed';
-  }
 }
 
 // Initialize on page load
