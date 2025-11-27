@@ -27,16 +27,26 @@ class SimulationManager {
                 logo: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png'
             }
         };
+        
+        // Score update timing (independent of polling rate)
+        this.lastScoreUpdate = Date.now();
+        this.scoreUpdateInterval = 3000; // Update scores every 3 seconds
     }
 
     /**
      * Generate fake game data based on server-provided state
      * @param {string} serverState - State from dashboard ('pregame', 'live', 'halftime', 'final')
+     * @param {number} timeMultiplier - Time acceleration multiplier (1 = normal, 10 = fast forward)
      * @returns {Object} Fake game object matching ESPN API format
      */
-    generateGameData(serverState) {
-        // Update scores (randomly)
-        this._updateScores();
+    generateGameData(serverState, timeMultiplier = 1) {
+        // Update scores only if enough time has passed (adjusted for time multiplier)
+        const now = Date.now();
+        const adjustedInterval = this.scoreUpdateInterval / timeMultiplier;
+        if (now - this.lastScoreUpdate >= adjustedInterval) {
+            this._updateScores();
+            this.lastScoreUpdate = now;
+        }
 
         // Update state/quarter/time based on dashboard state
         if (serverState) {
@@ -214,6 +224,7 @@ class SimulationManager {
             timeSeconds: 720,
             state: 'live'
         };
+        this.lastScoreUpdate = Date.now();
     }
 
     /**

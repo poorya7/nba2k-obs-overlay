@@ -24,6 +24,9 @@ class AppController {
         this.updateInterval = 3000; // Current interval (adjusted for time multiplier)
         this.simMVPCheckInterval = 1000; // 1 second
         this.lastTimeMultiplier = 1; // Track multiplier changes
+        this.lastQuarter = null; // Track quarter changes for sim reset
+        this.virtualTimeOffset = 0; // Offset to preserve virtual time when FF changes
+        this.lastQuarterStartTime = null; // Track quarter start time
         
         // Timers
         this.updateTimer = null;
@@ -105,11 +108,34 @@ class AppController {
             // Step 3: Check quarter tracking
             const quarterData = await this.api.getQuarter();
             
+            // In sim mode, reset simulation manager when quarter changes
+            if (isSimMode && quarterData && quarterData.current) {
+                if (!this.lastQuarter || this.lastQuarter !== quarterData.current) {
+                    this.simulationManager.reset();
+                    this.lastQuarter = quarterData.current;
+                    this.virtualTimeOffset = 0; // Reset virtual time offset
+                    this.lastQuarterStartTime = quarterData.startTime;
+                }
+            } else if (!quarterData || !quarterData.current) {
+                this.lastQuarter = null;
+                this.virtualTimeOffset = 0;
+                this.lastQuarterStartTime = null;
+            }
+            
             // Get time multiplier for fast forward
             const timeMultiplier = isSimMode ? (simData.timeMultiplier || 1) : 1;
             
-            // Track multiplier for calculations
-            if (timeMultiplier !== this.lastTimeMultiplier) {
+            // Track multiplier changes and adjust virtual time offset
+            if (timeMultiplier !== this.lastTimeMultiplier && quarterData && quarterData.startTime) {
+                // Calculate current virtual elapsed time with old multiplier
+                const realElapsed = Date.now() - quarterData.startTime;
+                const oldVirtualElapsed = realElapsed * this.lastTimeMultiplier + this.virtualTimeOffset;
+                
+                // Calculate what the new offset should be to preserve virtual time
+                this.virtualTimeOffset = oldVirtualElapsed - (realElapsed * timeMultiplier);
+                
+                this.lastTimeMultiplier = timeMultiplier;
+            } else if (timeMultiplier !== this.lastTimeMultiplier) {
                 this.lastTimeMultiplier = timeMultiplier;
             }
             
@@ -131,7 +157,7 @@ class AppController {
             // Quarter active - show overlay
 
             // Step 4: Check if we should show other games
-            if (this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier)) {
+            if (this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier, this.virtualTimeOffset)) {
                 await this.showOtherGamesMode(selectedGameId);
                 return; // Other games is showing, don't update current game
             }
@@ -145,7 +171,7 @@ class AppController {
             // Step 6: Fetch or generate game data
             let game;
             if (isSimMode) {
-                game = this.simulationManager.generateGameData(simData.state);
+                game = this.simulationManager.generateGameData(simData.state, timeMultiplier);
             } else {
                 game = await this.nbaApi.getGameById(selectedGameId);
             }
@@ -201,7 +227,7 @@ class AppController {
             // Only check delay for Q1 (first quarter of the game)
             if (quarterData.current === 'Q1') {
                 const realTimeSinceStart = Date.now() - quarterData.startTime;
-                const acceleratedTime = realTimeSinceStart * timeMultiplier;
+                const acceleratedTime = realTimeSinceStart * timeMultiplier + this.virtualTimeOffset;
                 const SHOW_DELAY = 10000; // 10 seconds
 
                 if (acceleratedTime < SHOW_DELAY) {

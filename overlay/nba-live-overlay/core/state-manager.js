@@ -251,13 +251,13 @@ class StateManager {
         return this.hasShownOtherGamesThisQuarter;
     }
 
-    shouldShowOtherGames(quarterData, timeMultiplier = 1) {
+    shouldShowOtherGames(quarterData, timeMultiplier = 1, virtualTimeOffset = 0) {
         if (!quarterData || !quarterData.current || !quarterData.startTime) {
             return false;
         }
 
         const realTimeSinceQuarterStart = Date.now() - quarterData.startTime;
-        const acceleratedTime = realTimeSinceQuarterStart * timeMultiplier;
+        const acceleratedTime = realTimeSinceQuarterStart * timeMultiplier + virtualTimeOffset;
         
         // Track quarter changes
         this.updateQuarterTracking(quarterData.startTime);

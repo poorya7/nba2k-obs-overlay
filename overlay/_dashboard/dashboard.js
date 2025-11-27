@@ -33,6 +33,7 @@ async function init() {
   // Clear server state on dashboard load (fresh start)
   await api.setSelectedGame(null);
   await api.setQuarter(null);
+  await api.setSimulation({ timeMultiplier: 1, showMVP: false }); // Reset sim state
   
   // Load state from server
   await loadSimulationState();
