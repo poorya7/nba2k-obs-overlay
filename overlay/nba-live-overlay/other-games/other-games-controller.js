@@ -133,6 +133,28 @@ class OtherGamesController {
     }
 
     /**
+     * Update time multiplier (for fast forward toggle mid-cycle)
+     * @param {number} newMultiplier - New time multiplier value
+     */
+    updateTimeMultiplier(newMultiplier) {
+        if (newMultiplier === this.timeMultiplier) {
+            return; // No change needed
+        }
+        
+        this.timeMultiplier = newMultiplier;
+        
+        // Recalculate display duration
+        const baseDuration = this.isSimulationMode ? 12000 : 18000;
+        this.displayDuration = baseDuration / this.timeMultiplier;
+        
+        // Restart cycle with new timing
+        if (this.cycleInterval) {
+            this.stopCycle();
+            this.startCycle();
+        }
+    }
+
+    /**
      * Clean up timers
      */
     destroy() {

@@ -181,8 +181,14 @@ class AppController {
                 this.stateManager.setVirtualTimeOffset(newOffset);
                 
                 this.stateManager.setTimeMultiplier(timeMultiplier);
+                
+                // Update other games controller if it's active
+                this.modeCoordinator.updateTimeMultiplier(timeMultiplier);
             } else if (timeMultiplier !== this.stateManager.getTimeMultiplier()) {
                 this.stateManager.setTimeMultiplier(timeMultiplier);
+                
+                // Update other games controller if it's active
+                this.modeCoordinator.updateTimeMultiplier(timeMultiplier);
             }
             
             // In sim mode, always use fast polling (300ms) for responsiveness
@@ -203,7 +209,14 @@ class AppController {
             // Quarter active - show overlay
 
             // Step 4: Check if we should show other games
-            if (this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier, this.stateManager.getVirtualTimeOffset())) {
+            // In simulation mode: Only show during active live play (not pregame/halftime/final)
+            // In live mode: Quarter tracking naturally prevents showing during breaks
+            let canShowOtherGames = true;
+            if (isSimMode && simData.state && simData.state !== 'live') {
+                canShowOtherGames = false; // Don't show during pregame/halftime/final
+            }
+            
+            if (canShowOtherGames && this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier, this.stateManager.getVirtualTimeOffset())) {
                 await this.modeCoordinator.showOtherGamesMode(selectedGameId);
                 return; // Other games is showing, don't update current game
             }

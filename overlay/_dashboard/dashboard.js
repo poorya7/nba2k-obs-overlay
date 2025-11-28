@@ -258,8 +258,9 @@ function updateQuarterUI() {
   const doneBtn = document.getElementById('doneBtn');
   
   // Update quarter buttons (Q1, Q2, Q3, Q4)
+  // Only highlight if not in a sim state (pregame/halftime/final)
   document.querySelectorAll('.quarter-btn[data-quarter]').forEach(btn => {
-    if (btn.dataset.quarter === currentQuarter) {
+    if (btn.dataset.quarter === currentQuarter && !currentSimState) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');

@@ -150,6 +150,17 @@ class ModeCoordinator {
     }
 
     /**
+     * Update time multiplier in other games controller (for fast forward)
+     * @param {number} newMultiplier - New time multiplier value
+     * @returns {void}
+     */
+    updateTimeMultiplier(newMultiplier) {
+        if (this.otherGamesController) {
+            this.otherGamesController.updateTimeMultiplier(newMultiplier);
+        }
+    }
+
+    /**
      * Clean up (called when app stops)
      * @returns {void}
      */
