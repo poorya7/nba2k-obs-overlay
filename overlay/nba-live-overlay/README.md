@@ -1,235 +1,204 @@
-# Game Stats Overlay
+# NBA Live Overlay
 
-Clean, modular overlay for displaying NBA game stats with ASMR-friendly Blue Neon theme.
+Unified, modular overlay for displaying live NBA game stats with automatic mode switching. Built with clean architecture following SOLID/DRY principles.
 
-## Structure
+## Overview
 
-```
-game-stats-overlay/
-├── index.html           - Main overlay (with demo data)
-├── test-states.html     - Interactive state transition tester
-├── test-simulation.html - Realistic game simulation (Pre-Game → Final)
-├── styles.css           - All visual styling (finalized design)
-├── game-view.js         - View layer with state management
-└── README.md            - This file
-```
-
-## Quick Start
-
-**No server required!** Just open the HTML files directly in your browser.
-
-**Option 1: View with demo data**
-- Open `index.html` - Shows Lakers vs Warriors in Live state
-- Test in console: `gameView.updateScore('home', 100, true)`
-
-**Option 2: Test state transitions**
-- Open `test-states.html` - Interactive state switcher
-- Click buttons to switch between Pre-Game, Live, Halftime, Final
-- See smooth transitions in action with video background
-
-**Option 3: Realistic game simulation**
-- Open `test-simulation.html` - Full game simulation
-- Auto-plays through: Pre-Game countdown → Q1 → Q2 → Halftime → Q3 → Q4 → Final
-- Adjustable speed: 1x (real-time), 5x, 10x, 20x, 50x
-- Realistic score updates with Slide animation
+Single overlay that automatically switches between two display modes:
+- **Current Game Mode**: Shows selected game with live stats, animations, and MVP overlays
+- **Other Games Mode**: Shows scores from other NBA games (cycles through all games once per quarter at 60s mark)
 
 ## Architecture
 
-**Separation of Concerns:**
-- `styles.css` - Pure presentation (no logic)
-- `game-view.js` - Pure view updates (no data fetching)
-- `index.html` - Minimal structure with data attributes
+Feature-based organization following modern best practices:
 
-**SOLID Principles:**
-- Single Responsibility: GameView only handles DOM updates
-- Open/Closed: Easy to extend without modifying existing code
-- Dependency Inversion: View doesn't depend on data source
+```
+nba-live-overlay/
+├── game/                          # Current game feature
+│   └── game-view.js              # - Renders current game display
+│                                  # - Handles pregame/live/halftime/final states
+│                                  # - Score animations (slide effect)
+│
+├── other-games/                   # Other games feature
+│   ├── other-games-view.js       # - Renders other games (3 per page)
+│   └── other-games-controller.js # - Cycles through games
+│                                  # - Sorting and timing logic
+│
+├── mvp/                           # MVP feature (self-contained)
+│   ├── mvp-view.js               # - MVP section animations
+│   ├── mvp-controller.js         # - Automatic display timing
+│   └── mvp-integration.js        # - Data fetching and caching
+│
+├── utils/                         # Utility functions
+│   ├── game-utils.js             # - Game state detection
+│   │                              # - Time formatting (MM:SS)
+│   │                              # - Countdown calculations
+│   ├── state-manager.js          # - Centralized state tracking
+│   │                              # - Mode management
+│   │                              # - Quarter timing
+│   ├── simulation-manager.js     # - Fake data for testing
+│   └── game-data-formatter.js    # - Data transformation
+│                                  # - ESPN API → View format
+│
+├── app-controller.js              # Main orchestrator
+│                                  # - Coordinates all components
+│                                  # - API polling (3s interval)
+│                                  # - State detection and updates
+│
+├── mode-coordinator.js            # Mode switching logic
+│                                  # - Transitions between modes
+│                                  # - Cleanup and show logic
+│
+├── index.html                     # Single entry point
+├── styles.css                     # All visual styling
+└── README.md                      # This file
+```
 
-## Game States
+## Key Features
 
-The overlay supports 4 different game states with smooth transitions:
+### Automatic Mode Switching
+- **Q1**: Hidden first 10s, shows current game, switches to other games at 60s
+- **Q2/Q3/Q4**: Shows current game immediately, switches to other games at 60s
+- **Other games show once per quarter only** (cycles through all, then returns)
 
-1. **Pre-Game** - Countdown timer with team matchup preview
-2. **Live** - Active gameplay (Q1, Q2, Q3, Q4, OT, 2OT...)
-3. **Halftime** - Shows "Halftime" banner with current scores
-4. **Final** - Shows "Final" banner with final scores
+### Smart Animations
+- **Score Changes**: Smooth slide animation (slot-machine effect)
+- **State Transitions**: Instant switching (no unnecessary blinking)
+- **MVP Display**: Automatic timing during halftime/final (17s duration, up to 3x)
 
-### State Transition Logic
+### Game States
+1. **Pregame**: Countdown timer with team matchup
+2. **Live**: Real-time scores, quarter, time remaining (Q1-Q4, OT)
+3. **Halftime**: Halftime indicator with current scores
+4. **Final**: Final scores display
 
-**Smart Animations:** Only animates what changes
+### MVP Feature
+- Automatically displays during game breaks
+- Shows leading player (highest PTS + REB + AST)
+- Smooth expand/fade animations
+- Data caching to prevent API spam
 
-**Pre-Game → Live** (Sophisticated choreography):
-1. Countdown timer fades out (0.3s)
-2. Box expands downward from top edge (0.5s)
-3. Team logos smoothly move and resize from center to team rows (0.8s)
-4. Team names and scores fade in (0.3s)
-5. "Upcoming" changes to "Live" + Quarter status fades in (0.3s)
-- Total duration: ~2.2s of smooth, ASMR-friendly animation
+## Architecture Principles
 
-**Live ↔ Halftime/Final**: 
-- Only bottom element fades (teams/scores stay visible)
-- Quick and clean (0.55s total)
+**SOLID Design:**
+- **Single Responsibility**: Each class has one clear purpose
+- **Open/Closed**: Easy to extend without modifying existing code
+- **Loose Coupling**: Components interact through well-defined interfaces
+- **Dependency Injection**: All dependencies injected in constructors
 
-**Live → Live** (Q1→Q3): 
-- Full content fades for score/quarter updates
-- Maintains consistency (0.55s total)
+**DRY (Don't Repeat Yourself):**
+- Shared utilities in `shared/` folder
+- No code duplication
+- Reusable formatting functions
 
-**All other transitions**: 
-- Simple fade in/out for state changes
+**Feature-Based Organization:**
+- Self-contained feature folders
+- Easy to find code by feature
+- Scales well for future additions
 
 ## Usage
 
-### State Management Methods
-
-```javascript
-// Transition to Pre-Game state
-await gameView.transitionToState('pregame', {
-    homeTeam: { abbr: 'LAL', logoUrl: 'https://...' },
-    awayTeam: { abbr: 'GSW', logoUrl: 'https://...' },
-    countdown: '02:15:34'
-});
-
-// Transition to Live state
-await gameView.transitionToState('live', {
-    home: { abbr: 'LAL', logoUrl: 'https://...', score: 67 },
-    away: { abbr: 'GSW', logoUrl: 'https://...', score: 64 },
-    quarter: 'Q3',
-    time: '8:42'
-});
-
-// Transition to Halftime
-await gameView.transitionToState('halftime', {
-    home: { abbr: 'LAL', logoUrl: 'https://...', score: 54 },
-    away: { abbr: 'GSW', logoUrl: 'https://...', score: 48 }
-});
-
-// Transition to Final
-await gameView.transitionToState('final', {
-    home: { abbr: 'LAL', logoUrl: 'https://...', score: 112 },
-    away: { abbr: 'GSW', logoUrl: 'https://...', score: 108 }
-});
-
-// Get current state
-const currentState = gameView.getCurrentState(); // 'pregame', 'live', 'halftime', 'final'
-
-// Note: Pre-Game → Live has a special sophisticated transition that's 
-// automatically triggered by transitionToState('live') when coming from 'pregame'
+### Access the Overlay
+```
+http://localhost:3000/overlay/nba-live
 ```
 
-### Basic Update Methods
+### Select a Game
+1. Open dashboard: `http://localhost:3000/dashboard`
+2. Choose mode:
+   - **Live Game**: Select from today's NBA games
+   - **Simulation**: Test with fake data
+3. Use quarter buttons to track game progress
+4. Overlay updates automatically
 
-```javascript
-// Update team info
-gameView.updateTeam('home', 'LAL', 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png');
-gameView.updateTeam('away', 'BOS', 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png');
+### In OBS Studio
+1. Add Browser Source
+2. URL: `http://localhost:3000/overlay/nba-live`
+3. Width: 1920, Height: 1080
+4. Check "Shutdown source when not visible"
 
-// Update scores (with optional animation)
-gameView.updateScore('home', 85, true);  // Animate score change
-gameView.updateScore('away', 82, false); // No animation
+## Technical Details
 
-// Update game status
-gameView.updateGameStatus('Q4', '3:45');
+### Dependencies
+- **External APIs**: ESPN NBA Scoreboard & Summary APIs
+- **Shared Config/API**: `overlay/_shared/` (config, nbaApi, apiClient)
+- **Internal Utils**: `utils/` (game-utils, state-manager, formatters)
+- **Framework**: Vanilla JavaScript (no frameworks)
 
-// Update everything at once
-gameView.updateAll({
-    home: {
-        abbr: 'LAL',
-        logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png',
-        score: 85,
-        animate: true
-    },
-    away: {
-        abbr: 'BOS',
-        logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png',
-        score: 82,
-        animate: false
-    },
-    quarter: 'Q4',
-    time: '3:45'
-});
-
-// Reset to default state
-gameView.reset();
+### Data Flow
+```
+ESPN API → AppController → GameDataFormatter → Views → DOM
+            ↓
+         StateManager (centralized state)
+            ↓
+         ModeCoordinator (mode switching)
 ```
 
-### Testing in Browser Console
+### Refresh Strategy
+- **Normal mode**: 3-second polling
+- **Simulation mode**: 300ms polling (responsive testing)
+- **Smart updates**: Only animates what changes
 
-Open `index.html` or `test-states.html` in a browser and try:
+### State Management
+All state centralized in `StateManager`:
+- Game tracking (ID, scores, state)
+- Mode tracking (CURRENT_GAME vs OTHER_GAMES)
+- Quarter timing and virtual time
+- Overlay visibility flags
 
-```javascript
-// Test score animation
-gameView.updateScore('home', 100, true);
+## Development
 
-// Test team switch
-gameView.updateTeam('home', 'MIA', 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png');
+### Class Responsibilities
 
-// Test state transition
-await gameView.transitionToState('halftime', {
-    home: { abbr: 'LAL', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png', score: 54 },
-    away: { abbr: 'GSW', logoUrl: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png', score: 48 }
-});
+**AppController (427 lines)**
+- Main orchestration
+- API polling and error handling
+- Delegates to specialized components
 
-// Check current state
-console.log(gameView.getCurrentState());
-```
+**GameView**
+- Current game display
+- State transitions (pregame/live/halftime/final)
+- Score animations
 
-## Game Simulation Features
+**ModeCoordinator**
+- Switches between current game ↔ other games
+- Cleanup and transition logic
 
-The `test-simulation.html` provides a realistic game flow simulation:
+**StateManager**
+- Centralized state storage
+- Getters/setters for all state
+- Quarter tracking logic
 
-**Features:**
-- Auto-progression through all game states
-- Realistic score updates (2pt/3pt with proper distribution)
-- Countdown timer that ticks down to zero before transitioning to Live
-- Adjustable simulation speed (1x, 5x, 10x, 20x, 50x)
-- Pause/Resume and Reset controls
-- Real-time info display (current state, time, speed)
+**GameDataFormatter**
+- Transforms ESPN API data
+- Prepares data for views
+- Handles animation flags
 
-**Simulation Flow:**
-1. **Pre-Game**: 10-second countdown → pauses at 00:00:00 (0.5s) → transitions to Live
-2. **Q1-Q4**: 12 minutes each with random scoring
-3. **Halftime**: 5-second break between Q2 and Q3
-4. **Final**: Game over screen with final scores
+### Simulation Mode
+- Test overlay without live games
+- Control game state with quarter buttons
+- Fast forward (10x speed) for rapid testing
+- Simulated MVP and other games
 
-This simulates how the overlay will behave with real NBA API data polling.
+## Design Specifications
 
-## Next Steps
+- **Position**: Fixed bottom-left (370px from bottom, 20px from left)
+- **Size**: 190px wide, auto height
+- **Theme**: Blue neon with dark background
+- **Opacity**: 0.7 (semi-transparent)
+- **Animations**: Smooth, ASMR-friendly
+- **Font**: Inter (body), Russo One (branding)
 
-**State Management:** ✅ Complete!
-- 4 game states (Pre-Game, Live, Halftime, Final)
-- Sophisticated choreographed transitions (especially Pre-Game → Live)
-- Smart content-only animations (only animates what changes)
-- Ready for real-time data integration
+## Refactoring History
 
-**When ready to add live data:**
-1. Create a `GameDataService` class to fetch NBA API data
-2. Create a `GameController` to connect service → view
-3. Poll API every 5-10 seconds
-4. Call `gameView.transitionToState()` when state changes
-5. Call `gameView.updateScore()` when scores update (with animation)
-6. Keep `GameView` unchanged (loose coupling achieved!)
+This overlay was refactored from 2 separate overlays into a unified system:
+- **Before**: 617 lines in AppController, scattered state
+- **After**: 427 lines, modular architecture (30% reduction)
+- **Improvements**: SOLID principles, feature-based folders, better maintainability
 
-## Design Specs
+## Related Documentation
 
-- **Position:** 260px from bottom, 20px from left (340px from bottom in Pre-Game state)
-- **Size:** 175px wide, auto height (expands downward from top edge)
-- **Opacity:** 0.7
-- **Theme:** Blue Neon with green quarter text
-- **Typography:** Tabular numbers (fixed-width digits) for all scores, times, and countdowns
-- **Transitions:** Choreographed multi-step animations optimized for ASMR viewing
-
-## Available Score Animations
-
-When scores update (via `updateScore()` with `animate: true`), you can choose from:
-
-1. **Slide** - Slot reel effect (old score slides up, new slides in from bottom) ✨ **Chosen default**
-2. **Glow** - Subtle green glow with scale
-3. **NBA Style** - Scale up with golden highlight
-4. **Bounce** - Bounces up and down
-5. **Flash** - Quick opacity flash
-6. **Pop** - Pops in with elastic effect
-7. **Shake** - Quick shake effect
-8. **Highlight** - Background highlight fade
-
-Set animation type via: `gameView.currentAnimation = 'slide'` (or 'glow', 'nba', etc.)
-
+- **API Reference**: `docs/API.md`
+- **Architecture**: `docs/ARCHITECTURE.md`
+- **Development Guide**: `docs/DEVELOPMENT.md`
+- **MVP Integration**: `docs/MVP_INTEGRATION.md`
