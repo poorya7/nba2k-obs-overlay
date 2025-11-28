@@ -121,10 +121,17 @@ nba2k-obs-overlay/
 │   │   │   └── mvp-integration.js
 │   │   ├── other-games/       # Other games feature
 │   │   │   ├── other-games-view.js
-│   │   │   └── other-games-controller.js
+│   │   │   ├── other-games-controller.js
+│   │   │   └── other-games-container-view.js
 │   │   ├── utils/             # Utility functions
-│   │   │   ├── game-utils.js
-│   │   │   ├── state-manager.js
+│   │   │   ├── game-utils.js            # GameUtils class (static methods)
+│   │   │   ├── state-manager.js         # Unified state facade
+│   │   │   ├── state/                   # State managers (SOLID)
+│   │   │   │   ├── game-state-manager.js
+│   │   │   │   ├── timing-manager.js
+│   │   │   │   ├── mode-manager.js
+│   │   │   │   └── overlay-state-manager.js
+│   │   │   ├── transition-animator.js   # Transition animations
 │   │   │   ├── simulation-manager.js
 │   │   │   └── game-data-formatter.js
 │   │   ├── app-controller.js  # Main orchestrator

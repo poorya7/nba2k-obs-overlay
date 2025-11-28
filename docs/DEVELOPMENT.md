@@ -78,10 +78,17 @@ nba2k-obs-overlay/
 │   │   │   └── mvp-integration.js
 │   │   ├── other-games/    # Other games feature
 │   │   │   ├── other-games-view.js
-│   │   │   └── other-games-controller.js
+│   │   │   ├── other-games-controller.js
+│   │   │   └── other-games-container-view.js
 │   │   ├── utils/          # Utility functions
-│   │   │   ├── game-utils.js
-│   │   │   ├── state-manager.js
+│   │   │   ├── game-utils.js           # GameUtils class
+│   │   │   ├── state-manager.js        # Unified facade
+│   │   │   ├── state/                  # State managers
+│   │   │   │   ├── game-state-manager.js
+│   │   │   │   ├── timing-manager.js
+│   │   │   │   ├── mode-manager.js
+│   │   │   │   └── overlay-state-manager.js
+│   │   │   ├── transition-animator.js
 │   │   │   ├── simulation-manager.js
 │   │   │   └── game-data-formatter.js
 │   │   ├── app-controller.js      # Main orchestrator
@@ -205,11 +212,35 @@ Overlay:
   - Adding new display features
 
 #### `overlay/nba-live-overlay/utils/state-manager.js`
-- **Purpose:** Centralized state tracking
+- **Purpose:** Unified state management facade
 - **When to modify:**
-  - Adding new timing logic
-  - Changing quarter-based behavior
-  - Modifying state tracking
+  - Adding new state categories (create new manager)
+  - Modifying delegation logic
+  - Backwards compatibility concerns
+- **Note:** Delegates to 4 specialized managers following SOLID principles
+
+#### `overlay/nba-live-overlay/utils/state/*.js` (State Managers)
+- **Purpose:** Specialized state management (SOLID principles)
+- **When to modify:**
+  - **game-state-manager.js**: Game data, scores, game ID tracking
+  - **timing-manager.js**: Countdown, time multiplier, quarter timing
+  - **mode-manager.js**: Display mode (CURRENT_GAME/OTHER_GAMES)
+  - **overlay-state-manager.js**: Visibility flags, overlay state
+
+#### `overlay/nba-live-overlay/utils/transition-animator.js`
+- **Purpose:** Complex transition animations
+- **When to modify:**
+  - Changing pregame→live expansion animation
+  - Modifying transition timings
+  - Adding new transition types
+- **Note:** Extracted from GameView to reduce complexity
+
+#### `overlay/nba-live-overlay/other-games/other-games-container-view.js`
+- **Purpose:** Container show/hide for other games overlay
+- **When to modify:**
+  - Changing container visibility logic
+  - Modifying fade transitions
+- **Note:** Separates DOM manipulation from ModeCoordinator
 
 #### `overlay/nba-live-overlay/utils/game-data-formatter.js`
 - **Purpose:** Transform ESPN API data for views

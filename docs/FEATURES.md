@@ -111,8 +111,10 @@ Integrated into the unified overlay:
   - `game-view.js`: Current game display controller
   - `other-games-view.js`: Other games display controller
   - `other-games-controller.js`: Other games cycling logic
+  - `other-games-container-view.js`: Container visibility
   - `mvp-view.js / mvp-controller.js`: MVP functionality
-  - `state-manager.js`: Centralized state tracking
+  - `state-manager.js`: Unified state facade (delegates to 4 specialized managers)
+  - `transition-animator.js`: Complex transition animations
   - `simulation-manager.js`: Fake data generation
   - `nbaApi.js`: ESPN API client (shared)
   - `apiClient.js`: Server API client (shared)
