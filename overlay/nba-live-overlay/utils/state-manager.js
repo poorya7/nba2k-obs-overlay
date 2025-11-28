@@ -33,6 +33,10 @@ class StateManager {
         this.gameState.setGameState(state);
     }
 
+    getGameState() {
+        return this.gameState.getGameState();
+    }
+
     hasGameIdChanged(newGameId) {
         return this.gameState.hasGameIdChanged(newGameId);
     }

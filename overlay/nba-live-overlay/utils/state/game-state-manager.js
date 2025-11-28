@@ -52,6 +52,14 @@ class GameStateManager {
     }
 
     /**
+     * Get current game state
+     * @returns {string|null}
+     */
+    getGameState() {
+        return this.lastGameState;
+    }
+
+    /**
      * Check if game ID has changed
      * @param {string} newGameId - Game ID
      * @returns {boolean}

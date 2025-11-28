@@ -15,6 +15,7 @@
  * @param {StateManager} dependencies.stateManager - State management
  * @param {SimulationManager} dependencies.simulationManager - Simulation data
  * @param {GameDataFormatter} dependencies.gameDataFormatter - Data formatter
+ * @param {UnifiedBoxAnimator} dependencies.unifiedBoxAnimator - Box animator
  */
 
 class ModeCoordinator {
@@ -29,7 +30,7 @@ class ModeCoordinator {
         
         const required = ['api', 'nbaApi', 'gameView', 'mvpView', 'otherGamesView', 
                          'otherGamesContainerView', 'stateManager', 'simulationManager', 
-                         'gameDataFormatter'];
+                         'gameDataFormatter', 'unifiedBoxAnimator'];
         
         for (const dep of required) {
             if (!dependencies[dep]) {
@@ -47,9 +48,14 @@ class ModeCoordinator {
         this.stateManager = dependencies.stateManager;
         this.simulationManager = dependencies.simulationManager;
         this.gameDataFormatter = dependencies.gameDataFormatter;
+        this.unifiedBoxAnimator = dependencies.unifiedBoxAnimator;
         
         // Other games controller (initialized when needed)
         this.otherGamesController = null;
+        
+        // DOM element references
+        this.currentGameContent = document.getElementById('currentGameContent');
+        this.otherGamesContent = document.getElementById('otherGamesContent');
     }
 
     /**
@@ -63,8 +69,7 @@ class ModeCoordinator {
             this.stateManager.setMode('OTHER_GAMES');
             this.stateManager.markOtherGamesShownThisQuarter();
 
-            // Hide current game overlay
-            this.gameView.hide();
+            // Hide MVP if showing
             this.mvpView.hide();
 
             // Check if simulation mode is enabled
@@ -98,15 +103,24 @@ class ModeCoordinator {
                 return;
             }
 
-            // Show other games overlay
-            this.otherGamesContainerView.show();
+            // Calculate height for first page of other games
+            const firstPageCount = Math.min(otherGames.length, 3);
+            const newHeight = UnifiedBoxAnimator.getOtherGamesHeight(firstPageCount);
 
-            // Initialize other games controller with callback
+            // Transition from current game to other games using animator
+            await this.unifiedBoxAnimator.transitionContent(
+                this.currentGameContent,
+                this.otherGamesContent,
+                newHeight
+            );
+
+            // Initialize other games controller with callback and animator
             this.otherGamesController = new OtherGamesController(
                 this.otherGamesView,
                 () => this.returnToCurrentGameMode(), // Callback when cycling completes
                 isSimMode, // Pass sim mode flag
-                timeMultiplier // Pass time multiplier for fast forward
+                timeMultiplier, // Pass time multiplier for fast forward
+                this.unifiedBoxAnimator // Pass animator for page transitions
             );
 
             // Start cycling
@@ -120,13 +134,10 @@ class ModeCoordinator {
 
     /**
      * Cleanup other games mode (without showing current game)
-     * Used when resetting or hiding everything
+     * Used when resetting or hiding everything (e.g., quarter change, no game selected)
      * @returns {void}
      */
     cleanupOtherGamesMode() {
-        // Hide other games overlay
-        this.otherGamesContainerView.hide();
-
         // Clean up other games controller
         if (this.otherGamesController) {
             this.otherGamesController.destroy();
@@ -135,18 +146,40 @@ class ModeCoordinator {
 
         // Switch back to current game mode
         this.stateManager.setMode('CURRENT_GAME');
+        
+        // Hide other games content (no animation needed for emergency cleanup)
+        if (this.otherGamesContent) {
+            this.otherGamesContent.style.display = 'none';
+            this.otherGamesContent.style.opacity = '0';
+        }
     }
 
     /**
      * Return to current game mode (full transition with show)
      * Used when transitioning back from other games
-     * @returns {void}
+     * @returns {Promise<void>}
      */
-    returnToCurrentGameMode() {
-        this.cleanupOtherGamesMode();
+    async returnToCurrentGameMode() {
+        // Clean up controller timers first (before transition)
+        if (this.otherGamesController) {
+            this.otherGamesController.destroy();
+            this.otherGamesController = null;
+        }
         
-        // Show current game overlay again (will be updated on next API poll)
-        this.gameView.show();
+        // Switch state
+        this.stateManager.setMode('CURRENT_GAME');
+        
+        // Get current game height based on state
+        const currentState = this.stateManager.getGameState() || 'live';
+        const hasMVP = this.mvpView.getVisibility();
+        const newHeight = UnifiedBoxAnimator.getCurrentGameHeight(currentState, hasMVP);
+        
+        // Transition back to current game content (this handles the fade out/in)
+        await this.unifiedBoxAnimator.transitionContent(
+            this.otherGamesContent,
+            this.currentGameContent,
+            newHeight
+        );
     }
 
     /**

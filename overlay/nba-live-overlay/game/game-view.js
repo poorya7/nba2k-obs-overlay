@@ -30,12 +30,16 @@ class GameView {
             gameStatus: document.querySelector('[data-status]'),
             liveIndicator: document.querySelector('.live-indicator'),
             teamsContainer: document.querySelector('.teams'),
-            gameStatsBox: document.querySelector('.game-stats')
+            unifiedBox: document.querySelector('.unified-overlay-box'),
+            currentGameContent: document.querySelector('.current-game-content')
         };
         
         // Validate critical DOM elements exist
-        if (!this.elements.gameStatsBox) {
-            throw new Error('GameView: .game-stats element not found in DOM');
+        if (!this.elements.unifiedBox) {
+            throw new Error('GameView: .unified-overlay-box element not found in DOM');
+        }
+        if (!this.elements.currentGameContent) {
+            throw new Error('GameView: .current-game-content element not found in DOM');
         }
         if (!this.elements.teamsContainer) {
             throw new Error('GameView: .teams element not found in DOM');
@@ -48,39 +52,61 @@ class GameView {
 
     /**
      * Show the overlay (when game is selected) with fade in
+     * Shows both the unified box and fades in the current game content
      * @returns {void}
      */
     show() {
-        if (this.elements.gameStatsBox && !this.isVisible) {
-            // Set to display block but transparent
-            this.elements.gameStatsBox.style.display = 'block';
-            this.elements.gameStatsBox.style.opacity = '0';
+        // Always show the box and content (even if already visible - ensures it's shown)
+            // Show unified box
+            if (this.elements.unifiedBox) {
+                this.elements.unifiedBox.style.display = 'block';
+                this.elements.unifiedBox.style.opacity = '1'; // Box opacity
+            }
+        
+        // Show and fade in current game content
+        if (this.elements.currentGameContent) {
+            // Ensure it's visible
+            this.elements.currentGameContent.style.display = 'block';
             
-            // Force reflow
-            void this.elements.gameStatsBox.offsetWidth;
-            
-            // Fade in
-            this.elements.gameStatsBox.style.transition = 'opacity 0.3s ease-in';
-            this.elements.gameStatsBox.style.opacity = '1';
-            
-            this.isVisible = true;
+            // Only fade in if not already visible
+            if (!this.isVisible) {
+                this.elements.currentGameContent.style.opacity = '0';
+                
+                // Force reflow
+                void this.elements.currentGameContent.offsetWidth;
+                
+                // Fade in content
+                this.elements.currentGameContent.style.transition = 'opacity 0.3s ease-in';
+                this.elements.currentGameContent.style.opacity = '1';
+            } else {
+                // Already visible, just ensure opacity is 1
+                this.elements.currentGameContent.style.opacity = '1';
+            }
         }
+        
+        this.isVisible = true;
     }
 
     /**
      * Hide the overlay (when no game selected) with fade out
+     * Hides both the content and the unified box
      * @returns {void}
      */
     hide() {
-        if (this.elements.gameStatsBox && this.isVisible) {
-            // Fade out
-            this.elements.gameStatsBox.style.transition = 'opacity 0.3s ease-out';
-            this.elements.gameStatsBox.style.opacity = '0';
+        if (this.isVisible) {
+            // Fade out content first
+            if (this.elements.currentGameContent) {
+                this.elements.currentGameContent.style.transition = 'opacity 0.3s ease-out';
+                this.elements.currentGameContent.style.opacity = '0';
+            }
             
-            // After fade completes, set display none
+            // After fade completes, hide everything
             setTimeout(() => {
-                if (this.elements.gameStatsBox) {
-                    this.elements.gameStatsBox.style.display = 'none';
+                if (this.elements.currentGameContent) {
+                    this.elements.currentGameContent.style.display = 'none';
+                }
+                if (this.elements.unifiedBox) {
+                    this.elements.unifiedBox.style.display = 'none';
                 }
             }, 300);
             
@@ -288,7 +314,7 @@ class GameView {
      * @param {string} countdownText - Formatted countdown string (e.g., "02:15:34")
      */
     updateCountdown(countdownText) {
-        const countdownElement = this.elements.gameStatsBox.querySelector('.countdown-time');
+        const countdownElement = this.elements.currentGameContent.querySelector('.countdown-time');
         if (countdownElement) {
             countdownElement.textContent = countdownText;
         }
@@ -350,14 +376,14 @@ class GameView {
      */
     clearStateElements() {
         // Remove pregame elements
-        const countdown = this.elements.gameStatsBox.querySelector('.countdown-container');
-        const matchup = this.elements.gameStatsBox.querySelector('.matchup-preview');
+        const countdown = this.elements.currentGameContent.querySelector('.countdown-container');
+        const matchup = this.elements.currentGameContent.querySelector('.matchup-preview');
         if (countdown) countdown.remove();
         if (matchup) matchup.remove();
 
         // Remove halftime/final banners
-        const halftimeBanner = this.elements.gameStatsBox.querySelector('.halftime-banner');
-        const finalBanner = this.elements.gameStatsBox.querySelector('.final-banner');
+        const halftimeBanner = this.elements.currentGameContent.querySelector('.halftime-banner');
+        const finalBanner = this.elements.currentGameContent.querySelector('.final-banner');
         if (halftimeBanner) halftimeBanner.remove();
         if (finalBanner) finalBanner.remove();
 
@@ -403,7 +429,7 @@ class GameView {
 
         // Insert after live indicator
         this.elements.liveIndicator.insertAdjacentHTML('afterend', matchupHTML);
-        const matchupElement = this.elements.gameStatsBox.querySelector('.matchup-preview');
+        const matchupElement = this.elements.currentGameContent.querySelector('.matchup-preview');
         matchupElement.insertAdjacentHTML('afterend', countdownHTML);
     }
 
@@ -532,7 +558,7 @@ class GameView {
             }
 
             // Add transitioning class to prevent interactions
-            this.elements.gameStatsBox.classList.add('transitioning');
+            this.elements.unifiedBox.classList.add('transitioning');
 
             // Determine if this is a content-only transition (Live/Halftime/Final) or full transition (Pre-Game involved)
             const currentIsGameState = ['live', 'halftime', 'final'].includes(this.currentState);

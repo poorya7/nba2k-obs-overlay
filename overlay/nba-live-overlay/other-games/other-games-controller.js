@@ -4,7 +4,7 @@
  */
 
 class OtherGamesController {
-    constructor(view, onComplete = null, isSimulationMode = false, timeMultiplier = 1) {
+    constructor(view, onComplete = null, isSimulationMode = false, timeMultiplier = 1, unifiedBoxAnimator = null) {
         // Validate dependencies
         if (!view) {
             throw new Error('OtherGamesController: view is required');
@@ -16,14 +16,17 @@ class OtherGamesController {
         this.gamesPerSet = 3;
         this.isSimulationMode = isSimulationMode;
         this.timeMultiplier = timeMultiplier;
+        this.unifiedBoxAnimator = unifiedBoxAnimator;
         
         // Timing: Base times divided by multiplier for fast forward
         const baseDuration = isSimulationMode ? 12000 : 18000;
         this.displayDuration = baseDuration / timeMultiplier; // Faster with FF
-        this.fadeDuration = 200; // 0.2 seconds
         this.cycleInterval = null;
         this.countdownInterval = null;
         this.onComplete = onComplete; // Callback when all sets shown
+        
+        // DOM reference for games container
+        this.gamesContainer = document.getElementById('games-container');
     }
 
     /**
@@ -72,22 +75,52 @@ class OtherGamesController {
         const totalSets = Math.ceil(this.games.length / this.gamesPerSet);
         const nextSetIndex = this.currentSet + 1;
         
+        console.log(`[OtherGames] nextSet called: currentSet=${this.currentSet}, nextSetIndex=${nextSetIndex}, totalSets=${totalSets}`);
+        
         // Check if we've shown all sets
         if (nextSetIndex >= totalSets) {
-            // Stop cycling and hide overlay
+            console.log('[OtherGames] All sets shown, returning to current game');
+            // Stop cycling and return to current game
             this.stopCycle();
             this.stopCountdown();
             if (this.onComplete) {
+                console.log('[OtherGames] Calling onComplete callback');
                 this.onComplete();
+            } else {
+                console.warn('[OtherGames] No onComplete callback provided!');
             }
             return;
         }
         
-        // Continue to next set
-        await this.view.fadeOut(this.fadeDuration);
-        this.currentSet = nextSetIndex;
-        this.view.renderGames(this.games, this.currentSet * this.gamesPerSet, this.gamesPerSet);
-        await this.view.fadeIn(this.fadeDuration);
+        // Calculate next page games and height
+        const startIndex = nextSetIndex * this.gamesPerSet;
+        const nextPageGames = this.games.slice(startIndex, startIndex + this.gamesPerSet);
+        const gameCount = nextPageGames.length;
+        
+        // Use animator if available, otherwise fallback to simple fade
+        if (this.unifiedBoxAnimator && this.gamesContainer) {
+            // Get new height based on game count
+            const newHeight = UnifiedBoxAnimator.getOtherGamesHeight(gameCount);
+            
+            // Fade out current content
+            await this.unifiedBoxAnimator.fadeOutContent(this.gamesContainer);
+            
+            // Render new content
+            this.currentSet = nextSetIndex;
+            this.view.renderGames(this.games, startIndex, this.gamesPerSet);
+            
+            // Resize box
+            await this.unifiedBoxAnimator.resizeBox(newHeight);
+            
+            // Fade in new content
+            await this.unifiedBoxAnimator.fadeInContent(this.gamesContainer);
+        } else {
+            // Fallback: simple fade without resize (shouldn't happen in production)
+            await this.view.fadeOut(200);
+            this.currentSet = nextSetIndex;
+            this.view.renderGames(this.games, startIndex, this.gamesPerSet);
+            await this.view.fadeIn(200);
+        }
     }
 
     /**

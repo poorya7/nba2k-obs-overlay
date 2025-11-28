@@ -54,10 +54,11 @@ body {
     opacity: 0.154;
 }
 
-/* Game Stats - Blue Neon Theme */
-.game-stats {
+/* Unified Overlay Box - Blue Neon Theme */
+.unified-overlay-box {
     position: fixed;
-    top: 370px;
+    top: 470px; /* Fixed center point */
+    transform: translateY(-50%); /* Auto-center based on height */
     left: 20px;
     z-index: 10;
     background: rgba(10, 20, 40, 0.85);
@@ -65,16 +66,20 @@ body {
     padding: 13px 15.5px 18px 15.5px; /* Adjusted padding */
     border-radius: 16px;
     width: 190px; /* Adjusted width */
+    height: 180px; /* Initial height */
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
     display: none; /* Hidden by default, shown by JavaScript */
     border: 1px solid rgba(59, 130, 246, 0.55);
-    opacity: 0.7;
+    opacity: 1.0;
     overflow: visible;
+    /* Smooth transition for height only - transform handles centering */
+    transition: height 0.4s ease-out;
 }
 
-/* Smooth height transition for pregame expansion */
-.game-stats.expanding {
-    transition: height 0.5s ease-out;
+/* Content wrappers */
+.current-game-content,
+.other-games-content {
+    transition: opacity 0.3s ease;
 }
 
 .live-indicator {
@@ -433,7 +438,7 @@ body {
 }
 
 /* Transition animations */
-.game-stats.transitioning {
+.unified-overlay-box.transitioning {
     pointer-events: none;
 }
 
@@ -582,27 +587,10 @@ body {
    Other Games Overlay
    ======================================== */
 
-/* ==================== OTHER GAMES OVERLAY ==================== */
+/* ==================== OTHER GAMES CONTENT ==================== */
 
-.other-games-overlay {
-    position: fixed;
-    top: 461.5px;
-    transform: translateY(-50%);
-    left: 20px;
-    z-index: 10;
-    display: none;
-    will-change: opacity, transform;
-}
-
-.other-game-card {
-    background: rgba(10, 20, 40, 0.85);
-    backdrop-filter: blur(10px);
-    padding: 13px 19px;
-    border-radius: 19px;
-    box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
-    border: 1px solid rgba(59, 130, 246, 0.55);
-    min-width: 214px;
-}
+/* Other games content is now inside unified-overlay-box */
+/* No separate container styling needed - uses parent box styles */
 
 .game-in-card {
     display: flex;

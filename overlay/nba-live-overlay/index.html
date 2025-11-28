@@ -8,70 +8,71 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Current Game Stats Overlay -->
-    <div class="game-stats">
-        <div class="live-indicator">
-            <div class="live-dot"></div>
-            <span class="live-text">Live</span>
-            <span class="nba-label">NBA</span>
-        </div>
-        
-        <div class="teams">
-            <!-- Home Team -->
-            <div class="team" data-team="home">
-                <div class="team-left">
-                    <img class="team-logo" data-logo="home" src="" alt="Home Team">
-                    <div class="team-abbr" data-abbr="home">---</div>
-                </div>
-                <div class="score" data-score="home">0</div>
+    <!-- Unified Overlay Box -->
+    <div class="unified-overlay-box" id="unifiedBox">
+        <!-- Current Game Content -->
+        <div class="current-game-content" id="currentGameContent">
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span class="live-text">Live</span>
+                <span class="nba-label">NBA</span>
             </div>
             
-            <!-- Away Team -->
-            <div class="team" data-team="away">
-                <div class="team-left">
-                    <img class="team-logo" data-logo="away" src="" alt="Away Team">
-                    <div class="team-abbr" data-abbr="away">---</div>
-                </div>
-                <div class="score" data-score="away">0</div>
-            </div>
-        </div>
-        
-        <div class="game-status" data-status>Q1 · 12:00</div>
-
-        <!-- MVP Player Section -->
-        <div class="mvp-section">
-            <div class="mvp-content">
-                <div class="photo-container">
-                    <img class="player-pic" src="" alt="MVP Player">
-                    <img class="player-team-logo" src="" alt="Team">
-                </div>
-                <div class="player-info">
-                    <div class="mvp-header">
-                        <span class="mvp-label">⭐ MVP</span>
-                        <span class="player-name">---</span>
+            <div class="teams">
+                <!-- Home Team -->
+                <div class="team" data-team="home">
+                    <div class="team-left">
+                        <img class="team-logo" data-logo="home" src="" alt="Home Team">
+                        <div class="team-abbr" data-abbr="home">---</div>
                     </div>
-                    <div class="player-stats">
-                        <div class="stat-item">
-                            <div class="stat-value" data-stat="pts">0</div>
-                            <div class="stat-label">PTS</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" data-stat="reb">0</div>
-                            <div class="stat-label">REB</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" data-stat="ast">0</div>
-                            <div class="stat-label">AST</div>
-                        </div>
+                    <div class="score" data-score="home">0</div>
+                </div>
+                
+                <!-- Away Team -->
+                <div class="team" data-team="away">
+                    <div class="team-left">
+                        <img class="team-logo" data-logo="away" src="" alt="Away Team">
+                        <div class="team-abbr" data-abbr="away">---</div>
                     </div>
+                    <div class="score" data-score="away">0</div>
                 </div>
             </div>
-        </div>
-    </div>
+            
+            <div class="game-status" data-status>Q1 · 12:00</div>
 
-    <!-- Other Games Overlay -->
-    <div class="other-games-overlay" id="other-games">
-        <div class="other-game-card">
+            <!-- MVP Player Section -->
+            <div class="mvp-section">
+                <div class="mvp-content">
+                    <div class="photo-container">
+                        <img class="player-pic" src="" alt="MVP Player">
+                        <img class="player-team-logo" src="" alt="Team">
+                    </div>
+                    <div class="player-info">
+                        <div class="mvp-header">
+                            <span class="mvp-label">⭐ MVP</span>
+                            <span class="player-name">---</span>
+                        </div>
+                        <div class="player-stats">
+                            <div class="stat-item">
+                                <div class="stat-value" data-stat="pts">0</div>
+                                <div class="stat-label">PTS</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" data-stat="reb">0</div>
+                                <div class="stat-label">REB</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" data-stat="ast">0</div>
+                                <div class="stat-label">AST</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Games Content -->
+        <div class="other-games-content" id="otherGamesContent" style="display: none;">
             <div id="games-container">
                 <!-- Games will be dynamically inserted here -->
             </div>
@@ -93,6 +94,7 @@
     <script src="utils/simulation-manager.js"></script>
     <script src="utils/game-data-formatter.js"></script>
     <script src="utils/transition-animator.js"></script>
+    <script src="utils/unified-box-animator.js"></script>
     
     <!-- Game feature -->
     <script src="game/game-view.js"></script>
@@ -118,6 +120,11 @@
         // Initialize dependencies
         const api = new ApiClient();
         const nbaApi = window.NBAApi;
+        
+        // Initialize unified box animator
+        const unifiedBoxAnimator = new UnifiedBoxAnimator();
+        unifiedBoxAnimator.init(document.getElementById('unifiedBox'));
+        
         const gameView = new GameView();
         const mvpView = new MvpView();
         const mvpController = new MvpController(mvpView);
@@ -140,7 +147,8 @@
             otherGamesContainerView,
             stateManager,
             simulationManager,
-            gameDataFormatter
+            gameDataFormatter,
+            unifiedBoxAnimator
         });
         
         // Initialize main app controller with all dependencies
