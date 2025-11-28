@@ -235,7 +235,7 @@ const server = http.createServer(async (req, res) => {
   } else if (filePath === './overlay/game-stats' || filePath === './overlay/game-stats/') {
     filePath = './overlay/game-stats-overlay/core/index.html';
   } else if (filePath === './overlay/nba-live' || filePath === './overlay/nba-live/') {
-    filePath = './overlay/nba-live-overlay/core/index.html';
+    filePath = './overlay/nba-live-overlay/index.html';
   } else if (filePath === './overlay/other-games' || filePath === './overlay/other-games/') {
     filePath = './overlay/other-games-overlay/index.html';
   } else if (filePath === './overlay/title' || filePath === './overlay/title/') {

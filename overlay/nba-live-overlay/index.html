@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Game Stats Overlay - OBS Browser Source Ready -->
+    <!-- Current Game Stats Overlay -->
     <div class="game-stats">
         <div class="live-indicator">
             <div class="live-dot"></div>
@@ -69,23 +69,40 @@
         </div>
     </div>
 
+    <!-- Other Games Overlay -->
+    <div class="other-games-overlay" id="other-games">
+        <div class="other-game-card">
+            <div id="games-container">
+                <!-- Games will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
     <!-- NBA API utilities -->
     <script src="../_shared/config.js"></script>
     <script src="../_shared/nbaApi.js"></script>
     <script src="../_shared/apiClient.js"></script>
     
-    <!-- Game utilities (overlay-specific) -->
-    <script src="core/game-utils.js"></script>
+    <!-- Shared utilities -->
+    <script src="shared/game-utils.js"></script>
+    <script src="shared/state-manager.js"></script>
+    <script src="shared/simulation-manager.js"></script>
+    <script src="shared/game-data-formatter.js"></script>
     
-    <!-- View Controllers -->
-    <script src="game-view.js"></script>
-    <script src="mvp-view.js"></script>
-    <script src="mvp-controller.js"></script>
-    <script src="mvp-integration.js"></script>
+    <!-- Game feature -->
+    <script src="game/game-view.js"></script>
     
-    <!-- Core Controllers (Refactored modular architecture) -->
-    <script src="state-manager.js"></script>
-    <script src="simulation-manager.js"></script>
+    <!-- Other games feature -->
+    <script src="other-games/other-games-view.js"></script>
+    <script src="other-games/other-games-controller.js"></script>
+    
+    <!-- MVP feature -->
+    <script src="mvp/mvp-view.js"></script>
+    <script src="mvp/mvp-controller.js"></script>
+    <script src="mvp/mvp-integration.js"></script>
+    
+    <!-- Main controllers -->
+    <script src="mode-coordinator.js"></script>
     <script src="app-controller.js"></script>
     
     <script>
@@ -98,11 +115,25 @@
         const gameView = new GameView();
         const mvpView = new MvpView();
         const mvpController = new MvpController(mvpView);
-        const mvpIntegration = window.MVPIntegration;
+        const mvpIntegration = new MvpIntegration();
+        const otherGamesView = new OtherGamesView();
         
         // Initialize core managers
         const stateManager = new StateManager();
         const simulationManager = new SimulationManager();
+        const gameDataFormatter = new GameDataFormatter(stateManager);
+        
+        // Initialize mode coordinator
+        const modeCoordinator = new ModeCoordinator({
+            api,
+            nbaApi,
+            gameView,
+            mvpView,
+            otherGamesView,
+            stateManager,
+            simulationManager,
+            gameDataFormatter
+        });
         
         // Initialize main app controller with all dependencies
         const appController = new AppController({
@@ -112,8 +143,11 @@
             mvpView,
             mvpController,
             mvpIntegration,
+            otherGamesView,
             stateManager,
-            simulationManager
+            simulationManager,
+            gameDataFormatter,
+            modeCoordinator
         });
         
         // Start the overlay when DOM is ready
@@ -139,4 +173,3 @@
 
 </body>
 </html>
-
