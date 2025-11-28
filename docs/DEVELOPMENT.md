@@ -49,7 +49,7 @@ Complete guide for developing, modifying, and extending the NBA 2K OBS Overlay.
 
 4. **Open in browser**
    - Dashboard: `http://localhost:3000/dashboard`
-   - Overlay: `http://localhost:3000/overlay/game-stats`
+   - Overlay: `http://localhost:3000/overlay/nba-live`
 
 ### Project Structure Overview
 
@@ -62,22 +62,26 @@ nba2k-obs-overlay/
 ├── overlay/
 │   ├── _shared/            # Shared utilities (single source of truth)
 │   │   ├── config.js       # Configuration constants
-│   │   └── nbaApi.js       # ESPN API client
+│   │   ├── nbaApi.js       # ESPN API client
+│   │   └── apiClient.js    # Server API client
 │   │
 │   ├── _dashboard/         # Control panel
 │   │   ├── index.html      # Dashboard UI
-│   │   └── dashboard.js    # Game selection & simulation logic
+│   │   └── dashboard.js    # Mode selection, quarter controls, simulation
 │   │
-│   └── game-stats-overlay/ # Modular overlay system
-│       ├── core/           # Production overlay
-│       │   ├── index.html  # Production overlay with API integration
-│       │   ├── game-view.js # GameView controller class
-│       │   └── styles.css  # All overlay styling
-│       │
-│       └── tests/          # Testing pages
-│           ├── test-states.html      # Interactive state tester
-│           ├── test-simulation.html  # Full game simulation
-│           └── index-full.html       # Full design preview
+│   ├── nba-live-overlay/   # Unified overlay system
+│   │   └── core/           # Production overlay
+│   │       ├── index.html             # Main overlay HTML
+│   │       ├── app-controller.js      # Main orchestrator
+│   │       ├── game-view.js           # Current game view
+│   │       ├── other-games-view.js    # Other games view
+│   │       ├── other-games-controller.js  # Other games cycling
+│   │       ├── mvp-view.js            # MVP overlay
+│   │       ├── state-manager.js       # State management
+│   │       ├── simulation-manager.js  # Fake data generation
+│   │       └── styles.css             # All styling
+│   │
+│   └── _tests/             # Social media overlay tests
 │
 └── docs/                   # Documentation
 ```
@@ -101,11 +105,11 @@ The server serves static files, so changes are reflected immediately:
 npm start
 
 # Make changes to files
-# → Edit overlay/game-stats-overlay/core/styles.css
+# → Edit overlay/nba-live-overlay/core/styles.css
 # → Refresh browser to see changes
 
 # Test in OBS
-# → Add browser source: http://localhost:3000/overlay/game-stats
+# → Add browser source: http://localhost:3000/overlay/nba-live
 # → Right-click → Interact to open DevTools
 ```
 
@@ -118,9 +122,9 @@ Dashboard:
 3. Select a game or enable simulation mode
 
 Overlay:
-1. Open http://localhost:3000/overlay/game-stats
+1. Open http://localhost:3000/overlay/nba-live
 2. F12 to open DevTools
-3. Watch auto-refresh every 3 seconds
+3. Watch auto-refresh (300ms in sim, 3s in normal)
 4. Check that animations are smooth
 ```
 
@@ -161,23 +165,44 @@ Overlay:
   - Modifying game filtering
   - Adding simulation controls
 
-#### `overlay/game-stats-overlay/core/game-view.js`
-- **Purpose:** Core GameView controller class
+#### `overlay/nba-live-overlay/core/app-controller.js`
+- **Purpose:** Main orchestrator for unified overlay
+- **When to modify:**
+  - Changing mode switching logic
+  - Modifying timing behavior
+  - Adding new overlay modes
+  - Adjusting refresh intervals
+
+#### `overlay/nba-live-overlay/core/game-view.js`
+- **Purpose:** Current game display with animations
 - **When to modify:**
   - Changing animation logic (score slide, state transitions)
   - Modifying show/hide behavior
   - Adding new state rendering methods
   - Adjusting animation timings
 
-#### `overlay/game-stats-overlay/core/index.html`
-- **Purpose:** Production overlay with API integration
+#### `overlay/nba-live-overlay/core/other-games-view.js`
+- **Purpose:** Other games display and rendering
+- **When to modify:**
+  - Changing how games are grouped or displayed
+  - Modifying layout of other games
+  - Adding new display features
+
+#### `overlay/nba-live-overlay/core/state-manager.js`
+- **Purpose:** Centralized state tracking
+- **When to modify:**
+  - Adding new timing logic
+  - Changing quarter-based behavior
+  - Modifying mode switching rules
+
+#### `overlay/nba-live-overlay/core/index.html`
+- **Purpose:** Production overlay with both views
 - **When to modify:**
   - Changing HTML structure
-  - Modifying API polling logic
-  - Adjusting simulation data generation
-  - Changing data comparison/update logic
+  - Adding new views or sections
+  - Modifying initialization logic
 
-#### `overlay/game-stats-overlay/core/styles.css`
+#### `overlay/nba-live-overlay/core/styles.css`
 - **Purpose:** All overlay visual design
 - **When to modify:** 
   - Changing colors/fonts
@@ -191,7 +216,7 @@ Overlay:
 
 ### Changing Colors
 
-Edit `overlay/game-stats-overlay/core/styles.css`:
+Edit `overlay/nba-live-overlay/core/styles.css`:
 
 ```css
 /* Main accent color */
@@ -213,7 +238,7 @@ Edit `overlay/game-stats-overlay/core/styles.css`:
 
 ### Changing Fonts
 
-1. **Add font to HTML** (`overlay/game-stats-overlay/core/index.html`):
+1. **Add font to HTML** (`overlay/nba-live-overlay/core/index.html`):
 ```html
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@600;800&display=swap" rel="stylesheet">
 ```
@@ -248,10 +273,11 @@ Edit `overlay/_shared/config.js`:
 const REFRESH_INTERVAL = 5000;
 ```
 
-Then update the `setInterval` call in `overlay/game-stats-overlay/core/index.html`:
+Then update the `setInterval` call in `overlay/nba-live-overlay/core/app-controller.js`:
 
 ```javascript
-setInterval(updateFromAPI, 5000); // Match config value
+// Update the polling interval in the constructor
+this.updateInterval = 5000; // Match config value
 ```
 
 ---
@@ -270,7 +296,7 @@ awayTeam: {
 }
 ```
 
-2. **Use in GameView** (`overlay/game-stats-overlay/core/game-view.js`):
+2. **Use in GameView** (`overlay/nba-live-overlay/core/game-view.js`):
 
 ```javascript
 // In showLive method, add:
@@ -283,12 +309,12 @@ this.elements.awayTeam.style.borderColor = `#${awayColor}`;
 
 ### Example: Add Sound on Score Change
 
-1. **Add audio file** to `overlay/game-stats-overlay/core/sounds/`:
+1. **Add audio file** to `overlay/nba-live-overlay/core/sounds/`:
    ```
    sounds/score.mp3
    ```
 
-2. **Modify score update logic** (`overlay/game-stats-overlay/core/index.html`):
+2. **Modify score update logic** (`overlay/nba-live-overlay/core/app-controller.js`):
 
 ```javascript
 // In detectStateAndUpdate, when scores change:
@@ -308,25 +334,17 @@ if (scoresChanged) {
 
 ## Testing
 
-### Using Test Pages
+### Using Dashboard Simulation Mode
 
-**test-states.html** - Interactive state tester:
+**Simulation Mode** - Full overlay testing:
 ```
-http://localhost:3000/overlay/game-stats-overlay/tests/test-states.html
+http://localhost:3000/dashboard
 
-• Buttons to trigger each state (pregame, live, halftime, etc.)
-• Score increment buttons
-• Mimics production overlay logic exactly
-• Great for testing animations
-```
-
-**test-simulation.html** - Full game simulation:
-```
-http://localhost:3000/overlay/game-stats-overlay/tests/test-simulation.html
-
-• Automatic score changes
-• State progression
-• Tests all animation scenarios
+• Select "Simulation" mode
+• Use quarter buttons (Q1, Q2, Q3, Q4, Pre-Game, Halftime, Final)
+• Toggle MVP display
+• Enable Fast Forward (10x speed) for quick testing
+• Tests current game mode, other games mode, and MVP
 ```
 
 ### Testing in Browser
@@ -351,7 +369,7 @@ setInterval(() => {
 ### Testing in OBS
 
 1. **Add Browser Source**
-   - URL: `http://localhost:3000/overlay/game-stats`
+   - URL: `http://localhost:3000/overlay/nba-live`
    - Width: 1920, Height: 1080
 
 2. **Enable Interact Mode**
@@ -369,10 +387,13 @@ setInterval(() => {
 ### Testing Simulation Mode
 
 1. Open dashboard: `http://localhost:3000/dashboard`
-2. Check "Enable Simulation Mode"
-3. Click "Next State" to cycle through states
-4. Watch overlay respond with animations
-5. Verify scores change automatically in simulation
+2. Select "Simulation" mode (radio button)
+3. Click quarter buttons (Q1, Q2, etc.) to set game state
+4. Toggle "Fast Forward" for 10x speed testing
+5. Toggle "MVP" to test MVP overlay
+6. Watch overlay respond with animations and mode switching
+7. Verify scores change automatically in simulation
+8. Test other games cycling at 60s mark
 
 ---
 
@@ -507,7 +528,7 @@ gameView.transitionToState(stateName, formattedData);
 
 ### Custom Animation Timings
 
-Modify `overlay/game-stats-overlay/core/game-view.js`:
+Modify `overlay/nba-live-overlay/core/game-view.js`:
 
 ```javascript
 // In updateScore method:
@@ -543,7 +564,7 @@ To access from other devices on your network:
 
 3. **Access from other device:**
    ```
-   http://YOUR_IP:3000/overlay/game-stats
+   http://YOUR_IP:3000/overlay/nba-live
    ```
 
 **Security Note:** Only do this on trusted networks!

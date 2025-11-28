@@ -26,10 +26,11 @@ The NBA 2K OBS Overlay is a local web application that displays live NBA game st
         ┌───────────▼─────────┐  ┌───────▼───────────┐
         │   Control Dashboard  │  │  OBS Game Overlay │
         │   /dashboard         │  │  /overlay/        │
-        │                      │  │  game-stats       │
-        │  • Game selection UI │  │                   │
-        │  • Simulation mode   │  │  • Live stats     │
-        │  • Saves to server   │  │  • Auto-refresh   │
+        │                      │  │  nba-live         │
+        │  • Game/mode select  │  │                   │
+        │  • Quarter controls  │  │  • Unified view   │
+        │  • Simulation mode   │  │  • Current game   │
+        │  • Saves to server   │  │  • Other games    │
         └──────────────────────┘  └───────────────────┘
 ```
 
@@ -103,27 +104,30 @@ nba2k-obs-overlay/
 ├── overlay/
 │   ├── _shared/                 # Shared utilities (single source of truth)
 │   │   ├── config.js           # Configuration constants
-│   │   └── nbaApi.js           # ESPN API integration
+│   │   ├── nbaApi.js           # ESPN API integration
+│   │   └── apiClient.js        # Server API client
 │   │
 │   ├── _dashboard/             # Control Panel
 │   │   ├── index.html         # Dashboard UI
-│   │   ├── dashboard.js       # Selection logic & simulation control
+│   │   ├── dashboard.js       # Mode selection, quarter controls, simulation
 │   │   └── (references _shared/)
 │   │
-│   └── game-stats-overlay/    # Modular overlay system
-│       ├── core/              # Production overlay
-│       │   ├── index.html         # Production-ready overlay with API
-│       │   ├── game-view.js       # Core GameView controller class
-│       │   ├── mvp-view.js        # MVP overlay view controller
-│       │   ├── mvp-controller.js  # MVP automatic display logic
-│       │   ├── mvp-integration.js # MVP data fetching & caching
-│       │   ├── styles.css         # Overlay styling (includes MVP)
-│       │   └── (references ../../_shared/)
-│       │
-│       └── tests/             # Testing pages
-│           ├── test-states.html      # Interactive state tester
-│           ├── test-simulation.html  # Full game simulation
-│           └── index-full.html       # Full design preview
+│   ├── nba-live-overlay/      # Unified modular overlay system
+│   │   └── core/              # Production overlay
+│   │       ├── index.html             # Production-ready overlay
+│   │       ├── app-controller.js      # Main orchestrator
+│   │       ├── game-view.js           # Current game view
+│   │       ├── other-games-view.js    # Other games view
+│   │       ├── other-games-controller.js  # Other games cycling logic
+│   │       ├── mvp-view.js            # MVP overlay view
+│   │       ├── mvp-controller.js      # MVP automatic display
+│   │       ├── mvp-integration.js     # MVP data fetching & caching
+│   │       ├── state-manager.js       # Centralized state management
+│   │       ├── simulation-manager.js  # Fake data generation
+│   │       ├── styles.css             # All overlay styling
+│   │       └── (references ../../_shared/)
+│   │
+│   └── _tests/                # Social media overlay tests
 │
 ├── docs/                       # Documentation
 ├── backup_old_dashboard/      # Previous implementation (archived)
@@ -144,8 +148,9 @@ nba2k-obs-overlay/
 
 **Routes:**
 - `/` or `/dashboard` → Dashboard UI
-- `/overlay/game-stats` → OBS Overlay (maps to `/overlay/game-stats-overlay/core/index.html`)
+- `/overlay/nba-live` → Unified OBS Overlay (maps to `/overlay/nba-live-overlay/core/index.html`)
 - `/api/selected-game` → Game selection API (GET/POST)
+- `/api/quarter` → Quarter tracking API (GET/POST)
 - `/api/simulation` → Simulation control API (GET/POST)
 
 ### Shared Utilities (`overlay/_shared/`)
@@ -191,70 +196,71 @@ ESPN API integration layer providing:
 4. Selection saved immediately
 5. Overlay updates within 3 seconds
 
-### Game Overlay (`overlay/game-stats-overlay/core/`)
+### Unified NBA Live Overlay (`overlay/nba-live-overlay/core/`)
 
-**Purpose:** Browser source for OBS that displays live game statistics with smooth ASMR-friendly animations.
+**Purpose:** Single browser source for OBS that displays both current game stats and other games with automatic timing-based switching.
 
 **Architecture:**
-- **Modular Design:** Following SOLID/DRY principles
-- **GameView class:** Core controller managing all overlay logic
-- **Inline integration:** Production HTML includes API polling and simulation logic
+- **Unified Design:** Combines game-stats and other-games functionality in one overlay
+- **Two Display Modes:** Current game view and other games view (automatic switching)
+- **Modular Components:** GameView, OtherGamesView, MvpView, Controllers, State/Simulation managers
+- **AppController orchestration:** Manages mode switching, timing, and data flow
 - **Shared dependencies:** Uses `../../_shared/` for config and API client
 
 **Key Files:**
-- **index.html:** Production overlay with polling logic, simulation support, state detection
-- **game-view.js:** GameView class with show/hide, state transitions, score animations
+- **index.html:** Production overlay with both views (current game + other games)
+- **app-controller.js:** Main orchestrator managing timing, mode switching, data fetching
+- **game-view.js:** Current game display with state transitions and animations
+- **other-games-view.js:** Other games rendering and cycling
+- **other-games-controller.js:** Other games timing and cycle management
+- **mvp-view.js / mvp-controller.js / mvp-integration.js:** MVP functionality
+- **state-manager.js:** Centralized state tracking (mode, quarters, scores, timing)
+- **simulation-manager.js:** Fake data generation for testing
 - **styles.css:** All overlay styling (pill design, animations, colors)
 
-**Features:**
-- Transparent background (OBS-ready)
-- Clean pill-style design
-- Team logos, names, records
-- Live scores with slide animation (slot-machine effect)
-- Game status (scheduled, live, halftime, overtime, final)
-- **Fast refresh:** Updates every 3 seconds
-- **Smart updates:** Only animates what changed (no unnecessary fading)
-- **Pregame countdown:** Updates every second
-- Hides completely when server is down or no game selected
+**Two Display Modes:**
 
-**Display States:**
-- **Pregame:** Countdown timer with "Upcoming NBA" indicator
-- **Live:** Real-time scores, quarter, time remaining with "Live NBA" indicator
-- **Halftime:** "Halftime" status with current scores
-- **Overtime:** "OT" indicator with time
-- **Final:** "Final" status with final scores
+**1. Current Game Mode:**
+- Shows selected game with live stats
+- Team logos, scores, quarter, time
+- Score slide animations (slot-machine effect)
+- MVP overlay when appropriate
+- States: Pregame (countdown), Live, Halftime, Final
+
+**2. Other Games Mode:**
+- Shows other NBA games (3 at a time)
+- Cycles through all games
+- 10-18 seconds per set
+- Appears at 60s mark each quarter (once per quarter)
+- After cycling, returns to current game mode
+
+**Timing Logic:**
+
+**Q1:**
+- 0-10s: Hidden
+- 10-60s: Current game mode
+- 60s: Other games mode (cycles through all, then back to current game)
+- Rest of quarter: Current game mode
+
+**Q2/Q3/Q4:**
+- 0-60s: Current game mode (shows immediately, no delay)
+- 60s: Other games mode (cycles through all, then back to current game)
+- Rest of quarter: Current game mode
 
 **Animation Strategy:**
-- **Score changes:** Slide animation only (old score slides up and fades, new score slides in)
-- **State changes:** Instant content swap (no fading)
-- **First load:** Instant appearance (no animation)
-- **Time updates:** Silent (no animation when only time changes)
+- **Score changes:** Slide animation (old score slides up, new score slides in from bottom)
+- **Mode switching:** Show/hide divs (game-stats ↔ other-games)
+- **State changes:** Instant content swap
+- **First load:** Instant appearance
+- **Time updates:** Silent updates
 
 **Smart Features:**
-- Detects game state from ESPN API
-- Compares data to determine what changed (state, scores, time)
-- Calls appropriate GameView methods based on change type
-- Handles midnight rollover (keeps yesterday's live games visible)
-- Simulation mode respects dashboard state selection
-
-### Test Pages (`overlay/game-stats-overlay/tests/`)
-
-**Purpose:** Testing tools for development and debugging.
-
-**test-states.html:**
-- Interactive buttons to trigger state changes
-- Mimics production overlay logic exactly
-- Tests all game states and transitions
-
-**test-simulation.html:**
-- Full game simulation with auto-progression
-- Automatic score changes every few seconds
-- Tests all animation scenarios
-
-**index-full.html:**
-- Full design preview with video background
-- Shows overlay in context with stream branding
-- Useful for visual design review
+- Quarter-based timing (controlled from dashboard)
+- Automatic mode switching at 60s mark
+- Other games show once per quarter only
+- Detects quarter changes and resets accordingly
+- Simulation mode with fast forward (10x time acceleration)
+- Responsive polling (300ms in sim mode, 3s in normal mode)
 
 ## Technology Stack
 

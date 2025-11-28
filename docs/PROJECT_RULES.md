@@ -228,7 +228,7 @@ When user reports a bug:
 4. **CHECK the codebase FIRST** - Before implementing, find similar implementations and use their approach
 
 **Examples:**
-- Adding a new overlay? Copy structure from existing overlay (game-stats-overlay)
+- Adding a new overlay? Copy structure from existing overlay (nba-live-overlay)
 - Need to display team logos? Use the exact same approach as the main overlay
 - Refactoring? Keep the working logic, just organize it better
 

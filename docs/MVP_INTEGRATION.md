@@ -17,11 +17,11 @@ The `MvpView` class manages the MVP (Most Valuable Player) section of the game s
 ### File Structure
 
 ```
-overlay/game-stats-overlay/core/
+overlay/nba-live-overlay/core/
 ├── mvp-view.js          # MvpView class (view layer)
 ├── mvp-controller.js    # MvpController class (automatic display logic)
 ├── mvp-integration.js   # MVP data fetching & caching
-├── styles.css           # MVP styles (lines 459+)
+├── styles.css           # MVP styles
 └── index.html           # MVP HTML structure + integration
 ```
 
@@ -408,7 +408,7 @@ The MVP view automatically adjusts player name font size based on length to prev
 
 ## Testing
 
-**Test File**: `overlay/game-stats-overlay/tests/test-mvp-view.html`
+**Test File**: Use dashboard simulation mode (`http://localhost:3000/dashboard` → Simulation → Toggle MVP)
 
 Open in a browser to see:
 - Toggle button to show/hide MVP

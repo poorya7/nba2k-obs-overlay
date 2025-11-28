@@ -23,22 +23,39 @@ Complete list of features in the NBA 2K OBS Overlay system.
 
 ### Simulation Mode
 - **Testing Tool**: Enable simulation mode to test overlays without live games
-- **State Control**: Cycle through pregame, live, halftime, overtime, and final states
+- **State Control**: Use quarter buttons (Q1-Q4) and state buttons (Pre-Game, Halftime, Final) to control game state
+- **Fast Forward**: 10x speed button to accelerate time for rapid testing
 - **Auto-progression**: Simulated games automatically progress through states
-- **Score Animation Testing**: Scores change automatically to test animations
+- **Score Animation Testing**: Scores change automatically to test animations (faster in Fast Forward mode)
 - **Simulated MVP**: Toggle to show/hide test MVP data in simulation mode
 - **Simulated Other Games**: Displays 10 fake games when simulation is active
+- **Mode Switching**: Tests both current game and other games display modes with proper timing
 
 ## Overlay Features
 
-### Display
-- **Clean ASMR Design**: Minimalist pill-style design with smooth animations
-- **Transparent Background**: Integrates seamlessly with OBS
-- **Scalable**: Optimized for 1920x1080 streams
-- **Customizable Position**: Place anywhere on your stream
-- **MVP Overlay**: Integrated player spotlight section that automatically displays during breaks
+### Unified NBA Live Overlay
+Single overlay that automatically switches between two display modes:
 
-### Game States
+**Current Game Mode:**
+- Shows your selected game with live stats
+- Team logos, scores, quarter, time remaining
+- Clean ASMR pill-style design with smooth animations
+- Transparent background integrates seamlessly with OBS
+- MVP overlay displays during game breaks
+
+**Other Games Mode:**
+- Shows scores from other NBA games (3 per page)
+- Cycles through all games automatically
+- Appears 1 minute after each quarter starts
+- Returns to current game after one full cycle
+
+### Automatic Mode Switching
+- **Q1**: Hidden for first 10 seconds, then shows current game until 60s, switches to other games, cycles, returns to current game
+- **Q2/Q3/Q4**: Shows current game immediately, switches to other games at 60s, cycles, returns to current game
+- **Once Per Quarter**: Other games only show once per quarter automatically
+- **Seamless Transitions**: Smooth switching between modes
+
+### Current Game States
 Automatically detects and displays:
 - **Pre-game**: Countdown timer until tipoff (updates every second)
 - **Live**: Real-time scores, quarter, time remaining
@@ -47,13 +64,14 @@ Automatically detects and displays:
 - **Final**: Final scores
 
 ### Smart Features
-- **Fast Updates**: Refreshes game data every 3 seconds
+- **Adaptive Polling**: 3 seconds in normal mode, 300ms in simulation mode
 - **Score Slide Animation**: Smooth slot-machine-style animation when scores change
 - **Smart Update Logic**: Only animates what changes (no unnecessary blinking)
 - **Time Formatting**: Always displays time as MM:SS (e.g., "08:32" or "00:45")
-- **Instant Switching**: No animation when switching between games
+- **Instant Switching**: No animation when switching between games or modes
 - **Graceful Degradation**: Hides overlay when server is down or no game selected
 - **Midnight Handling**: Games don't disappear at midnight if still in progress
+- **Quarter-based Timing**: Coordinated with dashboard quarter tracking
 
 ### Status Parsing
 Intelligently handles all ESPN API statuses:
@@ -63,7 +81,7 @@ Intelligently handles all ESPN API statuses:
 - **Overtime**: "3:45 - Overtime" → "OT 03:45"
 
 ### MVP Player Overlay
-Automatic player spotlight that displays during game breaks:
+Automatic player spotlight that displays during game breaks (only in current game mode):
 - **Auto-Display Logic**: Shows during halftime (10s delay), timeouts (20s delay), end of quarters (3s delay), and final (5s delay)
 - **Smart Timing**: Displays for 17 seconds, repeats every 1 minute during halftime and final states (max 3 times)
 - **Player Data**: Shows MVP's name, photo, team logo, and key stats (PTS, REB, AST)
@@ -72,27 +90,36 @@ Automatic player spotlight that displays during game breaks:
 - **Dynamic Font Sizing**: Adjusts player name font size for long names to prevent clipping
 - **Data Caching**: Prevents redundant API calls during game breaks
 - **Integrated Design**: Matches main game stats box styling and color scheme
+- **Mode-Aware**: Only displays when in current game mode (hidden during other games display)
 
-### Other Games Overlay
-Shows scores from other NBA games during your stream:
-- **Smart Timing**: Appears 1 minute after each quarter starts in real mode
-- **Display Duration**: Shows each page of games for 18 seconds
+### Other Games Display
+Integrated into the unified overlay:
+- **Smart Timing**: Appears 1 minute after each quarter starts
+- **Display Duration**: Shows each page of games for 10-18 seconds (variable based on content)
 - **Pagination**: Groups games 3 per page, cycles through all games once per quarter
-- **Vertical Alignment**: Centered vertically with main game stats overlay for consistent positioning
+- **Once Per Quarter**: After cycling, returns to current game mode automatically
+- **Same Position**: Uses the exact same screen position as current game display
 - **Simulation Mode**: Shows 10 fake games when simulation is enabled for testing
-- **Auto-Update**: Automatically refreshes when simulation mode or selected game changes
+- **Consistent Styling**: Matches the visual design of current game mode
 
 ## Technical Features
 
 ### Architecture
-- **Modular Design**: Following SOLID/DRY principles
+- **Unified Modular Design**: Following SOLID/DRY principles
 - **Separation of Concerns**: 
-  - `game-view.js`: Core overlay controller
-  - `index.html`: Production-ready overlay with API integration
+  - `app-controller.js`: Main orchestrator managing timing and mode switching
+  - `game-view.js`: Current game display controller
+  - `other-games-view.js`: Other games display controller
+  - `other-games-controller.js`: Other games cycling logic
+  - `mvp-view.js / mvp-controller.js`: MVP functionality
+  - `state-manager.js`: Centralized state tracking
+  - `simulation-manager.js`: Fake data generation
   - `nbaApi.js`: ESPN API client (shared)
+  - `apiClient.js`: Server API client (shared)
   - `config.js`: Configuration (shared)
 - **Loose Coupling**: Components interact through well-defined interfaces
 - **Single Source of Truth**: Shared files eliminate duplication
+- **Single Overlay**: One unified overlay replaces separate game-stats and other-games overlays
 
 ### Performance
 - **Efficient Polling**: 3-second updates for responsive live data
@@ -113,7 +140,7 @@ Shows scores from other NBA games during your stream:
 Recommended settings for OBS:
 - **Width**: 1920 pixels
 - **Height**: 1080 pixels
-- **URL**: `http://localhost:3000/overlay/game-stats`
+- **URL**: `http://localhost:3000/overlay/nba-live`
 - **Shutdown source when not visible**: Yes (saves resources)
 - **Refresh browser when scene becomes active**: No (maintains state)
 
@@ -125,10 +152,12 @@ Recommended settings for OBS:
 
 ## Development Features
 
-### Test Pages
-- **State Tester**: Interactive buttons to test all game states
-- **Game Simulation**: Full game simulation with automatic score changes
-- **Full Preview**: Design preview with video background and branding
+### Testing & Simulation
+- **Dashboard Simulation Mode**: Full overlay testing with quarter controls and state buttons
+- **Fast Forward (10x)**: Rapid time acceleration for quick testing
+- **MVP Toggle**: Test MVP display in simulation mode
+- **Mode Switching**: Test automatic transitions between current game and other games
+- **Quarter Controls**: Q1-Q4, Pre-Game, Halftime, Final state buttons
 
 ### Configuration
 - **Timezone Support**: Configurable timezone for game times
