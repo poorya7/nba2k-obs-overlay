@@ -61,7 +61,7 @@ class OtherGamesView {
      */
     _addImageErrorHandlers(games) {
         setTimeout(() => {
-            document.querySelectorAll('.other-game-logo').forEach(img => {
+            document.querySelectorAll('.compact .team-logo').forEach(img => {
                 img.addEventListener('error', function() {
                     // Just hide broken images - the abbreviation below will still show
                     this.style.visibility = 'hidden';
@@ -80,20 +80,24 @@ class OtherGamesView {
             : '00:00:00';
         
         return `
-            <div class="game-in-card">
-                <div class="other-game-teams">
-                    <div class="other-game-team">
-                        <div class="other-game-team-left pregame-layout">
-                            <span class="other-game-abbr">${game.away.abbr}</span>
-                            <img class="other-game-logo" src="${game.away.logo}" alt="${game.away.abbr}" crossorigin="anonymous">
-                            <span style="margin: 0 4px; color: #94a3b8; font-size: 10px;">@</span>
-                            <img class="other-game-logo" src="${game.home.logo}" alt="${game.home.abbr}" crossorigin="anonymous">
-                            <span class="other-game-abbr">${game.home.abbr}</span>
-                        </div>
+            <div class="game-in-card compact">
+                <div class="live-indicator">
+                    <span class="live-text">Upcoming</span>
+                </div>
+                <div class="matchup-preview with-names">
+                    <div class="preview-team">
+                        <img class="preview-logo" src="${game.away.logo}" alt="${game.away.abbr}" crossorigin="anonymous">
+                        <span class="preview-abbr">${game.away.abbr}</span>
+                    </div>
+                    <span class="vs-text">vs</span>
+                    <div class="preview-team">
+                        <span class="preview-abbr">${game.home.abbr}</span>
+                        <img class="preview-logo" src="${game.home.logo}" alt="${game.home.abbr}" crossorigin="anonymous">
                     </div>
                 </div>
-                <div class="other-game-status pregame countdown-timer" data-game-index="${gameIndex}">
-                    Starts in ${countdown}
+                <div class="countdown-container">
+                    <div class="countdown-label">Starts In</div>
+                    <div class="countdown-time countdown-timer" data-game-index="${gameIndex}">${countdown}</div>
                 </div>
             </div>
         `;
@@ -105,27 +109,28 @@ class OtherGamesView {
      */
     _renderLiveGame(game) {
         return `
-            <div class="game-in-card">
-                <div class="other-game-status live">LIVE</div>
-                <div class="other-game-teams">
-                    <div class="other-game-team">
-                        <div class="other-game-team-left">
-                            <img class="other-game-logo" src="${game.away.logo}" alt="${game.away.abbr}" crossorigin="anonymous">
-                            <span class="other-game-abbr">${game.away.abbr}</span>
+            <div class="game-in-card compact">
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    <span class="live-text">Live</span>
+                </div>
+                <div class="teams">
+                    <div class="team">
+                        <div class="team-left">
+                            <img class="team-logo" src="${game.away.logo}" alt="${game.away.abbr}" crossorigin="anonymous">
+                            <div class="team-abbr">${game.away.abbr}</div>
                         </div>
-                        <span class="other-game-score">${game.away.score}</span>
+                        <div class="score">${game.away.score}</div>
                     </div>
-                    <div class="other-game-team">
-                        <div class="other-game-team-left">
-                            <img class="other-game-logo" src="${game.home.logo}" alt="${game.home.abbr}" crossorigin="anonymous">
-                            <span class="other-game-abbr">${game.home.abbr}</span>
+                    <div class="team">
+                        <div class="team-left">
+                            <img class="team-logo" src="${game.home.logo}" alt="${game.home.abbr}" crossorigin="anonymous">
+                            <div class="team-abbr">${game.home.abbr}</div>
                         </div>
-                        <span class="other-game-score">${game.home.score}</span>
+                        <div class="score">${game.home.score}</div>
                     </div>
                 </div>
-                <div class="other-game-status">
-                    <span class="game-time" style="color: #4ade80;">${game.quarter}</span>
-                </div>
+                <div class="game-status">${game.quarter}</div>
             </div>
         `;
     }
@@ -136,24 +141,24 @@ class OtherGamesView {
      */
     _renderFinalGame(game) {
         return `
-            <div class="game-in-card">
-                <div class="other-game-teams">
-                    <div class="other-game-team">
-                        <div class="other-game-team-left">
-                            <img class="other-game-logo" src="${game.away.logo}" alt="${game.away.abbr}" crossorigin="anonymous">
-                            <span class="other-game-abbr">${game.away.abbr}</span>
+            <div class="game-in-card compact">
+                <div class="teams">
+                    <div class="team">
+                        <div class="team-left">
+                            <img class="team-logo" src="${game.away.logo}" alt="${game.away.abbr}" crossorigin="anonymous">
+                            <div class="team-abbr">${game.away.abbr}</div>
                         </div>
-                        <span class="other-game-score">${game.away.score}</span>
+                        <div class="score">${game.away.score}</div>
                     </div>
-                    <div class="other-game-team">
-                        <div class="other-game-team-left">
-                            <img class="other-game-logo" src="${game.home.logo}" alt="${game.home.abbr}" crossorigin="anonymous">
-                            <span class="other-game-abbr">${game.home.abbr}</span>
+                    <div class="team">
+                        <div class="team-left">
+                            <img class="team-logo" src="${game.home.logo}" alt="${game.home.abbr}" crossorigin="anonymous">
+                            <div class="team-abbr">${game.home.abbr}</div>
                         </div>
-                        <span class="other-game-score">${game.home.score}</span>
+                        <div class="score">${game.home.score}</div>
                     </div>
                 </div>
-                <div class="other-game-status final">${game.status}</div>
+                <div class="game-status final">${game.status}</div>
             </div>
         `;
     }
@@ -167,7 +172,7 @@ class OtherGamesView {
             const gameIndex = parseInt(el.dataset.gameIndex);
             if (games[gameIndex] && games[gameIndex].secondsUntilStart > 0) {
                 games[gameIndex].secondsUntilStart--;
-                el.textContent = 'Starts in ' + this.formatCountdown(games[gameIndex].secondsUntilStart);
+                el.textContent = this.formatCountdown(games[gameIndex].secondsUntilStart);
             }
         });
     }

@@ -323,6 +323,15 @@ body {
     font-variant-numeric: tabular-nums;
 }
 
+.game-status.pregame {
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.game-status.final {
+    color: #4ade80;
+}
+
 /* State-specific styles */
 
 /* Pre-Game State */
@@ -573,24 +582,26 @@ body {
    Other Games Overlay
    ======================================== */
 
+/* ==================== OTHER GAMES OVERLAY ==================== */
+
 .other-games-overlay {
     position: fixed;
-    top: 461.5px; /* Aligned with game-stats-overlay vertical center */
-    transform: translateY(-50%); /* Center this element at that point */
-    left: 20px; /* Changed from right to left */
+    top: 461.5px;
+    transform: translateY(-50%);
+    left: 20px;
     z-index: 10;
-    display: none; /* Hidden by default, shown when games available */
-    will-change: opacity, transform; /* Optimize fade and transform animations */
+    display: none;
+    will-change: opacity, transform;
 }
 
 .other-game-card {
     background: rgba(10, 20, 40, 0.85);
     backdrop-filter: blur(10px);
-    padding: 13px 19px; /* 10px * 1.34, 14px * 1.34 */
-    border-radius: 19px; /* 14px * 1.34 */
+    padding: 13px 19px;
+    border-radius: 19px;
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
     border: 1px solid rgba(59, 130, 246, 0.55);
-    min-width: 214px; /* 160px * 1.34 */
+    min-width: 214px;
 }
 
 .game-in-card {
@@ -598,87 +609,121 @@ body {
     flex-direction: column;
 }
 
-.other-game-teams {
-    display: flex;
-    flex-direction: column;
-    gap: 8px; /* 6px * 1.34 */
-    margin-bottom: 11px; /* 8px * 1.34 */
-}
-
-.other-game-team {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 11px; /* 8px * 1.34 */
-}
-
-.other-game-team-left {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* 6px * 1.34 */
-    flex: 1;
-}
-
-/* Pregame special layout */
-.other-game-team-left.pregame-layout {
-    justify-content: center;
-}
-
-.other-game-logo {
-    width: 27px; /* 20px * 1.34 */
-    height: 27px; /* 20px * 1.34 */
-    object-fit: contain;
-}
-
-.other-game-abbr {
-    font-size: 15px; /* 11px * 1.34 */
-    font-weight: 600;
-    color: #ffffff;
-    letter-spacing: 0.5px;
-}
-
-.other-game-score {
-    font-size: 19px; /* 14px * 1.34 */
-    font-weight: 700;
-    color: #ffffff;
-    font-variant-numeric: tabular-nums;
-    min-width: 32px; /* 24px * 1.34 */
-    text-align: right;
-}
-
-.other-game-status {
-    text-align: center;
-    font-size: 15.5px; /* Adjusted for stream readability */
-    font-weight: 600;
-    color: #a5b4fc;
-    letter-spacing: 0.5px;
-    padding-top: 8px; /* 6px * 1.34 */
-}
-
-.other-game-status.live {
-    color: #3b82f6;
-    font-size: 16.5px; /* Adjusted for stream readability */
-    padding-top: 0;
-    padding-bottom: 8px; /* 6px * 1.34 */
-    margin-bottom: 11px; /* 8px * 1.34 */
-}
-
-.other-game-status.final {
-    color: #4ade80;
-}
-
-.other-game-status.pregame {
-    color: #fbbf24;
-    font-variant-numeric: tabular-nums;
-}
-
-.game-time {
-    color: #4ade80;
-}
-
+/* Divider between games */
 .game-divider.thick {
-    height: 3px; /* 2px * 1.34 */
+    height: 3px;
     background: rgba(59, 130, 246, 0.5);
-    margin: 16px 0; /* 12px * 1.34 */
+    margin: 16px 0;
+}
+
+/* ==================== COMPACT MODIFIER (for other games) ==================== */
+/* Scales down all elements to fit multiple games in overlay */
+
+.compact .live-indicator {
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.compact .live-dot {
+    width: 6px;
+    height: 6px;
+}
+
+.compact .live-text {
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.compact .nba-label {
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.compact .teams {
+    gap: 5px;
+    margin: 8px 0;
+}
+
+.compact .team {
+    gap: 8px;
+}
+
+.compact .team-left {
+    gap: 6px;
+}
+
+.compact .team-logo {
+    width: 27px;
+    height: 27px;
+}
+
+.compact .team-abbr {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.compact .score {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.compact .game-status {
+    font-size: 11px;
+    margin-top: 8px;
+    height: auto;
+    min-height: 20px;
+    padding: 4px 0;
+}
+
+/* Compact pregame styles */
+.compact .matchup-preview {
+    gap: 6px;
+    margin-top: 6px;
+}
+
+/* Matchup with team names - wider spacing */
+.compact .matchup-preview.with-names {
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.compact .preview-team {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.compact .preview-logo {
+    width: 28px;
+    height: 28px;
+}
+
+.compact .preview-abbr {
+    font-size: 11px;
+    font-weight: 600;
+    color: #bfdbfe;
+    letter-spacing: 0.5px;
+}
+
+.compact .vs-text {
+    font-size: 10px;
+}
+
+.compact .countdown-container {
+    margin-top: 6px;
+}
+
+.compact .countdown-label {
+    font-size: 8px;
+    letter-spacing: 1px;
+    margin-top: 0;
+    margin-bottom: 2px;
+}
+
+.compact .countdown-time {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    margin-bottom: 0;
 }
 
