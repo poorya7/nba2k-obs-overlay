@@ -9,7 +9,7 @@ Live NBA game stats overlay for your NBA 2K streams. Shows real-time scores, qua
 - **Smooth Animations**: Score slide animation (slot-machine effect), instant state changes
 - **Live Game Stats**: Real-time scores, quarter/time, team logos, records
 - **MVP Player Overlay**: Automatic player spotlight (17s display, repeats every 1 minute during breaks)
-- **Other Games Overlay**: Shows scores from other NBA games (appears 1 minute into each quarter)
+- **Other Games Display**: Automatically shows other NBA games at 60s mark each quarter (part of unified overlay)
 - **Smart Dashboard**: Easy game selection + quarter timer + simulation mode for testing
 - **State Detection**: Pregame (with countdown), live, halftime, overtime, final
 - **Simulation Mode**: Test overlays with fake data that cycles through all states
