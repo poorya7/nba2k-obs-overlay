@@ -42,20 +42,18 @@ http://localhost:3000/dashboard
 - Preview shows team info and scores
 - Selection is saved automatically
 
-### 3. Add Overlays to OBS
+### 3. Add Overlay to OBS
 
-**Main Game Stats Overlay:**
+**NBA Live Overlay (Unified):**
 1. In OBS, add a **Browser Source**
-2. Set URL to: `http://localhost:3000/overlay/game-stats`
+2. Set URL to: `http://localhost:3000/overlay/nba-live`
 3. Set Width: `1920` Height: `1080`
 4. Check "Shutdown source when not visible" for better performance
 5. Position and scale overlay as needed on your stream!
 
-**Other Games Overlay (Optional):**
-1. Add another **Browser Source**
-2. Set URL to: `http://localhost:3000/overlay/other-games`
-3. Set Width: `1920` Height: `1080`
-4. This overlay shows scores from other NBA games (appears 1 minute into each quarter, 18s per page)
+**What This Single Overlay Shows:**
+- **Current game mode**: Your selected game with live stats, MVP overlays
+- **Other games mode**: Scores from other NBA games (automatically appears 1 minute into each quarter, cycles through all games, then returns to current game)
 
 ## 📁 Project Structure
 
@@ -66,7 +64,7 @@ nba2k-obs-overlay/
 │   └── scripts/                   # Windows auto-start scripts
 │
 ├── overlay/
-│   ├── _shared/                   # Shared utilities (single source of truth)
+│   ├── _shared/                   # Shared utilities (Dashboard + Overlay)
 │   │   ├── config.js              # Configuration
 │   │   ├── nbaApi.js              # ESPN API client
 │   │   └── apiClient.js           # Server communication
@@ -75,23 +73,29 @@ nba2k-obs-overlay/
 │   │   ├── index.html             # Dashboard UI
 │   │   └── dashboard.js           # Game selection + quarter timer + simulation
 │   │
-│   ├── game-stats-overlay/        # Main game overlay (modular)
-│   │   └── core/
-│   │       ├── index.html         # Production overlay
-│   │       ├── app-controller.js  # Main controller
-│   │       ├── state-manager.js   # State tracking
-│   │       ├── game-view.js       # View rendering
-│   │       ├── mvp-view.js        # MVP section view
-│   │       ├── mvp-controller.js  # MVP auto-display logic
-│   │       └── styles.css         # All styling
+│   ├── nba-live-overlay/          # Unified NBA overlay (feature-based structure)
+│   │   ├── game/                  # Current game feature
+│   │   │   └── game-view.js       # Game display & animations
+│   │   ├── mvp/                   # MVP feature
+│   │   │   ├── mvp-view.js        # MVP section view
+│   │   │   ├── mvp-controller.js  # Auto-display logic
+│   │   │   └── mvp-integration.js # Data fetching
+│   │   ├── other-games/           # Other games feature
+│   │   │   ├── other-games-view.js       # Games display
+│   │   │   └── other-games-controller.js # Cycling logic
+│   │   ├── utils/                 # Utility functions
+│   │   │   ├── game-utils.js      # Game state detection
+│   │   │   ├── state-manager.js   # State tracking
+│   │   │   ├── simulation-manager.js # Fake data
+│   │   │   └── game-data-formatter.js # Data transformation
+│   │   ├── app-controller.js      # Main orchestrator
+│   │   ├── mode-coordinator.js    # Mode switching
+│   │   ├── index.html             # Single entry point
+│   │   └── styles.css             # All styling
 │   │
-│   └── other-games-overlay/       # Other games scores (modular)
-│       ├── index.html             # Production overlay
-│       ├── app-controller.js      # Main controller
-│       ├── state-manager.js       # State + timing
-│       ├── simulation-manager.js  # Fake data generator
-│       ├── other-games-controller.js # Game cycling logic
-│       └── styles.css             # Styling
+│   └── title-overlay/             # Channel branding
+│       ├── index.html
+│       └── styles.css
 │
 └── docs/                          # Complete documentation
     ├── FEATURES.md
@@ -113,7 +117,7 @@ nba2k-obs-overlay/
 
 ## ⚙️ Configuration
 
-Edit `overlay/shared/config.js` to customize:
+Edit `overlay/_shared/config.js` to customize:
 
 - **Refresh Intervals**: How often overlay updates (default: 3 seconds)
 - **Timezone**: Display timezone for game times (default: Eastern)

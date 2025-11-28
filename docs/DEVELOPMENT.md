@@ -60,7 +60,7 @@ nba2k-obs-overlay/
 │   └── scripts/            # Auto-start scripts
 │
 ├── overlay/
-│   ├── _shared/            # Shared utilities (single source of truth)
+│   ├── _shared/            # Shared utilities (Dashboard + Overlay)
 │   │   ├── config.js       # Configuration constants
 │   │   ├── nbaApi.js       # ESPN API client
 │   │   └── apiClient.js    # Server API client
@@ -70,16 +70,26 @@ nba2k-obs-overlay/
 │   │   └── dashboard.js    # Mode selection, quarter controls, simulation
 │   │
 │   ├── nba-live-overlay/   # Unified overlay system
-│   │   └── core/           # Production overlay
-│   │       ├── index.html             # Main overlay HTML
-│   │       ├── app-controller.js      # Main orchestrator
-│   │       ├── game-view.js           # Current game view
-│   │       ├── other-games-view.js    # Other games view
-│   │       ├── other-games-controller.js  # Other games cycling
-│   │       ├── mvp-view.js            # MVP overlay
-│   │       ├── state-manager.js       # State management
-│   │       ├── simulation-manager.js  # Fake data generation
-│   │       └── styles.css             # All styling
+│   │   ├── game/           # Current game feature
+│   │   │   └── game-view.js
+│   │   ├── mvp/            # MVP feature
+│   │   │   ├── mvp-view.js
+│   │   │   ├── mvp-controller.js
+│   │   │   └── mvp-integration.js
+│   │   ├── other-games/    # Other games feature
+│   │   │   ├── other-games-view.js
+│   │   │   └── other-games-controller.js
+│   │   ├── utils/          # Utility functions
+│   │   │   ├── game-utils.js
+│   │   │   ├── state-manager.js
+│   │   │   ├── simulation-manager.js
+│   │   │   └── game-data-formatter.js
+│   │   ├── app-controller.js      # Main orchestrator
+│   │   ├── mode-coordinator.js    # Mode switching
+│   │   ├── index.html             # Main overlay HTML
+│   │   └── styles.css             # All styling
+│   │
+│   ├── title-overlay/      # Channel branding
 │   │
 │   └── _tests/             # Social media overlay tests
 │
@@ -105,7 +115,7 @@ The server serves static files, so changes are reflected immediately:
 npm start
 
 # Make changes to files
-# → Edit overlay/nba-live-overlay/core/styles.css
+# → Edit overlay/nba-live-overlay/styles.css
 # → Refresh browser to see changes
 
 # Test in OBS
@@ -165,15 +175,21 @@ Overlay:
   - Modifying game filtering
   - Adding simulation controls
 
-#### `overlay/nba-live-overlay/core/app-controller.js`
+#### `overlay/nba-live-overlay/app-controller.js`
 - **Purpose:** Main orchestrator for unified overlay
 - **When to modify:**
-  - Changing mode switching logic
-  - Modifying timing behavior
-  - Adding new overlay modes
-  - Adjusting refresh intervals
+  - Changing refresh intervals
+  - Modifying main update loop
+  - Adjusting simulation MVP checks
 
-#### `overlay/nba-live-overlay/core/game-view.js`
+#### `overlay/nba-live-overlay/mode-coordinator.js`
+- **Purpose:** Manages mode switching (current game ↔ other games)
+- **When to modify:**
+  - Changing mode transition logic
+  - Modifying cleanup behavior
+  - Adding new display modes
+
+#### `overlay/nba-live-overlay/game/game-view.js`
 - **Purpose:** Current game display with animations
 - **When to modify:**
   - Changing animation logic (score slide, state transitions)
@@ -181,28 +197,35 @@ Overlay:
   - Adding new state rendering methods
   - Adjusting animation timings
 
-#### `overlay/nba-live-overlay/core/other-games-view.js`
+#### `overlay/nba-live-overlay/other-games/other-games-view.js`
 - **Purpose:** Other games display and rendering
 - **When to modify:**
   - Changing how games are grouped or displayed
   - Modifying layout of other games
   - Adding new display features
 
-#### `overlay/nba-live-overlay/core/state-manager.js`
+#### `overlay/nba-live-overlay/utils/state-manager.js`
 - **Purpose:** Centralized state tracking
 - **When to modify:**
   - Adding new timing logic
   - Changing quarter-based behavior
-  - Modifying mode switching rules
+  - Modifying state tracking
 
-#### `overlay/nba-live-overlay/core/index.html`
+#### `overlay/nba-live-overlay/utils/game-data-formatter.js`
+- **Purpose:** Transform ESPN API data for views
+- **When to modify:**
+  - Changing data transformation logic
+  - Adding new data fields
+  - Modifying format for views
+
+#### `overlay/nba-live-overlay/index.html`
 - **Purpose:** Production overlay with both views
 - **When to modify:**
   - Changing HTML structure
   - Adding new views or sections
   - Modifying initialization logic
 
-#### `overlay/nba-live-overlay/core/styles.css`
+#### `overlay/nba-live-overlay/styles.css`
 - **Purpose:** All overlay visual design
 - **When to modify:** 
   - Changing colors/fonts
@@ -216,7 +239,7 @@ Overlay:
 
 ### Changing Colors
 
-Edit `overlay/nba-live-overlay/core/styles.css`:
+Edit `overlay/nba-live-overlay/styles.css`:
 
 ```css
 /* Main accent color */
@@ -238,7 +261,7 @@ Edit `overlay/nba-live-overlay/core/styles.css`:
 
 ### Changing Fonts
 
-1. **Add font to HTML** (`overlay/nba-live-overlay/core/index.html`):
+1. **Add font to HTML** (`overlay/nba-live-overlay/index.html`):
 ```html
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@600;800&display=swap" rel="stylesheet">
 ```
@@ -273,7 +296,7 @@ Edit `overlay/_shared/config.js`:
 const REFRESH_INTERVAL = 5000;
 ```
 
-Then update the `setInterval` call in `overlay/nba-live-overlay/core/app-controller.js`:
+Then update the `setInterval` call in `overlay/nba-live-overlay/app-controller.js`:
 
 ```javascript
 // Update the polling interval in the constructor
@@ -296,7 +319,7 @@ awayTeam: {
 }
 ```
 
-2. **Use in GameView** (`overlay/nba-live-overlay/core/game-view.js`):
+2. **Use in GameView** (`overlay/nba-live-overlay/game/game-view.js`):
 
 ```javascript
 // In showLive method, add:
@@ -309,12 +332,12 @@ this.elements.awayTeam.style.borderColor = `#${awayColor}`;
 
 ### Example: Add Sound on Score Change
 
-1. **Add audio file** to `overlay/nba-live-overlay/core/sounds/`:
+1. **Add audio file** to `overlay/nba-live-overlay/sounds/`:
    ```
    sounds/score.mp3
    ```
 
-2. **Modify score update logic** (`overlay/nba-live-overlay/core/app-controller.js`):
+2. **Modify score update logic** (`overlay/nba-live-overlay/app-controller.js`):
 
 ```javascript
 // In detectStateAndUpdate, when scores change:
@@ -528,7 +551,7 @@ gameView.transitionToState(stateName, formattedData);
 
 ### Custom Animation Timings
 
-Modify `overlay/nba-live-overlay/core/game-view.js`:
+Modify `overlay/nba-live-overlay/game/game-view.js`:
 
 ```javascript
 // In updateScore method:

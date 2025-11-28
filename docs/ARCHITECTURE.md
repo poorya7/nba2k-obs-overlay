@@ -113,19 +113,25 @@ nba2k-obs-overlay/
 │   │   └── (references _shared/)
 │   │
 │   ├── nba-live-overlay/      # Unified modular overlay system
-│   │   └── core/              # Production overlay
-│   │       ├── index.html             # Production-ready overlay
-│   │       ├── app-controller.js      # Main orchestrator
-│   │       ├── game-view.js           # Current game view
-│   │       ├── other-games-view.js    # Other games view
-│   │       ├── other-games-controller.js  # Other games cycling logic
-│   │       ├── mvp-view.js            # MVP overlay view
-│   │       ├── mvp-controller.js      # MVP automatic display
-│   │       ├── mvp-integration.js     # MVP data fetching & caching
-│   │       ├── state-manager.js       # Centralized state management
-│   │       ├── simulation-manager.js  # Fake data generation
-│   │       ├── styles.css             # All overlay styling
-│   │       └── (references ../../_shared/)
+│   │   ├── game/              # Current game feature
+│   │   │   └── game-view.js   # Game display & animations
+│   │   ├── mvp/               # MVP feature
+│   │   │   ├── mvp-view.js
+│   │   │   ├── mvp-controller.js
+│   │   │   └── mvp-integration.js
+│   │   ├── other-games/       # Other games feature
+│   │   │   ├── other-games-view.js
+│   │   │   └── other-games-controller.js
+│   │   ├── utils/             # Utility functions
+│   │   │   ├── game-utils.js
+│   │   │   ├── state-manager.js
+│   │   │   ├── simulation-manager.js
+│   │   │   └── game-data-formatter.js
+│   │   ├── app-controller.js  # Main orchestrator
+│   │   ├── mode-coordinator.js # Mode switching
+│   │   ├── index.html         # Production overlay
+│   │   ├── styles.css         # All styling
+│   │   └── (references ../_shared/)
 │   │
 │   └── _tests/                # Social media overlay tests
 │
@@ -148,7 +154,7 @@ nba2k-obs-overlay/
 
 **Routes:**
 - `/` or `/dashboard` → Dashboard UI
-- `/overlay/nba-live` → Unified OBS Overlay (maps to `/overlay/nba-live-overlay/core/index.html`)
+- `/overlay/nba-live` → Unified OBS Overlay (maps to `/overlay/nba-live-overlay/index.html`)
 - `/api/selected-game` → Game selection API (GET/POST)
 - `/api/quarter` → Quarter tracking API (GET/POST)
 - `/api/simulation` → Simulation control API (GET/POST)
@@ -196,7 +202,7 @@ ESPN API integration layer providing:
 4. Selection saved immediately
 5. Overlay updates within 3 seconds
 
-### Unified NBA Live Overlay (`overlay/nba-live-overlay/core/`)
+### Unified NBA Live Overlay (`overlay/nba-live-overlay/`)
 
 **Purpose:** Single browser source for OBS that displays both current game stats and other games with automatic timing-based switching.
 

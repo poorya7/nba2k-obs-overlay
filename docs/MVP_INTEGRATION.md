@@ -17,10 +17,11 @@ The `MvpView` class manages the MVP (Most Valuable Player) section of the game s
 ### File Structure
 
 ```
-overlay/nba-live-overlay/core/
-├── mvp-view.js          # MvpView class (view layer)
-├── mvp-controller.js    # MvpController class (automatic display logic)
-├── mvp-integration.js   # MVP data fetching & caching
+overlay/nba-live-overlay/
+├── mvp/                 # MVP feature (self-contained)
+│   ├── mvp-view.js          # MvpView class (view layer)
+│   ├── mvp-controller.js    # MvpController class (automatic display logic)
+│   └── mvp-integration.js   # MVP data fetching & caching
 ├── styles.css           # MVP styles
 └── index.html           # MVP HTML structure + integration
 ```

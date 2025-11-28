@@ -67,7 +67,7 @@ Once setup is complete:
 
 1. **Start streaming**: Server is already running!
 2. **Select game**: Open `http://localhost:3000/dashboard`
-3. **Add to OBS**: Browser source → `http://localhost:3000/overlay/game-stats`
+3. **Add to OBS**: Browser source → `http://localhost:3000/overlay/nba-live`
 4. **Done!** No terminal windows, no manual starting!
 
 ## 🔧 Troubleshooting

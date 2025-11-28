@@ -34,23 +34,25 @@ Run `scripts/stop-overlay-server.bat` to stop the server.
 1. **Serves Static Files**: Delivers HTML, CSS, JS, images, and other assets for the overlay and dashboard
 2. **Provides API Endpoints**:
    - `/api/selected-game` (GET/POST) - Game selection
-   - `/api/selected-style` (GET/POST) - Overlay style selection
+   - `/api/quarter` (GET/POST) - Quarter tracking
    - `/api/simulation` (GET/POST) - Simulation mode for testing
 
 3. **Default Routes**:
    - `http://localhost:3000/` → Dashboard
    - `http://localhost:3000/dashboard` → Dashboard
-   - `http://localhost:3000/overlay/game-stats` → Game Overlay (for OBS)
+   - `http://localhost:3000/overlay/nba-live` → NBA Live Overlay (unified, for OBS)
+   - `http://localhost:3000/overlay/title` → Title Overlay (channel branding)
 
 ## Configuration
 
 - **Port**: 3000 (hardcoded in server.js)
-- **Default Style**: pill-green
 - **MIME Types**: Defined in MIME_TYPES object for proper content delivery
+- **In-memory Storage**: Game selection and simulation state stored while server runs
 
 ## Notes
 
 - The server runs from the `server/` directory but serves files from the parent directory (project root)
-- All file paths in server.js use `../` to reference files in the project root
 - No external dependencies required - uses only Node.js built-in modules (http, fs, path)
+- In-memory storage resets on server restart (game selection is not persistent)
+- Designed for single-user localhost usage (not production-ready for public deployment)
 
