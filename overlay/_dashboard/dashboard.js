@@ -7,6 +7,7 @@ const api = new ApiClient();
 
 let allGames = [];
 let currentQuarter = null;
+let currentSimState = null; // For halftime/final in sim mode
 
 // Quarter Timer
 let quarterStartTime = null;
@@ -26,7 +27,11 @@ async function init() {
   
   // Quarter tracking event listeners
   document.querySelectorAll('.quarter-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleQuarterClick(btn.dataset.quarter));
+    if (btn.dataset.quarter) {
+      btn.addEventListener('click', () => handleQuarterClick(btn.dataset.quarter));
+    } else if (btn.dataset.state) {
+      btn.addEventListener('click', () => handleSimStateClick(btn.dataset.state));
+    }
   });
   document.getElementById('doneBtn').addEventListener('click', handleGameDone);
   
@@ -170,13 +175,23 @@ async function loadQuarterState() {
  * Handle quarter button click
  */
 async function handleQuarterClick(quarter) {
-  // Toggle: if clicking the active quarter, unselect it
-  if (currentQuarter === quarter) {
+  // Check if we're coming from a sim state
+  const wasInSimState = currentSimState !== null;
+  
+  // Clear sim state whenever clicking a quarter button
+  currentSimState = null;
+  
+  // Toggle: if clicking the active quarter (and not coming from sim state), unselect it
+  if (currentQuarter === quarter && !wasInSimState) {
     currentQuarter = null;
     await api.setQuarter(null);
     stopTimer();
   } else {
-    // Clear 'done' state if switching from done to a quarter
+    // Switching quarters - this resets everything
+    // The overlay will detect the quarter change and:
+    // 1. Hide other games if showing
+    // 2. Reset other games shown flag for new quarter
+    // 3. Start fresh with current game
     currentQuarter = quarter;
     await api.setQuarter(quarter);
     startTimer();
@@ -191,6 +206,35 @@ async function handleQuarterClick(quarter) {
 }
 
 /**
+ * Handle simulation state button click (pregame/halftime/final)
+ */
+async function handleSimStateClick(state) {
+  // Toggle: if clicking the active state, unselect it
+  if (currentSimState === state) {
+    currentSimState = null;
+    currentQuarter = null;
+    await api.setQuarter(null);
+    stopTimer();
+  } else {
+    // Set simulation state
+    await api.setSimulation({ state: state });
+    
+    // Use Q2 to bypass Q1 delay (Q2+ show immediately)
+    currentQuarter = 'Q2';
+    currentSimState = state;
+    await api.setQuarter('Q2');
+    
+    // Stop timer and just show the state name
+    stopTimer();
+    const timerElement = document.getElementById('quarterTimer');
+    if (timerElement) timerElement.classList.add('show');
+    updateTimerDisplay();
+  }
+  
+  updateQuarterUI();
+}
+
+/**
  * Handle game done button click
  */
 async function handleGameDone() {
@@ -200,6 +244,7 @@ async function handleGameDone() {
     await api.setQuarter(null);
   } else {
     currentQuarter = 'done';
+    currentSimState = null; // Clear sim state
     await api.setQuarter(null); // Send null to server (no active quarter)
     stopTimer();
   }
@@ -212,8 +257,8 @@ async function handleGameDone() {
 function updateQuarterUI() {
   const doneBtn = document.getElementById('doneBtn');
   
-  // Update quarter buttons
-  document.querySelectorAll('.quarter-btn').forEach(btn => {
+  // Update quarter buttons (Q1, Q2, Q3, Q4)
+  document.querySelectorAll('.quarter-btn[data-quarter]').forEach(btn => {
     if (btn.dataset.quarter === currentQuarter) {
       btn.classList.add('active');
     } else {
@@ -221,8 +266,16 @@ function updateQuarterUI() {
     }
   });
   
+  // Update sim state buttons (pregame, halftime, final)
+  document.querySelectorAll('.quarter-btn[data-state]').forEach(btn => {
+    if (btn.dataset.state === currentSimState) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  
   // Done button is only active if currentQuarter is 'done' (not just null)
-  // We need to track this as a separate state
   if (currentQuarter === 'done') {
     doneBtn.classList.add('active');
   } else {
@@ -370,11 +423,17 @@ async function handleModeChange() {
   // Update server
   await api.setSimulation({ enabled: isSimMode });
   
+  // Reset quarter and state tracking
+  currentQuarter = null;
+  currentSimState = null;
+  await api.setQuarter(null);
+  stopTimer();
+  
   // Reset MVP button when switching to live mode
   if (!isSimMode) {
     const mvpBtn = document.getElementById('simMVPToggle');
     mvpBtn.dataset.state = 'off';
-    mvpBtn.textContent = 'OFF';
+    mvpBtn.textContent = 'MVP';
     await api.setSimulation({ showMVP: false });
     
     // Clear game selection when switching to live mode
@@ -386,6 +445,7 @@ async function handleModeChange() {
   
   // Update UI
   updateModeUI();
+  updateQuarterUI();
 }
 
 /**
@@ -398,16 +458,19 @@ function updateModeUI() {
   const liveGameSection = document.getElementById('liveGameSection');
   const simulationSection = document.getElementById('simulationSection');
   const quarterSection = document.getElementById('quarterSection');
+  const simStateButtons = document.getElementById('simStateButtons');
   
   if (isSimMode) {
     // Simulation mode
     liveGameSection.style.display = 'none';
     simulationSection.style.display = 'block';
     quarterSection.style.display = 'block';
+    if (simStateButtons) simStateButtons.style.display = 'grid';
   } else {
     // Live game mode
     liveGameSection.style.display = 'block';
     simulationSection.style.display = 'none';
+    if (simStateButtons) simStateButtons.style.display = 'none';
     
     // Only show quarter section if a game is selected
     const selectEl = document.getElementById('gameSelect');
@@ -521,6 +584,21 @@ function updateTimerDisplay() {
   const timerValue = document.getElementById('timerValue');
   
   if (!timerElement || !timerValue) return;
+  
+  // If in special state, show state name instead of timer
+  if (currentSimState === 'pregame') {
+    timerValue.textContent = 'Pre-Game';
+    timerElement.classList.add('show');
+    return;
+  } else if (currentSimState === 'halftime') {
+    timerValue.textContent = 'Halftime';
+    timerElement.classList.add('show');
+    return;
+  } else if (currentSimState === 'final') {
+    timerValue.textContent = 'Final';
+    timerElement.classList.add('show');
+    return;
+  }
   
   // Calculate elapsed time (accelerated if fast forward is on)
   const realElapsedMs = Date.now() - quarterStartTime;

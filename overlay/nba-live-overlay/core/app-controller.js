@@ -108,14 +108,29 @@ class AppController {
             // Step 3: Check quarter tracking
             const quarterData = await this.api.getQuarter();
             
-            // In sim mode, reset simulation manager when quarter changes
-            if (isSimMode && quarterData && quarterData.current) {
-                if (!this.lastQuarter || this.lastQuarter !== quarterData.current) {
-                    this.simulationManager.reset();
-                    this.lastQuarter = quarterData.current;
-                    this.virtualTimeOffset = 0; // Reset virtual time offset
-                    this.lastQuarterStartTime = quarterData.startTime;
+            // Detect quarter changes and handle cleanup
+            const quarterChanged = quarterData && quarterData.current && 
+                                  (this.lastQuarter !== quarterData.current || 
+                                   this.lastQuarterStartTime !== quarterData.startTime);
+            
+            if (quarterChanged) {
+                console.log('🔄 Quarter changed:', this.lastQuarter, '→', quarterData.current, 
+                           'currentMode:', this.stateManager.getMode());
+                
+                // Quarter changed - hide other games if showing and reset to current game mode
+                if (this.stateManager.getMode() === 'OTHER_GAMES') {
+                    console.log('🚫 Hiding other games due to quarter change');
+                    this.returnToCurrentGameMode();
                 }
+                
+                // In sim mode, reset simulation manager
+                if (isSimMode) {
+                    this.simulationManager.reset();
+                }
+                
+                this.lastQuarter = quarterData.current;
+                this.virtualTimeOffset = 0; // Reset virtual time offset
+                this.lastQuarterStartTime = quarterData.startTime;
             } else if (!quarterData || !quarterData.current) {
                 this.lastQuarter = null;
                 this.virtualTimeOffset = 0;
