@@ -31,6 +31,11 @@ const MVP_DISPLAY_TIMING = {
 
 class MvpController {
     constructor(mvpView) {
+        // Validate dependencies
+        if (!mvpView) {
+            throw new Error('MvpController: mvpView is required');
+        }
+        
         this.mvpView = mvpView;
         this.currentGameState = null;
         this.previousGameState = null;

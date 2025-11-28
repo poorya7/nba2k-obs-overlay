@@ -85,9 +85,14 @@
     
     <!-- Utilities -->
     <script src="utils/game-utils.js"></script>
+    <script src="utils/state/game-state-manager.js"></script>
+    <script src="utils/state/timing-manager.js"></script>
+    <script src="utils/state/mode-manager.js"></script>
+    <script src="utils/state/overlay-state-manager.js"></script>
     <script src="utils/state-manager.js"></script>
     <script src="utils/simulation-manager.js"></script>
     <script src="utils/game-data-formatter.js"></script>
+    <script src="utils/transition-animator.js"></script>
     
     <!-- Game feature -->
     <script src="game/game-view.js"></script>
@@ -95,6 +100,7 @@
     <!-- Other games feature -->
     <script src="other-games/other-games-view.js"></script>
     <script src="other-games/other-games-controller.js"></script>
+    <script src="other-games/other-games-container-view.js"></script>
     
     <!-- MVP feature -->
     <script src="mvp/mvp-view.js"></script>
@@ -117,6 +123,7 @@
         const mvpController = new MvpController(mvpView);
         const mvpIntegration = new MvpIntegration();
         const otherGamesView = new OtherGamesView();
+        const otherGamesContainerView = new OtherGamesContainerView();
         
         // Initialize core managers
         const stateManager = new StateManager();
@@ -130,6 +137,7 @@
             gameView,
             mvpView,
             otherGamesView,
+            otherGamesContainerView,
             stateManager,
             simulationManager,
             gameDataFormatter

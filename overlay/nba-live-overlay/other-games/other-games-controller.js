@@ -5,6 +5,11 @@
 
 class OtherGamesController {
     constructor(view, onComplete = null, isSimulationMode = false, timeMultiplier = 1) {
+        // Validate dependencies
+        if (!view) {
+            throw new Error('OtherGamesController: view is required');
+        }
+        
         this.view = view;
         this.games = [];
         this.currentSet = 0;

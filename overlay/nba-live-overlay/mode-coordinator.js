@@ -7,12 +7,28 @@
 
 class ModeCoordinator {
     constructor(dependencies) {
+        // Validate dependencies
+        if (!dependencies) {
+            throw new Error('ModeCoordinator: dependencies object is required');
+        }
+        
+        const required = ['api', 'nbaApi', 'gameView', 'mvpView', 'otherGamesView', 
+                         'otherGamesContainerView', 'stateManager', 'simulationManager', 
+                         'gameDataFormatter'];
+        
+        for (const dep of required) {
+            if (!dependencies[dep]) {
+                throw new Error(`ModeCoordinator: ${dep} dependency is required`);
+            }
+        }
+        
         // Dependencies
         this.api = dependencies.api;
         this.nbaApi = dependencies.nbaApi;
         this.gameView = dependencies.gameView;
         this.mvpView = dependencies.mvpView;
         this.otherGamesView = dependencies.otherGamesView;
+        this.otherGamesContainerView = dependencies.otherGamesContainerView;
         this.stateManager = dependencies.stateManager;
         this.simulationManager = dependencies.simulationManager;
         this.gameDataFormatter = dependencies.gameDataFormatter;
@@ -66,11 +82,7 @@ class ModeCoordinator {
         }
 
         // Show other games overlay
-        const otherGamesOverlay = document.getElementById('other-games');
-        if (otherGamesOverlay) {
-            otherGamesOverlay.style.display = 'block';
-            otherGamesOverlay.style.opacity = '1';
-        }
+        this.otherGamesContainerView.show();
 
         // Initialize other games controller with callback
         this.otherGamesController = new OtherGamesController(
@@ -90,13 +102,7 @@ class ModeCoordinator {
      */
     cleanupOtherGamesMode() {
         // Hide other games overlay
-        const otherGamesOverlay = document.getElementById('other-games');
-        if (otherGamesOverlay) {
-            otherGamesOverlay.style.opacity = '0';
-            setTimeout(() => {
-                otherGamesOverlay.style.display = 'none';
-            }, 300);
-        }
+        this.otherGamesContainerView.hide();
 
         // Clean up other games controller
         if (this.otherGamesController) {

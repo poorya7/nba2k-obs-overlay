@@ -9,17 +9,6 @@
  *   gameView.hide(); // When no game selected
  */
 
-// Transition timing constants (all in milliseconds)
-const TRANSITION_TIMING = {
-    BOX_EXPAND: 500,
-    FADE_OUT: 300,
-    FADE_IN: 300,
-    CONTENT_FADE_OUT: 250,
-    CONTENT_FADE_IN: 300,
-    FULL_FADE_OUT: 250,
-    FULL_FADE_IN: 300
-};
-
 // Default animation for score changes
 const DEFAULT_SCORE_ANIMATION = 'slide';
 
@@ -39,8 +28,17 @@ class GameView {
             gameStatsBox: document.querySelector('.game-stats')
         };
         
+        // Validate critical DOM elements exist
+        if (!this.elements.gameStatsBox) {
+            throw new Error('GameView: .game-stats element not found in DOM');
+        }
+        if (!this.elements.teamsContainer) {
+            throw new Error('GameView: .teams element not found in DOM');
+        }
+        
         this.currentState = null; // No default state - set by first API call
         this.isVisible = false;   // Track visibility
+        this.transitionAnimator = new TransitionAnimator(); // Delegate complex transitions
     }
 
     /**
@@ -289,6 +287,18 @@ class GameView {
         }
     }
 
+    /**
+     * Update game status text (for live games - time updates)
+     * @param {string} quarter - Quarter (e.g., 'Q1', 'Q2', 'OT')
+     * @param {string} time - Time remaining (e.g., '7:32')
+     */
+    updateStatusText(quarter, time) {
+        const statusElement = document.querySelector('[data-status]');
+        if (statusElement) {
+            statusElement.textContent = `${quarter} · ${time}`;
+        }
+    }
+
     updateAll(gameData) {
         const { home, away, quarter, time } = gameData;
 
@@ -523,88 +533,19 @@ class GameView {
             const isContentOnlyTransition = currentIsGameState && newIsGameState;
 
             if (isContentOnlyTransition) {
-                // Smart transition: Only animate what changes
-                const teamsContainer = this.elements.teamsContainer;
-                const currentBottomElement = this.elements.gameStatsBox.querySelector('.game-status, .halftime-banner, .final-banner');
-                
-                // For Live → Live transitions, DON'T fade teams (score animations handle it)
-                // Only fade bottom element (game status)
-                const shouldAnimateTeams = false; // Disabled to prevent double animation with score slide
-                
-                // Fade out elements that will change
-                if (shouldAnimateTeams && teamsContainer) {
-                    teamsContainer.classList.add('content-fade-out');
-                }
-                if (currentBottomElement) {
-                    currentBottomElement.classList.add('content-fade-out');
-                }
-
-                setTimeout(() => {
-                    // Switch state (updates teams/scores instantly)
-                    this.switchToState(stateName, data);
-
-                    // Get new elements
-                    const newTeamsContainer = this.elements.teamsContainer;
-                    const newBottomElement = this.elements.gameStatsBox.querySelector('.game-status, .halftime-banner, .final-banner');
-
-                    // Fade in only the elements we faded out
-                    if (shouldAnimateTeams && newTeamsContainer) {
-                        newTeamsContainer.classList.remove('content-fade-out');
-                        newTeamsContainer.style.opacity = '0';
-                        void newTeamsContainer.offsetWidth;
-                        newTeamsContainer.classList.add('content-fade-in');
-                    }
-                    
-                    if (newBottomElement) {
-                        newBottomElement.style.opacity = '0';
-                        void newBottomElement.offsetWidth;
-                        newBottomElement.classList.add('content-fade-in');
-                    }
-
-                    setTimeout(() => {
-                        // Clean up
-                        if (shouldAnimateTeams && newTeamsContainer) {
-                            newTeamsContainer.classList.remove('content-fade-in');
-                            newTeamsContainer.style.opacity = '';
-                        }
-                        if (newBottomElement) {
-                            newBottomElement.classList.remove('content-fade-in');
-                            newBottomElement.style.opacity = '';
-                        }
-                        this.elements.gameStatsBox.classList.remove('transitioning');
-                        resolve();
-                    }, TRANSITION_TIMING.CONTENT_FADE_IN);
-                }, TRANSITION_TIMING.CONTENT_FADE_OUT);
+                // Delegate to TransitionAnimator
+                this.transitionAnimator.contentFadeTransition(this, stateName, data).then(resolve);
             } else {
                 // Full box transition (Pre-Game involved)
                 
                 // Special smooth transition for Pre-Game → Live
                 if (this.currentState === 'pregame' && stateName === 'live') {
-                    this.transitionPreGameToLive(data).then(resolve);
+                    this.transitionAnimator.transitionPreGameToLive(this, data).then(resolve);
                     return;
                 }
                 
-                // Default: fade the whole overlay for other transitions
-                const currentOpacity = window.getComputedStyle(this.elements.gameStatsBox).opacity;
-                
-                // Animate to transparent
-                this.elements.gameStatsBox.style.transition = `opacity ${TRANSITION_TIMING.FULL_FADE_OUT}ms ease-out`;
-                this.elements.gameStatsBox.style.opacity = '0';
-
-                setTimeout(() => {
-                    // Switch state
-                    this.switchToState(stateName, data);
-
-                    // Fade back in
-                    this.elements.gameStatsBox.style.transition = `opacity ${TRANSITION_TIMING.FULL_FADE_IN}ms ease-in`;
-                    this.elements.gameStatsBox.style.opacity = currentOpacity;
-
-                    setTimeout(() => {
-                        this.elements.gameStatsBox.style.transition = '';
-                        this.elements.gameStatsBox.classList.remove('transitioning');
-                        resolve();
-                    }, TRANSITION_TIMING.FULL_FADE_IN);
-                }, TRANSITION_TIMING.FULL_FADE_OUT);
+                // Default: full box transition
+                this.transitionAnimator.fullBoxTransition(this, stateName, data).then(resolve);
             }
         });
     }
@@ -633,149 +574,6 @@ class GameView {
         }
     }
 
-    /**
-     * Special smooth transition from Pre-Game to Live
-     * @param {Object} data - Live game data
-     * @returns {Promise} Resolves when transition is complete
-     */
-    async transitionPreGameToLive(data) {
-        return new Promise((resolve) => {
-            this.elements.gameStatsBox.classList.add('transitioning');
-
-            // Lock the top position so box expands downward
-            const currentTop = this.elements.gameStatsBox.getBoundingClientRect().top;
-            this.elements.gameStatsBox.style.top = currentTop + 'px';
-            this.elements.gameStatsBox.style.bottom = 'auto';
-
-            // Measure current height
-            const currentHeight = this.elements.gameStatsBox.offsetHeight;
-
-            // Get references to pregame content (keep in place for now!)
-            const countdownContainer = this.elements.gameStatsBox.querySelector('.countdown-container');
-            const matchupPreview = this.elements.gameStatsBox.querySelector('.matchup-preview');
-            const liveText = this.elements.liveIndicator.querySelector('.live-text');
-
-            // Temporarily remove pregame from layout flow (position absolute = no space taken)
-            if (countdownContainer) countdownContainer.style.position = 'absolute';
-            if (matchupPreview) matchupPreview.style.position = 'absolute';
-
-            // Update state
-            this.currentState = 'live';
-
-            // Show teams container
-            if (this.elements.teamsContainer) {
-                this.elements.teamsContainer.classList.remove('hidden');
-            }
-
-            // Update game data
-            this.updateAll(data);
-
-            // Hide ALL live content initially
-            const teamLogos = this.elements.gameStatsBox.querySelectorAll('.team-logo');
-            const teamAbbrs = this.elements.gameStatsBox.querySelectorAll('.team-abbr');
-            const scores = this.elements.gameStatsBox.querySelectorAll('.score');
-            
-            teamLogos.forEach(logo => logo.style.opacity = '0');
-            teamAbbrs.forEach(abbr => abbr.style.opacity = '0');
-            scores.forEach(score => score.style.opacity = '0');
-
-            // Add game status (hidden)
-            const statusHTML = `<div class="game-status" data-status style="opacity: 0">${data.quarter} · ${data.time}</div>`;
-            this.elements.teamsContainer.insertAdjacentHTML('afterend', statusHTML);
-            this.elements.gameStatus = document.querySelector('[data-status]');
-
-            // Measure height with ONLY live content (pregame is position:absolute so doesn't affect height)
-            const newHeight = this.elements.gameStatsBox.scrollHeight;
-
-            // Put pregame back in normal flow (still visible during expansion)
-            if (countdownContainer) countdownContainer.style.position = '';
-            if (matchupPreview) matchupPreview.style.position = '';
-
-            // Step 1: Animate box expansion
-            this.elements.gameStatsBox.style.height = currentHeight + 'px';
-            this.elements.gameStatsBox.classList.add('expanding');
-            void this.elements.gameStatsBox.offsetWidth;
-            this.elements.gameStatsBox.style.height = newHeight + 'px';
-
-            // Step 2: After expansion, fade out pregame content
-            setTimeout(() => {
-                if (countdownContainer) {
-                    countdownContainer.style.transition = `opacity ${TRANSITION_TIMING.FADE_OUT}ms ease-in`;
-                    countdownContainer.style.opacity = '0';
-                }
-                if (matchupPreview) {
-                    matchupPreview.style.transition = `opacity ${TRANSITION_TIMING.FADE_OUT}ms ease-in`;
-                    matchupPreview.style.opacity = '0';
-                }
-                // Fade out entire live indicator ("Upcoming NBA")
-                if (this.elements.liveIndicator) {
-                    this.elements.liveIndicator.style.transition = `opacity ${TRANSITION_TIMING.FADE_OUT}ms ease-in`;
-                    this.elements.liveIndicator.style.opacity = '0';
-                }
-
-                // Step 3: After fade out, remove pregame and fade in new content together
-                setTimeout(() => {
-                    // Remove pregame content
-                    if (countdownContainer) countdownContainer.remove();
-                    if (matchupPreview) matchupPreview.remove();
-
-                    // Change "Upcoming" to "Live"
-                    if (liveText) liveText.textContent = 'Live';
-
-                    // Fade in entire live indicator ("Live NBA")
-                    if (this.elements.liveIndicator) {
-                        this.elements.liveIndicator.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
-                        this.elements.liveIndicator.style.opacity = '1';
-                    }
-                    teamLogos.forEach(logo => {
-                        logo.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
-                        logo.style.opacity = '1';
-                    });
-                    teamAbbrs.forEach(abbr => {
-                        abbr.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
-                        abbr.style.opacity = '1';
-                    });
-                    scores.forEach(score => {
-                        score.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
-                        score.style.opacity = '1';
-                    });
-                    if (this.elements.gameStatus) {
-                        this.elements.gameStatus.style.transition = `opacity ${TRANSITION_TIMING.FADE_IN}ms ease-out`;
-                        this.elements.gameStatus.style.opacity = '1';
-                    }
-
-                    // Step 4: Final cleanup after fade in completes
-                    setTimeout(() => {
-                        // Clean up all inline styles
-                        if (this.elements.liveIndicator) {
-                            this.elements.liveIndicator.style.transition = '';
-                            this.elements.liveIndicator.style.opacity = '';
-                        }
-                        teamLogos.forEach(logo => {
-                            logo.style.transition = '';
-                            logo.style.opacity = '';
-                        });
-                        teamAbbrs.forEach(abbr => {
-                            abbr.style.transition = '';
-                            abbr.style.opacity = '';
-                        });
-                        scores.forEach(score => {
-                            score.style.transition = '';
-                            score.style.opacity = '';
-                        });
-                        if (this.elements.gameStatus) {
-                            this.elements.gameStatus.style.transition = '';
-                            this.elements.gameStatus.style.opacity = '';
-                        }
-                        
-                        this.elements.gameStatsBox.classList.remove('transitioning', 'expanding');
-                        this.elements.gameStatsBox.style.height = '';
-                        resolve();
-                    }, TRANSITION_TIMING.FADE_IN);
-                }, TRANSITION_TIMING.FADE_OUT);
-            }, TRANSITION_TIMING.BOX_EXPAND);
-        });
-    }
 }
 
 // GameView class is now available globally

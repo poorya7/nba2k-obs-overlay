@@ -45,6 +45,14 @@ class MvpView {
             }
         };
         
+        // Validate critical DOM elements exist
+        if (!this.elements.mvpSection) {
+            throw new Error('MvpView: .mvp-section element not found in DOM');
+        }
+        if (!this.elements.mvpContent) {
+            throw new Error('MvpView: .mvp-content element not found in DOM');
+        }
+        
         this.isVisible = false;
         this._initializeHiddenState();
     }

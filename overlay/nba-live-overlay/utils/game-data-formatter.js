@@ -7,6 +7,11 @@
 
 class GameDataFormatter {
     constructor(stateManager) {
+        // Validate dependencies
+        if (!stateManager) {
+            throw new Error('GameDataFormatter: stateManager is required');
+        }
+        
         this.stateManager = stateManager;
     }
 
@@ -39,7 +44,7 @@ class GameDataFormatter {
         switch (stateName) {
             case 'pregame':
                 // USES existing utility from game-utils.js
-                const secondsUntilGame = window.calculateSecondsUntilStart(game.date);
+                const secondsUntilGame = GameUtils.calculateSecondsUntilStart(game.date);
 
                 // Update state manager's countdown seconds
                 this.stateManager.setCountdownSeconds(secondsUntilGame);
@@ -48,12 +53,12 @@ class GameDataFormatter {
                 return {
                     homeTeam: baseData.home,
                     awayTeam: baseData.away,
-                    countdown: window.formatCountdown(secondsUntilGame)
+                    countdown: GameUtils.formatCountdown(secondsUntilGame)
                 };
 
             case 'live':
                 // USES existing utility from game-utils.js
-                const liveStatus = window.formatLiveGameStatus(game.statusText);
+                const liveStatus = GameUtils.formatLiveGameStatus(game.statusText);
                 return {
                     ...baseData,
                     quarter: liveStatus.quarter,
@@ -74,7 +79,7 @@ class GameDataFormatter {
      * Uses same logic as other-games-overlay
      */
     transformGameDataForOtherGames(game) {
-        const state = window.detectGameState(game);
+        const state = GameUtils.detectGameState(game);
         
         const baseGame = {
             state: state,
@@ -91,9 +96,9 @@ class GameDataFormatter {
         };
         
         if (state === 'pregame') {
-            baseGame.secondsUntilStart = window.calculateSecondsUntilStart(game.date);
+            baseGame.secondsUntilStart = GameUtils.calculateSecondsUntilStart(game.date);
         } else if (state === 'live') {
-            baseGame.quarter = window.formatLiveGameStatus(game.statusText).formatted;
+            baseGame.quarter = GameUtils.formatLiveGameStatus(game.statusText).formatted;
         } else if (state === 'halftime') {
             baseGame.quarter = 'Halftime';
         } else if (state === 'final') {

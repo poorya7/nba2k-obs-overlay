@@ -6,6 +6,11 @@
 class OtherGamesView {
     constructor() {
         this.gamesContainer = document.getElementById('games-container');
+        
+        // Validate critical DOM elements exist
+        if (!this.gamesContainer) {
+            throw new Error('OtherGamesView: #games-container element not found in DOM');
+        }
     }
 
     /**
@@ -14,7 +19,7 @@ class OtherGamesView {
      * @returns {string} Formatted time (HH:MM:SS)
      */
     formatCountdown(seconds) {
-        return window.formatCountdown(seconds); // Use shared utility from gameUtils.js
+        return GameUtils.formatCountdown(seconds); // Use shared utility from gameUtils.js
     }
 
     /**

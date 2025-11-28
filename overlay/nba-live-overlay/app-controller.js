@@ -8,6 +8,21 @@
 
 class AppController {
     constructor(dependencies) {
+        // Validate dependencies
+        if (!dependencies) {
+            throw new Error('AppController: dependencies object is required');
+        }
+        
+        const required = ['api', 'nbaApi', 'gameView', 'mvpView', 'mvpController', 
+                         'mvpIntegration', 'otherGamesView', 'stateManager', 
+                         'simulationManager', 'gameDataFormatter', 'modeCoordinator'];
+        
+        for (const dep of required) {
+            if (!dependencies[dep]) {
+                throw new Error(`AppController: ${dep} dependency is required`);
+            }
+        }
+        
         // Dependencies (injected for loose coupling)
         this.api = dependencies.api;
         this.nbaApi = dependencies.nbaApi;
@@ -252,7 +267,7 @@ class AppController {
      */
     detectStateAndUpdate(game, gameId) {
         // USES existing utility from gameUtils.js
-        const stateName = window.detectGameState(game);
+        const stateName = GameUtils.detectGameState(game);
 
         // Extract current scores
         const currentHomeScore = parseInt(game.homeTeam.score) || 0;
@@ -294,7 +309,7 @@ class AppController {
                 this.stateManager.startCountdown((seconds) => {
                     if (seconds > 0) {
                         // USES existing utility from gameUtils.js
-                        this.gameView.updateCountdown(window.formatCountdown(seconds));
+                        this.gameView.updateCountdown(GameUtils.formatCountdown(seconds));
                     } else {
                         // Countdown finished, trigger API update to check if game started
                         this.stateManager.stopCountdown();
@@ -371,10 +386,7 @@ class AppController {
                     this.gameView.updateScore('away', awayScore, formattedData.away.animate);
                     // Also update time silently
                     if (formattedData.time) {
-                        const statusElement = document.querySelector('[data-status]');
-                        if (statusElement) {
-                            statusElement.textContent = `${formattedData.quarter} · ${formattedData.time}`;
-                        }
+                        this.gameView.updateStatusText(formattedData.quarter, formattedData.time);
                     }
                 } else {
                     // Scores changed in other states (halftime/final) - update without animation
@@ -384,10 +396,7 @@ class AppController {
             } else {
                 // Only time changed - update time silently
                 if (stateName === 'live' && formattedData.time) {
-                    const statusElement = document.querySelector('[data-status]');
-                    if (statusElement) {
-                        statusElement.textContent = `${formattedData.quarter} · ${formattedData.time}`;
-                    }
+                    this.gameView.updateStatusText(formattedData.quarter, formattedData.time);
                 }
             }
         }
