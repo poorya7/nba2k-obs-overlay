@@ -4,9 +4,26 @@
  * 
  * This class extracts the massive <script> block from index.html
  * USES existing working utilities from gameUtils.js (detectGameState, formatCountdown, etc.)
+ * 
+ * @class
+ * @param {Object} dependencies - Dependency injection object
+ * @param {ApiClient} dependencies.api - Server API client
+ * @param {NBAApi} dependencies.nbaApi - ESPN NBA API client
+ * @param {GameView} dependencies.gameView - Game display view
+ * @param {MvpView} dependencies.mvpView - MVP display view
+ * @param {MvpController} dependencies.mvpController - MVP controller
+ * @param {MvpIntegration} dependencies.mvpIntegration - MVP integration
+ * @param {OtherGamesView} dependencies.otherGamesView - Other games view
+ * @param {StateManager} dependencies.stateManager - State management
+ * @param {SimulationManager} dependencies.simulationManager - Simulation data
+ * @param {GameDataFormatter} dependencies.gameDataFormatter - Data formatter
+ * @param {ModeCoordinator} dependencies.modeCoordinator - Mode coordinator
  */
 
 class AppController {
+    /**
+     * @param {Object} dependencies - Dependency injection object
+     */
     constructor(dependencies) {
         // Validate dependencies
         if (!dependencies) {
@@ -48,6 +65,7 @@ class AppController {
 
     /**
      * Start the overlay (call once on page load)
+     * @returns {void}
      */
     start() {
         // Initial update
@@ -63,6 +81,7 @@ class AppController {
 
     /**
      * Stop the overlay (cleanup)
+     * @returns {void}
      */
     stop() {
         if (this.updateTimer) {
@@ -78,6 +97,7 @@ class AppController {
 
     /**
      * Main update loop - fetch and display game data
+     * @returns {Promise<void>}
      */
     async updateFromAPI() {
         try {
@@ -211,13 +231,15 @@ class AppController {
             this.detectStateAndUpdate(game, selectedGameId);
 
         } catch (error) {
-            console.error('ERROR in updateFromAPI:', error);
+            // Controller error handling: log and gracefully degrade
+            console.error('[AppController] Error in updateFromAPI:', error.message || error);
             this.resetAndHideOverlay();
         }
     }
 
     /**
      * Reset overlay state and hide everything
+     * @returns {void}
      */
     resetAndHideOverlay() {
         this.gameView.hide();
@@ -266,7 +288,48 @@ class AppController {
      * @param {string} gameId - ESPN game ID
      */
     detectStateAndUpdate(game, gameId) {
-        // USES existing utility from gameUtils.js
+        // Analyze changes
+        const changes = this._analyzeChanges(game, gameId);
+        
+        // Handle countdown for pregame state
+        this._managePregameCountdown(changes.stateName);
+        
+        // Check if anything changed
+        if (!this.stateManager.hasGameDataChanged(changes.fullKey)) {
+            return; // Nothing changed
+        }
+
+        // Route to appropriate handler based on what changed
+        if (this.stateManager.lastGameData === null) {
+            this._handleFirstLoad(changes);
+        } else {
+            const lastStateKey = this.stateManager.lastGameData.split('}')[0] + '}';
+            const lastScoreKey = this.stateManager.lastGameData.split('}')[1] + '}';
+
+            const stateChanged = changes.stateKey !== lastStateKey;
+            const scoresChanged = changes.scoreKey !== lastScoreKey;
+
+            if (stateChanged) {
+                this._handleStateChange(changes);
+            } else if (scoresChanged) {
+                this._handleScoreChange(changes, lastScoreKey);
+            } else {
+                this._handleTimeUpdate(changes);
+            }
+        }
+
+        // Update tracking
+        this.stateManager.setGameData(changes.fullKey);
+    }
+
+    /**
+     * Analyze what changed in the game data
+     * @private
+     * @param {Object} game - Game data
+     * @param {string} gameId - ESPN game ID
+     * @returns {Object} Change analysis object
+     */
+    _analyzeChanges(game, gameId) {
         const stateName = GameUtils.detectGameState(game);
 
         // Extract current scores
@@ -282,7 +345,7 @@ class AppController {
         // Update stored scores
         this.stateManager.updateScores(currentHomeScore, currentAwayScore);
 
-        // Create comparison keys for different types of changes
+        // Create comparison keys
         const homeScore = formattedData.home?.score ?? formattedData.homeTeam?.score ?? 0;
         const awayScore = formattedData.away?.score ?? formattedData.awayTeam?.score ?? 0;
         const homeAbbr = formattedData.home?.abbr ?? formattedData.homeTeam?.abbr ?? '';
@@ -300,114 +363,132 @@ class AppController {
             awayAbbr: awayAbbr
         });
 
-        const fullKey = stateKey + scoreKey;
+        return {
+            stateName,
+            formattedData,
+            homeScore,
+            awayScore,
+            homeAbbr,
+            awayAbbr,
+            stateKey,
+            scoreKey,
+            fullKey: stateKey + scoreKey,
+            gameId
+        };
+    }
 
-        // Manage countdown interval for pregame state
+    /**
+     * Manage countdown interval for pregame state
+     * @private
+     * @param {string} stateName - Current game state
+     */
+    _managePregameCountdown(stateName) {
         if (stateName === 'pregame') {
             if (!this.stateManager.isCountdownActive()) {
-                // Start countdown interval that ticks every second
                 this.stateManager.startCountdown((seconds) => {
                     if (seconds > 0) {
-                        // USES existing utility from gameUtils.js
                         this.gameView.updateCountdown(GameUtils.formatCountdown(seconds));
                     } else {
-                        // Countdown finished, trigger API update to check if game started
                         this.stateManager.stopCountdown();
                         this.updateFromAPI();
                     }
                 });
             }
         } else {
-            // Not pregame - clear countdown interval if it exists
             this.stateManager.stopCountdown();
         }
+    }
 
-        // Check what changed
-        if (!this.stateManager.hasGameDataChanged(fullKey)) {
-            return; // Nothing changed
-        }
+    /**
+     * Handle first load of game data
+     * @private
+     * @param {Object} changes - Change analysis object
+     */
+    _handleFirstLoad(changes) {
+        this.gameView.show();
+        this.gameView.switchToState(changes.stateName, changes.formattedData);
+        
+        // Initialize MVP controller with initial state
+        this.stateManager.setGameState(changes.stateName);
+        this.mvpIntegration.notifyMVPStateChange(
+            this.mvpController,
+            this.mvpView,
+            changes.stateName,
+            changes.gameId
+        );
+    }
 
-        if (this.stateManager.lastGameData === null) {
-            // First load - show instantly without animation
-            this.gameView.show();
-            this.gameView.switchToState(stateName, formattedData);
-            this.stateManager.setGameData(fullKey);
+    /**
+     * Handle game state change (pregame → live, live → halftime, etc.)
+     * @private
+     * @param {Object} changes - Change analysis object
+     */
+    _handleStateChange(changes) {
+        this.gameView.switchToState(changes.stateName, changes.formattedData);
 
-            // Initialize MVP controller with initial state
-            this.stateManager.setGameState(stateName);
+        // Notify MVP controller of state change
+        if (this.stateManager.hasGameStateChanged(changes.stateName)) {
+            this.stateManager.setGameState(changes.stateName);
             this.mvpIntegration.notifyMVPStateChange(
                 this.mvpController,
                 this.mvpView,
-                stateName,
-                gameId
+                changes.stateName,
+                changes.gameId
             );
-        } else {
-            // Something changed - determine what
-            const lastStateKey = this.stateManager.lastGameData.split('}')[0] + '}';
-            const lastScoreKey = this.stateManager.lastGameData.split('}')[1] + '}';
-
-            const stateChanged = stateKey !== lastStateKey;
-            const scoresChanged = scoreKey !== lastScoreKey;
-
-            if (stateChanged) {
-                // State changed - switch directly without animation
-                this.gameView.switchToState(stateName, formattedData);
-
-                // Notify MVP controller of state change
-                if (this.stateManager.hasGameStateChanged(stateName)) {
-                    this.stateManager.setGameState(stateName);
-                    this.mvpIntegration.notifyMVPStateChange(
-                        this.mvpController,
-                        this.mvpView,
-                        stateName,
-                        gameId
-                    );
-                }
-            } else if (scoresChanged) {
-                // Teams or scores changed
-                const teamsChanged = (lastScoreKey.includes(homeAbbr) === false) ||
-                    (lastScoreKey.includes(awayAbbr) === false);
-
-                if (teamsChanged) {
-                    // Teams changed - switch state to update everything
-                    this.gameView.switchToState(stateName, formattedData);
-
-                    // Game changed - notify MVP controller (even if state didn't change)
-                    this.stateManager.setGameState(stateName);
-                    this.mvpIntegration.notifyMVPStateChange(
-                        this.mvpController,
-                        this.mvpView,
-                        stateName,
-                        gameId
-                    );
-                } else if (stateName === 'live') {
-                    // Scores changed in live state - use animate flags from formattedData
-                    this.gameView.updateScore('home', homeScore, formattedData.home.animate);
-                    this.gameView.updateScore('away', awayScore, formattedData.away.animate);
-                    // Also update time silently
-                    if (formattedData.time) {
-                        this.gameView.updateStatusText(formattedData.quarter, formattedData.time);
-                    }
-                } else {
-                    // Scores changed in other states (halftime/final) - update without animation
-                    this.gameView.updateScore('home', homeScore, false);
-                    this.gameView.updateScore('away', awayScore, false);
-                }
-            } else {
-                // Only time changed - update time silently
-                if (stateName === 'live' && formattedData.time) {
-                    this.gameView.updateStatusText(formattedData.quarter, formattedData.time);
-                }
-            }
         }
+    }
 
-        // Update tracking
-        this.stateManager.setGameData(fullKey);
+    /**
+     * Handle score changes (with or without team changes)
+     * @private
+     * @param {Object} changes - Change analysis object
+     * @param {string} lastScoreKey - Previous score key for comparison
+     */
+    _handleScoreChange(changes, lastScoreKey) {
+        const teamsChanged = (lastScoreKey.includes(changes.homeAbbr) === false) ||
+            (lastScoreKey.includes(changes.awayAbbr) === false);
+
+        if (teamsChanged) {
+            // Teams changed - full state switch
+            this.gameView.switchToState(changes.stateName, changes.formattedData);
+            
+            this.stateManager.setGameState(changes.stateName);
+            this.mvpIntegration.notifyMVPStateChange(
+                this.mvpController,
+                this.mvpView,
+                changes.stateName,
+                changes.gameId
+            );
+        } else if (changes.stateName === 'live') {
+            // Scores changed in live state - animate
+            this.gameView.updateScore('home', changes.homeScore, changes.formattedData.home.animate);
+            this.gameView.updateScore('away', changes.awayScore, changes.formattedData.away.animate);
+            
+            if (changes.formattedData.time) {
+                this.gameView.updateStatusText(changes.formattedData.quarter, changes.formattedData.time);
+            }
+        } else {
+            // Scores changed in other states - no animation
+            this.gameView.updateScore('home', changes.homeScore, false);
+            this.gameView.updateScore('away', changes.awayScore, false);
+        }
+    }
+
+    /**
+     * Handle time-only updates (no score or state change)
+     * @private
+     * @param {Object} changes - Change analysis object
+     */
+    _handleTimeUpdate(changes) {
+        if (changes.stateName === 'live' && changes.formattedData.time) {
+            this.gameView.updateStatusText(changes.formattedData.quarter, changes.formattedData.time);
+        }
     }
 
 
     /**
      * Check if simulated MVP should be shown (controlled by dashboard)
+     * @returns {Promise<void>}
      */
     async checkSimulatedMVP() {
         try {
@@ -427,8 +508,9 @@ class AppController {
                     this.stateManager.setSimMVPState(false);
                 }
             }
-        } catch (e) {
-            // Ignore errors
+        } catch (error) {
+            // Silent fail for simulation MVP checks (non-critical feature)
+            console.warn('[AppController] Simulation MVP check failed:', error.message || error);
         }
     }
 

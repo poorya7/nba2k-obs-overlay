@@ -3,9 +3,15 @@
  * Single Responsibility: Format ESPN API data for display in views
  * 
  * Extracted from AppController to follow Single Responsibility Principle
+ * 
+ * @class
+ * @param {StateManager} stateManager - State management instance
  */
 
 class GameDataFormatter {
+    /**
+     * @param {StateManager} stateManager - State management instance
+     */
     constructor(stateManager) {
         // Validate dependencies
         if (!stateManager) {
@@ -77,6 +83,8 @@ class GameDataFormatter {
     /**
      * Transform game data for other games view
      * Uses same logic as other-games-overlay
+     * @param {Object} game - ESPN game data
+     * @returns {Object} Transformed game data
      */
     transformGameDataForOtherGames(game) {
         const state = GameUtils.detectGameState(game);

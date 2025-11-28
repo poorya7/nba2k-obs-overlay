@@ -50,7 +50,8 @@ class MvpIntegration {
             
             return null;
         } catch (error) {
-            console.error('Error getting MVP data:', error);
+            // Integration layer: log error and return null for graceful degradation
+            console.error('[MvpIntegration] Error getting MVP data:', error.message || error);
             return null;
         }
     }
@@ -61,6 +62,7 @@ class MvpIntegration {
      * @param {MvpView} mvpView - MVP view instance
      * @param {string} stateName - Game state
      * @param {string} gameId - ESPN game ID
+     * @returns {Promise<void>}
      */
     async notifyMVPStateChange(mvpController, mvpView, stateName, gameId) {
         try {
@@ -74,7 +76,8 @@ class MvpIntegration {
                 mvpController.onGameStateChange(stateName, mvpData);
             }
         } catch (error) {
-            console.error('Failed to update MVP state:', error);
+            // Integration layer: log error and gracefully degrade (no MVP display)
+            console.error('[MvpIntegration] Failed to update MVP state:', error.message || error);
         }
     }
 }

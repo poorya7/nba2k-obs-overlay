@@ -3,9 +3,24 @@
  * Single Responsibility: Handle mode transitions and coordination
  * 
  * Extracted from AppController to reduce its complexity
+ * 
+ * @class
+ * @param {Object} dependencies - Dependency injection object
+ * @param {ApiClient} dependencies.api - Server API client
+ * @param {NBAApi} dependencies.nbaApi - ESPN NBA API client
+ * @param {GameView} dependencies.gameView - Game display view
+ * @param {MvpView} dependencies.mvpView - MVP display view
+ * @param {OtherGamesView} dependencies.otherGamesView - Other games view
+ * @param {OtherGamesContainerView} dependencies.otherGamesContainerView - Container view
+ * @param {StateManager} dependencies.stateManager - State management
+ * @param {SimulationManager} dependencies.simulationManager - Simulation data
+ * @param {GameDataFormatter} dependencies.gameDataFormatter - Data formatter
  */
 
 class ModeCoordinator {
+    /**
+     * @param {Object} dependencies - Dependency injection object
+     */
     constructor(dependencies) {
         // Validate dependencies
         if (!dependencies) {
@@ -40,65 +55,73 @@ class ModeCoordinator {
     /**
      * Show other games mode
      * @param {string} selectedGameId - ID of selected game to exclude
+     * @returns {Promise<void>}
      */
     async showOtherGamesMode(selectedGameId) {
-        // Switch to other games mode
-        this.stateManager.setMode('OTHER_GAMES');
-        this.stateManager.markOtherGamesShownThisQuarter();
+        try {
+            // Switch to other games mode
+            this.stateManager.setMode('OTHER_GAMES');
+            this.stateManager.markOtherGamesShownThisQuarter();
 
-        // Hide current game overlay
-        this.gameView.hide();
-        this.mvpView.hide();
+            // Hide current game overlay
+            this.gameView.hide();
+            this.mvpView.hide();
 
-        // Check if simulation mode is enabled
-        const simData = await this.api.getSimulation();
-        const isSimMode = simData && simData.enabled;
-        const timeMultiplier = isSimMode ? (simData.timeMultiplier || 1) : 1;
+            // Check if simulation mode is enabled
+            const simData = await this.api.getSimulation();
+            const isSimMode = simData && simData.enabled;
+            const timeMultiplier = isSimMode ? (simData.timeMultiplier || 1) : 1;
 
-        let otherGames;
-        
-        if (isSimMode) {
-            // Use sim games
-            otherGames = this.simulationManager.getSampleGames();
-        } else {
-            // Fetch all today's games
-            const allGames = await this.nbaApi.getTodaysGames();
-            if (!allGames || allGames.length === 0) {
-                // No games, return to current game mode
+            let otherGames;
+            
+            if (isSimMode) {
+                // Use sim games
+                otherGames = this.simulationManager.getSampleGames();
+            } else {
+                // Fetch all today's games
+                const allGames = await this.nbaApi.getTodaysGames();
+                if (!allGames || allGames.length === 0) {
+                    // No games, return to current game mode
+                    this.returnToCurrentGameMode();
+                    return;
+                }
+
+                // Filter out the selected game and transform
+                otherGames = allGames
+                    .filter(game => game.id !== selectedGameId)
+                    .map(game => this.gameDataFormatter.transformGameDataForOtherGames(game));
+            }
+
+            if (otherGames.length === 0) {
+                // No other games, return to current game mode
                 this.returnToCurrentGameMode();
                 return;
             }
 
-            // Filter out the selected game and transform
-            otherGames = allGames
-                .filter(game => game.id !== selectedGameId)
-                .map(game => this.gameDataFormatter.transformGameDataForOtherGames(game));
-        }
+            // Show other games overlay
+            this.otherGamesContainerView.show();
 
-        if (otherGames.length === 0) {
-            // No other games, return to current game mode
+            // Initialize other games controller with callback
+            this.otherGamesController = new OtherGamesController(
+                this.otherGamesView,
+                () => this.returnToCurrentGameMode(), // Callback when cycling completes
+                isSimMode, // Pass sim mode flag
+                timeMultiplier // Pass time multiplier for fast forward
+            );
+
+            // Start cycling
+            this.otherGamesController.init(otherGames);
+        } catch (error) {
+            // Controller error handling: log and return to current game
+            console.error('[ModeCoordinator] Error in showOtherGamesMode:', error.message || error);
             this.returnToCurrentGameMode();
-            return;
         }
-
-        // Show other games overlay
-        this.otherGamesContainerView.show();
-
-        // Initialize other games controller with callback
-        this.otherGamesController = new OtherGamesController(
-            this.otherGamesView,
-            () => this.returnToCurrentGameMode(), // Callback when cycling completes
-            isSimMode, // Pass sim mode flag
-            timeMultiplier // Pass time multiplier for fast forward
-        );
-
-        // Start cycling
-        this.otherGamesController.init(otherGames);
     }
 
     /**
      * Cleanup other games mode (without showing current game)
      * Used when resetting or hiding everything
+     * @returns {void}
      */
     cleanupOtherGamesMode() {
         // Hide other games overlay
@@ -117,6 +140,7 @@ class ModeCoordinator {
     /**
      * Return to current game mode (full transition with show)
      * Used when transitioning back from other games
+     * @returns {void}
      */
     returnToCurrentGameMode() {
         this.cleanupOtherGamesMode();
@@ -127,6 +151,7 @@ class ModeCoordinator {
 
     /**
      * Clean up (called when app stops)
+     * @returns {void}
      */
     destroy() {
         this.cleanupOtherGamesMode();

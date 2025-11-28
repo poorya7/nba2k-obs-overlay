@@ -83,11 +83,12 @@ class MvpView {
      * @param {number} playerData.pts - Points
      * @param {number} playerData.reb - Rebounds
      * @param {number} playerData.ast - Assists
+     * @returns {void}
      */
     show(playerData) {
         if (!this.elements.mvpSection || !this.elements.mvpContent) {
-            console.error('MVP elements not found');
-            return;
+            // View layer: throw error up to controller
+            throw new Error('MvpView: MVP DOM elements not found');
         }
 
         // Update player data first
@@ -118,11 +119,12 @@ class MvpView {
 
     /**
      * Hide MVP section with animation
+     * @returns {void}
      */
     hide() {
         if (!this.elements.mvpSection || !this.elements.mvpContent) {
-            console.error('MVP elements not found');
-            return;
+            // View layer: throw error up to controller
+            throw new Error('MvpView: MVP DOM elements not found');
         }
 
         const section = this.elements.mvpSection;

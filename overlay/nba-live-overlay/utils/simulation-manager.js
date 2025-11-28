@@ -6,7 +6,16 @@
  */
 
 class SimulationManager {
-    constructor() {
+    /**
+     * @param {Object} options - Configuration options
+     * @param {Object} options.homeTeam - Home team configuration
+     * @param {string} options.homeTeam.abbreviation - Home team abbreviation
+     * @param {string} options.homeTeam.logo - Home team logo URL
+     * @param {Object} options.awayTeam - Away team configuration
+     * @param {string} options.awayTeam.abbreviation - Away team abbreviation
+     * @param {string} options.awayTeam.logo - Away team logo URL
+     */
+    constructor(options = {}) {
         // Default simulation data
         this.simulationData = {
             homeScore: 0,
@@ -16,13 +25,13 @@ class SimulationManager {
             state: 'live'
         };
 
-        // Configuration
+        // Configuration with defaults
         this.config = {
-            homeTeam: {
+            homeTeam: options.homeTeam || {
                 abbreviation: 'LAL',
                 logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png'
             },
-            awayTeam: {
+            awayTeam: options.awayTeam || {
                 abbreviation: 'GSW',
                 logo: 'https://a.espncdn.com/i/teamlogos/nba/500/gsw.png'
             }
@@ -214,7 +223,29 @@ class SimulationManager {
     }
 
     /**
+     * Set teams for simulation
+     * @param {Object} homeTeam - {abbreviation, logo}
+     * @param {Object} awayTeam - {abbreviation, logo}
+     * @returns {void}
+     */
+    setTeams(homeTeam, awayTeam) {
+        if (homeTeam) {
+            this.config.homeTeam = {
+                abbreviation: homeTeam.abbreviation || this.config.homeTeam.abbreviation,
+                logo: homeTeam.logo || this.config.homeTeam.logo
+            };
+        }
+        if (awayTeam) {
+            this.config.awayTeam = {
+                abbreviation: awayTeam.abbreviation || this.config.awayTeam.abbreviation,
+                logo: awayTeam.logo || this.config.awayTeam.logo
+            };
+        }
+    }
+
+    /**
      * Reset simulation data (for new simulation session)
+     * @returns {void}
      */
     reset() {
         this.simulationData = {

@@ -7,12 +7,17 @@
  *   gameView.transitionToState('live', gameData);
  *   gameView.updateScore('home', 85, true);
  *   gameView.hide(); // When no game selected
+ * 
+ * @class
  */
 
 // Default animation for score changes
 const DEFAULT_SCORE_ANIMATION = 'slide';
 
 class GameView {
+    /**
+     * Initialize GameView and cache DOM elements
+     */
     constructor() {
         // Cache DOM elements for performance
         this.elements = {
@@ -43,6 +48,7 @@ class GameView {
 
     /**
      * Show the overlay (when game is selected) with fade in
+     * @returns {void}
      */
     show() {
         if (this.elements.gameStatsBox && !this.isVisible) {
@@ -63,6 +69,7 @@ class GameView {
 
     /**
      * Hide the overlay (when no game selected) with fade out
+     * @returns {void}
      */
     hide() {
         if (this.elements.gameStatsBox && this.isVisible) {
