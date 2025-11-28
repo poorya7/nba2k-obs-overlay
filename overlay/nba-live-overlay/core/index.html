@@ -98,6 +98,7 @@
     <script src="state-manager.js"></script>
     <script src="simulation-manager.js"></script>
     <script src="game-data-formatter.js"></script>
+    <script src="mode-coordinator.js"></script>
     <script src="app-controller.js"></script>
     
     <script>
@@ -118,6 +119,18 @@
         const simulationManager = new SimulationManager();
         const gameDataFormatter = new GameDataFormatter(stateManager);
         
+        // Initialize mode coordinator
+        const modeCoordinator = new ModeCoordinator({
+            api,
+            nbaApi,
+            gameView,
+            mvpView,
+            otherGamesView,
+            stateManager,
+            simulationManager,
+            gameDataFormatter
+        });
+        
         // Initialize main app controller with all dependencies
         const appController = new AppController({
             api,
@@ -129,7 +142,8 @@
             otherGamesView,
             stateManager,
             simulationManager,
-            gameDataFormatter
+            gameDataFormatter,
+            modeCoordinator
         });
         
         // Start the overlay when DOM is ready
