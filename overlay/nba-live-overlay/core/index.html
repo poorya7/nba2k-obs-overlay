@@ -81,8 +81,10 @@
     <!-- NBA API utilities -->
     <script src="../../_shared/config.js"></script>
     <script src="../../_shared/nbaApi.js"></script>
-    <script src="../../_shared/gameUtils.js"></script>
     <script src="../../_shared/apiClient.js"></script>
+    
+    <!-- Game utilities (overlay-specific) -->
+    <script src="game-utils.js"></script>
     
     <!-- View Controllers -->
     <script src="game-view.js"></script>
@@ -95,6 +97,7 @@
     <!-- Core Controllers (Refactored modular architecture) -->
     <script src="state-manager.js"></script>
     <script src="simulation-manager.js"></script>
+    <script src="game-data-formatter.js"></script>
     <script src="app-controller.js"></script>
     
     <script>
@@ -107,12 +110,13 @@
         const gameView = new GameView();
         const mvpView = new MvpView();
         const mvpController = new MvpController(mvpView);
-        const mvpIntegration = window.MVPIntegration;
+        const mvpIntegration = new MvpIntegration();
         const otherGamesView = new OtherGamesView();
         
         // Initialize core managers
         const stateManager = new StateManager();
         const simulationManager = new SimulationManager();
+        const gameDataFormatter = new GameDataFormatter(stateManager);
         
         // Initialize main app controller with all dependencies
         const appController = new AppController({
@@ -124,7 +128,8 @@
             mvpIntegration,
             otherGamesView,
             stateManager,
-            simulationManager
+            simulationManager,
+            gameDataFormatter
         });
         
         // Start the overlay when DOM is ready

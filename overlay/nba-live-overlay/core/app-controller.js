@@ -18,15 +18,12 @@ class AppController {
         this.otherGamesView = dependencies.otherGamesView;
         this.stateManager = dependencies.stateManager;
         this.simulationManager = dependencies.simulationManager;
+        this.gameDataFormatter = dependencies.gameDataFormatter;
 
         // Configuration
         this.baseUpdateInterval = 3000; // 3 seconds base
         this.updateInterval = 3000; // Current interval (adjusted for time multiplier)
         this.simMVPCheckInterval = 1000; // 1 second
-        this.lastTimeMultiplier = 1; // Track multiplier changes
-        this.lastQuarter = null; // Track quarter changes for sim reset
-        this.virtualTimeOffset = 0; // Offset to preserve virtual time when FF changes
-        this.lastQuarterStartTime = null; // Track quarter start time
         
         // Timers
         this.updateTimer = null;
@@ -110,11 +107,11 @@ class AppController {
             
             // Detect quarter changes and handle cleanup
             const quarterChanged = quarterData && quarterData.current && 
-                                  (this.lastQuarter !== quarterData.current || 
-                                   this.lastQuarterStartTime !== quarterData.startTime);
+                                  (this.stateManager.getLastQuarter() !== quarterData.current || 
+                                   this.stateManager.getQuarterStartTime() !== quarterData.startTime);
             
             if (quarterChanged) {
-                console.log('🔄 Quarter changed:', this.lastQuarter, '→', quarterData.current, 
+                console.log('🔄 Quarter changed:', this.stateManager.getLastQuarter(), '→', quarterData.current, 
                            'currentMode:', this.stateManager.getMode());
                 
                 // Quarter changed - hide other games if showing and reset to current game mode
@@ -128,30 +125,31 @@ class AppController {
                     this.simulationManager.reset();
                 }
                 
-                this.lastQuarter = quarterData.current;
-                this.virtualTimeOffset = 0; // Reset virtual time offset
-                this.lastQuarterStartTime = quarterData.startTime;
+                this.stateManager.setLastQuarter(quarterData.current);
+                this.stateManager.resetVirtualTimeOffset();
+                this.stateManager.setQuarterStartTime(quarterData.startTime);
             } else if (!quarterData || !quarterData.current) {
-                this.lastQuarter = null;
-                this.virtualTimeOffset = 0;
-                this.lastQuarterStartTime = null;
+                this.stateManager.setLastQuarter(null);
+                this.stateManager.resetVirtualTimeOffset();
+                this.stateManager.setQuarterStartTime(null);
             }
             
             // Get time multiplier for fast forward
             const timeMultiplier = isSimMode ? (simData.timeMultiplier || 1) : 1;
             
             // Track multiplier changes and adjust virtual time offset
-            if (timeMultiplier !== this.lastTimeMultiplier && quarterData && quarterData.startTime) {
+            if (timeMultiplier !== this.stateManager.getTimeMultiplier() && quarterData && quarterData.startTime) {
                 // Calculate current virtual elapsed time with old multiplier
                 const realElapsed = Date.now() - quarterData.startTime;
-                const oldVirtualElapsed = realElapsed * this.lastTimeMultiplier + this.virtualTimeOffset;
+                const oldVirtualElapsed = realElapsed * this.stateManager.getTimeMultiplier() + this.stateManager.getVirtualTimeOffset();
                 
                 // Calculate what the new offset should be to preserve virtual time
-                this.virtualTimeOffset = oldVirtualElapsed - (realElapsed * timeMultiplier);
+                const newOffset = oldVirtualElapsed - (realElapsed * timeMultiplier);
+                this.stateManager.setVirtualTimeOffset(newOffset);
                 
-                this.lastTimeMultiplier = timeMultiplier;
-            } else if (timeMultiplier !== this.lastTimeMultiplier) {
-                this.lastTimeMultiplier = timeMultiplier;
+                this.stateManager.setTimeMultiplier(timeMultiplier);
+            } else if (timeMultiplier !== this.stateManager.getTimeMultiplier()) {
+                this.stateManager.setTimeMultiplier(timeMultiplier);
             }
             
             // In sim mode, always use fast polling (300ms) for responsiveness
@@ -172,7 +170,7 @@ class AppController {
             // Quarter active - show overlay
 
             // Step 4: Check if we should show other games
-            if (this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier, this.virtualTimeOffset)) {
+            if (this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier, this.stateManager.getVirtualTimeOffset())) {
                 await this.showOtherGamesMode(selectedGameId);
                 return; // Other games is showing, don't update current game
             }
@@ -242,7 +240,7 @@ class AppController {
             // Only check delay for Q1 (first quarter of the game)
             if (quarterData.current === 'Q1') {
                 const realTimeSinceStart = Date.now() - quarterData.startTime;
-                const acceleratedTime = realTimeSinceStart * timeMultiplier + this.virtualTimeOffset;
+                const acceleratedTime = realTimeSinceStart * timeMultiplier + this.stateManager.getVirtualTimeOffset();
                 const SHOW_DELAY = 10000; // 10 seconds
 
                 if (acceleratedTime < SHOW_DELAY) {
@@ -273,7 +271,7 @@ class AppController {
         const scoreChanges = this.stateManager.hasScoresChanged(currentHomeScore, currentAwayScore);
 
         // Format data for GameView (with animation flags)
-        const formattedData = this.formatGameDataForView(game, stateName, scoreChanges);
+        const formattedData = this.gameDataFormatter.formatGameDataForView(game, stateName, scoreChanges);
 
         // Update stored scores
         this.stateManager.updateScores(currentHomeScore, currentAwayScore);
@@ -407,64 +405,6 @@ class AppController {
         this.stateManager.setGameData(fullKey);
     }
 
-    /**
-     * Format ESPN API game data for GameView
-     * USES existing utilities from gameUtils.js
-     * @param {Object} game - ESPN game data
-     * @param {string} stateName - Game state
-     * @param {Object} scoreChanges - { homeChanged, awayChanged }
-     * @returns {Object}
-     */
-    formatGameDataForView(game, stateName, scoreChanges = { homeChanged: false, awayChanged: false }) {
-        // Base team data (used by all states)
-        const baseData = {
-            home: {
-                abbr: game.homeTeam.abbreviation,
-                logoUrl: game.homeTeam.logo,
-                score: parseInt(game.homeTeam.score) || 0,
-                animate: scoreChanges.homeChanged // Add animation flag
-            },
-            away: {
-                abbr: game.awayTeam.abbreviation,
-                logoUrl: game.awayTeam.logo,
-                score: parseInt(game.awayTeam.score) || 0,
-                animate: scoreChanges.awayChanged // Add animation flag
-            }
-        };
-
-        // State-specific formatting
-        switch (stateName) {
-            case 'pregame':
-                // USES existing utility from gameUtils.js
-                const secondsUntilGame = window.calculateSecondsUntilStart(game.date);
-
-                // Update state manager's countdown seconds
-                this.stateManager.setCountdownSeconds(secondsUntilGame);
-
-                // USES existing utility from gameUtils.js
-                return {
-                    homeTeam: baseData.home,
-                    awayTeam: baseData.away,
-                    countdown: window.formatCountdown(secondsUntilGame)
-                };
-
-            case 'live':
-                // USES existing utility from gameUtils.js
-                const liveStatus = window.formatLiveGameStatus(game.statusText);
-                return {
-                    ...baseData,
-                    quarter: liveStatus.quarter,
-                    time: liveStatus.time
-                };
-
-            case 'halftime':
-            case 'final':
-                return baseData;
-
-            default:
-                return baseData;
-        }
-    }
 
     /**
      * Check if simulated MVP should be shown (controlled by dashboard)
@@ -527,7 +467,7 @@ class AppController {
             // Filter out the selected game and transform
             otherGames = allGames
                 .filter(game => game.id !== selectedGameId)
-                .map(game => this.transformGameDataForOtherGames(game));
+                .map(game => this.gameDataFormatter.transformGameDataForOtherGames(game));
         }
 
         if (otherGames.length === 0) {
@@ -581,38 +521,5 @@ class AppController {
         this.gameView.show();
     }
 
-    /**
-     * Transform game data for other games view
-     * Uses same logic as other-games-overlay
-     */
-    transformGameDataForOtherGames(game) {
-        const state = window.detectGameState(game);
-        
-        const baseGame = {
-            state: state,
-            away: {
-                logo: game.awayTeam.logo,
-                abbr: game.awayTeam.abbreviation,
-                score: parseInt(game.awayTeam.score) || 0
-            },
-            home: {
-                logo: game.homeTeam.logo,
-                abbr: game.homeTeam.abbreviation,
-                score: parseInt(game.homeTeam.score) || 0
-            }
-        };
-        
-        if (state === 'pregame') {
-            baseGame.secondsUntilStart = window.calculateSecondsUntilStart(game.date);
-        } else if (state === 'live') {
-            baseGame.quarter = window.formatLiveGameStatus(game.statusText).formatted;
-        } else if (state === 'halftime') {
-            baseGame.quarter = 'Halftime';
-        } else if (state === 'final') {
-            baseGame.status = 'FINAL';
-        }
-        
-        return baseGame;
-    }
 }
 

@@ -31,6 +31,12 @@ class StateManager {
         this.lastQuarterStartTime = null;
         this.hasShownOtherGamesThisQuarter = false;
         this.OTHER_GAMES_DELAY_MS = 60000; // 60 seconds
+        
+        // Time tracking (from AppController)
+        this.lastTimeMultiplier = 1;
+        this.lastQuarter = null;
+        this.virtualTimeOffset = 0;
+        this.quarterStartTime = null;
     }
 
     /**
@@ -269,6 +275,45 @@ class StateManager {
         
         // Show if enough time has passed (60 seconds accelerated)
         return acceleratedTime >= this.OTHER_GAMES_DELAY_MS;
+    }
+
+    /**
+     * Time tracking getters/setters
+     */
+    getTimeMultiplier() {
+        return this.lastTimeMultiplier;
+    }
+
+    setTimeMultiplier(multiplier) {
+        this.lastTimeMultiplier = multiplier;
+    }
+
+    getLastQuarter() {
+        return this.lastQuarter;
+    }
+
+    setLastQuarter(quarter) {
+        this.lastQuarter = quarter;
+    }
+
+    getVirtualTimeOffset() {
+        return this.virtualTimeOffset;
+    }
+
+    setVirtualTimeOffset(offset) {
+        this.virtualTimeOffset = offset;
+    }
+
+    resetVirtualTimeOffset() {
+        this.virtualTimeOffset = 0;
+    }
+
+    getQuarterStartTime() {
+        return this.quarterStartTime;
+    }
+
+    setQuarterStartTime(time) {
+        this.quarterStartTime = time;
     }
 }
 
