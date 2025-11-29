@@ -37,6 +37,7 @@ class OtherGamesController {
 
     /**
      * Sort games by priority: FINAL -> LIVE -> PREGAME
+     * Within each state, sort by start time (earliest first)
      * @param {Array} games - Unsorted games array
      * @returns {Array} Sorted games array
      */
@@ -48,13 +49,13 @@ class OtherGamesController {
         };
         
         return [...games].sort((a, b) => {
-            // Sort by state priority
+            // Sort by state priority first
             if (statePriority[a.state] !== statePriority[b.state]) {
                 return statePriority[a.state] - statePriority[b.state];
             }
             
-            // Keep original order within same state
-            return 0;
+            // Within same state, sort by start time (earliest first)
+            return (a.startTime || 0) - (b.startTime || 0);
         });
     }
 
@@ -173,8 +174,8 @@ class OtherGamesController {
         const startIndex = this.currentSet * this.gamesPerSet;
         const gamesOnThisPage = Math.min(this.gamesPerSet, this.games.length - startIndex);
         
-        // Base duration: 13 seconds for 3 games
-        const baseDuration = 13000 / this.timeMultiplier;
+        // Base duration: TESTING: 5 seconds for 3 games (ORIGINAL: 13000 = 13 seconds)
+        const baseDuration = 5000 / this.timeMultiplier;
         
         // Proportional: 1 game = 1/3, 2 games = 2/3, 3 games = full
         return Math.round((baseDuration / 3) * gamesOnThisPage);

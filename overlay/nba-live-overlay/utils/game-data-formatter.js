@@ -91,6 +91,7 @@ class GameDataFormatter {
         
         const baseGame = {
             state: state,
+            startTime: new Date(game.date).getTime(), // Add timestamp for sorting
             away: {
                 logo: game.awayTeam.logo,
                 abbr: game.awayTeam.abbreviation,

@@ -111,11 +111,23 @@ class ModeCoordinator {
                 return;
             }
 
-            // Render first page of games
-            this.otherGamesView.renderGames(otherGames, 0, 3);
+            // Initialize other games controller FIRST (this sorts the games)
+            this.otherGamesController = new OtherGamesController(
+                this.otherGamesView,
+                () => this.returnToCurrentGameMode(), // Callback when cycling completes
+                isSimMode, // Pass sim mode flag
+                timeMultiplier, // Pass time multiplier for fast forward
+                this.unifiedBoxAnimator // Pass animator for page transitions
+            );
+
+            // Sort and get sorted games (don't render yet)
+            const sortedGames = this.otherGamesController.sortGames(otherGames);
+            
+            // Render first page of SORTED games
+            this.otherGamesView.renderGames(sortedGames, 0, 3);
             
             // Use hardcoded max height for the number of games on first page
-            const gamesOnFirstPage = Math.min(3, otherGames.length);
+            const gamesOnFirstPage = Math.min(3, sortedGames.length);
             const maxHeights = { 1: 156, 2: 316, 3: 476 };
             const newHeight = maxHeights[gamesOnFirstPage];
 
@@ -143,17 +155,8 @@ class ModeCoordinator {
                 await new Promise(resolve => setTimeout(resolve, 800));
             }
 
-            // Initialize other games controller with callback and animator
-            this.otherGamesController = new OtherGamesController(
-                this.otherGamesView,
-                () => this.returnToCurrentGameMode(), // Callback when cycling completes
-                isSimMode, // Pass sim mode flag
-                timeMultiplier, // Pass time multiplier for fast forward
-                this.unifiedBoxAnimator // Pass animator for page transitions
-            );
-
-            // Start cycling (skip first render since we already rendered above for measurement)
-            this.otherGamesController.init(otherGames, true);
+            // Start cycling with sorted games (skip first render since we already rendered above)
+            this.otherGamesController.init(sortedGames, true);
         } catch (error) {
             // Controller error handling: log and return to current game
             console.error('[ModeCoordinator] Error in showOtherGamesMode:', error.message || error);
@@ -206,16 +209,9 @@ class ModeCoordinator {
             this.otherGamesBox.style.display = 'none';
         }
         
-        // Fade in current game box (no fixed height - grows naturally with content!)
-        if (this.currentGameBox) {
-            this.currentGameBox.style.display = 'block';
-            this.currentGameBox.style.opacity = '0';
-            this.currentGameContent.style.display = 'block';
-            void this.currentGameBox.offsetHeight;
-            this.currentGameBox.style.transition = 'opacity 0.8s ease';
-            this.currentGameBox.style.opacity = '1';
-            await new Promise(resolve => setTimeout(resolve, 800));
-        }
+        // Clear game data cache to force re-render with fresh data
+        // Don't show current game box here - let normal update cycle show it with fresh data
+        this.stateManager.setGameData(null);
     }
 
     /**

@@ -278,36 +278,42 @@ class SimulationManager {
      * @returns {Array} Array of all live game objects
      */
     getSampleGamesAllLive() {
+        const now = Date.now();
         return [
-            { 
-                state: 'live', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png', abbr: 'BOS', score: 87 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png', abbr: 'MIA', score: 92 },
-                quarter: 'Q3 · 8:15'
-            },
-            { 
-                state: 'live', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/den.png', abbr: 'DEN', score: 94 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phx.png', abbr: 'PHX', score: 88 },
-                quarter: 'Q4 · 5:23'
-            },
             { 
                 state: 'live', 
                 away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/dal.png', abbr: 'DAL', score: 112 },
                 home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sac.png', abbr: 'SAC', score: 108 },
-                quarter: 'Q2 · 3:45'
-            },
-            { 
-                state: 'live', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/chi.png', abbr: 'CHI', score: 76 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png', abbr: 'MIL', score: 83 },
-                quarter: 'Q3 · 11:20'
+                quarter: 'Q2 · 3:45',
+                startTime: now - 1800000 // Started 30 min ago (earliest)
             },
             { 
                 state: 'live', 
                 away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mem.png', abbr: 'MEM', score: 55 },
                 home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/nyk.png', abbr: 'NYK', score: 62 },
-                quarter: 'Q2 · 8:15'
+                quarter: 'Q2 · 8:15',
+                startTime: now - 2700000 // Started 45 min ago
+            },
+            { 
+                state: 'live', 
+                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png', abbr: 'BOS', score: 87 },
+                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png', abbr: 'MIA', score: 92 },
+                quarter: 'Q3 · 8:15',
+                startTime: now - 3600000 // Started 1 hour ago
+            },
+            { 
+                state: 'live', 
+                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/chi.png', abbr: 'CHI', score: 76 },
+                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png', abbr: 'MIL', score: 83 },
+                quarter: 'Q3 · 11:20',
+                startTime: now - 4500000 // Started 1 hour 15 min ago
+            },
+            { 
+                state: 'live', 
+                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/den.png', abbr: 'DEN', score: 94 },
+                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phx.png', abbr: 'PHX', score: 88 },
+                quarter: 'Q4 · 5:23',
+                startTime: now - 5400000 // Started 1.5 hours ago (latest in Q4)
             },
             { 
                 state: 'live', 
@@ -347,48 +353,56 @@ class SimulationManager {
      * @returns {Array} Array of sample game objects
      */
     getSampleGames() {
+        const now = Date.now();
         return [
             { 
-                state: 'pregame', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png', abbr: 'BOS' },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png', abbr: 'MIA' },
-                secondsUntilStart: 8130 // 2:15:30
+                state: 'final', 
+                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/dal.png', abbr: 'DAL', score: 112 },
+                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sac.png', abbr: 'SAC', score: 108 },
+                status: 'FINAL',
+                startTime: now - 7200000 // Finished 2 hours ago
             },
             { 
                 state: 'live', 
                 away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/den.png', abbr: 'DEN', score: 94 },
                 home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phx.png', abbr: 'PHX', score: 88 },
-                quarter: 'Q4 · 5:23'
-            },
-            { 
-                state: 'final', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/dal.png', abbr: 'DAL', score: 112 },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sac.png', abbr: 'SAC', score: 108 },
-                status: 'FINAL'
-            },
-            { 
-                state: 'pregame', 
-                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/chi.png', abbr: 'CHI' },
-                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png', abbr: 'MIL' },
-                secondsUntilStart: 13500 // 3:45:00
+                quarter: 'Q4 · 5:23',
+                startTime: now - 5400000 // Started 1.5 hours ago
             },
             { 
                 state: 'live', 
                 away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mem.png', abbr: 'MEM', score: 55 },
                 home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/nyk.png', abbr: 'NYK', score: 62 },
-                quarter: 'Q2 · 8:15'
+                quarter: 'Q2 · 8:15',
+                startTime: now - 3600000 // Started 1 hour ago
+            },
+            { 
+                state: 'pregame', 
+                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png', abbr: 'BOS' },
+                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png', abbr: 'MIA' },
+                secondsUntilStart: 8130, // 2:15:30
+                startTime: now + 8130000 // Starts in 2:15:30
+            },
+            { 
+                state: 'pregame', 
+                away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/chi.png', abbr: 'CHI' },
+                home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png', abbr: 'MIL' },
+                secondsUntilStart: 13500, // 3:45:00
+                startTime: now + 13500000 // Starts in 3:45:00
             },
             { 
                 state: 'live', 
                 away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/atl.png', abbr: 'ATL', score: 78 },
                 home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/cle.png', abbr: 'CLE', score: 81 },
-                quarter: 'Q3 · 2:34'
+                quarter: 'Q3 · 2:34',
+                startTime: now - 4500000 // Started 1 hour 15 min ago
             },
             { 
                 state: 'final', 
                 away: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/utah.png', abbr: 'UTA', score: 98 },
                 home: { logo: 'https://a.espncdn.com/i/teamlogos/nba/500/okc.png', abbr: 'OKC', score: 105 },
-                status: 'FINAL'
+                status: 'FINAL',
+                startTime: now - 9000000 // Finished 2.5 hours ago
             },
             { 
                 state: 'pregame', 
