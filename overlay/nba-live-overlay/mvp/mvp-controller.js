@@ -102,7 +102,6 @@ class MvpController {
      */
     scheduleMvpDisplay(state, mvpPlayerData) {
         if (!mvpPlayerData) {
-            console.warn('No MVP player data provided');
             return;
         }
 

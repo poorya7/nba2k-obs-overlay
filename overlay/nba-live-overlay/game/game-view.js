@@ -137,18 +137,15 @@ class GameView {
      */
     validateStateData(stateName, data) {
         if (!data) {
-            console.error(`Invalid data for state "${stateName}": data is null/undefined`);
             return false;
         }
 
         switch (stateName) {
             case 'pregame':
                 if (!data.homeTeam || !data.awayTeam) {
-                    console.error('Pre-game state requires homeTeam and awayTeam');
                     return false;
                 }
                 if (!data.homeTeam.abbr || !data.homeTeam.logoUrl || !data.awayTeam.abbr || !data.awayTeam.logoUrl) {
-                    console.error('Teams must have abbr and logoUrl');
                     return false;
                 }
                 // countdown is optional
@@ -156,11 +153,9 @@ class GameView {
 
             case 'live':
                 if (!data.home || !data.away) {
-                    console.error('Live state requires home and away team data');
                     return false;
                 }
                 if (!data.quarter || !data.time) {
-                    console.error('Live state requires quarter and time');
                     return false;
                 }
                 return true;
@@ -168,13 +163,11 @@ class GameView {
             case 'halftime':
             case 'final':
                 if (!data.home || !data.away) {
-                    console.error(`${stateName} state requires home and away team data`);
                     return false;
                 }
                 return true;
 
             default:
-                console.error(`Unknown state: ${stateName}`);
                 return false;
         }
     }
@@ -187,7 +180,6 @@ class GameView {
      */
     updateTeam(team, abbr, logoUrl) {
         if (team !== 'home' && team !== 'away') {
-            console.error('Invalid team. Must be "home" or "away"');
             return;
         }
 
@@ -210,7 +202,6 @@ class GameView {
      */
     updateScore(team, newScore, animate = false, animType = DEFAULT_SCORE_ANIMATION) {
         if (team !== 'home' && team !== 'away') {
-            console.error('Invalid team. Must be "home" or "away"');
             return;
         }
 
@@ -557,7 +548,6 @@ class GameView {
         return new Promise((resolve) => {
             // Validate data first
             if (!this.validateStateData(stateName, data)) {
-                console.error('State transition aborted due to invalid data');
                 resolve();
                 return;
             }
@@ -617,7 +607,7 @@ class GameView {
                 this.showFinal(data);
                 break;
             default:
-                console.error('Invalid state:', stateName);
+                break;
         }
     }
 

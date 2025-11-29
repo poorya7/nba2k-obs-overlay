@@ -247,8 +247,7 @@ class AppController {
             this.detectStateAndUpdate(game, selectedGameId);
 
         } catch (error) {
-            // Controller error handling: log and gracefully degrade
-            console.error('[AppController] Error in updateFromAPI:', error.message || error);
+            // Controller error handling: gracefully degrade
             this.resetAndHideOverlay();
         }
     }
@@ -535,7 +534,6 @@ class AppController {
             }
         } catch (error) {
             // Silent fail for simulation MVP checks (non-critical feature)
-            console.warn('[AppController] Simulation MVP check failed:', error.message || error);
         }
     }
 

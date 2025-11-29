@@ -158,8 +158,7 @@ class ModeCoordinator {
             // Start cycling with sorted games (skip first render since we already rendered above)
             this.otherGamesController.init(sortedGames, true);
         } catch (error) {
-            // Controller error handling: log and return to current game
-            console.error('[ModeCoordinator] Error in showOtherGamesMode:', error.message || error);
+            // Controller error handling: return to current game
             this.returnToCurrentGameMode();
         }
     }

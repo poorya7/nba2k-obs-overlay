@@ -50,8 +50,7 @@ class MvpIntegration {
             
             return null;
         } catch (error) {
-            // Integration layer: log error and return null for graceful degradation
-            console.error('[MvpIntegration] Error getting MVP data:', error.message || error);
+            // Integration layer: return null for graceful degradation
             return null;
         }
     }
@@ -76,8 +75,7 @@ class MvpIntegration {
                 mvpController.onGameStateChange(stateName, mvpData);
             }
         } catch (error) {
-            // Integration layer: log error and gracefully degrade (no MVP display)
-            console.error('[MvpIntegration] Failed to update MVP state:', error.message || error);
+            // Integration layer: gracefully degrade (no MVP display)
         }
     }
 }

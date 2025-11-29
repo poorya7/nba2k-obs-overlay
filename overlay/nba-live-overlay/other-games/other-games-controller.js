@@ -174,8 +174,8 @@ class OtherGamesController {
         const startIndex = this.currentSet * this.gamesPerSet;
         const gamesOnThisPage = Math.min(this.gamesPerSet, this.games.length - startIndex);
         
-        // Base duration: TESTING: 5 seconds for 3 games (ORIGINAL: 13000 = 13 seconds)
-        const baseDuration = 5000 / this.timeMultiplier;
+        // Base duration: 13 seconds for 3 games
+        const baseDuration = 13000 / this.timeMultiplier;
         
         // Proportional: 1 game = 1/3, 2 games = 2/3, 3 games = full
         return Math.round((baseDuration / 3) * gamesOnThisPage);

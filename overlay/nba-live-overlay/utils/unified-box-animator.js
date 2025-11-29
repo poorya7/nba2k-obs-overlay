@@ -48,7 +48,6 @@ class UnifiedBoxAnimator {
     resizeBox(newHeight) {
         return new Promise((resolve) => {
             if (!this.otherGamesBox) {
-                console.error('UnifiedBoxAnimator: Other games box not initialized');
                 resolve();
                 return;
             }
@@ -208,7 +207,6 @@ class UnifiedBoxAnimator {
     fadeOutBox(duration = TIMING.CONTENT_FADE_OUT) {
         return new Promise((resolve) => {
             if (!this.box) {
-                console.error('UnifiedBoxAnimator: Box not initialized');
                 resolve();
                 return;
             }
@@ -255,7 +253,6 @@ class UnifiedBoxAnimator {
     fadeInBox(duration = TIMING.CONTENT_FADE_IN) {
         return new Promise((resolve) => {
             if (!this.box) {
-                console.error('UnifiedBoxAnimator: Box not initialized');
                 resolve();
                 return;
             }
@@ -348,7 +345,7 @@ class UnifiedBoxAnimator {
             await Promise.all([fadeOutPromise, resizePromise, fadeInPromise]);
             
         } catch (error) {
-            console.error('UnifiedBoxAnimator: Error during transition:', error);
+            // Silent error handling
         }
     }
 
@@ -380,7 +377,7 @@ class UnifiedBoxAnimator {
             // Keeping for backwards compatibility but this method should not be called
             
         } catch (error) {
-            console.error('UnifiedBoxAnimator: Error during mode transition:', error);
+            // Silent error handling
         }
     }
 
