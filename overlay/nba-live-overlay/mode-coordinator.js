@@ -67,6 +67,12 @@ class ModeCoordinator {
      */
     async showOtherGamesMode(selectedGameId) {
         try {
+            // DEFENSIVE: Clean up any existing controller first (prevent race conditions)
+            if (this.otherGamesController) {
+                this.otherGamesController.destroy();
+                this.otherGamesController = null;
+            }
+            
             // Switch to other games mode
             this.stateManager.setMode('OTHER_GAMES');
             this.stateManager.markOtherGamesShownThisQuarter();

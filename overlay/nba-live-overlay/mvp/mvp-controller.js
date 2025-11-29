@@ -273,6 +273,13 @@ class MvpController {
     }
 
     /**
+     * Destroy controller (cleanup all resources)
+     */
+    destroy() {
+        this.clearAllTimers();
+    }
+
+    /**
      * Get current game state
      * @returns {string}
      */

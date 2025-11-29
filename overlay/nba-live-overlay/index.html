@@ -172,6 +172,11 @@
             appController.start();
         });
         
+        // Cleanup timers when page unloads (OBS hides source, browser navigates away, etc.)
+        window.addEventListener('beforeunload', () => {
+            appController.stop();
+        });
+        
         // Expose for debugging/testing
         window.appController = appController;
         window.gameView = gameView;

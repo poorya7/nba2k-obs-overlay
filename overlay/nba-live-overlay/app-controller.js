@@ -80,10 +80,11 @@ class AppController {
     }
 
     /**
-     * Stop the overlay (cleanup)
+     * Stop the overlay (cleanup all timers and resources)
      * @returns {void}
      */
     stop() {
+        // Stop own timers
         if (this.updateTimer) {
             clearInterval(this.updateTimer);
             this.updateTimer = null;
@@ -92,6 +93,10 @@ class AppController {
             clearInterval(this.simMVPTimer);
             this.simMVPTimer = null;
         }
+        
+        // Cleanup all child components
+        this.mvpController.destroy();
+        this.modeCoordinator.destroy();
         this.stateManager.stopCountdown();
     }
 
@@ -116,8 +121,9 @@ class AppController {
 
                 selectedGameId = data.gameId;
 
-                // Check if game changed - reset overlay shown flag
+                // Check if game changed - cleanup other games and reset overlay shown flag
                 if (this.stateManager.hasGameIdChanged(selectedGameId)) {
+                    this.modeCoordinator.cleanupOtherGamesMode();
                     this.stateManager.setGameId(selectedGameId);
                 }
 
@@ -144,10 +150,11 @@ class AppController {
                                    this.stateManager.getQuarterStartTime() !== quarterData.startTime);
             
             if (quarterChanged) {
-                // Quarter changed - hide other games if showing and reset to current game mode
-                if (this.stateManager.getMode() === 'OTHER_GAMES') {
-                    this.modeCoordinator.returnToCurrentGameMode();
-                }
+                // Quarter changed - use instant cleanup (no animation, prevents race conditions)
+                this.modeCoordinator.cleanupOtherGamesMode();
+                
+                // Force re-render by clearing last game data (normal flow will show game view)
+                this.stateManager.setGameData(null);
                 
                 // In sim mode, reset simulation manager
                 if (isSimMode) {
@@ -254,6 +261,9 @@ class AppController {
         this.gameView.hide();
         this.mvpView.hide();
         this.mvpIntegration.clearMVPCache();
+        
+        // Cleanup timers to prevent leaks
+        this.mvpController.clearAllTimers();
         
         // Cleanup other games mode (without showing current game)
         this.modeCoordinator.cleanupOtherGamesMode();
