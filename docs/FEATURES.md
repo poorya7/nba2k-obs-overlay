@@ -95,11 +95,13 @@ Automatic player spotlight that displays during game breaks (only in current gam
 ### Other Games Display
 Integrated into the unified overlay:
 - **Smart Timing**: Appears 1 minute after each quarter starts
-- **Display Duration**: Shows each page of games for 10-18 seconds (variable based on content)
+- **Proportional Duration**: Display time scales with game count (13s for 3 games, 8.7s for 2 games, 4.3s for 1 game)
 - **Pagination**: Groups games 3 per page, cycles through all games once per quarter
 - **Once Per Quarter**: After cycling, returns to current game mode automatically
 - **Same Position**: Uses the exact same screen position as current game display
 - **Simulation Mode**: Shows 10 fake games when simulation is enabled for testing
+- **Consistent Sizing**: Box uses hardcoded max heights (476px for 3 games, 316px for 2, 156px for 1)
+- **Smooth Transitions**: No resize when same number of games, only when count changes
 - **Consistent Styling**: Matches the visual design of current game mode
 
 ## Technical Features

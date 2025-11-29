@@ -79,6 +79,10 @@ nba-live-overlay/
 ### Smart Animations
 - **Score Changes**: Smooth slide animation (slot-machine effect)
 - **State Transitions**: Instant switching (no unnecessary blinking)
+- **Mode Transitions**: Smooth overlapping animations (fade-out/resize parallel, fade-in overlaps with resize)
+- **Box Resize**: Proportional timing up to 800ms max, only when game count changes
+- **Page Duration**: Proportional to game count (13s for 3 games, 8.7s for 2, 4.3s for 1)
+- **Consistent Heights**: Uses max heights (476/316/156px) to prevent tiny resizes between same-count pages
 - **MVP Display**: Automatic timing during halftime/final (17s duration, up to 3x)
 
 ### Game States

@@ -243,9 +243,10 @@ ESPN API integration layer providing:
 **2. Other Games Mode:**
 - Shows other NBA games (3 at a time)
 - Cycles through all games
-- 10-18 seconds per set
+- Proportional duration: 13s for 3 games, 8.7s for 2 games, 4.3s for 1 game (scales with game count)
 - Appears at 60s mark each quarter (once per quarter)
 - After cycling, returns to current game mode
+- Box uses hardcoded max heights to prevent resizing when same game count
 
 **Timing Logic:**
 
@@ -262,10 +263,13 @@ ESPN API integration layer providing:
 
 **Animation Strategy:**
 - **Score changes:** Slide animation (old score slides up, new score slides in from bottom)
-- **Mode switching:** Show/hide divs (game-stats ↔ other-games)
+- **Mode switching:** Smooth overlapping transitions (fade-out/resize parallel, fade-in overlaps with resize end)
+- **Box resize:** Proportional timing up to 800ms max, with 200ms stagger before resize starts
+- **Content transitions:** Fade-out (300ms) → 200ms delay → Fade-in (matches resize duration)
 - **State changes:** Instant content swap
 - **First load:** Instant appearance
 - **Time updates:** Silent updates
+- **Other games pages:** No resize when same game count (uses hardcoded max heights: 476/316/156px)
 
 **Smart Features:**
 - Quarter-based timing (controlled from dashboard)

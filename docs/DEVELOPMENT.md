@@ -582,7 +582,7 @@ gameView.transitionToState(stateName, formattedData);
 
 ### Custom Animation Timings
 
-Modify `overlay/nba-live-overlay/game/game-view.js`:
+**Score Animation** - Modify `overlay/nba-live-overlay/game/game-view.js`:
 
 ```javascript
 // In updateScore method:
@@ -590,6 +590,33 @@ const FADE_OUT_DURATION = 350;  // ms
 const SLIDE_IN_DURATION = 300;  // ms
 const SLIDE_DELAY = 80;         // ms between fade out and slide in
 ```
+
+**Box Resize & Transition Animation** - Modify `overlay/nba-live-overlay/utils/unified-box-animator.js`:
+
+```javascript
+// At top of file (TIMING constant):
+const TIMING = {
+    CONTENT_FADE_OUT: 300,          // Content fade-out duration
+    CONTENT_FADE_IN: 300,           // Content fade-in duration (often matches resize)
+    RESIZE_MAX_HEIGHT_DIFF: 250,   // Max expected height change in pixels
+    RESIZE_MAX_DURATION: 800        // Max duration for largest resize (proportional)
+};
+```
+
+**Note:** Fade-in duration dynamically matches resize duration for smooth synchronized movement. The 200ms stagger and delays are hardcoded in `transitionContent` method.
+
+**Other Games Hardcoded Heights** - Modify `overlay/nba-live-overlay/other-games/other-games-controller.js`:
+
+```javascript
+// In constructor:
+this.maxHeightCache = {
+    1: 156,  // 1 live game max height
+    2: 316,  // 2 live games max height
+    3: 476   // 3 live games max height
+};
+```
+
+These ensure no resize when same game count changes pages.
 
 ### Server Auto-start on Windows
 
