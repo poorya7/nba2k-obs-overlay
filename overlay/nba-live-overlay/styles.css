@@ -99,8 +99,8 @@ body {
 #games-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly; /* Evenly distributes games with equal spacing (centers single game!) */
-    height: 100%; /* Takes full parent height */
+    justify-content: flex-start; /* Stack games from top */
+    height: auto; /* Let content determine height */
 }
 
 .live-indicator {
@@ -621,9 +621,9 @@ body {
 
 /* Divider between games */
 .game-divider.thick {
-    height: 3px;
-    background: rgba(59, 130, 246, 0.5);
-    margin: 16px 0;
+    height: 3px !important;
+    background: rgba(59, 130, 246, 0.5) !important;
+    margin: 16px 0 !important;
 }
 
 /* ==================== COMPACT MODIFIER (for other games) ==================== */
@@ -631,7 +631,7 @@ body {
 
 .compact .live-indicator {
     gap: 6px;
-    margin-bottom: 8px;
+    margin-bottom: 12px !important;
 }
 
 .compact .live-dot {
@@ -640,7 +640,7 @@ body {
 }
 
 .compact .live-text {
-    font-size: 11px;
+    font-size: 14.5px;
     letter-spacing: 1px;
 }
 
@@ -651,7 +651,8 @@ body {
 
 .compact .teams {
     gap: 5px;
-    margin: 8px 0;
+    margin: 0;
+    margin-bottom: 8px !important;
 }
 
 .compact .team {
@@ -663,12 +664,12 @@ body {
 }
 
 .compact .team-logo {
-    width: 27px;
-    height: 27px;
+    width: 24px;
+    height: 24px;
 }
 
 .compact .team-abbr {
-    font-size: 13px;
+    font-size: 15.5px;
     font-weight: 600;
     letter-spacing: 0.5px;
 }
@@ -679,7 +680,7 @@ body {
 }
 
 .compact .game-status {
-    font-size: 11px;
+    font-size: 16.5px;
     margin-top: 8px;
     height: auto;
     min-height: 20px;
@@ -690,6 +691,7 @@ body {
 .compact .matchup-preview {
     gap: 6px;
     margin-top: 6px;
+    margin-bottom: 11px;
 }
 
 /* Matchup with team names - wider spacing */
@@ -705,19 +707,19 @@ body {
 }
 
 .compact .preview-logo {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
 }
 
 .compact .preview-abbr {
-    font-size: 11px;
+    font-size: 13.5px;
     font-weight: 600;
     color: #bfdbfe;
     letter-spacing: 0.5px;
 }
 
 .compact .vs-text {
-    font-size: 10px;
+    font-size: 12.5px;
 }
 
 .compact .countdown-container {
@@ -725,14 +727,14 @@ body {
 }
 
 .compact .countdown-label {
-    font-size: 8px;
+    font-size: 14.5px;
     letter-spacing: 1px;
     margin-top: 0;
     margin-bottom: 2px;
 }
 
 .compact .countdown-time {
-    font-size: 14px;
+    font-size: 20.5px;
     letter-spacing: 1.5px;
     margin-bottom: 0;
 }
