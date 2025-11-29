@@ -17,8 +17,9 @@ const DEFAULT_SCORE_ANIMATION = 'slide';
 class GameView {
     /**
      * Initialize GameView and cache DOM elements
+     * @param {UnifiedBoxAnimator} unifiedBoxAnimator - Box animator for height control
      */
-    constructor() {
+    constructor(unifiedBoxAnimator = null) {
         // Cache DOM elements for performance
         this.elements = {
             homeAbbr: document.querySelector('[data-abbr="home"]'),
@@ -48,6 +49,7 @@ class GameView {
         this.currentState = null; // No default state - set by first API call
         this.isVisible = false;   // Track visibility
         this.transitionAnimator = new TransitionAnimator(); // Delegate complex transitions
+        this.unifiedBoxAnimator = unifiedBoxAnimator; // For height control
     }
 
     /**
@@ -56,35 +58,57 @@ class GameView {
      * @returns {void}
      */
     show() {
-        // Always show the box and content (even if already visible - ensures it's shown)
-            // Show unified box
-            if (this.elements.unifiedBox) {
-                this.elements.unifiedBox.style.display = 'block';
-                this.elements.unifiedBox.style.opacity = '1'; // Box opacity
-            }
+        // Show unified box
+        if (this.elements.unifiedBox) {
+            this.elements.unifiedBox.style.display = 'block';
+            // Fade in box
+            this.elements.unifiedBox.style.transition = 'opacity 0.3s ease-in';
+            this.elements.unifiedBox.style.opacity = '1';
+        }
         
         // Show and fade in current game content
         if (this.elements.currentGameContent) {
             // Ensure it's visible
             this.elements.currentGameContent.style.display = 'block';
             
-            // Only fade in if not already visible
-            if (!this.isVisible) {
-                this.elements.currentGameContent.style.opacity = '0';
-                
-                // Force reflow
-                void this.elements.currentGameContent.offsetWidth;
-                
-                // Fade in content
-                this.elements.currentGameContent.style.transition = 'opacity 0.3s ease-in';
-                this.elements.currentGameContent.style.opacity = '1';
-            } else {
-                // Already visible, just ensure opacity is 1
-                this.elements.currentGameContent.style.opacity = '1';
-            }
+            // Fade in content
+            this.elements.currentGameContent.style.transition = 'opacity 0.3s ease-in';
+            this.elements.currentGameContent.style.opacity = '1';
         }
         
         this.isVisible = true;
+    }
+
+    /**
+     * Measure and set the initial box height based on actual DOM content
+     * Call this AFTER content is rendered (via switchToState) but BEFORE showing
+     * @returns {void}
+     */
+    setInitialHeightFromContent() {
+        if (!this.elements.unifiedBox || !this.elements.currentGameContent) {
+            return;
+        }
+        
+        // Make elements visible but transparent so we can measure them
+        this.elements.unifiedBox.style.display = 'block';
+        this.elements.unifiedBox.style.opacity = '0';
+        this.elements.currentGameContent.style.display = 'block';
+        this.elements.currentGameContent.style.opacity = '0';
+        
+        // Force browser to calculate layout
+        void this.elements.currentGameContent.offsetHeight;
+        
+        // Measure the actual rendered content height
+        const contentHeight = this.elements.currentGameContent.scrollHeight;
+        
+        // Add box padding (from CSS: 13px top + 18px bottom)
+        const boxPadding = 31;
+        const totalHeight = contentHeight + boxPadding;
+        
+        // Set the box height to fit the content perfectly
+        this.elements.unifiedBox.style.height = totalHeight + 'px';
+        
+        console.log('📏 [GameView] Content height:', contentHeight, 'px → Box height:', totalHeight, 'px');
     }
 
     /**

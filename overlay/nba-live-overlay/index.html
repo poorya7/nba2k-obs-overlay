@@ -125,7 +125,7 @@
         const unifiedBoxAnimator = new UnifiedBoxAnimator();
         unifiedBoxAnimator.init(document.getElementById('unifiedBox'));
         
-        const gameView = new GameView();
+        const gameView = new GameView(unifiedBoxAnimator);
         const mvpView = new MvpView();
         const mvpController = new MvpController(mvpView);
         const mvpIntegration = new MvpIntegration();

@@ -6,10 +6,14 @@
 class OtherGamesView {
     constructor() {
         this.gamesContainer = document.getElementById('games-container');
+        this.otherGamesContent = document.getElementById('otherGamesContent');
         
         // Validate critical DOM elements exist
         if (!this.gamesContainer) {
             throw new Error('OtherGamesView: #games-container element not found in DOM');
+        }
+        if (!this.otherGamesContent) {
+            throw new Error('OtherGamesView: #otherGamesContent element not found in DOM');
         }
     }
 
@@ -53,6 +57,42 @@ class OtherGamesView {
         
         // Add error handlers to all images
         this._addImageErrorHandlers(gamesToShow);
+    }
+
+    /**
+     * Measure the actual rendered content height
+     * Call this AFTER renderGames() to get the real DOM height
+     * @returns {number} Height in pixels including padding
+     */
+    measureContentHeight() {
+        // Make sure content is visible so we can measure it
+        const wasHidden = this.otherGamesContent.style.display === 'none';
+        
+        if (wasHidden) {
+            // Temporarily make visible but transparent for measurement
+            this.otherGamesContent.style.display = 'block';
+            this.otherGamesContent.style.opacity = '0';
+        }
+        
+        // Force layout calculation
+        void this.otherGamesContent.offsetHeight;
+        
+        // Measure actual content height
+        const contentHeight = this.otherGamesContent.scrollHeight;
+        
+        // Add box padding (13px top + 18px bottom from CSS)
+        const boxPadding = 31;
+        const totalHeight = contentHeight + boxPadding;
+        
+        console.log('📏 [OtherGamesView] Measured content:', contentHeight, 'px → Total with padding:', totalHeight, 'px');
+        
+        // If it was hidden, restore that state
+        if (wasHidden) {
+            this.otherGamesContent.style.display = 'none';
+            this.otherGamesContent.style.opacity = '1';
+        }
+        
+        return totalHeight;
     }
     
     /**

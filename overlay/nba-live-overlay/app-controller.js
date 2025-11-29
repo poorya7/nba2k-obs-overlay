@@ -418,8 +418,14 @@ class AppController {
      * @param {Object} changes - Change analysis object
      */
     _handleFirstLoad(changes) {
-        this.gameView.show();
+        // Step 1: Render the content first (invisible)
         this.gameView.switchToState(changes.stateName, changes.formattedData);
+        
+        // Step 2: Measure actual content height and set box size
+        this.gameView.setInitialHeightFromContent();
+        
+        // Step 3: Now show it with fade in
+        this.gameView.show();
         
         // Initialize MVP controller with initial state
         this.stateManager.setGameState(changes.stateName);

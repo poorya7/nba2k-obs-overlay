@@ -73,6 +73,15 @@ class ModeManager {
         const realTimeSinceQuarterStart = Date.now() - quarterData.startTime;
         const acceleratedTime = realTimeSinceQuarterStart * timeMultiplier + virtualTimeOffset;
         
+        console.log('⏱️ [ModeManager] shouldShowOtherGames check:');
+        console.log('   Real time since quarter start:', realTimeSinceQuarterStart, 'ms');
+        console.log('   Time multiplier:', timeMultiplier, 'x');
+        console.log('   Virtual time offset:', virtualTimeOffset, 'ms');
+        console.log('   Accelerated time:', acceleratedTime, 'ms');
+        console.log('   Target delay:', this.OTHER_GAMES_DELAY_MS, 'ms');
+        console.log('   Already shown this quarter?', this.hasShownOtherGamesThisQuarter);
+        console.log('   Should show?', acceleratedTime >= this.OTHER_GAMES_DELAY_MS && !this.hasShownOtherGamesThisQuarter);
+        
         // Track quarter changes
         this.updateQuarterTracking(quarterData.startTime);
         

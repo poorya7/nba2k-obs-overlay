@@ -103,9 +103,12 @@ class ModeCoordinator {
                 return;
             }
 
-            // Calculate height for first page of other games
-            const firstPageCount = Math.min(otherGames.length, 3);
-            const newHeight = UnifiedBoxAnimator.getOtherGamesHeight(firstPageCount);
+            // Render first page of games (temporarily invisible)
+            this.otherGamesView.renderGames(otherGames, 0, 3);
+            
+            // Measure actual rendered height from DOM
+            const newHeight = this.otherGamesView.measureContentHeight();
+            console.log('📦 [ModeCoordinator] Transitioning TO other games, measured height:', newHeight, 'px');
 
             // Transition from current game to other games using animator
             await this.unifiedBoxAnimator.transitionContent(
@@ -169,10 +172,29 @@ class ModeCoordinator {
         // Switch state
         this.stateManager.setMode('CURRENT_GAME');
         
-        // Get current game height based on state
-        const currentState = this.stateManager.getGameState() || 'live';
-        const hasMVP = this.mvpView.getVisibility();
-        const newHeight = UnifiedBoxAnimator.getCurrentGameHeight(currentState, hasMVP);
+        // Measure actual current game content height (content is already rendered)
+        // Make it temporarily visible to measure if needed
+        const wasHidden = this.currentGameContent.style.display === 'none';
+        if (wasHidden) {
+            this.currentGameContent.style.display = 'block';
+            this.currentGameContent.style.opacity = '0';
+        }
+        
+        // Force layout calculation
+        void this.currentGameContent.offsetHeight;
+        
+        // Measure actual content
+        const contentHeight = this.currentGameContent.scrollHeight;
+        const boxPadding = 31; // 13px top + 18px bottom
+        const newHeight = contentHeight + boxPadding;
+        
+        console.log('📦 [ModeCoordinator] Returning TO current game, measured height:', newHeight, 'px');
+        
+        // Restore state if needed
+        if (wasHidden) {
+            this.currentGameContent.style.display = 'none';
+            this.currentGameContent.style.opacity = '1';
+        }
         
         // Transition back to current game content (this handles the fade out/in)
         await this.unifiedBoxAnimator.transitionContent(

@@ -8,21 +8,6 @@
  * @class
  */
 
-// Height constants for different content types
-const BOX_HEIGHTS = {
-    // Current game states
-    PREGAME: 150,
-    LIVE: 180,
-    LIVE_WITH_MVP: 365,  // Live + MVP section (180 + 185)
-    HALFTIME: 180,
-    FINAL: 180,
-    
-    // Other games (by count)
-    OTHER_GAMES_1: 120,
-    OTHER_GAMES_2: 250,
-    OTHER_GAMES_3: 380
-};
-
 // Fixed center point (CSS top value - transform: translateY(-50%) handles the centering)
 const BOX_CENTER_Y = 470;
 
@@ -226,45 +211,9 @@ class UnifiedBoxAnimator {
         }
     }
 
-    /**
-     * Get height constant for a given number of other games
-     * @param {number} gameCount - Number of games (1-3)
-     * @returns {number} Height in pixels
-     */
-    static getOtherGamesHeight(gameCount) {
-        if (gameCount === 1) return BOX_HEIGHTS.OTHER_GAMES_1;
-        if (gameCount === 2) return BOX_HEIGHTS.OTHER_GAMES_2;
-        return BOX_HEIGHTS.OTHER_GAMES_3;
-    }
-
-    /**
-     * Get height constant for current game state
-     * @param {string} stateName - Game state name
-     * @param {boolean} hasMVP - Whether MVP is visible
-     * @returns {number} Height in pixels
-     */
-    static getCurrentGameHeight(stateName, hasMVP = false) {
-        if (hasMVP && stateName === 'live') {
-            return BOX_HEIGHTS.LIVE_WITH_MVP;
-        }
-        
-        switch (stateName) {
-            case 'pregame':
-                return BOX_HEIGHTS.PREGAME;
-            case 'live':
-                return BOX_HEIGHTS.LIVE;
-            case 'halftime':
-                return BOX_HEIGHTS.HALFTIME;
-            case 'final':
-                return BOX_HEIGHTS.FINAL;
-            default:
-                return BOX_HEIGHTS.LIVE; // Default fallback
-        }
-    }
 }
 
 // Export constants for use in other files
-UnifiedBoxAnimator.BOX_HEIGHTS = BOX_HEIGHTS;
 UnifiedBoxAnimator.BOX_CENTER_Y = BOX_CENTER_Y;
 UnifiedBoxAnimator.TIMING = TIMING;
 

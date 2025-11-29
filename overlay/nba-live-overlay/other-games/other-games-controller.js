@@ -92,16 +92,11 @@ class OtherGamesController {
             return;
         }
         
-        // Calculate next page games and height
+        // Calculate next page index
         const startIndex = nextSetIndex * this.gamesPerSet;
-        const nextPageGames = this.games.slice(startIndex, startIndex + this.gamesPerSet);
-        const gameCount = nextPageGames.length;
         
         // Use animator if available, otherwise fallback to simple fade
         if (this.unifiedBoxAnimator && this.gamesContainer) {
-            // Get new height based on game count
-            const newHeight = UnifiedBoxAnimator.getOtherGamesHeight(gameCount);
-            
             // Fade out current content
             await this.unifiedBoxAnimator.fadeOutContent(this.gamesContainer);
             
@@ -109,7 +104,11 @@ class OtherGamesController {
             this.currentSet = nextSetIndex;
             this.view.renderGames(this.games, startIndex, this.gamesPerSet);
             
-            // Resize box
+            // Measure actual height from rendered DOM
+            const newHeight = this.view.measureContentHeight();
+            console.log('📦 [OtherGamesController] Page', nextSetIndex, 'measured height:', newHeight, 'px');
+            
+            // Resize box to fit new content
             await this.unifiedBoxAnimator.resizeBox(newHeight);
             
             // Fade in new content
