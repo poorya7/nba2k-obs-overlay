@@ -92,7 +92,15 @@ body {
 /* Content wrappers */
 .current-game-content,
 .other-games-content {
+    height: 100%; /* Takes full box height */
     transition: opacity 0.3s ease;
+}
+
+#games-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; /* Evenly distributes games with equal spacing (centers single game!) */
+    height: 100%; /* Takes full parent height */
 }
 
 .live-indicator {
