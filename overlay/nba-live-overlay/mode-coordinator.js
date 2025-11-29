@@ -212,6 +212,10 @@ class ModeCoordinator {
         // Clear game data cache to force re-render with fresh data
         // Don't show current game box here - let normal update cycle show it with fresh data
         this.stateManager.setGameData(null);
+        
+        // Clear game state to force MVP re-evaluation
+        // This ensures MVP timers restart fresh when returning from other games
+        this.stateManager.setGameState(null);
     }
 
     /**

@@ -128,8 +128,6 @@
         
         const gameView = new GameView(unifiedBoxAnimator);
         const mvpView = new MvpView();
-        const mvpController = new MvpController(mvpView);
-        const mvpIntegration = new MvpIntegration();
         const otherGamesView = new OtherGamesView();
         const otherGamesContainerView = new OtherGamesContainerView();
         
@@ -137,6 +135,10 @@
         const stateManager = new StateManager();
         const simulationManager = new SimulationManager();
         const gameDataFormatter = new GameDataFormatter(stateManager);
+        
+        // Initialize MVP controller with state manager (for mode checking)
+        const mvpController = new MvpController(mvpView, stateManager);
+        const mvpIntegration = new MvpIntegration();
         
         // Initialize mode coordinator
         const modeCoordinator = new ModeCoordinator({

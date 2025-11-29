@@ -30,13 +30,14 @@ const MVP_DISPLAY_TIMING = {
 };
 
 class MvpController {
-    constructor(mvpView) {
+    constructor(mvpView, stateManager = null) {
         // Validate dependencies
         if (!mvpView) {
             throw new Error('MvpController: mvpView is required');
         }
         
         this.mvpView = mvpView;
+        this.stateManager = stateManager; // Optional: for checking current mode
         this.currentGameState = null;
         this.previousGameState = null;
         this.showTimer = null;
@@ -227,6 +228,11 @@ class MvpController {
      * @param {Object} mvpPlayerData
      */
     showMvpWithAutoHide(mvpPlayerData) {
+        // Don't show MVP during other games mode
+        if (this.stateManager && this.stateManager.getMode() === 'OTHER_GAMES') {
+            return; // Block display, don't show
+        }
+        
         // Show MVP
         this.mvpView.show(mvpPlayerData);
 
