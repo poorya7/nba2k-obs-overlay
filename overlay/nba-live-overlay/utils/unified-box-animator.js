@@ -15,7 +15,7 @@ const BOX_CENTER_Y = 470;
 const TIMING = {
     CONTENT_FADE_OUT: 300,
     CONTENT_FADE_IN: 300,
-    BOX_RESIZE: 400
+    BOX_RESIZE: 2000  // Testing: 2 seconds to see it clearly
 };
 
 class UnifiedBoxAnimator {
@@ -40,6 +40,7 @@ class UnifiedBoxAnimator {
 
     /**
      * Resize the box from its center point
+     * Duration is proportional to the height change amount
      * @param {number} newHeight - New height in pixels
      * @returns {Promise} Resolves after resize animation completes
      */
@@ -51,12 +52,36 @@ class UnifiedBoxAnimator {
                 return;
             }
 
-            // Check if already at target height
+            // Check current height
             const currentHeight = parseInt(this.box.style.height) || 180;
-            if (currentHeight === newHeight) {
+            
+            // Calculate height difference
+            const heightDifference = Math.abs(newHeight - currentHeight);
+            
+            // If no change, resolve immediately
+            if (heightDifference === 0) {
                 resolve();
                 return;
             }
+
+            // Calculate proportional duration
+            // Max expected height difference: ~250px (e.g., 150px pregame to 400px other games)
+            // Max duration for biggest resize: 500ms
+            const MAX_HEIGHT_DIFF = 250;
+            const MAX_DURATION = 500;
+            
+            // Scale duration based on actual height change
+            const duration = Math.min(
+                (heightDifference / MAX_HEIGHT_DIFF) * MAX_DURATION,
+                MAX_DURATION
+            );
+            
+            // Round to nearest 10ms for cleaner values
+            const finalDuration = Math.round(duration / 10) * 10;
+
+            // Set transition with calculated duration
+            // Using cubic-bezier for more pronounced ease-out (starts fast, decelerates smoothly)
+            this.box.style.transition = `top ${finalDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94), height ${finalDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 
             // Set up transitionend listener with fallback timeout
             let resolved = false;
@@ -80,7 +105,7 @@ class UnifiedBoxAnimator {
                     this.box.removeEventListener('transitionend', handleEnd);
                     resolve();
                 }
-            }, TIMING.BOX_RESIZE + 50);
+            }, finalDuration + 50);
             
             // Set new height (CSS transform keeps it centered automatically!)
             this.box.style.height = newHeight + 'px';
@@ -181,6 +206,7 @@ class UnifiedBoxAnimator {
 
     /**
      * Full transition: fade out old content, resize box, fade in new content
+     * Resize duration is proportional to height change, fade timings are fixed
      * @param {HTMLElement} oldContent - Content to hide
      * @param {HTMLElement} newContent - Content to show
      * @param {number} newHeight - New box height
@@ -188,23 +214,42 @@ class UnifiedBoxAnimator {
      */
     async transitionContent(oldContent, newContent, newHeight) {
         try {
-            // Step 1: Fade out old content
-            await this.fadeOutContent(oldContent);
+            // Calculate resize duration based on height difference
+            const currentHeight = parseInt(this.box.style.height) || 180;
+            const heightDifference = Math.abs(newHeight - currentHeight);
+            const MAX_HEIGHT_DIFF = 250;
+            const MAX_DURATION = 500;
+            const resizeDuration = Math.min(
+                (heightDifference / MAX_HEIGHT_DIFF) * MAX_DURATION,
+                MAX_DURATION
+            );
+            const finalResizeDuration = Math.round(resizeDuration / 10) * 10;
             
-            // Step 2: Swap visibility (hide old, prepare new)
-            if (oldContent) {
-                oldContent.style.display = 'none';
-            }
-            if (newContent) {
-                newContent.style.display = 'block';
-                newContent.style.opacity = '0'; // Invisible but ready
-            }
+            // START: Fade out old content (don't wait)
+            this.fadeOutContent(oldContent);
             
-            // Step 3: Resize box from center
-            await this.resizeBox(newHeight);
+            // START: Resize box IMMEDIATELY (happens together with fade out)
+            this.resizeBox(newHeight);
             
-            // Step 4: Fade in new content
-            await this.fadeInContent(newContent);
+            // After fade out completes, swap content visibility
+            setTimeout(() => {
+                if (oldContent) {
+                    oldContent.style.display = 'none';
+                }
+                if (newContent) {
+                    newContent.style.display = 'block';
+                    newContent.style.opacity = '0'; // Invisible but ready
+                }
+            }, TIMING.CONTENT_FADE_OUT); // Swap when fade out finishes (300ms)
+            
+            // After BOTH fade out AND resize complete, start fading in new content
+            const whenToStartFadeIn = Math.max(TIMING.CONTENT_FADE_OUT, finalResizeDuration);
+            await new Promise(resolve => {
+                setTimeout(async () => {
+                    await this.fadeInContent(newContent);
+                    resolve();
+                }, whenToStartFadeIn);
+            });
             
         } catch (error) {
             console.error('UnifiedBoxAnimator: Error during transition:', error);
