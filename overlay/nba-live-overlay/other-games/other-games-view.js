@@ -84,8 +84,6 @@ class OtherGamesView {
         const boxPadding = 31;
         const totalHeight = contentHeight + boxPadding;
         
-        console.log('📏 [OtherGamesView] Measured content:', contentHeight, 'px → Total with padding:', totalHeight, 'px');
-        
         // If it was hidden, restore that state
         if (wasHidden) {
             this.otherGamesContent.style.display = 'none';

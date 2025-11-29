@@ -144,12 +144,8 @@ class AppController {
                                    this.stateManager.getQuarterStartTime() !== quarterData.startTime);
             
             if (quarterChanged) {
-                console.log('🔄 Quarter changed:', this.stateManager.getLastQuarter(), '→', quarterData.current, 
-                           'currentMode:', this.stateManager.getMode());
-                
                 // Quarter changed - hide other games if showing and reset to current game mode
                 if (this.stateManager.getMode() === 'OTHER_GAMES') {
-                    console.log('🚫 Hiding other games due to quarter change');
                     this.modeCoordinator.returnToCurrentGameMode();
                 }
                 

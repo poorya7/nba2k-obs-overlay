@@ -18,15 +18,21 @@ class OtherGamesController {
         this.timeMultiplier = timeMultiplier;
         this.unifiedBoxAnimator = unifiedBoxAnimator;
         
-        // Timing: Base times divided by multiplier for fast forward
-        const baseDuration = isSimulationMode ? 12000 : 18000;
-        this.displayDuration = baseDuration / timeMultiplier; // Faster with FF
+        // Timing calculated dynamically based on games count per page
         this.cycleInterval = null;
         this.countdownInterval = null;
         this.onComplete = onComplete; // Callback when all sets shown
         
         // DOM reference for games container
         this.gamesContainer = document.getElementById('games-container');
+        
+        // Hardcoded max heights for each game count (measured from all-live games)
+        // This prevents tiny resizes when going from 3 games to 3 games with different states
+        this.maxHeightCache = {
+            1: 156,  // 1 live game
+            2: 316,  // 2 live games
+            3: 476   // 3 live games
+        };
     }
 
     /**
@@ -66,6 +72,8 @@ class OtherGamesController {
             this.view.renderGames(this.games, 0, this.gamesPerSet);
         }
         
+        // Heights are now hardcoded in constructor - no need to measure first page
+        
         // Start cycling and countdown
         this.startCycle();
         this.startCountdown();
@@ -78,19 +86,13 @@ class OtherGamesController {
         const totalSets = Math.ceil(this.games.length / this.gamesPerSet);
         const nextSetIndex = this.currentSet + 1;
         
-        console.log(`[OtherGames] nextSet called: currentSet=${this.currentSet}, nextSetIndex=${nextSetIndex}, totalSets=${totalSets}`);
-        
         // Check if we've shown all sets
         if (nextSetIndex >= totalSets) {
-            console.log('[OtherGames] All sets shown, returning to current game');
             // Stop cycling and return to current game
             this.stopCycle();
             this.stopCountdown();
             if (this.onComplete) {
-                console.log('[OtherGames] Calling onComplete callback');
                 this.onComplete();
-            } else {
-                console.warn('[OtherGames] No onComplete callback provided!');
             }
             return;
         }
@@ -100,22 +102,57 @@ class OtherGamesController {
         
         // Use animator if available, otherwise fallback to simple fade
         if (this.unifiedBoxAnimator && this.gamesContainer) {
-            // Fade out current content
-            await this.unifiedBoxAnimator.fadeOutContent(this.gamesContainer);
+            // Calculate how many games are on this page
+            const gamesOnThisPage = Math.min(this.gamesPerSet, this.games.length - startIndex);
             
-            // Render new content
-            this.currentSet = nextSetIndex;
-            this.view.renderGames(this.games, startIndex, this.gamesPerSet);
+            // Use hardcoded max height for this game count (no measuring needed!)
+            const newHeight = this.maxHeightCache[gamesOnThisPage];
             
-            // Measure actual height from rendered DOM
-            const newHeight = this.view.measureContentHeight();
-            console.log('📦 [OtherGamesController] Page', nextSetIndex, 'measured height:', newHeight, 'px');
+            // Check if we need to resize (or if we're already at the correct height)
+            const box = document.querySelector('.unified-overlay-box');
+            const currentHeight = parseInt(box.style.height) || 180;
+            const needsResize = currentHeight !== newHeight;
             
-            // Resize box to fit new content
-            await this.unifiedBoxAnimator.resizeBox(newHeight);
-            
-            // Fade in new content
-            await this.unifiedBoxAnimator.fadeInContent(this.gamesContainer);
+            if (needsResize) {
+                // NUMBER OF GAMES CHANGED - Do full resize animation
+                const heightDifference = Math.abs(newHeight - currentHeight);
+                const TIMING = UnifiedBoxAnimator.TIMING;
+                const resizeDuration = Math.min(
+                    (heightDifference / TIMING.RESIZE_MAX_HEIGHT_DIFF) * TIMING.RESIZE_MAX_DURATION,
+                    TIMING.RESIZE_MAX_DURATION
+                );
+                const finalResizeDuration = Math.round(resizeDuration / 10) * 10;
+                
+                // Fade out + resize (staggered)
+                const fadeOutPromise = this.unifiedBoxAnimator.fadeOutContent(this.gamesContainer);
+                const resizePromise = new Promise(resolve => {
+                    setTimeout(async () => {
+                        await this.unifiedBoxAnimator.resizeBox(newHeight);
+                        resolve();
+                    }, 200);
+                });
+                
+                // After fade-out: render new content, wait, then fade in
+                await fadeOutPromise;
+                this.currentSet = nextSetIndex; // Update current page index!
+                this.view.renderGames(this.games, startIndex, this.gamesPerSet);
+                await new Promise(r => setTimeout(r, 200));
+                
+                // Fade-in with same duration as resize
+                const fadeInPromise = this.unifiedBoxAnimator.fadeInContent(this.gamesContainer, finalResizeDuration);
+                await Promise.all([resizePromise, fadeInPromise]);
+            } else {
+                // SAME NUMBER OF GAMES - No resize! Just fade content
+                const fadeOutPromise = this.unifiedBoxAnimator.fadeOutContent(this.gamesContainer);
+                
+                // After fade-out: render new content and fade in
+                await fadeOutPromise;
+                this.currentSet = nextSetIndex; // Update current page index!
+                this.view.renderGames(this.games, startIndex, this.gamesPerSet);
+                
+                // Use fixed 800ms fade-in (matches typical resize duration)
+                await this.unifiedBoxAnimator.fadeInContent(this.gamesContainer, 800);
+            }
         } else {
             // Fallback: simple fade without resize (shouldn't happen in production)
             await this.view.fadeOut(200);
@@ -123,6 +160,24 @@ class OtherGamesController {
             this.view.renderGames(this.games, startIndex, this.gamesPerSet);
             await this.view.fadeIn(200);
         }
+        
+        // Restart cycle with new page duration (each page can have different timing based on games count)
+        this.startCycle();
+    }
+
+    /**
+     * Calculate display duration based on number of games on current page
+     * @returns {number} Duration in milliseconds
+     */
+    calculateCurrentPageDuration() {
+        const startIndex = this.currentSet * this.gamesPerSet;
+        const gamesOnThisPage = Math.min(this.gamesPerSet, this.games.length - startIndex);
+        
+        // Base duration: 13 seconds for 3 games
+        const baseDuration = 13000 / this.timeMultiplier;
+        
+        // Proportional: 1 game = 1/3, 2 games = 2/3, 3 games = full
+        return Math.round((baseDuration / 3) * gamesOnThisPage);
     }
 
     /**
@@ -130,9 +185,14 @@ class OtherGamesController {
      */
     startCycle() {
         if (this.cycleInterval) {
-            clearInterval(this.cycleInterval);
+            clearTimeout(this.cycleInterval);
         }
-        this.cycleInterval = setInterval(() => this.nextSet(), this.displayDuration);
+        
+        // Calculate duration for current page based on games count
+        const duration = this.calculateCurrentPageDuration();
+        
+        // Use setTimeout (not setInterval) so each page can have different duration
+        this.cycleInterval = setTimeout(() => this.nextSet(), duration);
     }
 
     /**
@@ -140,7 +200,7 @@ class OtherGamesController {
      */
     stopCycle() {
         if (this.cycleInterval) {
-            clearInterval(this.cycleInterval);
+            clearTimeout(this.cycleInterval);
             this.cycleInterval = null;
         }
     }
@@ -178,11 +238,7 @@ class OtherGamesController {
         
         this.timeMultiplier = newMultiplier;
         
-        // Recalculate display duration
-        const baseDuration = this.isSimulationMode ? 12000 : 18000;
-        this.displayDuration = baseDuration / this.timeMultiplier;
-        
-        // Restart cycle with new timing
+        // Restart cycle with new timing (duration recalculated based on current page)
         if (this.cycleInterval) {
             this.stopCycle();
             this.startCycle();

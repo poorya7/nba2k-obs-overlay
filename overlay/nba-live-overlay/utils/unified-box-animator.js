@@ -15,7 +15,9 @@ const BOX_CENTER_Y = 470;
 const TIMING = {
     CONTENT_FADE_OUT: 300,
     CONTENT_FADE_IN: 300,
-    BOX_RESIZE: 2000  // Testing: 2 seconds to see it clearly
+    // Box resize timing (proportional to height change)
+    RESIZE_MAX_HEIGHT_DIFF: 250,  // Max expected height difference in pixels
+    RESIZE_MAX_DURATION: 800       // Max duration for largest resize (800ms)
 };
 
 class UnifiedBoxAnimator {
@@ -34,8 +36,7 @@ class UnifiedBoxAnimator {
         
         this.box = boxElement;
         
-        // Set up CSS transitions on the box
-        this.box.style.transition = `top ${TIMING.BOX_RESIZE / 1000}s ease-out, height ${TIMING.BOX_RESIZE / 1000}s ease-out`;
+        // Note: Transition timing is set dynamically in resizeBox() based on height change
     }
 
     /**
@@ -64,16 +65,10 @@ class UnifiedBoxAnimator {
                 return;
             }
 
-            // Calculate proportional duration
-            // Max expected height difference: ~250px (e.g., 150px pregame to 400px other games)
-            // Max duration for biggest resize: 500ms
-            const MAX_HEIGHT_DIFF = 250;
-            const MAX_DURATION = 500;
-            
-            // Scale duration based on actual height change
+            // Calculate proportional duration using centralized constants
             const duration = Math.min(
-                (heightDifference / MAX_HEIGHT_DIFF) * MAX_DURATION,
-                MAX_DURATION
+                (heightDifference / TIMING.RESIZE_MAX_HEIGHT_DIFF) * TIMING.RESIZE_MAX_DURATION,
+                TIMING.RESIZE_MAX_DURATION
             );
             
             // Round to nearest 10ms for cleaner values
@@ -161,9 +156,10 @@ class UnifiedBoxAnimator {
     /**
      * Fade in content
      * @param {HTMLElement} contentElement - Content to fade in
+     * @param {number} duration - Custom duration in ms (optional, defaults to TIMING.CONTENT_FADE_IN)
      * @returns {Promise} Resolves after fade completes
      */
-    fadeInContent(contentElement) {
+    fadeInContent(contentElement, duration = TIMING.CONTENT_FADE_IN) {
         return new Promise((resolve) => {
             if (!contentElement) {
                 resolve();
@@ -197,9 +193,9 @@ class UnifiedBoxAnimator {
                     contentElement.removeEventListener('transitionend', handleEnd);
                     resolve();
                 }
-            }, TIMING.CONTENT_FADE_IN + 50);
+            }, duration + 50);
 
-            contentElement.style.transition = `opacity ${TIMING.CONTENT_FADE_IN / 1000}s ease`;
+            contentElement.style.transition = `opacity ${duration / 1000}s ease`;
             contentElement.style.opacity = '1';
         });
     }
@@ -214,42 +210,48 @@ class UnifiedBoxAnimator {
      */
     async transitionContent(oldContent, newContent, newHeight) {
         try {
-            // Calculate resize duration based on height difference
+            // Calculate resize duration FIRST (so we can match fade-in to it)
             const currentHeight = parseInt(this.box.style.height) || 180;
             const heightDifference = Math.abs(newHeight - currentHeight);
-            const MAX_HEIGHT_DIFF = 250;
-            const MAX_DURATION = 500;
             const resizeDuration = Math.min(
-                (heightDifference / MAX_HEIGHT_DIFF) * MAX_DURATION,
-                MAX_DURATION
+                (heightDifference / TIMING.RESIZE_MAX_HEIGHT_DIFF) * TIMING.RESIZE_MAX_DURATION,
+                TIMING.RESIZE_MAX_DURATION
             );
             const finalResizeDuration = Math.round(resizeDuration / 10) * 10;
             
-            // START: Fade out old content (don't wait)
-            this.fadeOutContent(oldContent);
-            
-            // START: Resize box IMMEDIATELY (happens together with fade out)
-            this.resizeBox(newHeight);
-            
-            // After fade out completes, swap content visibility
-            setTimeout(() => {
-                if (oldContent) {
-                    oldContent.style.display = 'none';
-                }
-                if (newContent) {
-                    newContent.style.display = 'block';
-                    newContent.style.opacity = '0'; // Invisible but ready
-                }
-            }, TIMING.CONTENT_FADE_OUT); // Swap when fade out finishes (300ms)
-            
-            // After BOTH fade out AND resize complete, start fading in new content
-            const whenToStartFadeIn = Math.max(TIMING.CONTENT_FADE_OUT, finalResizeDuration);
-            await new Promise(resolve => {
+            // START: Fade out immediately, resize starts slightly after (200ms stagger)
+            const fadeOutPromise = this.fadeOutContent(oldContent);
+            const resizePromise = new Promise(resolve => {
                 setTimeout(async () => {
-                    await this.fadeInContent(newContent);
+                    await this.resizeBox(newHeight);
                     resolve();
-                }, whenToStartFadeIn);
+                }, 200);
             });
+            
+            // After fade-out completes: swap content and start fade-in (with 200ms delay)
+            // Fade-in duration MATCHES resize duration for smooth synchronized movement!
+            const fadeInPromise = new Promise(resolve => {
+                setTimeout(async () => {
+                    // Swap DOM visibility
+                    if (oldContent) {
+                        oldContent.style.display = 'none';
+                    }
+                    if (newContent) {
+                        newContent.style.display = 'block';
+                        newContent.style.opacity = '0';
+                    }
+                    
+                    // Wait 200ms before starting fade-in
+                    await new Promise(r => setTimeout(r, 200));
+                    
+                    // Fade-in with same duration as resize (they move together!)
+                    await this.fadeInContent(newContent, finalResizeDuration);
+                    resolve();
+                }, TIMING.CONTENT_FADE_OUT);
+            });
+            
+            // Wait for all animations to complete
+            await Promise.all([fadeOutPromise, resizePromise, fadeInPromise]);
             
         } catch (error) {
             console.error('UnifiedBoxAnimator: Error during transition:', error);

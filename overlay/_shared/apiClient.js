@@ -64,5 +64,6 @@ class ApiClient {
   async setQuarter(quarter) {
     return this.post('/api/quarter', { quarter });
   }
+
 }
 

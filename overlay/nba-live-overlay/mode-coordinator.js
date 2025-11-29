@@ -80,7 +80,7 @@ class ModeCoordinator {
             let otherGames;
             
             if (isSimMode) {
-                // Use sim games
+                // Use sim games (mixed states)
                 otherGames = this.simulationManager.getSampleGames();
             } else {
                 // Fetch all today's games
@@ -106,9 +106,11 @@ class ModeCoordinator {
             // Render first page of games (temporarily invisible)
             this.otherGamesView.renderGames(otherGames, 0, 3);
             
-            // Measure actual rendered height from DOM
-            const newHeight = this.otherGamesView.measureContentHeight();
-            console.log('📦 [ModeCoordinator] Transitioning TO other games, measured height:', newHeight, 'px');
+            // Use hardcoded max height for the number of games on first page
+            // This ensures we start at the correct size from the beginning!
+            const gamesOnFirstPage = Math.min(3, otherGames.length);
+            const maxHeights = { 1: 156, 2: 316, 3: 476 };
+            const newHeight = maxHeights[gamesOnFirstPage];
 
             // Transition from current game to other games using animator
             await this.unifiedBoxAnimator.transitionContent(
@@ -187,8 +189,6 @@ class ModeCoordinator {
         const contentHeight = this.currentGameContent.scrollHeight;
         const boxPadding = 31; // 13px top + 18px bottom
         const newHeight = contentHeight + boxPadding;
-        
-        console.log('📦 [ModeCoordinator] Returning TO current game, measured height:', newHeight, 'px');
         
         // Restore state if needed
         if (wasHidden) {
