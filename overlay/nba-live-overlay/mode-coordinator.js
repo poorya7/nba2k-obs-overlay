@@ -126,8 +126,8 @@ class ModeCoordinator {
                 this.unifiedBoxAnimator // Pass animator for page transitions
             );
 
-            // Start cycling
-            this.otherGamesController.init(otherGames);
+            // Start cycling (skip first render since we already rendered above for measurement)
+            this.otherGamesController.init(otherGames, true);
         } catch (error) {
             // Controller error handling: log and return to current game
             console.error('[ModeCoordinator] Error in showOtherGamesMode:', error.message || error);

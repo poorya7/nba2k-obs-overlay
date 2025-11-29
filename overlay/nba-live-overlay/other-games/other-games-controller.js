@@ -55,13 +55,16 @@ class OtherGamesController {
     /**
      * Initialize controller with games data
      * @param {Array} games - Array of game objects
+     * @param {boolean} skipFirstRender - Skip rendering first set (already rendered for measurement)
      */
-    init(games) {
+    init(games, skipFirstRender = false) {
         this.games = this.sortGames(games);
         this.currentSet = 0; // Reset to first set
         
-        // Render first set
-        this.view.renderGames(this.games, 0, this.gamesPerSet);
+        // Render first set only if not already rendered
+        if (!skipFirstRender) {
+            this.view.renderGames(this.games, 0, this.gamesPerSet);
+        }
         
         // Start cycling and countdown
         this.startCycle();
