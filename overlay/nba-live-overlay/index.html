@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Unified Overlay Box -->
-    <div class="unified-overlay-box" id="unifiedBox">
-        <!-- Current Game Content -->
+    <!-- Current Game Box (top-anchored, grows from bottom for MVP) -->
+    <div class="current-game-box" id="currentGameBox">
         <div class="current-game-content" id="currentGameContent">
             <div class="live-indicator">
                 <div class="live-dot"></div>
@@ -70,9 +69,11 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Other Games Content -->
-        <div class="other-games-content" id="otherGamesContent" style="display: none;">
+    <!-- Other Games Box (center-anchored, grows from both sides) -->
+    <div class="other-games-box" id="otherGamesBox" style="display: none;">
+        <div class="other-games-content" id="otherGamesContent">
             <div id="games-container">
                 <!-- Games will be dynamically inserted here -->
             </div>
@@ -123,7 +124,7 @@
         
         // Initialize unified box animator
         const unifiedBoxAnimator = new UnifiedBoxAnimator();
-        unifiedBoxAnimator.init(document.getElementById('unifiedBox'));
+        unifiedBoxAnimator.init(document.getElementById('otherGamesBox'));
         
         const gameView = new GameView(unifiedBoxAnimator);
         const mvpView = new MvpView();

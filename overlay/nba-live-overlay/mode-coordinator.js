@@ -54,6 +54,8 @@ class ModeCoordinator {
         this.otherGamesController = null;
         
         // DOM element references
+        this.currentGameBox = document.getElementById('currentGameBox');
+        this.otherGamesBox = document.getElementById('otherGamesBox');
         this.currentGameContent = document.getElementById('currentGameContent');
         this.otherGamesContent = document.getElementById('otherGamesContent');
     }
@@ -103,21 +105,37 @@ class ModeCoordinator {
                 return;
             }
 
-            // Render first page of games (temporarily invisible)
+            // Render first page of games
             this.otherGamesView.renderGames(otherGames, 0, 3);
             
             // Use hardcoded max height for the number of games on first page
-            // This ensures we start at the correct size from the beginning!
             const gamesOnFirstPage = Math.min(3, otherGames.length);
             const maxHeights = { 1: 156, 2: 316, 3: 476 };
             const newHeight = maxHeights[gamesOnFirstPage];
 
-            // Transition from current game to other games using animator
-            await this.unifiedBoxAnimator.transitionContent(
-                this.currentGameContent,
-                this.otherGamesContent,
-                newHeight
-            );
+            // Set other games box height before showing
+            if (this.otherGamesBox) {
+                this.otherGamesBox.style.height = newHeight + 'px';
+            }
+
+            // Fade out current game box
+            if (this.currentGameBox) {
+                this.currentGameBox.style.transition = 'opacity 0.8s ease';
+                this.currentGameBox.style.opacity = '0';
+                await new Promise(resolve => setTimeout(resolve, 800));
+                this.currentGameBox.style.display = 'none';
+            }
+
+            // Fade in other games box
+            if (this.otherGamesBox) {
+                this.otherGamesBox.style.display = 'block';
+                this.otherGamesBox.style.opacity = '0';
+                this.otherGamesContent.style.display = 'block';
+                void this.otherGamesBox.offsetHeight;
+                this.otherGamesBox.style.transition = 'opacity 0.8s ease';
+                this.otherGamesBox.style.opacity = '1';
+                await new Promise(resolve => setTimeout(resolve, 800));
+            }
 
             // Initialize other games controller with callback and animator
             this.otherGamesController = new OtherGamesController(
@@ -152,10 +170,10 @@ class ModeCoordinator {
         // Switch back to current game mode
         this.stateManager.setMode('CURRENT_GAME');
         
-        // Hide other games content (no animation needed for emergency cleanup)
-        if (this.otherGamesContent) {
-            this.otherGamesContent.style.display = 'none';
-            this.otherGamesContent.style.opacity = '0';
+        // Hide other games box (no animation needed for emergency cleanup)
+        if (this.otherGamesBox) {
+            this.otherGamesBox.style.display = 'none';
+            this.otherGamesBox.style.opacity = '0';
         }
     }
 
@@ -174,34 +192,24 @@ class ModeCoordinator {
         // Switch state
         this.stateManager.setMode('CURRENT_GAME');
         
-        // Measure actual current game content height (content is already rendered)
-        // Make it temporarily visible to measure if needed
-        const wasHidden = this.currentGameContent.style.display === 'none';
-        if (wasHidden) {
+        // Fade out other games box
+        if (this.otherGamesBox) {
+            this.otherGamesBox.style.transition = 'opacity 0.8s ease';
+            this.otherGamesBox.style.opacity = '0';
+            await new Promise(resolve => setTimeout(resolve, 800));
+            this.otherGamesBox.style.display = 'none';
+        }
+        
+        // Fade in current game box (no fixed height - grows naturally with content!)
+        if (this.currentGameBox) {
+            this.currentGameBox.style.display = 'block';
+            this.currentGameBox.style.opacity = '0';
             this.currentGameContent.style.display = 'block';
-            this.currentGameContent.style.opacity = '0';
+            void this.currentGameBox.offsetHeight;
+            this.currentGameBox.style.transition = 'opacity 0.8s ease';
+            this.currentGameBox.style.opacity = '1';
+            await new Promise(resolve => setTimeout(resolve, 800));
         }
-        
-        // Force layout calculation
-        void this.currentGameContent.offsetHeight;
-        
-        // Measure actual content
-        const contentHeight = this.currentGameContent.scrollHeight;
-        const boxPadding = 31; // 13px top + 18px bottom
-        const newHeight = contentHeight + boxPadding;
-        
-        // Restore state if needed
-        if (wasHidden) {
-            this.currentGameContent.style.display = 'none';
-            this.currentGameContent.style.opacity = '1';
-        }
-        
-        // Transition back to current game content (this handles the fade out/in)
-        await this.unifiedBoxAnimator.transitionContent(
-            this.otherGamesContent,
-            this.currentGameContent,
-            newHeight
-        );
     }
 
     /**

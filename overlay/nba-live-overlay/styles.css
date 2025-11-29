@@ -55,25 +55,38 @@ body {
 }
 
 /* Unified Overlay Box - Blue Neon Theme */
-.unified-overlay-box {
+/* Shared box styles */
+.current-game-box,
+.other-games-box {
     position: fixed;
-    top: 470px; /* Fixed center point */
-    transform: translateY(-50%); /* Auto-center based on height */
     left: 20px;
     z-index: 10;
     background: rgba(10, 20, 40, 0.85);
     backdrop-filter: blur(10px);
-    padding: 13px 15.5px 18px 15.5px; /* Adjusted padding */
+    padding: 13px 15.5px 18px 15.5px;
     border-radius: 16px;
-    width: 190px; /* Adjusted width */
-    height: 180px; /* Initial height */
+    width: 190px;
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
     display: none; /* Hidden by default, shown by JavaScript */
     border: 1px solid rgba(59, 130, 246, 0.55);
     opacity: 1.0;
     overflow: visible;
-    /* Smooth transition for height only - transform handles centering */
+}
+
+/* Current Game Box - Top-anchored (grows from bottom for MVP) */
+.current-game-box {
+    top: 370px; /* Fixed top position */
+    /* No transform - anchored at top, grows downward naturally */
+    /* No default height - let content determine size */
     transition: height 0.4s ease-out;
+}
+
+/* Other Games Box - Center-anchored (grows from both sides) */
+.other-games-box {
+    top: 470px; /* Fixed center point */
+    transform: translateY(-50%); /* Auto-center based on height */
+    /* Height set dynamically during transitions */
+    transition: top 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), height 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Content wrappers */
@@ -438,7 +451,8 @@ body {
 }
 
 /* Transition animations */
-.unified-overlay-box.transitioning {
+.current-game-box.transitioning,
+.other-games-box.transitioning {
     pointer-events: none;
 }
 
@@ -589,7 +603,7 @@ body {
 
 /* ==================== OTHER GAMES CONTENT ==================== */
 
-/* Other games content is now inside unified-overlay-box */
+/* Other games content is now inside other-games-box */
 /* No separate container styling needed - uses parent box styles */
 
 .game-in-card {

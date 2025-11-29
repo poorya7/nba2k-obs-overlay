@@ -109,7 +109,7 @@ class OtherGamesController {
             const newHeight = this.maxHeightCache[gamesOnThisPage];
             
             // Check if we need to resize (or if we're already at the correct height)
-            const box = document.querySelector('.unified-overlay-box');
+            const box = document.querySelector('.other-games-box');
             const currentHeight = parseInt(box.style.height) || 180;
             const needsResize = currentHeight !== newHeight;
             

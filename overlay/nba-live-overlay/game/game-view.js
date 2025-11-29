@@ -31,16 +31,16 @@ class GameView {
             gameStatus: document.querySelector('[data-status]'),
             liveIndicator: document.querySelector('.live-indicator'),
             teamsContainer: document.querySelector('.teams'),
-            unifiedBox: document.querySelector('.unified-overlay-box'),
-            currentGameContent: document.querySelector('.current-game-content')
+            currentGameBox: document.getElementById('currentGameBox'),
+            currentGameContent: document.getElementById('currentGameContent')
         };
         
         // Validate critical DOM elements exist
-        if (!this.elements.unifiedBox) {
-            throw new Error('GameView: .unified-overlay-box element not found in DOM');
+        if (!this.elements.currentGameBox) {
+            throw new Error('GameView: #currentGameBox element not found in DOM');
         }
         if (!this.elements.currentGameContent) {
-            throw new Error('GameView: .current-game-content element not found in DOM');
+            throw new Error('GameView: #currentGameContent element not found in DOM');
         }
         if (!this.elements.teamsContainer) {
             throw new Error('GameView: .teams element not found in DOM');
@@ -58,13 +58,12 @@ class GameView {
      * @returns {void}
      */
     show() {
-        // Show unified box
-        if (this.elements.unifiedBox) {
-            this.elements.unifiedBox.style.display = 'block';
-            // Fade in box - use max resize duration as default
-            const resizeDuration = (UnifiedBoxAnimator.TIMING.RESIZE_MAX_DURATION / 1000) + 's';
-            this.elements.unifiedBox.style.transition = `top ${resizeDuration} ease-out, height ${resizeDuration} ease-out, opacity 0.3s ease-in`;
-            this.elements.unifiedBox.style.opacity = '1';
+        // Show current game box
+        if (this.elements.currentGameBox) {
+            this.elements.currentGameBox.style.display = 'block';
+            // Fade in box
+            this.elements.currentGameBox.style.transition = 'opacity 0.3s ease-in';
+            this.elements.currentGameBox.style.opacity = '1';
         }
         
         // Show and fade in current game content
@@ -86,39 +85,20 @@ class GameView {
      * @returns {void}
      */
     setInitialHeightFromContent() {
-        if (!this.elements.unifiedBox || !this.elements.currentGameContent) {
+        // Current game box doesn't need explicit height - it grows naturally with content
+        // Just make sure it's ready to display
+        if (!this.elements.currentGameBox || !this.elements.currentGameContent) {
             return;
         }
         
-        // Make elements visible but transparent so we can measure them
-        this.elements.unifiedBox.style.display = 'block';
-        this.elements.unifiedBox.style.opacity = '0';
+        // Make elements visible but transparent so initial render is ready
+        this.elements.currentGameBox.style.display = 'block';
+        this.elements.currentGameBox.style.opacity = '0';
         this.elements.currentGameContent.style.display = 'block';
         this.elements.currentGameContent.style.opacity = '0';
         
         // Force browser to calculate layout
         void this.elements.currentGameContent.offsetHeight;
-        
-        // Measure the actual rendered content height
-        const contentHeight = this.elements.currentGameContent.scrollHeight;
-        
-        // Add box padding (from CSS: 13px top + 18px bottom)
-        const boxPadding = 31;
-        const totalHeight = contentHeight + boxPadding;
-        
-        // Disable transition temporarily for instant initial sizing
-        const originalTransition = this.elements.unifiedBox.style.transition;
-        this.elements.unifiedBox.style.transition = 'none';
-        
-        // Set the box height to fit the content perfectly (no animation)
-        this.elements.unifiedBox.style.height = totalHeight + 'px';
-        
-        // Force reflow to apply the instant height change
-        void this.elements.unifiedBox.offsetHeight;
-        
-        // Re-enable transitions for future animations (use max resize duration as default)
-        const resizeDuration = (UnifiedBoxAnimator.TIMING.RESIZE_MAX_DURATION / 1000) + 's';
-        this.elements.unifiedBox.style.transition = originalTransition || `top ${resizeDuration} ease-out, height ${resizeDuration} ease-out`;
     }
 
     /**
@@ -139,8 +119,8 @@ class GameView {
                 if (this.elements.currentGameContent) {
                     this.elements.currentGameContent.style.display = 'none';
                 }
-                if (this.elements.unifiedBox) {
-                    this.elements.unifiedBox.style.display = 'none';
+                if (this.elements.currentGameBox) {
+                    this.elements.currentGameBox.style.display = 'none';
                 }
             }, 300);
             

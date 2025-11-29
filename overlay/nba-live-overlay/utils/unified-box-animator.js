@@ -22,19 +22,19 @@ const TIMING = {
 
 class UnifiedBoxAnimator {
     constructor() {
-        this.box = null;
+        this.otherGamesBox = null;
     }
 
     /**
-     * Initialize the animator with the box element
-     * @param {HTMLElement} boxElement - The unified overlay box element
+     * Initialize the animator with the other games box element
+     * @param {HTMLElement} otherGamesBoxElement - The other games box element
      */
-    init(boxElement) {
-        if (!boxElement) {
-            throw new Error('UnifiedBoxAnimator: boxElement is required');
+    init(otherGamesBoxElement) {
+        if (!otherGamesBoxElement) {
+            throw new Error('UnifiedBoxAnimator: otherGamesBoxElement is required');
         }
         
-        this.box = boxElement;
+        this.otherGamesBox = otherGamesBoxElement;
         
         // Note: Transition timing is set dynamically in resizeBox() based on height change
     }
@@ -47,14 +47,14 @@ class UnifiedBoxAnimator {
      */
     resizeBox(newHeight) {
         return new Promise((resolve) => {
-            if (!this.box) {
-                console.error('UnifiedBoxAnimator: Box not initialized');
+            if (!this.otherGamesBox) {
+                console.error('UnifiedBoxAnimator: Other games box not initialized');
                 resolve();
                 return;
             }
 
             // Check current height
-            const currentHeight = parseInt(this.box.style.height) || 180;
+            const currentHeight = parseInt(this.otherGamesBox.style.height) || 180;
             
             // Calculate height difference
             const heightDifference = Math.abs(newHeight - currentHeight);
@@ -76,7 +76,7 @@ class UnifiedBoxAnimator {
 
             // Set transition with calculated duration
             // Using cubic-bezier for more pronounced ease-out (starts fast, decelerates smoothly)
-            this.box.style.transition = `top ${finalDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94), height ${finalDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            this.otherGamesBox.style.transition = `top ${finalDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94), height ${finalDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 
             // Set up transitionend listener with fallback timeout
             let resolved = false;
@@ -91,19 +91,19 @@ class UnifiedBoxAnimator {
             };
 
             // Listen for transition end
-            this.box.addEventListener('transitionend', handleEnd, { once: true });
+            this.otherGamesBox.addEventListener('transitionend', handleEnd, { once: true });
             
             // Fallback timeout in case transitionend doesn't fire
             setTimeout(() => {
                 if (!resolved) {
                     resolved = true;
-                    this.box.removeEventListener('transitionend', handleEnd);
+                    this.otherGamesBox.removeEventListener('transitionend', handleEnd);
                     resolve();
                 }
             }, finalDuration + 50);
             
             // Set new height (CSS transform keeps it centered automatically!)
-            this.box.style.height = newHeight + 'px';
+            this.otherGamesBox.style.height = newHeight + 'px';
         });
     }
 
@@ -201,6 +201,100 @@ class UnifiedBoxAnimator {
     }
 
     /**
+     * Fade out the entire box (background + content)
+     * @param {number} duration - Fade duration in ms (optional, defaults to TIMING.CONTENT_FADE_OUT)
+     * @returns {Promise} Resolves after fade completes
+     */
+    fadeOutBox(duration = TIMING.CONTENT_FADE_OUT) {
+        return new Promise((resolve) => {
+            if (!this.box) {
+                console.error('UnifiedBoxAnimator: Box not initialized');
+                resolve();
+                return;
+            }
+
+            // Check if already faded out
+            const currentOpacity = parseFloat(window.getComputedStyle(this.box).opacity);
+            if (currentOpacity === 0) {
+                resolve();
+                return;
+            }
+
+            // Set up transitionend listener with fallback
+            let resolved = false;
+            const handleEnd = (e) => {
+                if (e && e.propertyName !== 'opacity') return;
+                
+                if (!resolved) {
+                    resolved = true;
+                    resolve();
+                }
+            };
+
+            this.otherGamesBox.addEventListener('transitionend', handleEnd, { once: true });
+            
+            // Fallback timeout
+            setTimeout(() => {
+                if (!resolved) {
+                    resolved = true;
+                    this.otherGamesBox.removeEventListener('transitionend', handleEnd);
+                    resolve();
+                }
+            }, duration + 50);
+
+            this.otherGamesBox.style.transition = `opacity ${duration / 1000}s ease`;
+            this.otherGamesBox.style.opacity = '0';
+        });
+    }
+
+    /**
+     * Fade in the entire box (background + content)
+     * @param {number} duration - Fade duration in ms (optional, defaults to TIMING.CONTENT_FADE_IN)
+     * @returns {Promise} Resolves after fade completes
+     */
+    fadeInBox(duration = TIMING.CONTENT_FADE_IN) {
+        return new Promise((resolve) => {
+            if (!this.box) {
+                console.error('UnifiedBoxAnimator: Box not initialized');
+                resolve();
+                return;
+            }
+
+            // Check if already faded in
+            const currentOpacity = parseFloat(window.getComputedStyle(this.box).opacity);
+            if (currentOpacity === 1) {
+                resolve();
+                return;
+            }
+
+            // Set up transitionend listener with fallback
+            let resolved = false;
+            const handleEnd = (e) => {
+                if (e && e.propertyName !== 'opacity') return;
+                
+                if (!resolved) {
+                    resolved = true;
+                    resolve();
+                }
+            };
+
+            this.otherGamesBox.addEventListener('transitionend', handleEnd, { once: true });
+            
+            // Fallback timeout
+            setTimeout(() => {
+                if (!resolved) {
+                    resolved = true;
+                    this.otherGamesBox.removeEventListener('transitionend', handleEnd);
+                    resolve();
+                }
+            }, duration + 50);
+
+            this.otherGamesBox.style.transition = `opacity ${duration / 1000}s ease`;
+            this.otherGamesBox.style.opacity = '1';
+        });
+    }
+
+    /**
      * Full transition: fade out old content, resize box, fade in new content
      * Resize duration is proportional to height change, fade timings are fixed
      * @param {HTMLElement} oldContent - Content to hide
@@ -211,7 +305,7 @@ class UnifiedBoxAnimator {
     async transitionContent(oldContent, newContent, newHeight) {
         try {
             // Calculate resize duration FIRST (so we can match fade-in to it)
-            const currentHeight = parseInt(this.box.style.height) || 180;
+            const currentHeight = parseInt(this.otherGamesBox.style.height) || 180;
             const heightDifference = Math.abs(newHeight - currentHeight);
             const resizeDuration = Math.min(
                 (heightDifference / TIMING.RESIZE_MAX_HEIGHT_DIFF) * TIMING.RESIZE_MAX_DURATION,
@@ -255,6 +349,38 @@ class UnifiedBoxAnimator {
             
         } catch (error) {
             console.error('UnifiedBoxAnimator: Error during transition:', error);
+        }
+    }
+
+    /**
+     * Mode transition: fade out entire box, resize + swap content instantly, fade in entire box
+     * Used when switching between CURRENT_GAME and OTHER_GAMES modes
+     * @param {HTMLElement} oldContent - Content to hide
+     * @param {HTMLElement} newContent - Content to show
+     * @param {number} newHeight - New box height
+     * @returns {Promise} Resolves after full transition completes
+     */
+    async transitionModes(oldContent, newContent, newHeight) {
+        try {
+            const MODE_TRANSITION_DURATION = 800; // Slower fade for mode transitions (800ms)
+            
+            // Fade out entire box (background + content)
+            await this.fadeOutBox(MODE_TRANSITION_DURATION);
+            
+            // While invisible: swap content and resize box instantly
+            if (oldContent) {
+                oldContent.style.display = 'none';
+            }
+            if (newContent) {
+                newContent.style.display = 'block';
+                newContent.style.opacity = '1'; // Content should be visible when box fades in
+            }
+            
+            // NOTE: transitionModes is no longer used with the two-box system
+            // Keeping for backwards compatibility but this method should not be called
+            
+        } catch (error) {
+            console.error('UnifiedBoxAnimator: Error during mode transition:', error);
         }
     }
 
