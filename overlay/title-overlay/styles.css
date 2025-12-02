@@ -23,7 +23,7 @@ body {
     letter-spacing: 2.5px;
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7),
                  0 2px 4px rgba(0, 0, 0, 0.6);
-    opacity: 0.18;
+    opacity: 0.22;
 }
 
 .sub-text {
@@ -35,6 +35,6 @@ body {
     margin-top: 3px;
     margin-left: 8px;
     text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
-    opacity: 0.20;
+    opacity: 0.24;
 }
 

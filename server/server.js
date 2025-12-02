@@ -299,7 +299,10 @@ const server = http.createServer(async (req, res) => {
       }
     } else {
       console.log('   ✅ Served successfully');
-      res.writeHead(200, { 'Content-Type': contentType });
+      const headers = { 'Content-Type': contentType };
+      // Add CORS headers for local development
+      headers['Access-Control-Allow-Origin'] = '*';
+      res.writeHead(200, headers);
       res.end(content, 'utf-8');
     }
   });
