@@ -225,7 +225,9 @@ const server = http.createServer(async (req, res) => {
   }
 
   // Parse URL (server runs from project root)
-  let filePath = '.' + req.url;
+  // Strip query string from URL
+  const urlWithoutQuery = req.url.split('?')[0];
+  let filePath = '.' + urlWithoutQuery;
   
   // Default routes
   if (filePath === './') {

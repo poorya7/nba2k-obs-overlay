@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22 - Stacked Card (Reversed) - Badge Numbers - Handle Version</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; background: transparent; }
+
+        .social-wrapper {
+            position: fixed; bottom: 15px; right: 20px; z-index: 10;
+        }
+        .social-bg {
+            position: absolute;
+            width: 1591px;
+            height: 82px;
+            background: linear-gradient(90deg, transparent 0%, #1e293b 15%, #1e293b 100%);
+            border-radius: 0 16px 16px 0;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translate(-69px, 12px);
+        }
+        .social-bg::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 70%;
+            border: 2px solid #2a4a7a;
+            border-left: none;
+            border-radius: 0 16px 16px 0;
+            mask: linear-gradient(90deg, transparent 0%, black 20%);
+            -webkit-mask: linear-gradient(90deg, transparent 0%, black 20%);
+        }
+        .social-content {
+            position: relative; z-index: 2;
+            padding: 20px 28px;
+            display: flex; align-items: center; gap: 30.4px;
+            transform: translate(-40.3px, 14px);
+        }
+        .right-section { display: flex; flex-direction: column; gap: 4px; transform: translateY(2px); }
+        .handle { 
+            font-size: 29.5px; 
+            font-weight: 500; 
+            text-transform: lowercase; 
+            letter-spacing: 0.2px; 
+            transform: translate(47.9px, 14.9px);
+        }
+        .handle .at { color: #4AB5E8; }
+        .handle .hush { color: #4AB5E8; }
+        .handle .swish { color: #EB9861; }
+        .subtitle { 
+            font-size: 19px; 
+            color: rgba(180, 190, 200, 0.7); 
+            font-weight: 700; 
+            letter-spacing: 6.8px; 
+            text-transform: lowercase; 
+            opacity: 0.73;
+            transform: translate(6.3px, -43.8px);
+        }
+        .divider { width: 2px; height: 60px; background: #3b5998; }
+        .socials { display: flex; gap: 11.1px; }
+        .social-item { display: flex; flex-direction: column; align-items: center; gap: -10px; opacity: 0.69; }
+        .social-item i {
+            font-size: 23px;
+            width: 35.5px; height: 35.5px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0, 145, 145, 0.2); border-radius: 12px;
+        }
+        .social-item.ig i { color: #00f2f2; }
+        .social-item.yt i { color: #00f2f2; }
+        .social-item.tt i { color: #00f2f2; }
+        .social-item .count { 
+            font-size: 18px; 
+            color: #00f2f2; 
+            font-weight: 700; 
+            background: rgba(0, 145, 145, 0.2);
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 145, 145, 0.4);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="social-wrapper">
+        <div class="social-bg"></div>
+        <div class="social-content">
+            <div class="socials">
+                <div class="social-item ig"><i class="fab fa-instagram"></i><span class="count">147.2K</span></div>
+                <div class="social-item yt"><i class="fab fa-youtube"></i><span class="count">5.1K</span></div>
+                <div class="social-item tt"><i class="fab fa-tiktok"></i><span class="count">510</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="right-section">
+                <span class="handle"><span class="at">@</span><span class="hush">hush</span><span class="swish">swish</span></span>
+                <span class="subtitle">silent basketball</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

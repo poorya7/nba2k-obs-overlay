@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socials Overlay Gallery - Choose Your Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .variation {
+            background: #161614;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .variation:hover {
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-4px);
+        }
+
+        .variation-preview {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .variation-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .variation-info {
+            padding: 20px;
+        }
+
+        .variation-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .variation-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 12px;
+        }
+
+        .variation-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .select-button {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+
+        .select-button:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .category-header {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+            margin-bottom: -10px;
+        }
+
+        .category-header h2 {
+            font-size: 24px;
+            color: rgba(255,255,255,0.9);
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Socials Overlay Gallery</h1>
+        <p>Browse different color schemes, placements, and styles. Click to view full screen.</p>
+    </div>
+
+    <div class="gallery">
+        <!-- Final Options -->
+        <div class="category-header">
+            <h2>Socials Overlay Options</h2>
+        </div>
+
+        <!-- Option 1 -->
+        <div class="variation">
+            <div class="variation-preview">
+                <iframe src="socials-variations/option1.html"></iframe>
+            </div>
+            <div class="variation-info">
+                <div class="variation-title">Option 1 - Basketball Energy (Bottom Right)</div>
+                <div class="variation-desc">Orange & blue diagonal cut with neon glow. Basketball court inspired with vibrant colors</div>
+                <div class="variation-tags">
+                    <span class="tag">Bottom Right</span>
+                    <span class="tag">Orange/Blue</span>
+                    <span class="tag">High Energy</span>
+                </div>
+                <button class="select-button" onclick="openFull('option1')">View Fullscreen</button>
+            </div>
+        </div>
+
+        <!-- Option 1 -->
+        <div class="variation">
+            <div class="variation-preview">
+                <iframe src="socials-variations/option1.html"></iframe>
+            </div>
+            <div class="variation-info">
+                <div class="variation-title">Option 1 - Corner Burst (Bottom Right)</div>
+                <div class="variation-desc">Explosive radial design from corner. Angled clip-path with glowing edges. Perfect for scoreboard overlay</div>
+                <div class="variation-tags">
+                    <span class="tag">Bottom Right</span>
+                    <span class="tag">Explosive</span>
+                    <span class="tag">Radial</span>
+                </div>
+                <button class="select-button" onclick="openFull('option1')">View Fullscreen</button>
+            </div>
+        </div>
+
+        <!-- Option 8A -->
+        <div class="variation">
+            <div class="variation-preview">
+                <iframe src="socials-variations/option8a.html"></iframe>
+            </div>
+            <div class="variation-info">
+                <div class="variation-title">Option 8A - Diagonal Slash Bars</div>
+                <div class="variation-desc">Angled diagonal bars slashing across. Multiple border glows with depth and shadow layers</div>
+                <div class="variation-tags">
+                    <span class="tag">Middle Right</span>
+                    <span class="tag">Diagonal</span>
+                    <span class="tag">Layered</span>
+                </div>
+                <button class="select-button" onclick="openFull('option8a')">View Fullscreen</button>
+            </div>
+        </div>
+
+        <!-- Option 8B -->
+        <div class="variation">
+            <div class="variation-preview">
+                <iframe src="socials-variations/option8b.html"></iframe>
+            </div>
+            <div class="variation-info">
+                <div class="variation-title">Option 8B - Orbit Circles</div>
+                <div class="variation-desc">Circular pill design with orbital rotation feel. Radial gradients with 3D depth shadows</div>
+                <div class="variation-tags">
+                    <span class="tag">Middle Right</span>
+                    <span class="tag">Circular</span>
+                    <span class="tag">3D Depth</span>
+                </div>
+                <button class="select-button" onclick="openFull('option8b')">View Fullscreen</button>
+            </div>
+        </div>
+
+        <!-- Option 8C -->
+        <div class="variation">
+            <div class="variation-preview">
+                <iframe src="socials-variations/option8c.html"></iframe>
+            </div>
+            <div class="variation-info">
+                <div class="variation-title">Option 8C - Neon Pipes</div>
+                <div class="variation-desc">Horizontal glowing pipes/tubes. Multi-layer neon glow with inner lighting effects</div>
+                <div class="variation-tags">
+                    <span class="tag">Middle Right</span>
+                    <span class="tag">Neon</span>
+                    <span class="tag">Tubes</span>
+                </div>
+                <button class="select-button" onclick="openFull('option8c')">View Fullscreen</button>
+            </div>
+        </div>
+
+        <!-- Option 8D -->
+        <div class="variation">
+            <div class="variation-preview">
+                <iframe src="socials-variations/option8d.html"></iframe>
+            </div>
+            <div class="variation-info">
+                <div class="variation-title">Option 8D - Stadium Scoreboard</div>
+                <div class="variation-desc">LED arena scoreboard style. Monospace fonts with digital glow. Dark panel with lit segments</div>
+                <div class="variation-tags">
+                    <span class="tag">Middle Right</span>
+                    <span class="tag">LED</span>
+                    <span class="tag">Digital</span>
+                </div>
+                <button class="select-button" onclick="openFull('option8d')">View Fullscreen</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openFull(option) {
+            window.open(`socials-variations/${option}.html`, '_blank');
+        }
+    </script>
+</body>
+</html>
+
+
+

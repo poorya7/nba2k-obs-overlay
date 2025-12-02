@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Overlay Preview - Press F11 for Fullscreen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .preview-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+        }
+
+        /* Video background */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Overlay iframes */
+        .overlay-frame {
+            position: absolute;
+            border: none;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .title-overlay-frame {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 10;
+        }
+
+        .game-stats-frame {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+        }
+
+        .socials-frame {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 30;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <!-- Video Background -->
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="/overlay/game.mp4" type="video/mp4">
+            Your browser does not support video.
+        </video>
+
+        <!-- Title Overlay -->
+        <iframe 
+            class="overlay-frame title-overlay-frame" 
+            src="/overlay/title-overlay/index.html">
+        </iframe>
+
+        <!-- Game Stats Overlay -->
+        <iframe 
+            class="overlay-frame game-stats-frame" 
+            src="/overlay/nba-live-overlay/index.html">
+        </iframe>
+
+        <!-- Socials Overlay with Final Values -->
+        <iframe 
+            class="overlay-frame socials-frame"
+            src="/overlay/socials-overlay/index.html?layout=bottom-right&scale=0.7&iconSize=44&fontSize=29&gap=58&padding=10&borderExtension=350&borderRadius=0&bottom=23&right=-115&numberSize=27&verticalGap=0">
+        </iframe>
+    </div>
+
+    <script>
+        console.log('Final Overlay Preview Loaded');
+        console.log('Socials Settings: scale=0.7, iconSize=44px, fontSize=29px, gap=58px, padding=10px, borderExtension=350px, borderRadius=0px, bottom=23px, right=-115px, numberSize=27px, verticalGap=0px');
+    </script>
+</body>
+</html>
+
