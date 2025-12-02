@@ -24,13 +24,13 @@ The NBA 2K OBS Overlay is a local web application that displays live NBA game st
 └───────────────────┬─────────────────────┬───────────────────┘
                     │                     │
         ┌───────────▼─────────┐  ┌───────▼───────────┐
-        │   Control Dashboard  │  │  OBS Game Overlay │
+        │   Control Dashboard  │  │  OBS Overlays     │
         │   /dashboard         │  │  /overlay/        │
-        │                      │  │  nba-live         │
-        │  • Game/mode select  │  │                   │
-        │  • Quarter controls  │  │  • Unified view   │
-        │  • Simulation mode   │  │  • Current game   │
-        │  • Saves to server   │  │  • Other games    │
+        │                      │  │                   │
+        │  • Game/mode select  │  │  • nba-live       │
+        │  • Quarter controls  │  │  • title          │
+        │  • Simulation mode   │  │  • socials        │
+        │  • Saves to server   │  │                   │
         └──────────────────────┘  └───────────────────┘
 ```
 
@@ -140,7 +140,14 @@ nba2k-obs-overlay/
 │   │   ├── styles.css         # All styling
 │   │   └── (references ../_shared/)
 │   │
-│   └── _tests/                # Social media overlay tests
+│   ├── title-overlay/         # Channel branding overlay
+│   │   ├── index.html         # Static title display
+│   │   └── styles.css         # Styling
+│   │
+│   ├── socials-overlay/       # Social media overlay
+│   │   └── index.html         # Static socials display
+│   │
+│   └── _tests/                # Test pages
 │
 ├── docs/                       # Documentation
 ├── backup_old_dashboard/      # Previous implementation (archived)
@@ -161,7 +168,9 @@ nba2k-obs-overlay/
 
 **Routes:**
 - `/` or `/dashboard` → Dashboard UI
-- `/overlay/nba-live` → Unified OBS Overlay (maps to `/overlay/nba-live-overlay/index.html`)
+- `/overlay/nba-live` → Unified NBA OBS Overlay (maps to `/overlay/nba-live-overlay/index.html`)
+- `/overlay/title` → Title overlay (maps to `/overlay/title-overlay/index.html`)
+- `/overlay/socials` → Socials overlay (maps to `/overlay/socials-overlay/index.html`)
 - `/api/selected-game` → Game selection API (GET/POST)
 - `/api/quarter` → Quarter tracking API (GET/POST)
 - `/api/simulation` → Simulation control API (GET/POST)

@@ -55,6 +55,18 @@ http://localhost:3000/dashboard
 - **Current game mode**: Your selected game with live stats, MVP overlays
 - **Other games mode**: Scores from other NBA games (automatically appears 1 minute into each quarter, cycles through all games, then returns to current game)
 
+**Title Overlay:**
+1. In OBS, add another **Browser Source**
+2. Set URL to: `http://localhost:3000/overlay/title`
+3. Set Width: `1920` Height: `1080`
+4. Position at top-left corner for channel branding
+
+**Socials Overlay:**
+1. In OBS, add another **Browser Source**
+2. Set URL to: `http://localhost:3000/overlay/socials`
+3. Set Width: `1920` Height: `1080`
+4. Position at bottom-right corner for social media handles and follower counts
+
 ## 📁 Project Structure
 
 ```
@@ -100,9 +112,12 @@ nba2k-obs-overlay/
 │   │   ├── index.html             # Single entry point
 │   │   └── styles.css             # All styling
 │   │
-│   └── title-overlay/             # Channel branding
-│       ├── index.html
-│       └── styles.css
+│   ├── title-overlay/             # Channel branding
+│   │   ├── index.html
+│   │   └── styles.css
+│   │
+│   └── socials-overlay/           # Social media handles & followers
+│       └── index.html
 │
 └── docs/                          # Complete documentation
     ├── FEATURES.md

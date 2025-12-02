@@ -33,6 +33,21 @@ Complete list of features in the NBA 2K OBS Overlay system.
 
 ## Overlay Features
 
+### Title Overlay
+Simple static overlay for channel branding:
+- **Position**: Top-left corner
+- **Content**: Channel name "Silent Basketball" and "ASMR" subtitle
+- **Design**: Subtle, low-opacity text with shadows
+- **OBS Ready**: Transparent background, ready to use
+
+### Socials Overlay
+Static overlay displaying social media information:
+- **Position**: Bottom-right corner
+- **Content**: Social media icons (Instagram, YouTube, TikTok) with follower counts
+- **Handle Display**: Shows "@hushswish" with color-coded branding
+- **Design**: Gradient background with cyan/blue theme, matches ASMR aesthetic
+- **OBS Ready**: Transparent background, ready to use
+
 ### Unified NBA Live Overlay
 Single overlay that automatically switches between two display modes:
 
@@ -142,11 +157,23 @@ Integrated into the unified overlay:
 
 ### Browser Source Settings
 Recommended settings for OBS:
+
+**NBA Live Overlay:**
 - **Width**: 1920 pixels
 - **Height**: 1080 pixels
 - **URL**: `http://localhost:3000/overlay/nba-live`
 - **Shutdown source when not visible**: Yes (saves resources)
 - **Refresh browser when scene becomes active**: No (maintains state)
+
+**Title Overlay:**
+- **Width**: 1920 pixels
+- **Height**: 1080 pixels
+- **URL**: `http://localhost:3000/overlay/title`
+
+**Socials Overlay:**
+- **Width**: 1920 pixels
+- **Height**: 1080 pixels
+- **URL**: `http://localhost:3000/overlay/socials`
 
 ### Styling
 - **Full Transparency**: No visible background
