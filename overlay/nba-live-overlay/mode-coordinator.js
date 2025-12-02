@@ -123,6 +123,12 @@ class ModeCoordinator {
             // Sort and get sorted games (don't render yet)
             const sortedGames = this.otherGamesController.sortGames(otherGames);
             
+            // Reset gamesContainer opacity (may be 0 from interrupted transition)
+            const gamesContainer = document.getElementById('games-container');
+            if (gamesContainer) {
+                gamesContainer.style.opacity = '1';
+            }
+            
             // Render first page of SORTED games
             this.otherGamesView.renderGames(sortedGames, 0, 3);
             
@@ -178,6 +184,12 @@ class ModeCoordinator {
         // Switch back to current game mode
         this.stateManager.setMode('CURRENT_GAME');
         
+        // Reset gamesContainer opacity for next use
+        const gamesContainer = document.getElementById('games-container');
+        if (gamesContainer) {
+            gamesContainer.style.opacity = '1';
+        }
+        
         // Hide other games box (no animation needed for emergency cleanup)
         if (this.otherGamesBox) {
             this.otherGamesBox.style.display = 'none';
@@ -208,8 +220,16 @@ class ModeCoordinator {
             this.otherGamesBox.style.display = 'none';
         }
         
+        // Show current game box immediately (don't wait for poll cycle)
+        if (this.currentGameBox) {
+            this.currentGameBox.style.display = 'block';
+            this.currentGameBox.style.opacity = '0';
+            void this.currentGameBox.offsetHeight;
+            this.currentGameBox.style.transition = 'opacity 0.8s ease';
+            this.currentGameBox.style.opacity = '1';
+        }
+        
         // Clear game data cache to force re-render with fresh data
-        // Don't show current game box here - let normal update cycle show it with fresh data
         this.stateManager.setGameData(null);
         
         // Clear game state to force MVP re-evaluation
