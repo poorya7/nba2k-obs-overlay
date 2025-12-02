@@ -24,6 +24,7 @@ async function init() {
   document.getElementById('simRadio').addEventListener('change', handleModeChange);
   document.getElementById('simMVPToggle').addEventListener('click', toggleSimMVP);
   document.getElementById('fastForwardToggle').addEventListener('click', toggleFastForward);
+  document.getElementById('socialsToggle').addEventListener('click', toggleSocials);
   
   // Quarter tracking event listeners
   document.querySelectorAll('.quarter-btn').forEach(btn => {
@@ -43,6 +44,7 @@ async function init() {
   // Load state from server
   await loadSimulationState();
   await loadQuarterState();
+  await loadSocialsState();
   
   // Load games (don't restore selection on initial load)
   await loadGames(false);
@@ -150,6 +152,7 @@ function showQuarterSection() {
  */
 function hideQuarterSection() {
   document.getElementById('quarterSection').style.display = 'none';
+  document.getElementById('socialsSection').style.display = 'none';
   // Clear button states when hiding
   document.querySelectorAll('.quarter-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById('doneBtn').classList.remove('active');
@@ -164,9 +167,12 @@ async function loadQuarterState() {
     currentQuarter = data.current;
     updateQuarterUI();
     
-    // Start timer if a quarter is active (not 'done')
+    // Show socials section if quarter is active
     if (currentQuarter && currentQuarter !== 'done') {
+      document.getElementById('socialsSection').style.display = 'block';
       startTimer();
+    } else {
+      document.getElementById('socialsSection').style.display = 'none';
     }
   }
 }
@@ -186,6 +192,8 @@ async function handleQuarterClick(quarter) {
     currentQuarter = null;
     await api.setQuarter(null);
     stopTimer();
+    // Hide socials section when quarter is cleared
+    document.getElementById('socialsSection').style.display = 'none';
   } else {
     // Switching quarters - this resets everything
     // The overlay will detect the quarter change and:
@@ -195,6 +203,9 @@ async function handleQuarterClick(quarter) {
     currentQuarter = quarter;
     await api.setQuarter(quarter);
     startTimer();
+    
+    // Show socials section when quarter is selected
+    document.getElementById('socialsSection').style.display = 'block';
     
     // If in sim mode, set simulation state to 'live' with this quarter
     const simRadio = document.getElementById('simRadio');
@@ -226,8 +237,6 @@ async function handleSimStateClick(state) {
     
     // Stop timer and just show the state name
     stopTimer();
-    const timerElement = document.getElementById('quarterTimer');
-    if (timerElement) timerElement.classList.add('show');
     updateTimerDisplay();
   }
   
@@ -242,11 +251,15 @@ async function handleGameDone() {
   if (currentQuarter === 'done') {
     currentQuarter = null;
     await api.setQuarter(null);
+    // Hide socials section when cleared
+    document.getElementById('socialsSection').style.display = 'none';
   } else {
     currentQuarter = 'done';
     currentSimState = null; // Clear sim state
     await api.setQuarter(null); // Send null to server (no active quarter)
     stopTimer();
+    // Hide socials section when Done is clicked
+    document.getElementById('socialsSection').style.display = 'none';
   }
   updateQuarterUI();
 }
@@ -429,6 +442,8 @@ async function handleModeChange() {
   currentSimState = null;
   await api.setQuarter(null);
   stopTimer();
+  // Hide socials section when mode changes
+  document.getElementById('socialsSection').style.display = 'none';
   
   // Reset MVP button when switching to live mode
   if (!isSimMode) {
@@ -538,6 +553,32 @@ async function toggleFastForward() {
   await api.setSimulation({ timeMultiplier: currentTimeMultiplier });
 }
 
+/**
+ * Toggle socials overlay button
+ */
+async function toggleSocials() {
+  const socialsBtn = document.getElementById('socialsToggle');
+  const isOn = socialsBtn.dataset.state === 'on';
+  
+  // Toggle state
+  const newState = !isOn;
+  socialsBtn.dataset.state = newState ? 'on' : 'off';
+  
+  // Update server
+  await api.setSocialsEnabled(newState);
+}
+
+/**
+ * Load socials state from server
+ */
+async function loadSocialsState() {
+  const data = await api.getSocialsEnabled();
+  if (data && data.enabled !== undefined) {
+    const socialsBtn = document.getElementById('socialsToggle');
+    socialsBtn.dataset.state = data.enabled ? 'on' : 'off';
+  }
+}
+
 
 // ==================== QUARTER TIMER ====================
 
@@ -569,9 +610,9 @@ function stopTimer() {
   }
   
   // Hide timer display
-  const timerElement = document.getElementById('quarterTimer');
-  if (timerElement) {
-    timerElement.classList.remove('show');
+  const timerSection = document.getElementById('timerSection');
+  if (timerSection) {
+    timerSection.classList.remove('show');
   }
 }
 
@@ -581,23 +622,24 @@ function stopTimer() {
 function updateTimerDisplay() {
   if (!quarterStartTime) return;
   
+  const timerSection = document.getElementById('timerSection');
   const timerElement = document.getElementById('quarterTimer');
   const timerValue = document.getElementById('timerValue');
   
-  if (!timerElement || !timerValue) return;
+  if (!timerElement || !timerValue || !timerSection) return;
   
   // If in special state, show state name instead of timer
   if (currentSimState === 'pregame') {
     timerValue.textContent = 'Pre-Game';
-    timerElement.classList.add('show');
+    timerSection.classList.add('show');
     return;
   } else if (currentSimState === 'halftime') {
     timerValue.textContent = 'Halftime';
-    timerElement.classList.add('show');
+    timerSection.classList.add('show');
     return;
   } else if (currentSimState === 'final') {
     timerValue.textContent = 'Final';
-    timerElement.classList.add('show');
+    timerSection.classList.add('show');
     return;
   }
   
@@ -612,8 +654,8 @@ function updateTimerDisplay() {
   const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   timerValue.textContent = timeStr;
   
-  // Show timer
-  timerElement.classList.add('show');
+  // Show timer section
+  timerSection.classList.add('show');
 }
 
 // Initialize on page load

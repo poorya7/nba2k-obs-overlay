@@ -12,6 +12,11 @@
 
         .social-wrapper {
             position: fixed; bottom: 15px; right: 20px; z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .social-wrapper.visible {
+            opacity: 1;
         }
         .social-bg {
             position: absolute;
@@ -99,6 +104,137 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Socials Overlay Controller
+        // Shows overlay when quarter is active (Q1-Q4) AND toggle is enabled
+        // 10s delay for Q1 only
+
+        const API_BASE = window.location.origin;
+        const SHOW_DELAY_Q1 = 10000; // 10 seconds for Q1
+        const POLL_INTERVAL = 1000; // Check every second
+
+        let lastQuarter = null;
+        let lastSocialsEnabled = false;
+        let delayTimeout = null;
+        let isVisible = false;
+        let initialized = false;
+
+        async function checkOverlayState() {
+            try {
+                // Check both quarter and socials toggle
+                const [quarterRes, socialsRes] = await Promise.all([
+                    fetch(`${API_BASE}/api/quarter`),
+                    fetch(`${API_BASE}/api/socials-enabled`)
+                ]);
+
+                if (!quarterRes.ok || !socialsRes.ok) return;
+
+                const quarterData = await quarterRes.json();
+                const socialsData = await socialsRes.json();
+                const wrapper = document.querySelector('.social-wrapper');
+
+                const socialsEnabled = socialsData && socialsData.enabled === true;
+                const quarterActive = quarterData && quarterData.current && quarterData.startTime;
+
+                // On first check, update lastSocialsEnabled and ensure hidden if toggle is off
+                if (!initialized) {
+                    lastSocialsEnabled = socialsEnabled;
+                    initialized = true;
+                    // On first load, always hide if toggle is disabled (don't trust initial state)
+                    if (!socialsEnabled) {
+                        hideOverlay(wrapper);
+                        return;
+                    }
+                }
+
+                // If toggle is disabled or no quarter - hide immediately
+                if (!socialsEnabled || !quarterActive) {
+                    if (delayTimeout) {
+                        clearTimeout(delayTimeout);
+                        delayTimeout = null;
+                    }
+                    hideOverlay(wrapper);
+                    lastQuarter = null;
+                    lastSocialsEnabled = socialsEnabled;
+                    return;
+                }
+
+                // Both conditions met - check quarter logic
+                const quarterChanged = quarterData.current !== lastQuarter;
+                const toggleChanged = socialsEnabled !== lastSocialsEnabled;
+
+                // If toggle was just disabled, hide immediately
+                if (toggleChanged && !socialsEnabled) {
+                    lastSocialsEnabled = socialsEnabled;
+                    return; // Already hidden above
+                }
+
+                // Reset delay if quarter or toggle changed
+                if (quarterChanged || toggleChanged) {
+                    if (delayTimeout) {
+                        clearTimeout(delayTimeout);
+                        delayTimeout = null;
+                    }
+                    lastQuarter = quarterData.current;
+                    lastSocialsEnabled = socialsEnabled;
+
+                    // Only proceed if toggle is enabled
+                    if (socialsEnabled) {
+                        // Q1: Wait 10 seconds before showing
+                        if (quarterData.current === 'Q1') {
+                            const elapsed = Date.now() - quarterData.startTime;
+                            const remaining = Math.max(0, SHOW_DELAY_Q1 - elapsed);
+                            
+                            if (remaining > 0) {
+                                delayTimeout = setTimeout(() => {
+                                    showOverlay(wrapper);
+                                    delayTimeout = null;
+                                }, remaining);
+                            } else {
+                                // Already past 10 seconds, show immediately
+                                showOverlay(wrapper);
+                            }
+                        } else {
+                            // Q2, Q3, Q4: Show immediately
+                            showOverlay(wrapper);
+                        }
+                    }
+                } else if (socialsEnabled && isVisible === false && !delayTimeout) {
+                    // If already visible state matches but overlay isn't showing, make sure it shows
+                    // This handles the case where the state was already correct on page load
+                    if (quarterData.current === 'Q1') {
+                        const elapsed = Date.now() - quarterData.startTime;
+                        if (elapsed >= SHOW_DELAY_Q1) {
+                            showOverlay(wrapper);
+                        }
+                    } else {
+                        showOverlay(wrapper);
+                    }
+                }
+            } catch (error) {
+                // Silently handle errors
+            }
+        }
+
+        function showOverlay(wrapper) {
+            if (!isVisible) {
+                wrapper.classList.add('visible');
+                isVisible = true;
+            }
+        }
+
+        function hideOverlay(wrapper) {
+            if (isVisible) {
+                wrapper.classList.remove('visible');
+                isVisible = false;
+            }
+        }
+
+        // Start polling
+        checkOverlayState();
+        setInterval(checkOverlayState, POLL_INTERVAL);
+    </script>
 </body>
 </html>
 

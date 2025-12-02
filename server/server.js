@@ -22,6 +22,7 @@ class StateStore {
       current: null,        // 'Q1', 'Q2', 'Q3', 'Q4', or null
       startTime: null       // timestamp when quarter started
     };
+    this.socialsEnabled = true;  // Socials overlay toggle (default: enabled)
   }
 
   // Game selection
@@ -51,6 +52,10 @@ class StateStore {
     this.quarter.current = null;
     this.quarter.startTime = null;
   }
+
+  // Socials overlay
+  getSocialsEnabled() { return this.socialsEnabled; }
+  setSocialsEnabled(enabled) { this.socialsEnabled = enabled; }
 }
 
 const state = new StateStore();
@@ -168,6 +173,23 @@ async function handlePostQuarter(req, res) {
   }
 }
 
+// GET /api/socials-enabled
+function handleGetSocialsEnabled(req, res) {
+  sendJson(res, 200, { enabled: state.getSocialsEnabled() });
+}
+
+// POST /api/socials-enabled
+async function handlePostSocialsEnabled(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    state.setSocialsEnabled(data.enabled === true);
+    console.log('📱 Socials overlay:', data.enabled ? 'ENABLED' : 'DISABLED');
+    sendJson(res, 200, { success: true });
+  } catch (error) {
+    sendJson(res, 400, { error: error.message });
+  }
+}
+
 // ==================== STATIC FILE SERVING ====================
 
 // MIME types for different file extensions
@@ -193,7 +215,9 @@ const API_ROUTES = {
   'GET /api/simulation': handleGetSimulation,
   'POST /api/simulation': handlePostSimulation,
   'GET /api/quarter': handleGetQuarter,
-  'POST /api/quarter': handlePostQuarter
+  'POST /api/quarter': handlePostQuarter,
+  'GET /api/socials-enabled': handleGetSocialsEnabled,
+  'POST /api/socials-enabled': handlePostSocialsEnabled
 };
 
 /**
@@ -242,6 +266,8 @@ const server = http.createServer(async (req, res) => {
     filePath = './overlay/other-games-overlay/index.html';
   } else if (filePath === './overlay/title' || filePath === './overlay/title/') {
     filePath = './overlay/title-overlay/index.html';
+  } else if (filePath === './overlay/socials' || filePath === './overlay/socials/') {
+    filePath = './overlay/socials-overlay/index.html';
   } else if (filePath === './test' || filePath === './test/') {
     filePath = './overlay/_tests/index.html';
   } else if (filePath === './design-test' || filePath === './design-test/') {
@@ -287,6 +313,7 @@ server.listen(PORT, () => {
   console.log('🔴 NBA Live (NEW): http://localhost:' + PORT + '/overlay/nba-live');
   console.log('🎯 Other Games (OBS): http://localhost:' + PORT + '/overlay/other-games');
   console.log('📝 Title Overlay (OBS): http://localhost:' + PORT + '/overlay/title');
+  console.log('📱 Socials Overlay (OBS): http://localhost:' + PORT + '/overlay/socials');
   console.log('🎨 Design Tester: http://localhost:' + PORT + '/design-test');
   console.log('');
   console.log('Press Ctrl+C to stop the server');

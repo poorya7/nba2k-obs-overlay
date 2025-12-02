@@ -308,13 +308,25 @@
     }
 
     /* Quarter Timer */
-    .quarter-timer {
-      margin-top: 12px;
+    #timerSection {
       display: none;
     }
 
-    .quarter-timer.show {
+    #timerSection.show {
       display: block;
+    }
+
+    .quarter-timer {
+      margin-top: 0;
+    }
+
+    .timer-value {
+      font-size: 25px;
+      font-weight: 700;
+      color: #667eea;
+      font-variant-numeric: tabular-nums;
+      font-family: 'Courier New', monospace;
+      text-align: center;
     }
 
     .timer-value {
@@ -415,7 +427,16 @@
       </div>
     </div>
 
-    <!-- Quarter Tracking (shown for both modes) -->
+    <!-- Today's Games Dropdown (shown when Live Game mode is active) -->
+    <div class="section" id="liveGameSection">
+      <label class="section-title" for="gameSelect">Today's Games</label>
+      <select id="gameSelect">
+        <option value="">Loading games...</option>
+      </select>
+      <div id="loading" class="loading">Select a game to see preview</div>
+    </div>
+
+    <!-- Quarter Tracking Buttons (shown for both modes) -->
     <div class="section" id="quarterSection" style="display: none;">
       <div class="quarter-buttons">
         <button class="quarter-btn" data-quarter="Q1">Q1</button>
@@ -430,11 +451,25 @@
         <button class="quarter-btn" data-state="halftime">Halftime</button>
         <button class="quarter-btn" data-state="final">Final</button>
       </div>
-      
-      <!-- Quarter Timer -->
+    </div>
+
+    <!-- Socials Overlay Toggle (shown when game is selected) -->
+    <div class="section" id="socialsSection" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button id="socialsToggle" class="mvp-toggle-btn" data-state="on" style="width: 100%;">Socials Overlay</button>
+      </div>
+    </div>
+
+    <!-- Quarter Timer -->
+    <div class="section" id="timerSection">
       <div class="quarter-timer" id="quarterTimer">
         <div class="timer-value" id="timerValue">00:00</div>
       </div>
+    </div>
+
+    <!-- Game Preview Box -->
+    <div class="section" id="previewSection">
+      <div id="preview" class="preview-card"></div>
     </div>
 
     <!-- Simulation Controls (shown when Simulation mode is active) -->
@@ -443,16 +478,6 @@
         <button id="simMVPToggle" class="mvp-toggle-btn" data-state="off" style="flex: 1;">MVP</button>
         <button id="fastForwardToggle" class="mvp-toggle-btn" data-state="off" style="flex: 1;">Fast Forward</button>
       </div>
-    </div>
-
-    <!-- Live Game Selection (shown when Live Game mode is active) -->
-    <div class="section" id="liveGameSection">
-      <label class="section-title" for="gameSelect">Today's Games</label>
-      <select id="gameSelect">
-        <option value="">Loading games...</option>
-      </select>
-      <div id="loading" class="loading">Select a game to see preview</div>
-      <div id="preview" class="preview-card"></div>
     </div>
   </div>
 

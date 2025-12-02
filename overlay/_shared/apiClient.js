@@ -65,5 +65,13 @@ class ApiClient {
     return this.post('/api/quarter', { quarter });
   }
 
+  async getSocialsEnabled() {
+    return this.get('/api/socials-enabled');
+  }
+
+  async setSocialsEnabled(enabled) {
+    return this.post('/api/socials-enabled', { enabled });
+  }
+
 }
 

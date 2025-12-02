@@ -64,6 +64,15 @@
             z-index: 20;
         }
 
+        /* Socials overlay - bottom right */
+        .socials-overlay-frame {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 150px;
+            z-index: 15;
+        }
+
     </style>
 </head>
 <body>
@@ -86,6 +95,13 @@
             class="overlay-frame game-stats-frame" 
             src="../nba-live-overlay/index.html"
             id="game-stats-frame">
+        </iframe>
+
+        <!-- Socials Overlay (bottom right) -->
+        <iframe 
+            class="overlay-frame socials-overlay-frame" 
+            src="../socials-overlay/index.html"
+            id="socials-frame">
         </iframe>
     </div>
 
