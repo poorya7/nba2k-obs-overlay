@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Chat Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; background: #0a0a0a; position: relative; overflow: hidden; }
+        .gameplay-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+
+        /* OVERLAYS */
+        .title-overlay { position: fixed; top: 26px; left: 26px; z-index: 5; }
+        .title-main { font-family: 'Russo One', sans-serif; font-size: 41.5px; color: #ffffff; letter-spacing: 2.5px; text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); opacity: 0.22; }
+        .title-sub { font-family: 'Russo One', sans-serif; font-size: 22.3px; color: #ffffff; letter-spacing: 8.5px; margin-top: 3px; margin-left: 8px; text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7); opacity: 0.24; }
+
+        .nba-overlay { position: fixed; left: 20px; top: 370px; z-index: 5; background: rgba(10, 20, 40, 1.0); backdrop-filter: blur(10px); padding: 13px 15.5px 18px 15.5px; border-radius: 16px; width: 190px; box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34); border: 1px solid rgba(59, 130, 246, 0.55); }
+        .live-indicator { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 17px; }
+        .live-dot { width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 12px rgba(59, 130, 246, 0.8); animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .live-text { font-size: 16.5px; font-weight: 600; color: #60a5fa; letter-spacing: 1.5px; }
+        .nba-label { font-size: 13px; color: #93c5fd; letter-spacing: 1.5px; }
+        .teams { display: flex; flex-direction: column; gap: 3px; margin: 13px 0 11px 0; }
+        .team { display: flex; align-items: center; justify-content: space-between; }
+        .team-left { display: flex; align-items: center; gap: 11px; }
+        .team-logo { width: 48px; height: 48px; }
+        .team-abbr { font-size: 16.26px; font-weight: 500; color: #bfdbfe; }
+        .score { font-size: 16.94px; font-weight: 600; color: #dbeafe; }
+        .game-status { font-size: 15.42px; color: #86efac; margin-top: 11px; letter-spacing: 1.5px; text-align: center; }
+
+        .socials-overlay { position: fixed; bottom: 15px; right: 20px; z-index: 5; }
+        .social-bg { position: absolute; width: 420px; height: 82px; background: linear-gradient(90deg, transparent 0%, #1e293b 15%, #1e293b 100%); border-radius: 0 16px 16px 0; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .social-bg::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 70%; border: 2px solid #2a4a7a; border-left: none; border-radius: 0 16px 16px 0; mask: linear-gradient(90deg, transparent 0%, black 20%); -webkit-mask: linear-gradient(90deg, transparent 0%, black 20%); }
+        .social-content { position: relative; z-index: 2; padding: 20px 28px; display: flex; align-items: center; gap: 20px; }
+        .socials-icons { display: flex; gap: 11px; }
+        .social-item { display: flex; flex-direction: column; align-items: center; gap: 2px; opacity: 0.69; }
+        .social-item i { font-size: 23px; width: 35.5px; height: 35.5px; display: flex; align-items: center; justify-content: center; background: rgba(0, 145, 145, 0.2); border-radius: 12px; color: #00f2f2; }
+        .social-item .count { font-size: 18px; color: #00f2f2; font-weight: 700; background: rgba(0, 145, 145, 0.2); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(0, 145, 145, 0.4); }
+        .social-divider { width: 2px; height: 60px; background: #3b5998; }
+        .social-handle { font-size: 29.5px; font-weight: 500; }
+        .social-handle .at, .social-handle .hush { color: #4AB5E8; }
+        .social-handle .swish { color: #EB9861; }
+        .social-subtitle { font-size: 15px; color: rgba(180, 190, 200, 0.7); font-weight: 700; letter-spacing: 4px; opacity: 0.73; margin-top: -5px; }
+
+        /* CHAT CANVAS - matches Style 2 placement */
+        .chat-canvas {
+            position: fixed;
+            right: 19px;
+            top: 38px;
+            width: 281px;
+            height: 500px;
+            z-index: 10;
+        }
+
+        /* Message element - moves and scales */
+        .message {
+            position: absolute;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            transform-origin: center center;
+        }
+
+        /* Stage state - full size, centered at bottom */
+        .message.staged {
+            top: 400px;
+            left: 50px;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* List state - EXACT Style 2 Floating Minimal + profile pic */
+        /* All changes transition smoothly from staged state */
+        .message.in-list {
+            left: 0;
+            transform: scale(1);
+            z-index: 1;
+        }
+
+        .message.in-list.ghost-style .entry {
+            gap: 6px;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .message.in-list.ghost-style .content {
+            background: rgba(100, 100, 150, 0);
+            backdrop-filter: blur(0px);
+            padding: 0;
+            border-radius: 0;
+            font-size: 15px;
+            color: #f1f5f9;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8),
+                         0 1px 3px rgba(0, 0, 0, 0.9);
+        }
+
+        .message.in-list.ghost-style .user {
+            color: #22d3ee;
+            font-weight: 600;
+            margin-right: 6px;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+
+        .message.in-list.ghost-style .profile-pic {
+            width: 24px;
+            height: 24px;
+            filter: drop-shadow(0 0 0 transparent);
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        /* Exiting state - exits upward */
+        .message.exiting {
+            opacity: 0 !important;
+            transform: translateX(0) translateY(-30px) scale(0.5);
+        }
+
+        /* Entry container */
+        .message .entry {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* =====================================================
+           GHOST STYLE - Fades in spooky with profile pic
+           All elements have transitions for smooth morphing
+           ===================================================== */
+        .ghost-style .entry {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            line-height: 1.4;
+            opacity: 0.9;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Only apply entry animation when staged */
+        .ghost-style.staged .entry {
+            animation: ghostEntry 1s ease-out forwards;
+        }
+
+        .ghost-style .profile-pic {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            filter: drop-shadow(0 0 20px rgba(200, 200, 255, 0.6));
+            border: 2px solid rgba(200, 200, 255, 0.4);
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ghost-style .content {
+            background: rgba(100, 100, 150, 0.4);
+            backdrop-filter: blur(5px);
+            color: #f1f5f9;
+            padding: 12px 18px;
+            border-radius: 15px;
+            font-size: 15px;
+            line-height: 1.4;
+            filter: blur(0);
+            opacity: 1;
+            transform: scale(1);
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Only apply entry animation when staged */
+        .ghost-style.staged .content {
+            animation: ghostEntry 1s ease-out forwards;
+        }
+
+        .ghost-style .user {
+            color: #a5b4fc;
+            font-weight: 600;
+            margin-right: 8px;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes ghostEntry {
+            0% {
+                opacity: 0;
+                filter: blur(15px);
+                transform: scale(1.3);
+            }
+            100% {
+                opacity: 0.9;
+                filter: blur(0);
+                transform: scale(1);
+            }
+        }
+
+        @keyframes ghostFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+    </style>
+</head>
+<body>
+    <video class="gameplay-video" autoplay loop muted><source src="../game.mp4" type="video/mp4"></video>
+
+    <div class="title-overlay"><div class="title-main">Silent Basketball</div><div class="title-sub">A S M R</div></div>
+
+    <div class="nba-overlay">
+        <div class="live-indicator"><div class="live-dot"></div><span class="live-text">Live</span><span class="nba-label">NBA</span></div>
+        <div class="teams">
+            <div class="team"><div class="team-left"><img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png" alt="LAL"><div class="team-abbr">LAL</div></div><div class="score">87</div></div>
+            <div class="team"><div class="team-left"><img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/gs.png" alt="GSW"><div class="team-abbr">GSW</div></div><div class="score">82</div></div>
+        </div>
+        <div class="game-status">Q3 · 8:42</div>
+    </div>
+
+    <div class="socials-overlay">
+        <div class="social-bg"></div>
+        <div class="social-content">
+            <div class="socials-icons">
+                <div class="social-item"><i class="fab fa-instagram"></i><span class="count">147.2K</span></div>
+                <div class="social-item"><i class="fab fa-youtube"></i><span class="count">5.1K</span></div>
+                <div class="social-item"><i class="fab fa-tiktok"></i><span class="count">510</span></div>
+            </div>
+            <div class="social-divider"></div>
+            <div style="display: flex; flex-direction: column;">
+                <span class="social-handle"><span class="at">@</span><span class="hush">hush</span><span class="swish">swish</span></span>
+                <span class="social-subtitle">silent basketball</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ghost Chat Canvas -->
+    <div class="chat-canvas" id="ghost-chat"></div>
+
+    <script>
+        // Sample messages with actual profile pics (using random avatar services)
+        const msgs = [
+            { user: 'hushswish_fan', text: 'so relaxing', avatar: 'https://i.pravatar.cc/150?img=1' },
+            { user: 'bball_lover', text: 'love the vibes', avatar: 'https://i.pravatar.cc/150?img=3' },
+            { user: 'nightowl23', text: 'whos winning?', avatar: 'https://i.pravatar.cc/150?img=5' },
+            { user: 'silent_hoops', text: 'W stream', avatar: 'https://i.pravatar.cc/150?img=7' },
+            { user: 'asmr_addict', text: 'keyboard sounds 🔥', avatar: 'https://i.pravatar.cc/150?img=8' },
+            { user: 'chill_gamer', text: 'perfect vibes', avatar: 'https://i.pravatar.cc/150?img=11' },
+            { user: 'zen_master', text: 'so peaceful', avatar: 'https://i.pravatar.cc/150?img=12' },
+            { user: 'newbie_here', text: 'first time!', avatar: 'https://i.pravatar.cc/150?img=14' },
+            { user: 'lol_master', text: 'lmaooo 💀', avatar: 'https://i.pravatar.cc/150?img=15' },
+            { user: 'RTB_18', text: 'pullin up', avatar: 'https://i.pravatar.cc/150?img=18' },
+            { user: 'KaponeONS', text: 'how to be 99 overall', avatar: 'https://i.pravatar.cc/150?img=20' },
+            { user: 'Thatchy2k', text: 'YOUUUU', avatar: 'https://i.pravatar.cc/150?img=22' },
+        ];
+
+        const userColors = ['#f472b6', '#fb923c', '#a78bfa', '#4ade80', '#60a5fa', '#fbbf24', '#f87171', '#2dd4bf', '#c084fc', '#fb7185', '#34d399', '#38bdf8'];
+
+        const MAX = 5, STAGE_TIME = 1800, LIST_ITEM_HEIGHT = 32;
+        let msgIdx = 0;
+        const messagesList = [];
+
+        function getGhostHTML(msg, color) {
+            return `<img class="profile-pic" src="${msg.avatar}" alt="${msg.user}"><div class="content"><span class="user" style="color:${color}">${msg.user}</span>${msg.text}</div>`;
+        }
+
+        function updateListPositions() {
+            const baseY = 40; // Start from top
+            
+            messagesList.forEach((el, index) => {
+                if (!el.classList.contains('exiting')) {
+                    // Oldest at top (index 0), newest at bottom
+                    const y = baseY + (index * LIST_ITEM_HEIGHT);
+                    el.style.top = y + 'px';
+                    // Consistent opacity (handled by CSS opacity: 0.9)
+                }
+            });
+        }
+
+        function addMessage() {
+            const msg = msgs[msgIdx % msgs.length];
+            const color = userColors[msgIdx % userColors.length];
+            msgIdx++;
+
+            const canvas = document.getElementById('ghost-chat');
+
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message staged ghost-style';
+            messageEl.innerHTML = `<div class="entry">${getGhostHTML(msg, color)}</div>`;
+            
+            canvas.appendChild(messageEl);
+
+            // After stage time, transition to list
+            setTimeout(() => {
+                messagesList.push(messageEl);
+                
+                // Calculate position FIRST (before class change)
+                const baseY = 40;
+                const newIndex = messagesList.length - 1;
+                const targetY = baseY + (newIndex * LIST_ITEM_HEIGHT);
+                
+                // Set position, THEN add class - both transitions start together
+                messageEl.style.top = targetY + 'px';
+                messageEl.classList.add('in-list');
+                messageEl.classList.remove('staged');
+                
+                // Update other messages positions
+                updateListPositions();
+
+                // Remove old messages if too many
+                while (messagesList.length > MAX) {
+                    const oldest = messagesList.shift();
+                    oldest.classList.add('exiting');
+                    setTimeout(() => oldest.remove(), 1200);
+                }
+            }, STAGE_TIME);
+        }
+
+        // Start
+        addMessage();
+        setInterval(addMessage, 3500);
+    </script>
+</body>
+</html>
