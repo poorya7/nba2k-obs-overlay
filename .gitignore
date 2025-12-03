@@ -5,6 +5,9 @@ node_modules/
 .env
 .env.local
 
+# Config files with API keys
+overlay/config.js
+
 # IDE
 .vscode/
 .idea/
