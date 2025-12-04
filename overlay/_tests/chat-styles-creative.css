@@ -1,14 +1,19 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    --stage-x: -243px;
-    --stage-y: 538px;
-    --pic-staged: 138px;
+    --stage-x: -162px;
+    --stage-y: 621px;
+    --pic-staged: 115px;
     --pic-list: 17px;
-    --font-size: 21px;
+    --font-size: 19px;
     --entry-gap: 6px;
-    --bg-padding: 16px;
-    --bg-alpha: 0.4;
+    --bg-padding: 15px;
+    --bg-alpha: 0.88;
+    --bg-color-r: 10;
+    --bg-color-g: 20;
+    --bg-color-b: 40;
+    --stage-width: 420px;
+    --list-width: 280px;
 }
 
 body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; background: #0a0a0a; position: relative; overflow: hidden; }
@@ -94,6 +99,15 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
     cursor: pointer;
 }
 
+.control-group input[type="color"] {
+    width: 100%;
+    height: 32px;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.5);
+    cursor: pointer;
+}
+
 .control-divider {
     height: 1px;
     background: rgba(59, 130, 246, 0.2);
@@ -115,7 +129,7 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
 /* CHAT CANVAS - positioned dynamically */
 .chat-canvas {
     position: fixed;
-    right: 31px;
+    right: 5px;
     top: 5px;
     width: 281px;
     height: 500px;
@@ -125,9 +139,16 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
 /* Message element - moves and scales */
 .message {
     position: absolute;
-    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
-    transform-origin: center center;
+    transform-origin: left center;
+    width: fit-content;
+}
+
+/* Only transition during state changes */
+.message.staged,
+.message.in-list,
+.message.exiting {
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Stage state - full size, centered at bottom */
@@ -153,7 +174,7 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
 }
 
 .message.in-list.ghost-style .content {
-    background: rgba(10, 20, 40, 0);
+    background: rgba(var(--bg-color-r), var(--bg-color-g), var(--bg-color-b), 0);
     backdrop-filter: blur(0px);
     padding: 0;
     border-radius: 0;
@@ -161,6 +182,7 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
     color: #f1f5f9;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8),
                  0 1px 3px rgba(0, 0, 0, 0.9);
+    width: var(--list-width);
 }
 
 .message.in-list.ghost-style .user {
@@ -186,9 +208,15 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
 
 /* Entry container */
 .message .entry {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 12px;
+}
+
+/* Only transition during state changes */
+.message.staged .entry,
+.message.in-list .entry,
+.message.exiting .entry {
     transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -197,10 +225,15 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
    All elements have transitions for smooth morphing
    ===================================================== */
 .ghost-style .entry {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 15px;
     line-height: 1.4;
+}
+
+/* Transition only during state changes */
+.ghost-style.staged .entry,
+.ghost-style.in-list .entry {
     transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -226,6 +259,11 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
     object-fit: cover;
     filter: drop-shadow(0 0 20px rgba(200, 200, 255, 0.6));
     border: 2px solid rgba(200, 200, 255, 0.4);
+}
+
+/* Transition only during state changes */
+.ghost-style.staged .profile-pic,
+.ghost-style.in-list .profile-pic {
     transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -235,7 +273,15 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
     border-radius: 15px;
     font-size: var(--font-size);
     line-height: 1.4;
-    background: rgba(10, 20, 40, var(--bg-alpha));
+    background: rgba(var(--bg-color-r), var(--bg-color-g), var(--bg-color-b), var(--bg-alpha));
+    max-width: var(--stage-width);
+    box-sizing: border-box;
+}
+
+/* Transition only during state changes */
+.ghost-style.staged .content,
+.ghost-style.in-list .content,
+.ghost-style.entering .content {
     transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -257,6 +303,11 @@ body { font-family: 'Inter', sans-serif; width: 1920px; height: 1080px; backgrou
     color: #a5b4fc;
     font-weight: 600;
     margin-right: 8px;
+}
+
+/* Transition only during state changes */
+.ghost-style.staged .user,
+.ghost-style.in-list .user {
     transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
