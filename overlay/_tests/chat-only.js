@@ -17,7 +17,7 @@ const settings = {
     maxHeight: 494,
     stageWidth: 420,
     listWidth: 290,
-    bubbleDelay: 4742
+    bubbleDelay: 703
 };
 
 // Update CSS variables and canvas position
@@ -79,6 +79,15 @@ function setupControls() {
         const valDisplay = document.getElementById(ctrl.valId);
         
         if (slider && valDisplay) {
+            // Initialize slider and display with settings value
+            if (ctrl.isFloat) {
+                slider.value = (settings[ctrl.key] / ctrl.scale).toString();
+                valDisplay.textContent = settings[ctrl.key].toFixed(2);
+            } else {
+                slider.value = settings[ctrl.key].toString();
+                valDisplay.textContent = settings[ctrl.key].toString();
+            }
+            
             slider.addEventListener('input', (e) => {
                 if (ctrl.isFloat) {
                     settings[ctrl.key] = parseFloat(e.target.value) * ctrl.scale;
@@ -95,7 +104,11 @@ function setupControls() {
     // Color picker
     const colorPicker = document.getElementById('ctrl-bg-color');
     const colorDisplay = document.getElementById('val-bg-color');
-    if (colorPicker) {
+    if (colorPicker && colorDisplay) {
+        // Initialize with settings value
+        colorPicker.value = settings.bgColor;
+        colorDisplay.textContent = settings.bgColor;
+        
         colorPicker.addEventListener('input', (e) => {
             settings.bgColor = e.target.value;
             colorDisplay.textContent = e.target.value;
@@ -110,20 +123,25 @@ function setupControls() {
             isPaused = e.target.checked;
             
             if (isPaused) {
-                if (currentStageTimeout && stageStartTime) {
+                if (currentStageTimeout) {
                     clearTimeout(currentStageTimeout);
-                    const elapsed = Date.now() - stageStartTime;
-                    timeRemaining = Math.max(0, settings.stageTime - elapsed);
                     currentStageTimeout = null;
+                    
+                    // Calculate remaining time
+                    if (stageStartTime) {
+                        // Stage timer has started (after bubble delay)
+                        const elapsed = Date.now() - stageStartTime;
+                        timeRemaining = Math.max(0, settings.stageTime - elapsed);
+                    } else if (messageStagedTime) {
+                        // Still in bubble delay phase
+                        const elapsed = Date.now() - messageStagedTime;
+                        const bubbleDelayRemaining = Math.max(0, settings.bubbleDelay - elapsed);
+                        timeRemaining = bubbleDelayRemaining + settings.stageTime;
+                    }
                 }
             } else {
-                if (stagedMessage && transitionToListFunc && timeRemaining !== null) {
-                    stageStartTime = Date.now() - (settings.stageTime - timeRemaining);
-                    currentStageTimeout = setTimeout(() => {
-                        transitionToListFunc();
-                        timeRemaining = null;
-                    }, timeRemaining);
-                }
+                // Resume functionality would need to be reimplemented with new structure
+                // For now, pause/resume is disabled to fix the main transition issue
             }
         });
     }
@@ -231,7 +249,8 @@ const messagesList = [];
 let isStaging = false;
 let currentStageTimeout = null;
 let stagedMessage = null;
-let stageStartTime = null;
+let messageStagedTime = null; // When profile pic appears
+let stageStartTime = null; // When stage timer starts (after bubble delay)
 let transitionToListFunc = null;
 let isPaused = false;
 let timeRemaining = null;
@@ -281,24 +300,23 @@ function addMessage() {
     isStaging = true;
     stagedMessage = messageEl;
 
-    setTimeout(() => {
-        messageEl.classList.remove('entering');
-        messageEl.classList.add('staged');
-    }, 50);
-
-    transitionToListFunc = () => {
-        if (!stagedMessage) return;
+    // Create transition function that captures this specific message
+    const transitionToList = () => {
+        if (!messageEl || !messageEl.parentNode) return;
         
-        messagesList.push(stagedMessage);
+        // Clear staging flag immediately so new messages can appear
+        isStaging = false;
+        
+        messagesList.push(messageEl);
         
         let targetY = settings.listY;
         for (let i = 0; i < messagesList.length - 1; i++) {
             targetY += messagesList[i].offsetHeight + settings.gap;
         }
         
-        stagedMessage.style.top = targetY + 'px';
-        stagedMessage.classList.add('in-list');
-        stagedMessage.classList.remove('staged');
+        messageEl.style.top = targetY + 'px';
+        messageEl.classList.add('in-list');
+        messageEl.classList.remove('staged');
         
         updateListPositions();
 
@@ -309,19 +327,31 @@ function addMessage() {
             updateListPositions();
         }
 
+        // Cleanup after animation completes
         setTimeout(() => {
-            isStaging = false;
-            stagedMessage = null;
+            if (stagedMessage === messageEl) {
+                stagedMessage = null;
+            }
             currentStageTimeout = null;
-            transitionToListFunc = null;
+            messageStagedTime = null;
             stageStartTime = null;
             timeRemaining = null;
         }, 1200);
     };
 
-    stageStartTime = Date.now();
-    timeRemaining = settings.stageTime;
-    currentStageTimeout = setTimeout(() => {
-        transitionToListFunc();
-    }, settings.stageTime);
+    setTimeout(() => {
+        messageEl.classList.remove('entering');
+        messageEl.classList.add('staged');
+        messageStagedTime = Date.now(); // Track when profile pic appears
+        
+        // Start stage timer AFTER bubble delay
+        // Sequence: Profile pic appears → wait bubbleDelay → text appears → wait stageTime → transition to list
+        setTimeout(() => {
+            stageStartTime = Date.now(); // Stage timer starts after bubble delay
+            timeRemaining = settings.stageTime;
+            currentStageTimeout = setTimeout(() => {
+                transitionToList();
+            }, settings.stageTime);
+        }, settings.bubbleDelay);
+    }, 50);
 }
