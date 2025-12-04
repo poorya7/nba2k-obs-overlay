@@ -104,10 +104,11 @@ class GameView {
     /**
      * Hide the overlay (when no game selected) with fade out
      * Hides both the content and the unified box
+     * @param {boolean} force - If true, hide even if isVisible is false (for cleanup)
      * @returns {void}
      */
-    hide() {
-        if (this.isVisible) {
+    hide(force = false) {
+        if (this.isVisible || force) {
             // Fade out content first
             if (this.elements.currentGameContent) {
                 this.elements.currentGameContent.style.transition = 'opacity 0.3s ease-out';
@@ -122,7 +123,7 @@ class GameView {
                 if (this.elements.currentGameBox) {
                     this.elements.currentGameBox.style.display = 'none';
                 }
-            }, 300);
+            }, force ? 0 : 300); // Instant hide if forced
             
             this.isVisible = false;
             this.currentState = null;

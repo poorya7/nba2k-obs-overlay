@@ -257,7 +257,7 @@ class AppController {
      * @returns {void}
      */
     resetAndHideOverlay() {
-        this.gameView.hide();
+        this.gameView.hide(true); // Force hide even if isVisible is false
         this.mvpView.hide();
         this.mvpIntegration.clearMVPCache();
         
