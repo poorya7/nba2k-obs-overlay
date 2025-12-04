@@ -15,9 +15,9 @@ const settings = {
     bgAlpha: 0.88,
     bgColor: '#0a1428',
     maxHeight: 494,
-    stageWidth: 420,
+    stageWidth: 260,
     listWidth: 290,
-    bubbleDelay: 703
+    bubbleDelay: 985
 };
 
 // Update CSS variables and canvas position

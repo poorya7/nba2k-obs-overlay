@@ -17,7 +17,7 @@ body {
     --bg-color-r: 10;
     --bg-color-g: 20;
     --bg-color-b: 40;
-    --stage-width: 420px;
+    --stage-width: 260px;
     --list-width: 290px;
     --bubble-delay: 80ms;
 }
@@ -175,15 +175,12 @@ body {
     font-size: var(--stage-font-size);
     line-height: 1.4;
     background: rgba(var(--bg-color-r), var(--bg-color-g), var(--bg-color-b), var(--bg-alpha));
-    max-width: var(--stage-width);
+    width: var(--stage-width);
     box-sizing: border-box;
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Transition only during state changes */
-.ghost-style.in-list .content {
-    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    transition-delay: 0s;
-}
+/* In-list uses base transition (no override needed) */
 
 /* Entering state - initial values for ghost entry effect */
 .ghost-style.entering .content {
