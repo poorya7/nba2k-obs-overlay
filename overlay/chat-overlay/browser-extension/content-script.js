@@ -4,101 +4,6 @@
 (function() {
     'use strict';
     
-    // IMMEDIATE log that should show up before any filtering
-    console.log('🎬 CHAT READER: Extension script starting...');
-
-    // ==================== CONSOLE FILTERING (RUNS FIRST) ====================
-    // Intercept console methods immediately to filter YouTube noise
-    const originalError = console.error;
-    const originalWarn = console.warn;
-    const originalLog = console.log;
-
-    function isYouTubeNoise(message, stackTrace) {
-        const lowerMessage = message.toLowerCase();
-        const fullText = (message + ' ' + (stackTrace || '')).toLowerCase();
-        
-        // Specific YouTube warning patterns
-        const patterns = [
-            'postmessage',
-            'target origin',
-            'content-security-policy',
-            'require-trusted-types-for',
-            'performance.now precision',
-            'legacydatamixin',
-            'legacy elements',
-            'unreachable code after return',
-            'mouseevent.mozpressure',
-            'mouseevent.mozinputsource',
-            'bug1842437',
-            'bugzilla.mozilla.org',
-            'youtube.com-performance-now-precision',
-            'rs=agkmyw',
-            'ht-avvw7qb0xdbuyrhr9rotmuek4ginmb6eoqe6pefu.js',
-            'googlevideo.com',
-            'videoplayback',
-            'http/3 403',
-            'http/3 404',
-            'xhrget'
-        ];
-
-        if (patterns.some(pattern => fullText.includes(pattern))) {
-            return true;
-        }
-
-        // Filter messages from YouTube script files
-        if (fullText.includes('www.youtube.com') || 
-            fullText.includes('youtube.com') ||
-            fullText.includes('googlevideo.com') ||
-            message.match(/[a-zA-Z0-9_-]{15,}\.js(:\d+)?(:\d+)?(\s|$)/i) ||
-            message.match(/[a-zA-Z0-9_-]{10,}-[a-zA-Z0-9_-]{10,}\.js/i)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    // Override console methods to filter YouTube noise
-    console.error = function(...args) {
-        const message = args.join(' ');
-        if (!message.includes('YouTube Live Chat Reader')) {
-            const stackTrace = new Error().stack || '';
-            if (isYouTubeNoise(message, stackTrace)) {
-                return; // Suppress
-            }
-        }
-        originalError.apply(console, args);
-    };
-
-    console.warn = function(...args) {
-        const message = args.join(' ');
-        if (!message.includes('YouTube Live Chat Reader')) {
-            const stackTrace = new Error().stack || '';
-            if (isYouTubeNoise(message, stackTrace)) {
-                return; // Suppress
-            }
-        }
-        originalWarn.apply(console, args);
-    };
-
-    console.log = function(...args) {
-        const message = args.join(' ');
-        // ALWAYS allow messages with our extension prefix
-        if (message.includes('🎬') || message.includes('🔍') || message.includes('✅') || 
-            message.includes('❌') || message.includes('💬') || message.includes('💡') ||
-            message.includes('🔬') || message.includes('📦') || message.includes('🛑') ||
-            message.includes('YouTube Live Chat Reader') || message.includes('CHAT READER')) {
-            originalLog.apply(console, args);
-            return;
-        }
-        // Filter YouTube noise
-        if (message.includes('Content-Security-Policy') || 
-            message.includes('CSP') ||
-            isYouTubeNoise(message)) {
-            return; // Suppress
-        }
-        originalLog.apply(console, args);
-    };
-    // ==================== END CONSOLE FILTERING ====================
 
     // Check if we're on a YouTube watch page
     function isYouTubeWatchPage() {
@@ -121,11 +26,9 @@
 
     // Only initialize if we're on a YouTube watch page
     if (!isYouTubeWatchPage()) {
-        console.log('🎬 CHAT READER: Not a YouTube watch page, exiting');
         return;
     }
 
-    console.log('🎬 CHAT READER: YouTube Live Chat Reader loaded on', window.location.href);
 
     class YouTubeChatReader {
         constructor() {
@@ -152,7 +55,6 @@
                     setTimeout(() => this.start(), 1000);
                 }
             } catch (error) {
-                console.error('❌ CHAT READER: Error initializing chat reader:', error);
             }
         }
 
@@ -164,9 +66,7 @@
             const hasLiveBadge = isLiveStream();
             
             if (hasLiveBadge) {
-                console.log('🔍 CHAT READER: Starting to watch for YouTube live chat (currently live)...');
             } else {
-                console.log('🔍 CHAT READER: Starting to watch for YouTube chat (past stream or scheduled)...');
             }
             this.isActive = true;
             
@@ -179,47 +79,37 @@
             // Also watch for initial chat load
             this.watchForChatContainer();
             } catch (error) {
-                console.error('❌ CHAT READER: Error starting chat reader:', error);
                 this.isActive = false;
             }
     }
 
     diagnosePage() {
-        console.log('🔬 CHAT READER: === DIAGNOSTIC: Scanning page for chat elements ===');
         
         // Look for any elements with "chat" in ID or class
         const chatElements = document.querySelectorAll('[id*="chat"], [class*="chat"], [id*="Chat"], [class*="Chat"]');
-        console.log(`🔬 CHAT READER: Found ${chatElements.length} elements with "chat" in ID/class:`);
         chatElements.forEach((el, idx) => {
             if (idx < 10) { // Only show first 10
-                console.log(`🔬 CHAT READER:   ${idx + 1}. Tag: ${el.tagName}, ID: ${el.id || '(none)'}, Class: ${el.className?.substring(0, 50) || '(none)'}`);
             }
         });
         
         // Look for iframes
         const allIframes = document.querySelectorAll('iframe');
-        console.log(`🔬 CHAT READER: Found ${allIframes.length} iframes on page:`);
         allIframes.forEach((iframe, idx) => {
             const id = iframe.id || '(no id)';
             const src = iframe.src?.substring(0, 80) || '(no src)';
-            console.log(`🔬 CHAT READER:   ${idx + 1}. ID: ${id}, Src: ${src}...`);
         });
         
         // Look for YouTube-specific chat components in main document
         const ytChatElements = document.querySelectorAll('yt-live-chat-app, yt-live-chat-renderer, ytd-live-chat-frame, ytd-live-chat-renderer, yt-live-chat-text-message-renderer');
-        console.log(`🔬 CHAT READER: Found ${ytChatElements.length} YouTube chat components in main document:`);
         ytChatElements.forEach((el, idx) => {
-            console.log(`🔬 CHAT READER:   ${idx + 1}. ${el.tagName}, ID: ${el.id || '(none)'}`);
         });
         
         // Try to access chat iframe
         const chatIframe = document.querySelector('iframe#chatframe');
         if (chatIframe) {
-            console.log(`🔬 CHAT READER: Found iframe#chatframe with src: ${chatIframe.src?.substring(0, 100) || '(no src)'}`);
             try {
                 const iframeDoc = chatIframe.contentDocument || chatIframe.contentWindow?.document;
                 if (iframeDoc) {
-                    console.log(`🔬 CHAT READER: ✅ Can access iframe document!`);
                     
                     // Check for messages with different selectors
                     const selectors = [
@@ -232,15 +122,12 @@
                         '[class*="message"]'
                     ];
                     
-                    console.log(`🔬 CHAT READER: Trying different selectors...`);
                     selectors.forEach(selector => {
                         try {
                             const elements = iframeDoc.querySelectorAll(selector);
                             if (elements.length > 0) {
-                                console.log(`🔬 CHAT READER: ✅ Found ${elements.length} elements with selector: "${selector}"`);
                                 if (elements.length <= 3) {
                                     elements.forEach((el, idx) => {
-                                        console.log(`🔬 CHAT READER:   Element ${idx + 1}:`, el.tagName, el.id, el.className?.substring(0, 50));
                                     });
                                 }
                             }
@@ -252,19 +139,14 @@
                     // Check if there's shadow DOM
                     const body = iframeDoc.body;
                     if (body) {
-                        console.log(`🔬 CHAT READER: Iframe body exists with ${body.children.length} direct children`);
                         
                         // Log all top-level elements
                         Array.from(body.children).slice(0, 5).forEach((child, idx) => {
-                            console.log(`🔬 CHAT READER:   Body child ${idx + 1}: ${child.tagName}, id="${child.id}", shadowRoot=${!!child.shadowRoot}`);
                             if (child.shadowRoot) {
-                                console.log(`🔬 CHAT READER:     ⚠️ HAS SHADOW DOM! This is why we can't find elements!`);
                                 // Try to access shadow DOM
                                 try {
                                     const shadowMessages = child.shadowRoot.querySelectorAll('yt-live-chat-text-message-renderer');
-                                    console.log(`🔬 CHAT READER:     Found ${shadowMessages.length} messages in shadow DOM`);
                                 } catch (e) {
-                                    console.log(`🔬 CHAT READER:     Cannot access shadow DOM content`);
                                 }
                             }
                         });
@@ -272,22 +154,15 @@
                     
                     // Try the original message selector
                     const iframeMessages = iframeDoc.querySelectorAll('yt-live-chat-text-message-renderer');
-                    console.log(`🔬 CHAT READER: Found ${iframeMessages.length} messages with yt-live-chat-text-message-renderer`);
                     if (iframeMessages.length > 0) {
-                        console.log(`🔬 CHAT READER: First message element:`, iframeMessages[0]);
                     }
                 } else {
-                    console.log(`🔬 CHAT READER: ❌ Cannot access iframe content (CORS restriction)`);
                 }
             } catch (e) {
-                console.log(`🔬 CHAT READER: ❌ Error accessing iframe: ${e.message}`);
-                console.log(`🔬 CHAT READER: Error stack:`, e.stack);
             }
         } else {
-            console.log(`🔬 CHAT READER: No iframe#chatframe found`);
         }
         
-        console.log('🔬 CHAT READER: === END DIAGNOSTIC ===\n');
     }
 
     watchForChatContainer() {
@@ -295,7 +170,6 @@
         let attemptCount = 0;
         const maxAttempts = 30; // 30 seconds
         
-        console.log('🔍 CHAT READER: Searching for chat container...');
         
         // Run diagnostic on first attempt
         setTimeout(() => this.diagnosePage(), 2000);
@@ -304,11 +178,9 @@
         const chatIframe = document.querySelector('iframe#chatframe');
         if (chatIframe) {
             chatIframe.addEventListener('load', () => {
-                console.log('📦 CHAT READER: Chat iframe loaded, trying to access content...');
                 setTimeout(() => {
                     const container = this.findChatContainer();
                     if (container && !this.observer) {
-                        console.log('✅ CHAT READER: Found chat container after iframe load!');
                         this.setupChatObserver();
                     }
                 }, 500);
@@ -320,22 +192,16 @@
                 attemptCount++;
                 const chatContainer = this.findChatContainer();
                 if (chatContainer && !this.observer) {
-                    console.log('✅ CHAT READER: Found chat container, setting up observer');
                     this.setupChatObserver();
                     clearInterval(checkInterval);
                 } else if (attemptCount >= maxAttempts) {
                     clearInterval(checkInterval);
                     if (!this.observer) {
-                        console.log('❌ CHAT READER: Chat container not found after 30 seconds.');
-                        console.log('💡 CHAT READER: The chat is likely in a cross-origin iframe that we cannot access due to CORS restrictions.');
-                        console.log('💡 CHAT READER: We may need to use a different approach (e.g., inject script into iframe or use postMessage)');
                     }
                 } else if (attemptCount % 5 === 0) {
                     // Log progress every 5 seconds
-                    console.log(`🔍 CHAT READER: Still searching for chat... (${attemptCount}/${maxAttempts} attempts)`);
                 }
             } catch (error) {
-                console.error('❌ CHAT READER: Error checking for chat container:', error);
                 if (attemptCount >= maxAttempts) {
                     clearInterval(checkInterval);
                 }
@@ -366,21 +232,18 @@
                 // Step 4: Try to find the chat messages container inside iframe
                 const chatMessagesContainer = iframeDoc.querySelector('#chat-messages');
                 if (chatMessagesContainer) {
-                    console.log('✅ CHAT READER: Found chat messages container (#chat-messages) inside iframe');
                     return chatMessagesContainer;
                 }
                 
                 // Fallback: try to find yt-live-chat-renderer
                 const chatRenderer = iframeDoc.querySelector('yt-live-chat-renderer');
                 if (chatRenderer) {
-                    console.log('✅ CHAT READER: Found yt-live-chat-renderer inside iframe');
                     return chatRenderer;
                 }
                 
                 // Fallback: try yt-live-chat-app
                 const chatApp = iframeDoc.querySelector('yt-live-chat-app');
                 if (chatApp) {
-                    console.log('✅ CHAT READER: Found yt-live-chat-app inside iframe');
                     return chatApp;
                 }
                 
@@ -397,7 +260,6 @@
                 // CORS error - we can't access iframe content
                 // This is expected for cross-origin iframes
                 if (e.message && e.message.includes('cross-origin')) {
-                    console.log('💡 CHAT READER: Cannot access iframe - cross-origin restriction');
                 }
                 return null;
             }
@@ -421,10 +283,8 @@
             // Use MutationObserver to watch for new chat messages
             this.observer = new MutationObserver((mutations) => {
                 try {
-                    console.log(`📝 CHAT READER: MutationObserver triggered (${mutations.length} mutations)`);
                     this.scanForNewMessages();
                 } catch (error) {
-                    console.error('❌ CHAT READER: Error scanning for messages:', error);
                 }
             });
 
@@ -437,15 +297,12 @@
             // Also do an initial scan
             setTimeout(() => {
                 try {
-                    console.log('🔍 CHAT READER: Running initial scan of existing messages...');
                     this.scanForNewMessages();
                     this.isInitialScan = false; // After first scan, mark as done
                 } catch (error) {
-                    console.error('❌ CHAT READER: Error in initial message scan:', error);
                 }
             }, 1000);
         } catch (error) {
-            console.error('❌ CHAT READER: Error setting up chat observer:', error);
         }
     }
 
@@ -453,7 +310,6 @@
         try {
             // Find all chat message elements
             const messages = this.findChatMessages();
-            console.log(`🔍 CHAT READER: Scanning ${messages.length} messages for new ones...`);
             
             let newCount = 0;
             let processedCount = 0;
@@ -473,20 +329,6 @@
                         const emojiImages = textEl ? textEl.querySelectorAll('img') : [];
                         const hasEmojis = emojiImages.length > 0;
                         
-                        // Always log failures for messages with emojis or from specific users
-                        if (hasEmojis || username.includes('JohnStephenson') || username.includes('NehaJadhav') || index < 10) {
-                            const logMsg = `⚠️ CHAT READER: Message ${index} from ${username} extraction FAILED:`;
-                            const logData = {
-                                hasEmojis,
-                                emojiCount: emojiImages.length,
-                                hasTextEl: !!textEl,
-                                messageElementId: messageEl.id || '(no id)',
-                                messageElementClasses: messageEl.className || '(no classes)',
-                                textElContent: textEl ? textEl.textContent?.substring(0, 100) : '(no textEl)'
-                            };
-                            console.warn(logMsg, logData);
-                            console.warn(`📋 COPY TO LOG.TXT: ${logMsg}`, JSON.stringify(logData, null, 2));
-                        }
                         return;
                     }
                     
@@ -496,15 +338,6 @@
                     // Check if we've already seen this ID in this scan (duplicate in DOM)
                     if (idsSeenInThisScan.has(messageData.id)) {
                         skippedInScan++;
-                        console.warn(`⚠️ CHAT READER: Duplicate message ID "${messageData.id}" found in same scan (username: ${messageData.username}, index ${index}). Skipping duplicate.`);
-                        if (isUserMessage) {
-                            console.warn(`🔍 CHAT READER: [DUPLICATE DEBUG] User's message "${messageData.text}" with ID "${messageData.id}" already seen in this scan. Element:`, {
-                                elementId: messageEl.id,
-                                elementIndex: index,
-                                elementClasses: messageEl.className,
-                                elementParent: messageEl.parentElement?.tagName
-                            });
-                        }
                         return;
                     }
                     idsSeenInThisScan.add(messageData.id);
@@ -514,47 +347,23 @@
                         this.processedMessageIds.add(messageData.id);
                         newCount++;
                         if (isUserMessage) {
-                            console.log(`🔍 CHAT READER: [USER MESSAGE] Processing NEW message - ID: "${messageData.id}", Text: "${messageData.text}", Element index: ${index}`);
                         }
                         this.onNewMessage(messageData);
                     } else {
                         processedCount++;
-                        if (isUserMessage) {
-                            console.warn(`⚠️ CHAT READER: [USER MESSAGE DUPLICATE] Message ID "${messageData.id}" already processed earlier. Text: "${messageData.text}", Element index: ${index}`);
-                            console.warn(`🔍 CHAT READER: [DUPLICATE DEBUG] Checking why it's appearing again...`, {
-                                elementId: messageEl.id,
-                                elementIndex: index,
-                                elementClasses: messageEl.className,
-                                elementParent: messageEl.parentElement?.tagName,
-                                alreadyInOverlay: this.addedToOverlayIds.has(messageData.id),
-                                messageId: messageData.id
-                            });
-                        }
-                        // Only log duplicates for debugging if it's the user's own message
-                        const isEmojiOnly = (!messageData.text || messageData.text.trim() === '') && 
-                                           messageData.textHtml && 
-                                           messageData.textHtml.includes('<img');
-                        if (isEmojiOnly) {
-                            console.log(`🔄 CHAT READER: Emoji-only message ${messageData.id} (${messageData.username}) already processed, skipping`);
-                        }
                     }
                 } catch (error) {
                     // Skip this message if there's an error extracting it
-                    console.error(`❌ CHAT READER: Error processing message ${index}:`, error);
                 }
             });
             
             if (newCount > 0 || skippedInScan > 0) {
                 const skipMsg = skippedInScan > 0 ? `, ${skippedInScan} duplicates in same scan` : '';
-                console.log(`✅ CHAT READER: Found ${newCount} new messages (${processedCount} already processed${skipMsg})`);
                 if (this.isInitialScan && newCount > 0) {
-                    console.log(`📋 CHAT READER: Initial scan processed ${newCount} existing messages. Waiting for new ones...`);
                 }
             } else if (this.isInitialScan && processedCount === 0) {
-                console.log(`⚠️ CHAT READER: Initial scan found ${messages.length} messages but none were extracted. Check extraction logic.`);
             }
         } catch (error) {
-            console.error('❌ CHAT READER: Error scanning for new messages:', error);
         }
     }
 
@@ -578,7 +387,6 @@
                             try {
                                 const elements = iframeDoc.querySelectorAll(selector);
                                 if (elements.length > 0) {
-                                    console.log(`🔍 CHAT READER: Found ${elements.length} messages with selector "${selector}" inside iframe`);
                                 }
                                 elements.forEach(el => {
                                     if (el && !messages.includes(el)) {
@@ -590,22 +398,17 @@
                             }
                         }
                     } else {
-                        console.log('💡 CHAT READER: Cannot access iframe content (CORS restriction)');
                     }
                 } catch (e) {
-                    console.log('💡 CHAT READER: Error accessing iframe:', e.message);
                 }
             } else {
-                console.log('🔍 CHAT READER: No iframe#chatframe found');
             }
 
             // Only log total if we found messages
             if (messages.length > 0) {
-                console.log(`🔍 CHAT READER: Total messages found: ${messages.length}`);
             }
             return messages;
         } catch (error) {
-            console.error('❌ CHAT READER: Error finding chat messages:', error);
             return [];
         }
     }
@@ -649,11 +452,6 @@
             
             // If we still can't find YouTube's ID, skip this message
             if (!id || id.length < 10) {
-                console.warn(`⚠️ CHAT READER: Could not find YouTube message ID, skipping message. Element:`, {
-                    elementId: messageElement.id,
-                    elementClasses: messageElement.className,
-                    hasData: !!messageElement.__data
-                });
                 return null; // Skip messages without YouTube ID
             }
             
@@ -662,15 +460,6 @@
             const username = usernameEl?.textContent?.trim() || 'Unknown';
             const isUserMessage = username && username.toLowerCase().includes('retrohead');
             
-            // Log ID extraction details for user messages to debug duplicates
-            if (isUserMessage) {
-                console.log(`🔍 CHAT READER: [ID EXTRACTION] Extracted ID: "${id}" from source: "${idSource}"`, {
-                    elementId: messageElement.id,
-                    elementClasses: messageElement.className,
-                    hasData: !!messageElement.__data,
-                    dataKeys: messageElement.__data ? Object.keys(messageElement.__data) : []
-                });
-            }
 
             // Extract message text - exact selector from DOM inspection (span#message)
             // YouTube renders emojis as <img> tags, so we need to extract them properly
@@ -720,12 +509,12 @@
                             
                             if (isValidSrc) {
                                 // Create emoji image HTML with proper attributes
-                                htmlParts.push(`<img src="${this.escapeHtml(imgSrc)}" alt="${this.escapeHtml(imgAlt)}" class="chat-reader-emoji" style="width: auto; height: auto; max-width: 24px; max-height: 24px; vertical-align: middle;">`);
+                                // DO NOT escape imgSrc - it's a URL that must remain intact
+                                htmlParts.push(`<img src="${imgSrc.replace(/"/g, '&quot;')}" alt="${this.escapeHtml(imgAlt)}" class="chat-reader-emoji" style="width: auto; height: auto; max-width: 24px; max-height: 24px; vertical-align: middle;">`);
                             } else {
                                 // Fallback: use alt text if it's a Unicode emoji, otherwise use default
                                 const emojiText = imgAlt && /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u.test(imgAlt) ? imgAlt : (imgAlt || '😀');
                                 htmlParts.push(emojiText);
-                                console.warn(`⚠️ CHAT READER: Emoji image has invalid src: "${imgSrc}", using alt: "${imgAlt || '😀'}"`);
                             }
                         } else {
                             // Process all child nodes recursively
@@ -746,28 +535,8 @@
                 // Debug: Log if we found emoji images
                 const emojiImages = textEl.querySelectorAll('img');
                 if (emojiImages.length > 0) {
-                    console.log(`😀 CHAT READER: Found ${emojiImages.length} emoji image(s) in message, textHtml length: ${textHtml.length}`);
-                    emojiImages.forEach((img, idx) => {
-                        const srcAttr = img.getAttribute('src');
-                        const dataSrc = img.getAttribute('data-src');
-                        const actualSrc = img.src;
-                        const currentSrc = img.currentSrc;
-                        console.log(`😀 CHAT READER:   Emoji ${idx + 1}:`, {
-                            srcAttr: srcAttr?.substring(0, 80),
-                            dataSrc: dataSrc?.substring(0, 80),
-                            actualSrc: actualSrc?.substring(0, 80),
-                            currentSrc: currentSrc?.substring(0, 80),
-                            alt: img.getAttribute('alt'),
-                            tooltip: img.getAttribute('shared-tooltip-text'),
-                            classes: img.className,
-                            width: img.width || img.style.width,
-                            height: img.height || img.style.height
-                        });
-                    });
-                    
                     // If we found emoji images but textHtml is empty, something went wrong
                     if (!textHtml || textHtml.trim().length === 0) {
-                        console.error(`❌ CHAT READER: Found ${emojiImages.length} emoji images but textHtml is empty! htmlParts length: ${htmlParts.length}`);
                     }
                 }
                 
@@ -879,6 +648,19 @@
             const avatarContainer = messageElement.querySelector('#author-photo');
             
             if (authorChip) {
+                // Special logging for @nightbot to debug badge extraction
+                const isNightbot = username && username.toLowerCase().includes('nightbot');
+                if (isNightbot) {
+                    
+                    // Check for badge containers
+                    const chipBadges = authorChip.querySelector('#chip-badges');
+                    const chatBadges = authorChip.querySelector('#chat-badges');
+                    
+                    // Check for moderator class
+                    const authorNameEl = authorChip.querySelector('#author-name');
+                    const isModerator = authorNameEl && authorNameEl.classList.contains('moderator');
+                }
+                
                 // Helper function to extract badge source from an element
                 const extractBadgeSource = (el) => {
                     let badgeSrc = '';
@@ -902,13 +684,16 @@
                         let svg = el.querySelector('svg');
                         if (svg) {
                             try {
-                                badgeSrc = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg.outerHTML)));
+                                const svgHTML = svg.outerHTML;
+                                badgeSrc = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgHTML)));
                                 // Also get alt from SVG if available
                                 if (!badgeAlt) {
                                     badgeAlt = svg.getAttribute('aria-label') || svg.getAttribute('title') || '';
                                 }
+                                // Debug: Log SVG path data to identify which icon this is
+                                const pathData = svg.querySelector('path')?.getAttribute('d') || 'no path';
+                                const viewBox = svg.getAttribute('viewBox') || 'no viewBox';
                             } catch (e) {
-                                console.warn(`⚠️ CHAT READER: Failed to convert SVG to base64 for ${username}:`, e);
                             }
                         }
                         
@@ -940,7 +725,6 @@
                         
                         // If we still don't have a source, log for debugging
                         if (!badgeSrc) {
-                            console.log(`⚠️ CHAT READER: yt-icon found for ${username} but couldn't extract image. aria-label="${badgeAlt}"`);
                         }
                     }
                     
@@ -948,10 +732,32 @@
                 };
                 
                 // Get ALL images/icons/SVG from author chip
-                // Process yt-icon FIRST (before SVGs) so we extract from the icon element itself
-                const allYtIcons = authorChip.querySelectorAll('yt-icon');
+                // Also explicitly check badge containers
+                const chipBadges = authorChip.querySelector('#chip-badges');
+                const chatBadges = authorChip.querySelector('#chat-badges');
+                
+                // Collect yt-icons from multiple sources
+                const allYtIcons = new Set();
+                authorChip.querySelectorAll('yt-icon').forEach(icon => allYtIcons.add(icon));
+                if (chipBadges) {
+                    chipBadges.querySelectorAll('yt-icon').forEach(icon => allYtIcons.add(icon));
+                }
+                if (chatBadges) {
+                    chatBadges.querySelectorAll('yt-icon').forEach(icon => allYtIcons.add(icon));
+                }
+                
                 const allImages = authorChip.querySelectorAll('img');
                 const allSvgs = authorChip.querySelectorAll('svg');
+                
+                const ytIconsArray = Array.from(allYtIcons);
+                
+                if (isNightbot) {
+                    ytIconsArray.forEach((icon, idx) => {
+                        const ariaLabel = icon.getAttribute('aria-label') || '';
+                        const svg = icon.querySelector('svg');
+                        const svgPath = svg ? svg.querySelector('path')?.getAttribute('d')?.substring(0, 50) : 'no svg';
+                    });
+                }
                 
                 // Helper to check if element should be skipped
                 const shouldSkip = (el) => {
@@ -970,37 +776,50 @@
                     return false;
                 };
                 
+                // Track processed elements to prevent processing the same element twice
+                const processedElements = new Set();
+                
                 // Process yt-icon elements first
-                allYtIcons.forEach(iconEl => {
+                ytIconsArray.forEach(iconEl => {
+                    // Skip if we've already processed this exact element
+                    if (processedElements.has(iconEl)) {
+                        return;
+                    }
+                    
                     const ariaLabel = iconEl.getAttribute('aria-label') || '';
                     
-                    // Debug: log all yt-icon elements found
-                    console.log(`🔍 CHAT READER: Found yt-icon for ${username}: aria-label="${ariaLabel}", inside avatar? ${avatarContainer && avatarContainer.contains(iconEl)}`);
+                    // Debug: log all yt-icon elements found with full details
+                    const svgInside = iconEl.querySelector('svg');
+                    const svgPath = svgInside ? svgInside.querySelector('path')?.getAttribute('d')?.substring(0, 50) : 'none';
                     
                     if (shouldSkip(iconEl)) {
-                        console.log(`⏭️ CHAT READER: Skipping yt-icon for ${username} (filtered out)`);
                         return;
                     }
                     
                     const { src: badgeSrc, alt: badgeAlt } = extractBadgeSource(iconEl);
                     
                     if (!badgeSrc) {
-                        console.log(`❌ CHAT READER: yt-icon for ${username} found but no badge source extracted. aria-label="${badgeAlt}"`);
                         return;
                     }
                     
-                    if (badgeSrc.includes('data:image/gif;base64') || seenBadgeSrcs.has(badgeSrc)) {
-                        console.log(`⏭️ CHAT READER: Skipping yt-icon for ${username} (duplicate or placeholder)`);
+                    // Check for duplicates BEFORE adding - log full base64 for comparison
+                    if (badgeSrc.includes('data:image/gif;base64')) {
                         return;
                     }
                     
+                    if (seenBadgeSrcs.has(badgeSrc)) {
+                        return;
+                    }
+                    
+                    // Mark element as processed and source as seen
+                    processedElements.add(iconEl);
                     seenBadgeSrcs.add(badgeSrc);
+                    
                     badges.badgeImages.push({
                         src: badgeSrc,
                         alt: badgeAlt,
                         element: iconEl
                     });
-                    console.log(`✅ CHAT READER: Extracted yt-icon badge for ${username}: src="${badgeSrc.substring(0, 100)}", alt="${badgeAlt}"`);
                 });
                 
                 // Process regular images
@@ -1021,7 +840,6 @@
                         alt: badgeAlt,
                         element: imgEl
                     });
-                    console.log(`🏷️ CHAT READER: Extracted image badge for ${username}: src="${badgeSrc.substring(0, 100)}", alt="${badgeAlt}"`);
                 });
                 
                 // Process standalone SVG elements (not inside yt-icon)
@@ -1042,13 +860,21 @@
                         alt: badgeAlt,
                         element: svgEl
                     });
-                    console.log(`🎨 CHAT READER: Extracted SVG badge for ${username}: src="${badgeSrc.substring(0, 100)}", alt="${badgeAlt}"`);
                 });
             }
 
             // Log total badges found for debugging
             if (badges.badgeImages.length > 0) {
-                console.log(`📊 CHAT READER: Found ${badges.badgeImages.length} badge(s) for ${username}:`, badges.badgeImages.map(b => ({ src: b.src.substring(0, 50) + '...', alt: b.alt })));
+            }
+            
+            // Special logging for @nightbot - ALWAYS log, even if no badges found
+            const isNightbotCheck = username && username.toLowerCase().includes('nightbot');
+            if (isNightbotCheck) {
+                if (badges.badgeImages.length > 0) {
+                    badges.badgeImages.forEach((badge, idx) => {
+                    });
+                } else {
+                }
             }
             
             // Ensure textHtml is set (should already be set from extraction)
@@ -1059,29 +885,17 @@
             // If we have text but textHtml is empty or failed, recreate it from text
             // This handles cases where emoji extraction might have failed but we still have text
             if (text && text.trim().length > 0 && (!textHtml || textHtml.trim().length === 0)) {
-                console.warn(`⚠️ CHAT READER: Message ${id} from ${username} has text but empty textHtml, recreating from text`, {
-                    text: text.substring(0, 50),
-                    hasTextEl: !!messageElement.querySelector('#message'),
-                    emojiCount: messageElement.querySelectorAll('#message img').length
-                });
                 textHtml = this.escapeHtml(text);
             }
             
             // For emoji-only messages, ensure textHtml has content even if text is empty
             if (!textHtml || textHtml.trim().length === 0) {
                 // If we have no HTML content at all, check if we should still accept it
-                console.warn(`⚠️ CHAT READER: Message ${id} from ${username} has empty textHtml!`, {
-                    text: text?.substring(0, 50),
-                    textHtml: textHtml?.substring(0, 50),
-                    username,
-                    hasTextEl: !!messageElement.querySelector('#message')
-                });
             }
             
             // Validate: message must have ID and either text content or HTML content (for emoji-only messages)
             // Allow messages with only HTML content (emoji-only messages)
             if (!id) {
-                console.warn(`⚠️ CHAT READER: Message from ${username} rejected - no ID found`);
                 return null; // Invalid message - no ID
             }
             
@@ -1090,20 +904,11 @@
             const hasHtml = textHtml && textHtml.trim().length > 0;
             
             if (!hasText && !hasHtml) {
-                console.warn(`⚠️ CHAT READER: Message ${id} from ${username} rejected - no text or HTML content`, {
-                    text: text || '(empty)',
-                    textLength: text?.length || 0,
-                    textHtmlLength: textHtml?.length || 0,
-                    textHtmlPreview: textHtml?.substring(0, 100) || '(empty)',
-                    hasTextEl: !!messageElement.querySelector('#message'),
-                    messageElementClasses: messageElement.className
-                });
                 return null; // Invalid message - no content
             }
             
             // Log successful extraction for debugging
             if (hasText && hasHtml) {
-                console.log(`✅ CHAT READER: Extracted message ${id} from ${username}: text="${text.substring(0, 50)}", html has ${(textHtml.match(/<img/g) || []).length} emoji(s)`);
             }
             
             const messageData = {
@@ -1119,24 +924,16 @@
             
             // Debug: Log successful extraction for emoji-only messages
             if ((!text || text.trim().length === 0) && textHtml && textHtml.includes('<img')) {
-                console.log(`✅ CHAT READER: Successfully extracted emoji-only message ${id} from ${username} with ${(textHtml.match(/<img/g) || []).length} emoji(s)`);
             }
             
-            // Only log extraction details for debugging (commented out to reduce noise)
-            // console.log('💬 CHAT READER: Extracted message:', messageData);
             return messageData;
         } catch (error) {
-            console.error('❌ CHAT READER: Error extracting message data:', error);
             return null;
         }
     }
 
     onNewMessage(messageData) {
         // For now, just log it - later we'll send to server
-        console.log('💬 CHAT READER: ===== NEW CHAT MESSAGE =====');
-        console.log('💬 CHAT READER: User:', messageData.username);
-        console.log('💬 CHAT READER: Message:', messageData.text);
-        console.log('💬 CHAT READER: Full data:', messageData);
         
         // Update overlay UI
         this.addMessageToOverlay(messageData);
@@ -1350,9 +1147,7 @@
                 document.getElementById('chat-reader-count').textContent = '0';
             });
 
-            console.log('✅ CHAT READER: Overlay UI created');
         } catch (error) {
-            console.error('❌ CHAT READER: Error creating overlay:', error);
         }
     }
 
@@ -1365,9 +1160,7 @@
             
             // Check if we've already added this message ID to overlay
             if (this.addedToOverlayIds.has(messageData.id)) {
-                console.log(`⚠️ CHAT READER: Message ${messageData.id} already tracked as added to overlay, skipping duplicate`);
                 if (isUserMessage) {
-                    console.warn(`🔍 CHAT READER: [USER MESSAGE] ID "${messageData.id}" already in addedToOverlayIds Set. Text: "${messageData.text}"`);
                 }
                 return;
             }
@@ -1377,7 +1170,6 @@
                                messageData.textHtml && 
                                messageData.textHtml.includes('<img');
             if (isEmojiOnly) {
-                console.log(`🔍 CHAT READER: Processing emoji-only message - ID: ${messageData.id}, username: ${messageData.username}`);
             }
             
             const messagesContainer = document.getElementById('chat-reader-messages');
@@ -1388,28 +1180,27 @@
             // sends the same message multiple times, each will show up (they have different IDs).
             const existingById = messagesContainer.querySelector(`[data-message-id="${messageData.id}"]`);
             if (existingById) {
-                console.log(`⚠️ CHAT READER: Message ${messageData.id} already in overlay DOM, skipping duplicate`);
                 if (isUserMessage) {
-                    console.warn(`🔍 CHAT READER: [USER MESSAGE] Found existing DOM element with ID "${messageData.id}". Text: "${messageData.text}"`);
-                    console.warn(`🔍 CHAT READER: [DUPLICATE DEBUG] Existing element:`, existingById);
                 }
                 this.addedToOverlayIds.add(messageData.id); // Track it even though we're skipping
                 return;
             }
             
             // Content-based duplicate detection for optimistic updates (YouTube shows your messages twice)
-            // Check if a message with the same username and content was added recently (within 1 second)
-            // Uses YouTube's actual timestamps to detect optimistic duplicates
-            // Use the actual message content - text if available, otherwise textHtml (which contains the actual emoji images)
+            // ONLY apply this to messages from the current user (optimistic updates)
+            // When loading many messages at once from a live stream, we should NOT filter duplicates
+            // Use YouTube's actual timestamps - if timestamps differ by more than 500ms, they're different messages
             let contentForKey = messageData.text && messageData.text.trim().length > 0 
                 ? messageData.text 
                 : (messageData.textHtml || ''); // For emoji-only messages, use textHtml which has the actual emoji image URLs
             const contentKey = `${messageData.username}:${contentForKey}`;
             const recentMessage = this.recentMessagesByContent.get(contentKey);
             const messageTimestamp = messageData.timestamp; // Use YouTube's actual timestamp
-            const TIME_WINDOW = 1000; // 1 second - if timestamps are >1s apart, show both
+            const TIME_WINDOW = 500; // 500ms - only filter if timestamps are VERY close (optimistic duplicate)
             
-            if (recentMessage && (messageTimestamp - recentMessage.timestamp) < TIME_WINDOW) {
+            // Only apply content-based duplicate detection if timestamps are extremely close (optimistic update)
+            // AND if we haven't already processed this exact message ID
+            if (recentMessage && Math.abs(messageTimestamp - recentMessage.timestamp) < TIME_WINDOW && recentMessage.id !== messageData.id) {
                 // Found a duplicate within time window
                 const isPlaceholderAvatar = messageData.avatar && (
                     messageData.avatar.includes('data:image/gif;base64') ||
@@ -1422,16 +1213,12 @@
                 
                 if (isPlaceholderAvatar && !existingIsPlaceholder) {
                     // New message has placeholder avatar but existing has real avatar - skip the new one
-                    console.log(`⚠️ CHAT READER: Content duplicate detected (placeholder avatar), skipping. Text: "${messageData.text}", Username: ${messageData.username}`);
                     if (isUserMessage) {
-                        console.log(`🔍 CHAT READER: [USER MESSAGE] Skipping duplicate with placeholder avatar - keeping existing message with real avatar`);
                     }
                     return;
                 } else if (!isPlaceholderAvatar && existingIsPlaceholder) {
                     // New message has real avatar but existing has placeholder - replace the old one
-                    console.log(`🔄 CHAT READER: Content duplicate detected (real avatar), replacing placeholder. Text: "${messageData.text}", Username: ${messageData.username}`);
                     if (isUserMessage) {
-                        console.log(`🔍 CHAT READER: [USER MESSAGE] Replacing placeholder message with confirmed message (real avatar)`);
                     }
                     
                     // Remove the old message from overlay
@@ -1452,14 +1239,16 @@
                         timestamp: messageTimestamp
                     });
                 } else {
-                    // Both have same avatar type or both are real - skip the duplicate
-                    const logMsg = `⚠️ CHAT READER: Content duplicate detected (same type), skipping. Text: "${messageData.text}", Username: ${messageData.username}`;
-                    console.log(logMsg);
-                    console.log(`📋 COPY TO LOG.TXT: ${logMsg} - Message ID: ${messageData.id}, Content: "${messageData.text}", HTML: ${messageData.textHtml ? messageData.textHtml.substring(0, 100) : 'none'}`);
-                    if (isUserMessage) {
-                        console.log(`🔍 CHAT READER: [USER MESSAGE] Skipping duplicate message - already added recently`);
+                    // Both have same avatar type or both are real - check if it's actually the same message ID
+                    // If different IDs, they might be legitimate duplicates from different sources - show both
+                    if (recentMessage.id === messageData.id) {
+                        // Same message ID - definitely a duplicate, skip
+                        return;
+                    } else {
+                        // Different IDs but same content - could be legitimate (e.g., bot repeating messages)
+                        // Allow it through if timestamps are different enough
+                        // Continue processing - don't return
                     }
-                    return;
                 }
             } else {
                 // No recent duplicate - add to tracking using YouTube's timestamp
@@ -1481,7 +1270,6 @@
             }
             
             if (isUserMessage) {
-                console.log(`✅ CHAT READER: [USER MESSAGE] Adding to overlay - ID: "${messageData.id}", Text: "${messageData.text}"`);
             }
 
             // Create message element
@@ -1492,46 +1280,114 @@
             // Use avatar if available, otherwise show a default placeholder
             const avatarUrl = messageData.avatar || '';
             const avatarHtml = avatarUrl 
-                ? `<img src="${this.escapeHtml(avatarUrl)}" alt="Avatar" class="chat-reader-avatar" onerror="this.style.display='none'">`
+                ? `<img src="${avatarUrl.replace(/"/g, '&quot;')}" alt="Avatar" class="chat-reader-avatar" onerror="this.style.display='none'">`
                 : '<div class="chat-reader-avatar-placeholder"></div>';
             
-            // Build badge indicators - maintain YouTube's order (hexagon first, then crown)
-            let badgeHtml = '';
+            // Build message content structure first
+            const messageContent = document.createElement('div');
+            messageContent.className = 'chat-reader-message-content';
+            
+            // Avatar
+            if (avatarUrl) {
+                const avatarImg = document.createElement('img');
+                avatarImg.src = avatarUrl;
+                avatarImg.alt = 'Avatar';
+                avatarImg.className = 'chat-reader-avatar';
+                avatarImg.onerror = () => avatarImg.style.display = 'none';
+                messageContent.appendChild(avatarImg);
+            } else {
+                const avatarPlaceholder = document.createElement('div');
+                avatarPlaceholder.className = 'chat-reader-avatar-placeholder';
+                messageContent.appendChild(avatarPlaceholder);
+            }
+            
+            // Message body
+            const messageBody = document.createElement('div');
+            messageBody.className = 'chat-reader-message-body';
+            
+            // Header
+            const messageHeader = document.createElement('div');
+            messageHeader.className = 'chat-reader-message-header';
+            
+            // Username
+            const usernameSpan = document.createElement('span');
+            usernameSpan.className = 'chat-reader-username';
+            usernameSpan.textContent = messageData.username;
+            messageHeader.appendChild(usernameSpan);
+            
+            // Badges - use DOM methods to avoid HTML escaping issues
             if (messageData.badges) {
-                // All other badge images (wrench, hexagon, verified, etc.) - show first to match YouTube order
+                // All other badge images (wrench, hexagon, verified, etc.)
                 if (messageData.badges.badgeImages && messageData.badges.badgeImages.length > 0) {
                     messageData.badges.badgeImages.forEach((badge, index) => {
                         if (badge.src) {
-                            console.log(`🔖 CHAT READER: Adding badge ${index + 1} for ${messageData.username}: src="${badge.src.substring(0, 100)}", alt="${badge.alt}"`);
-                            badgeHtml += `<img src="${this.escapeHtml(badge.src)}" alt="${this.escapeHtml(badge.alt || '')}" class="chat-reader-badge-image" title="${this.escapeHtml(badge.alt || '')}" onerror="console.error('❌ CHAT READER: Badge image failed to load:', this.src); this.style.display='none';">`;
+                            const badgeImg = document.createElement('img');
+                            badgeImg.src = badge.src; // Direct assignment - no escaping needed
+                            badgeImg.alt = badge.alt || '';
+                            badgeImg.className = 'chat-reader-badge-image';
+                            badgeImg.title = badge.alt || '';
+                            badgeImg.onerror = () => {
+                                badgeImg.style.display = 'none';
+                            };
+                            messageHeader.appendChild(badgeImg);
                         }
                     });
                 }
                 
-                // Membership tier badge (crown + number) - shown after other badges to match YouTube order
+                // Membership tier badge (crown + number)
                 if (messageData.badges.membershipTier) {
-                    badgeHtml += `<span class="chat-reader-badge chat-reader-badge-tier">👑 #${messageData.badges.membershipTier}</span>`;
+                    const tierBadge = document.createElement('span');
+                    tierBadge.className = 'chat-reader-badge chat-reader-badge-tier';
+                    tierBadge.textContent = `👑 #${messageData.badges.membershipTier}`;
+                    messageHeader.appendChild(tierBadge);
                 }
             }
+            
+            // Timestamp
+            const timestampSpan = document.createElement('span');
+            timestampSpan.className = 'chat-reader-meta-inline';
+            timestampSpan.textContent = messageData.timestampText || new Date(messageData.timestamp).toLocaleTimeString();
+            messageHeader.appendChild(timestampSpan);
+            
+            messageBody.appendChild(messageHeader);
+            
+            // Message text
+            const textDiv = document.createElement('div');
+            textDiv.className = 'chat-reader-text';
+            if (messageData.textHtml) {
+                textDiv.innerHTML = messageData.textHtml;
+            } else {
+                textDiv.textContent = messageData.text;
+            }
+            messageBody.appendChild(textDiv);
+            
+            messageContent.appendChild(messageBody);
+            messageEl.appendChild(messageContent);
 
-            messageEl.innerHTML = `
-                <div class="chat-reader-message-content">
-                    ${avatarHtml}
-                    <div class="chat-reader-message-body">
-                        <div class="chat-reader-message-header">
-                            <span class="chat-reader-username">${this.escapeHtml(messageData.username)}</span>
-                            ${badgeHtml}
-                            <span class="chat-reader-meta-inline">
-                                ${messageData.timestampText || new Date(messageData.timestamp).toLocaleTimeString()}
-                            </span>
-                        </div>
-                        <div class="chat-reader-text">${messageData.textHtml || this.escapeHtml(messageData.text)}</div>
-                    </div>
-                </div>
-            `;
-
-            // Add to bottom of list (newest messages at bottom)
-            messagesContainer.appendChild(messageEl);
+            // Insert message in timestamp order (oldest first, newest last)
+            // Get all existing messages with their timestamps
+            const existingMessages = Array.from(messagesContainer.children);
+            let inserted = false;
+            
+            for (let i = 0; i < existingMessages.length; i++) {
+                const existingMsg = existingMessages[i];
+                const existingTimestamp = existingMsg.getAttribute('data-timestamp');
+                
+                // If existing message has timestamp and it's newer, insert before it
+                if (existingTimestamp && parseInt(existingTimestamp) > messageData.timestamp) {
+                    messagesContainer.insertBefore(messageEl, existingMsg);
+                    inserted = true;
+                    break;
+                }
+            }
+            
+            // If not inserted, append to end (newest message)
+            if (!inserted) {
+                messagesContainer.appendChild(messageEl);
+            }
+            
+            // Store timestamp as data attribute for sorting
+            messageEl.setAttribute('data-timestamp', messageData.timestamp);
             
             // Auto-scroll to bottom to show new message
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -1553,7 +1409,6 @@
             this.messageCount++;
             document.getElementById('chat-reader-count').textContent = this.messageCount;
         } catch (error) {
-            console.error('❌ CHAT READER: Error adding message to overlay:', error);
         }
     }
 
@@ -1569,7 +1424,6 @@
             this.observer = null;
         }
         this.isActive = false;
-        console.log('🛑 CHAT READER: Stopped watching chat');
     }
 }
 
@@ -1583,34 +1437,25 @@
             if (chatReader) {
                 chatReader.diagnosePage();
             } else {
-                console.log('🔬 CHAT READER: Chat reader not initialized yet');
             }
         };
         
         // Helper function to inspect badge elements in a message
         window.inspectMessageBadges = (messageElement) => {
             if (!messageElement) {
-                console.log('❌ Please provide a message element. Usage: inspectMessageBadges(messageElement)');
                 return;
             }
             
-            console.log('🔬 CHAT READER: Inspecting badges in message element...');
-            console.log('Message element:', messageElement);
             
             // Find author chip
             const authorChip = messageElement.querySelector('yt-live-chat-author-chip');
-            console.log('Author chip:', authorChip);
             
             if (authorChip) {
-                console.log('Author chip HTML:', authorChip.innerHTML.substring(0, 500));
-                console.log('Author chip classes:', authorChip.className);
                 
                 // Find all child elements
                 const allChildren = authorChip.querySelectorAll('*');
-                console.log(`Found ${allChildren.length} child elements in author chip:`);
                 allChildren.forEach((child, idx) => {
                     if (idx < 20) {
-                        console.log(`  ${idx + 1}. ${child.tagName}, classes: ${child.className}, text: "${child.textContent?.substring(0, 30)}"`);
                     }
                 });
             }
@@ -1629,10 +1474,8 @@
             badgeSelectors.forEach(selector => {
                 const elements = messageElement.querySelectorAll(selector);
                 if (elements.length > 0) {
-                    console.log(`Found ${elements.length} elements with selector "${selector}":`);
                     elements.forEach((el, idx) => {
                         if (idx < 5) {
-                            console.log(`  ${idx + 1}. ${el.tagName}, classes: ${el.className}, id: ${el.id}, text: "${el.textContent?.trim()}"`);
                         }
                     });
                 }
@@ -1642,7 +1485,6 @@
             const allText = messageElement.textContent || '';
             const tierMatches = allText.match(/#(\d+)/g);
             if (tierMatches) {
-                console.log('Found tier patterns in text:', tierMatches);
             }
         };
         
@@ -1657,7 +1499,6 @@
             }
         });
     } catch (error) {
-        console.error('❌ CHAT READER: Failed to initialize chat reader:', error);
     }
 
 })();
