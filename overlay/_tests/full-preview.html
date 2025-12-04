@@ -73,6 +73,19 @@
             z-index: 15;
         }
 
+        /* Chat overlay - clean version */
+        .chat-overlay-frame {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1920px;
+            height: 1080px;
+            z-index: 25;
+            border: none;
+            background: transparent;
+            pointer-events: auto; /* Enable controls interaction */
+        }
+
     </style>
 </head>
 <body>
@@ -103,11 +116,19 @@
             src="../socials-overlay/index.html"
             id="socials-frame">
         </iframe>
+
+        <!-- Chat Overlay (clean, no background/overlays) -->
+        <iframe 
+            class="overlay-frame chat-overlay-frame" 
+            src="chat-only.html"
+            id="chat-frame">
+        </iframe>
     </div>
 
     <script>
         console.log('🎬 Full Overlay Preview Loaded');
         console.log('📡 All overlays synced to actual files');
+        console.log('💬 Chat overlay (clean) included');
     </script>
 </body>
 </html>

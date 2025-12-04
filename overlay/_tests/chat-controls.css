@@ -1,0 +1,119 @@
+/* CONTROL PANEL */
+.control-panel {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.95);
+    padding: 30px;
+    border-radius: 16px;
+    border: 2px solid rgba(59, 130, 246, 0.4);
+    width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.control-panel h3 {
+    color: #60a5fa;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.control-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.control-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    font-size: 18px;
+    min-width: 220px;
+    flex-shrink: 0;
+}
+
+.control-group label span {
+    color: #60a5fa;
+    font-weight: 600;
+    min-width: 80px;
+    text-align: right;
+}
+
+.control-group input[type="range"] {
+    flex: 1;
+    height: 12px;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.2);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #60a5fa;
+    cursor: pointer;
+}
+
+.control-divider {
+    height: 2px;
+    background: rgba(59, 130, 246, 0.2);
+    margin: 25px 0;
+}
+
+.control-group input[type="color"] {
+    flex: 1;
+    height: 50px;
+    border: 2px solid rgba(59, 130, 246, 0.4);
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.5);
+    cursor: pointer;
+}
+
+.control-panel button {
+    font-size: 18px !important;
+    padding: 15px !important;
+}
+
+.control-panel pre {
+    font-size: 14px !important;
+}
+
+.control-group input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.nudge-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(59, 130, 246, 0.3);
+    border: 2px solid rgba(59, 130, 246, 0.5);
+    border-radius: 8px;
+    color: #93c5fd;
+    font-size: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.nudge-btn:hover {
+    background: rgba(59, 130, 246, 0.5);
+    color: #fff;
+}
+
+.nudge-btn:active {
+    transform: scale(0.95);
+}
+

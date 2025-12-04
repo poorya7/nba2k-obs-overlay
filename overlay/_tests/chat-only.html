@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Overlay Only</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="chat-only.css">
+    <link rel="stylesheet" href="chat-controls.css">
+</head>
+<body style="margin: 0; padding: 0; background: transparent; width: 1920px; height: 1080px; overflow: hidden;">
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <h3>📝 Chat List</h3>
+        
+        <div class="control-group">
+            <label>List X: <span id="val-list-x">66</span>px</label>
+            <button class="nudge-btn" onclick="nudgeValue('listX', -1)">−</button>
+            <input type="range" id="ctrl-list-x" min="-500" max="1920" value="66">
+            <button class="nudge-btn" onclick="nudgeValue('listX', 1)">+</button>
+        </div>
+        
+        <div class="control-group">
+            <label>List Y: <span id="val-list-y">24</span>px</label>
+            <button class="nudge-btn" onclick="nudgeValue('listY', -1)">−</button>
+            <input type="range" id="ctrl-list-y" min="-500" max="1080" value="24">
+            <button class="nudge-btn" onclick="nudgeValue('listY', 1)">+</button>
+        </div>
+        
+        <div class="control-group">
+            <label>Chat Gap: <span id="val-gap">10</span>px</label>
+            <input type="range" id="ctrl-gap" min="0" max="150" value="10">
+        </div>
+        
+        <div class="control-group">
+            <label>List Pic: <span id="val-pic-list">10</span>px</label>
+            <input type="range" id="ctrl-pic-list" min="10" max="100" value="10">
+        </div>
+
+        <div class="control-group">
+            <label>List Width: <span id="val-list-width">290</span>px</label>
+            <input type="range" id="ctrl-list-width" min="100" max="600" value="290">
+        </div>
+
+        <div class="control-group">
+            <label>Max Height: <span id="val-max-height">454</span>px</label>
+            <input type="range" id="ctrl-max-height" min="100" max="1000" value="454">
+        </div>
+
+        <div class="control-divider"></div>
+
+        <h3>⭐ New Chat (Staged)</h3>
+        
+        <div class="control-group">
+            <label>Stage X: <span id="val-stage-x">-65</span>px</label>
+            <input type="range" id="ctrl-stage-x" min="-500" max="1920" value="-65">
+        </div>
+        
+        <div class="control-group">
+            <label>Stage Y: <span id="val-stage-y">750</span>px</label>
+            <input type="range" id="ctrl-stage-y" min="-500" max="1080" value="750">
+        </div>
+        
+        <div class="control-group">
+            <label>Stage Pic: <span id="val-pic-staged">100</span>px</label>
+            <input type="range" id="ctrl-pic-staged" min="20" max="200" value="100">
+        </div>
+
+        <div class="control-group">
+            <label>Stage Width: <span id="val-stage-width">420</span>px</label>
+            <input type="range" id="ctrl-stage-width" min="200" max="800" value="420">
+        </div>
+
+        <div class="control-group">
+            <label>BG Padding: <span id="val-bg-padding">15</span>px</label>
+            <input type="range" id="ctrl-bg-padding" min="0" max="40" value="15">
+        </div>
+
+        <div class="control-group">
+            <label>BG Alpha: <span id="val-bg-alpha">0.88</span></label>
+            <input type="range" id="ctrl-bg-alpha" min="0" max="100" value="88" step="1">
+        </div>
+
+        <div class="control-group">
+            <label>BG Color: <span id="val-bg-color">#0a1428</span></label>
+            <input type="color" id="ctrl-bg-color" value="#0a1428">
+        </div>
+
+        <div class="control-group">
+            <label>Stage Time: <span id="val-stage-time">1918</span>ms</label>
+            <input type="range" id="ctrl-stage-time" min="500" max="8000" value="1918">
+        </div>
+
+        <div class="control-group">
+            <label>Bubble Delay: <span id="val-bubble-delay">80</span>ms</label>
+            <input type="range" id="ctrl-bubble-delay" min="0" max="5000" value="80">
+        </div>
+
+        <div class="control-divider"></div>
+
+        <h3>🔧 Text & Spacing</h3>
+        
+        <div class="control-group">
+            <label>Stage Font: <span id="val-stage-font">21</span>px</label>
+            <input type="range" id="ctrl-stage-font" min="8" max="40" value="21">
+        </div>
+        
+        <div class="control-group">
+            <label>List Font: <span id="val-list-font">18</span>px</label>
+            <input type="range" id="ctrl-list-font" min="8" max="40" value="18">
+        </div>
+        
+        <div class="control-group">
+            <label>Entry Gap: <span id="val-entry-gap">6</span>px</label>
+            <input type="range" id="ctrl-entry-gap" min="0" max="40" value="6">
+        </div>
+
+        <div class="control-divider"></div>
+
+        <div class="control-group">
+            <label style="cursor: pointer; user-select: none; min-width: auto;">
+                ⏸️ Pause New Chats
+            </label>
+            <input type="checkbox" id="ctrl-pause" style="cursor: pointer;">
+        </div>
+
+        <div class="control-divider"></div>
+
+        <button id="export-btn" style="width: 100%; padding: 15px; background: rgba(59, 130, 246, 0.3); border: 2px solid rgba(59, 130, 246, 0.5); border-radius: 8px; color: #93c5fd; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 10px;">📋 Export Values</button>
+        <pre id="export-output" style="display: none; margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 8px; font-size: 14px; color: #94a3b8; white-space: pre-wrap; word-break: break-all;"></pre>
+    </div>
+
+    <!-- Ghost Chat Canvas -->
+    <div class="chat-canvas" id="ghost-chat"></div>
+
+    <script src="chat-only.js"></script>
+</body>
+</html>
+
