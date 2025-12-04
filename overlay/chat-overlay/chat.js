@@ -305,3 +305,4 @@ function addMessage() {
         }, settings.bubbleDelay);
     }, 50);
 }
+
