@@ -53,6 +53,38 @@ body {
     transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Fade out staged message - override staged transition with higher specificity */
+.message.staged {
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.message.staged.fading-out {
+    opacity: 0 !important;
+    transform: translateY(var(--move-up-amount, -20px)) !important;
+    transition: opacity var(--fade-out-duration, 500ms) ease-out, transform var(--fade-out-duration, 500ms) ease-out !important;
+    pointer-events: none;
+}
+
+/* Disable transitions on child elements when fading out */
+.message.staged.fading-out .entry,
+.message.staged.fading-out .content,
+.message.staged.fading-out .profile-pic {
+    transition: none !important;
+}
+
+/* Fade in new list message - starts invisible, has transition ready */
+.message.in-list.fading-in {
+    opacity: 0;
+    transform: translateY(var(--move-down-amount, 20px)) scale(0.95);
+    transition: opacity var(--fade-in-duration, 500ms) ease-in, transform var(--fade-in-duration, 500ms) ease-in;
+}
+
+/* When fading-in class is removed, it becomes visible (transition already set) */
+.message.in-list:not(.fading-in) {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
 /* Stage state - full size, centered at bottom */
 .message.staged {
     top: var(--stage-y);

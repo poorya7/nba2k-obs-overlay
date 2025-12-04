@@ -17,9 +17,13 @@ const settings = {
     maxHeight: 494,
     stageWidth: 260,
     listWidth: 290,
-    bubbleDelay: 985,
+    bubbleDelay: 100,
     listBgPadding: 22,
-    listBgAlpha: 0.45
+    listBgAlpha: 0.45,
+    fadeOutDuration: 350, // milliseconds
+    fadeInDuration: 100, // milliseconds
+    fadeInDelay: 50, // milliseconds - delay after scroll before fade-in starts
+    moveUpAmount: 40 // pixels
 };
 
 // Update CSS variables and canvas position
@@ -57,9 +61,20 @@ function updateStyles() {
     }
 }
 
+// Update fade animation CSS based on settings
+function updateFadeAnimations() {
+    const style = document.documentElement.style;
+    style.setProperty('--fade-out-duration', settings.fadeOutDuration + 'ms');
+    style.setProperty('--fade-in-duration', settings.fadeInDuration + 'ms');
+    style.setProperty('--move-up-amount', '-' + settings.moveUpAmount + 'px');
+    style.setProperty('--move-down-amount', settings.moveUpAmount + 'px');
+}
+
 // Initialize after DOM loads
 document.addEventListener('DOMContentLoaded', () => {
     updateStyles();
+    updateFadeAnimations();
+    
     
     // Start chat after a short delay
     setTimeout(() => {
@@ -116,6 +131,10 @@ function getTotalListHeight() {
 
 function getGhostHTML(msg, color) {
     return `<img class="profile-pic" src="${msg.avatar}" alt="${msg.user}"><div class="content"><span class="user" style="color:${color}">${msg.user}</span>${msg.text}</div>`;
+}
+
+function getListHTML(msg, color) {
+    return `<div class="content"><span class="user" style="color:${color}">${msg.user}</span>${msg.text}</div>`;
 }
 
 function updateListPositions() {
@@ -192,26 +211,66 @@ function addMessage() {
     isStaging = true;
     stagedMessage = messageEl;
 
-    // Create transition function that captures this specific message
+    // Create transition function that fades out staged and fades in new list message
+    // Timing stays the same - message stays on stage for full duration, only animation changes
     const transitionToList = () => {
         if (!messageEl || !messageEl.parentNode) return;
         
-        // Clear staging flag immediately so new messages can appear
-        isStaging = false;
-        
-        messagesList.push(messageEl);
-        
+        // Calculate position for new list message (before removing staged)
         let targetY = settings.listY;
-        for (let i = 0; i < messagesList.length - 1; i++) {
+        for (let i = 0; i < messagesList.length; i++) {
             targetY += messagesList[i].offsetHeight + settings.gap;
         }
         
-        messageEl.style.top = targetY + 'px';
-        messageEl.classList.add('in-list');
-        messageEl.classList.remove('staged');
+        // Create new message element directly in list position (starts invisible)
+        const listMessageEl = document.createElement('div');
+        listMessageEl.className = 'message in-list ghost-style fading-in';
+        listMessageEl.style.top = targetY + 'px';
+        listMessageEl.style.left = '0';
+        listMessageEl.innerHTML = `<div class="entry">${getListHTML(msg, color)}</div>`;
         
+        canvas.appendChild(listMessageEl);
+        messagesList.push(listMessageEl);
+        
+        // Force reflow to ensure element is in DOM before starting fade
+        void listMessageEl.offsetHeight;
+        
+        // Start fade out
+        messageEl.classList.add('fading-out');
+        
+        // Wait for fade in delay before starting fade in
+        setTimeout(() => {
+            // Trigger fade in by removing fading-in class (CSS will handle the transition)
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    listMessageEl.classList.remove('fading-in');
+                });
+            });
+        }, settings.fadeInDelay);
+        
+        // Remove staged message after fade out completes
+        setTimeout(() => {
+            if (messageEl && messageEl.parentNode) {
+                messageEl.remove();
+            }
+            if (stagedMessage === messageEl) {
+                stagedMessage = null;
+            }
+        }, settings.fadeOutDuration);
+        
+        // Clear staging flag so new messages can appear (after fade completes)
+        setTimeout(() => {
+            isStaging = false;
+            currentStageTimeout = null;
+            messageStagedTime = null;
+            stageStartTime = null;
+            timeRemaining = null;
+        }, settings.fadeOutDuration);
+
+        // Update positions and background
         updateListPositions();
 
+        // Remove old messages if list exceeds max height
         while (getTotalListHeight() > settings.maxHeight && messagesList.length > 1) {
             const oldest = messagesList.shift();
             oldest.classList.add('exiting');
@@ -224,19 +283,10 @@ function addMessage() {
             updateListPositions();
         }
 
-        // Update background after transition animation completes (1.2s)
+        // Update background after fade animations complete (fade out + fade in)
         setTimeout(() => {
             updateListBackground();
-            
-            // Cleanup
-            if (stagedMessage === messageEl) {
-                stagedMessage = null;
-            }
-            currentStageTimeout = null;
-            messageStagedTime = null;
-            stageStartTime = null;
-            timeRemaining = null;
-        }, 1200);
+        }, settings.fadeOutDuration + settings.fadeInDuration);
     };
 
     setTimeout(() => {
