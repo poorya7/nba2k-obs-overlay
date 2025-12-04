@@ -17,7 +17,9 @@ const settings = {
     maxHeight: 494,
     stageWidth: 260,
     listWidth: 290,
-    bubbleDelay: 985
+    bubbleDelay: 985,
+    listBgPadding: 22,
+    listBgAlpha: 0.45
 };
 
 // Update CSS variables and canvas position
@@ -50,170 +52,14 @@ function updateStyles() {
     if (typeof updateListPositions === 'function') {
         updateListPositions();
     }
-}
-
-// Setup controls
-function setupControls() {
-    const controls = [
-        { id: 'ctrl-list-x', key: 'listX', valId: 'val-list-x' },
-        { id: 'ctrl-list-y', key: 'listY', valId: 'val-list-y' },
-        { id: 'ctrl-gap', key: 'gap', valId: 'val-gap' },
-        { id: 'ctrl-stage-x', key: 'stageX', valId: 'val-stage-x' },
-        { id: 'ctrl-stage-y', key: 'stageY', valId: 'val-stage-y' },
-        { id: 'ctrl-pic-staged', key: 'picStaged', valId: 'val-pic-staged' },
-        { id: 'ctrl-pic-list', key: 'picList', valId: 'val-pic-list' },
-        { id: 'ctrl-stage-font', key: 'stageFontSize', valId: 'val-stage-font' },
-        { id: 'ctrl-list-font', key: 'listFontSize', valId: 'val-list-font' },
-        { id: 'ctrl-entry-gap', key: 'entryGap', valId: 'val-entry-gap' },
-        { id: 'ctrl-bg-padding', key: 'bgPadding', valId: 'val-bg-padding' },
-        { id: 'ctrl-bg-alpha', key: 'bgAlpha', valId: 'val-bg-alpha', isFloat: true, scale: 0.01 },
-        { id: 'ctrl-stage-time', key: 'stageTime', valId: 'val-stage-time' },
-        { id: 'ctrl-max-height', key: 'maxHeight', valId: 'val-max-height' },
-        { id: 'ctrl-stage-width', key: 'stageWidth', valId: 'val-stage-width' },
-        { id: 'ctrl-list-width', key: 'listWidth', valId: 'val-list-width' },
-        { id: 'ctrl-bubble-delay', key: 'bubbleDelay', valId: 'val-bubble-delay' },
-    ];
-
-    controls.forEach(ctrl => {
-        const slider = document.getElementById(ctrl.id);
-        const valDisplay = document.getElementById(ctrl.valId);
-        
-        if (slider && valDisplay) {
-            // Initialize slider and display with settings value
-            if (ctrl.isFloat) {
-                slider.value = (settings[ctrl.key] / ctrl.scale).toString();
-                valDisplay.textContent = settings[ctrl.key].toFixed(2);
-            } else {
-                slider.value = settings[ctrl.key].toString();
-                valDisplay.textContent = settings[ctrl.key].toString();
-            }
-            
-            slider.addEventListener('input', (e) => {
-                if (ctrl.isFloat) {
-                    settings[ctrl.key] = parseFloat(e.target.value) * ctrl.scale;
-                    valDisplay.textContent = settings[ctrl.key].toFixed(2);
-                } else {
-                    settings[ctrl.key] = parseInt(e.target.value);
-                    valDisplay.textContent = e.target.value;
-                }
-                updateStyles();
-            });
-        }
-    });
-
-    // Color picker
-    const colorPicker = document.getElementById('ctrl-bg-color');
-    const colorDisplay = document.getElementById('val-bg-color');
-    if (colorPicker && colorDisplay) {
-        // Initialize with settings value
-        colorPicker.value = settings.bgColor;
-        colorDisplay.textContent = settings.bgColor;
-        
-        colorPicker.addEventListener('input', (e) => {
-            settings.bgColor = e.target.value;
-            colorDisplay.textContent = e.target.value;
-            updateStyles();
-        });
+    if (typeof updateListBackground === 'function') {
+        updateListBackground();
     }
-
-    // Pause toggle
-    const pauseToggle = document.getElementById('ctrl-pause');
-    if (pauseToggle) {
-        pauseToggle.addEventListener('change', (e) => {
-            isPaused = e.target.checked;
-            
-            if (isPaused) {
-                if (currentStageTimeout) {
-                    clearTimeout(currentStageTimeout);
-                    currentStageTimeout = null;
-                    
-                    // Calculate remaining time
-                    if (stageStartTime) {
-                        // Stage timer has started (after bubble delay)
-                        const elapsed = Date.now() - stageStartTime;
-                        timeRemaining = Math.max(0, settings.stageTime - elapsed);
-                    } else if (messageStagedTime) {
-                        // Still in bubble delay phase
-                        const elapsed = Date.now() - messageStagedTime;
-                        const bubbleDelayRemaining = Math.max(0, settings.bubbleDelay - elapsed);
-                        timeRemaining = bubbleDelayRemaining + settings.stageTime;
-                    }
-                }
-            } else {
-                // Resume functionality would need to be reimplemented with new structure
-                // For now, pause/resume is disabled to fix the main transition issue
-            }
-        });
-    }
-
-    // Export button
-    const exportBtn = document.getElementById('export-btn');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', () => {
-            const output = document.getElementById('export-output');
-            const exportText = `Chat Overlay Settings:
-─────────────────────
-List X (right): ${settings.listX}px
-List Y (top): ${settings.listY}px
-Chat Gap: ${settings.gap}px
-List Pic Size: ${settings.picList}px
-List Width: ${settings.listWidth}px
-List Font Size: ${settings.listFontSize}px
-Max List Height: ${settings.maxHeight}px
-─────────────────────
-Stage X (left): ${settings.stageX}px
-Stage Y (top): ${settings.stageY}px
-Stage Pic Size: ${settings.picStaged}px
-Stage Width: ${settings.stageWidth}px
-Stage Font Size: ${settings.stageFontSize}px
-Stage BG Padding: ${settings.bgPadding}px
-Stage BG Alpha: ${settings.bgAlpha.toFixed(2)}
-Stage BG Color: ${settings.bgColor}
-Stage Time: ${settings.stageTime}ms
-Bubble Delay: ${settings.bubbleDelay}ms
-─────────────────────
-Entry Gap: ${settings.entryGap}px`;
-            
-            output.textContent = exportText;
-            output.style.display = 'block';
-            
-            navigator.clipboard.writeText(exportText).then(() => {
-                exportBtn.textContent = '✅ Copied!';
-                setTimeout(() => {
-                    exportBtn.textContent = '📋 Export Values';
-                }, 2000);
-            });
-        });
-    }
-}
-
-// Nudge function for +/- buttons
-function nudgeValue(key, delta) {
-    settings[key] += delta;
-    
-    // Update the slider and display
-    const ctrlMap = {
-        'listX': 'ctrl-list-x',
-        'listY': 'ctrl-list-y'
-    };
-    const valMap = {
-        'listX': 'val-list-x',
-        'listY': 'val-list-y'
-    };
-    
-    const slider = document.getElementById(ctrlMap[key]);
-    const valDisplay = document.getElementById(valMap[key]);
-    
-    if (slider) slider.value = settings[key];
-    if (valDisplay) valDisplay.textContent = settings[key];
-    
-    updateStyles();
 }
 
 // Initialize after DOM loads
 document.addEventListener('DOMContentLoaded', () => {
     updateStyles();
-    setupControls();
     
     // Start chat after a short delay
     setTimeout(() => {
@@ -283,6 +129,52 @@ function updateListPositions() {
     });
 }
 
+function updateListBackground() {
+    const bgEl = document.getElementById('chat-list-bg');
+    if (!bgEl) return;
+    
+    // Get all visible messages (not exiting)
+    const visibleMessages = messagesList.filter(el => !el.classList.contains('exiting'));
+    
+    if (visibleMessages.length === 0) {
+        bgEl.style.display = 'none';
+        return;
+    }
+    
+    // Get positions after animation completes - use exact positions
+    const firstMessage = visibleMessages[0];
+    const lastMessage = visibleMessages[visibleMessages.length - 1];
+    
+    const firstTop = parseFloat(firstMessage.style.top) || settings.listY;
+    const lastTop = parseFloat(lastMessage.style.top) || settings.listY;
+    const lastHeight = lastMessage.offsetHeight;
+    
+    // Calculate exact height: from first message top to last message bottom
+    const totalHeight = visibleMessages.length === 1 
+        ? firstMessage.offsetHeight 
+        : (lastTop - firstTop) + lastHeight;
+    
+    if (totalHeight <= 0) {
+        bgEl.style.display = 'none';
+        return;
+    }
+    
+    // Get background color values
+    const hex = settings.bgColor;
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    
+    // Show and size the background with padding and alpha
+    bgEl.style.display = 'block';
+    bgEl.style.top = (firstTop - settings.listBgPadding) + 'px';
+    bgEl.style.left = (-settings.listBgPadding) + 'px';
+    bgEl.style.width = (settings.listWidth + (settings.listBgPadding * 2)) + 'px';
+    bgEl.style.height = (totalHeight + (settings.listBgPadding * 2)) + 'px';
+    bgEl.style.padding = settings.listBgPadding + 'px';
+    bgEl.style.background = `rgba(${r}, ${g}, ${b}, ${settings.listBgAlpha})`;
+}
+
 function addMessage() {
     if (isStaging || isPaused) {
         return;
@@ -323,12 +215,20 @@ function addMessage() {
         while (getTotalListHeight() > settings.maxHeight && messagesList.length > 1) {
             const oldest = messagesList.shift();
             oldest.classList.add('exiting');
-            setTimeout(() => oldest.remove(), 1200);
+            setTimeout(() => {
+                oldest.remove();
+                updateListPositions();
+                // Update background after exit animation completes
+                setTimeout(() => updateListBackground(), 50);
+            }, 1200);
             updateListPositions();
         }
 
-        // Cleanup after animation completes
+        // Update background after transition animation completes (1.2s)
         setTimeout(() => {
+            updateListBackground();
+            
+            // Cleanup
             if (stagedMessage === messageEl) {
                 stagedMessage = null;
             }

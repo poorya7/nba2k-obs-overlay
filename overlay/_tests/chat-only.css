@@ -28,6 +28,17 @@ body {
     z-index: 10;
 }
 
+/* Chat List Background - dynamically sized to cover all messages */
+.chat-list-background {
+    position: absolute;
+    border-radius: 15px;
+    box-sizing: border-box;
+    z-index: 0; /* Behind messages */
+    pointer-events: none;
+    /* No transitions - instant size updates */
+    /* Background color, padding, and alpha are set via JavaScript */
+}
+
 /* Message element - moves and scales */
 .message {
     position: absolute;
