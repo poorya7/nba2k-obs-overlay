@@ -224,7 +224,7 @@ body {
 }
 
 .ghost-style.staged .profile-pic {
-    opacity: 1;
+    opacity: 0.7;
     flex-shrink: 0;
     position: relative;
     top: 0;

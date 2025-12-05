@@ -25,14 +25,19 @@ const settings = {
     fadeInDelay: 50, // milliseconds - delay after scroll before fade-in starts
     moveUpAmount: 40, // pixels
     stageBgColor: '#0a1428', // Stage background color
-    stageBgAlpha: 0.7 // Stage background transparency (0-1)
+    stageBgAlpha: 0.7, // Stage background transparency (0-1)
+    listOffsetX: 30 // Horizontal offset for list only (not stage)
 };
 
 // Update CSS variables and canvas position
 function updateStyles() {
     const canvas = document.getElementById('ghost-chat');
+    // Canvas position is fixed - stage uses this
     canvas.style.right = settings.listX + 'px';
     canvas.style.top = settings.listY + 'px';
+    
+    // List offset is applied separately via CSS variable
+    document.documentElement.style.setProperty('--list-offset-x', settings.listOffsetX + 'px');
 
     document.documentElement.style.setProperty('--stage-x', settings.stageX + 'px');
     document.documentElement.style.setProperty('--stage-y', settings.stageY + 'px');
@@ -133,7 +138,7 @@ function prePopulateMessages() {
         const listMessageEl = document.createElement('div');
         listMessageEl.className = 'message in-list ghost-style';
         listMessageEl.style.top = (settings.listY + (i * (50 + settings.gap))) + 'px';
-        listMessageEl.style.left = '0';
+        listMessageEl.style.left = settings.listOffsetX + 'px';
         
         // Get current style
         const body = document.body;
@@ -247,7 +252,7 @@ function updateListPositions() {
     messagesList.forEach((el, index) => {
         if (!el.classList.contains('exiting')) {
             el.style.top = currentY + 'px';
-            el.style.left = '0';
+            el.style.left = settings.listOffsetX + 'px';
             el.style.position = 'absolute';
             currentY += el.offsetHeight + settings.gap;
         }
@@ -293,7 +298,7 @@ function updateListBackground() {
     // Show and size the background with padding and alpha
     bgEl.style.display = 'block';
     bgEl.style.top = (firstTop - settings.listBgPadding) + 'px';
-    bgEl.style.left = (-settings.listBgPadding) + 'px';
+    bgEl.style.left = (settings.listOffsetX - settings.listBgPadding) + 'px';
     bgEl.style.width = (settings.listWidth + (settings.listBgPadding * 2)) + 'px';
     bgEl.style.height = (totalHeight + (settings.listBgPadding * 2)) + 'px';
     bgEl.style.padding = settings.listBgPadding + 'px';
@@ -337,7 +342,7 @@ function addMessage() {
         const listMessageEl = document.createElement('div');
         listMessageEl.className = 'message in-list ghost-style fading-in';
         listMessageEl.style.top = targetY + 'px';
-        listMessageEl.style.left = '0';
+        listMessageEl.style.left = settings.listOffsetX + 'px';
         listMessageEl.innerHTML = `<div class="entry">${getListHTML(msg, color)}</div>`;
         
         canvas.appendChild(listMessageEl);
