@@ -23,7 +23,9 @@ const settings = {
     fadeOutDuration: 350, // milliseconds
     fadeInDuration: 100, // milliseconds
     fadeInDelay: 50, // milliseconds - delay after scroll before fade-in starts
-    moveUpAmount: 40 // pixels
+    moveUpAmount: 40, // pixels
+    stageBgColor: '#0a1428', // Stage background color
+    stageBgAlpha: 0.7 // Stage background transparency (0-1)
 };
 
 // Update CSS variables and canvas position
@@ -53,6 +55,16 @@ function updateStyles() {
     document.documentElement.style.setProperty('--list-width', settings.listWidth + 'px');
     document.documentElement.style.setProperty('--bubble-delay', settings.bubbleDelay + 'ms');
     
+    // Update stage background
+    const stageBgHex = settings.stageBgColor;
+    const stageBgR = parseInt(stageBgHex.slice(1, 3), 16);
+    const stageBgG = parseInt(stageBgHex.slice(3, 5), 16);
+    const stageBgB = parseInt(stageBgHex.slice(5, 7), 16);
+    document.documentElement.style.setProperty('--stage-bg-r', stageBgR);
+    document.documentElement.style.setProperty('--stage-bg-g', stageBgG);
+    document.documentElement.style.setProperty('--stage-bg-b', stageBgB);
+    document.documentElement.style.setProperty('--stage-bg-alpha', settings.stageBgAlpha);
+    
     if (typeof updateListPositions === 'function') {
         updateListPositions();
     }
@@ -75,13 +87,78 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStyles();
     updateFadeAnimations();
     
+    // Listen for style changes from parent window
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'changeStyle') {
+            const style = event.data.style;
+            // Remove all style classes
+            for (let i = 1; i <= 21; i++) {
+                document.body.classList.remove(`chat-style-option-${i}`);
+            }
+            // Add selected style class
+            if (style) {
+                document.body.classList.add(`chat-style-${style}`);
+            }
+            // Pre-populate messages for the new style
+            prePopulateMessages();
+        }
+    });
+    
+    // Pre-populate initial messages
+    prePopulateMessages();
     
     // Start chat after a short delay
     setTimeout(() => {
         addMessage();
-        setInterval(addMessage, 3500);
+        setInterval(addMessage, 2000); // 2 seconds
     }, 500);
 });
+
+// Pre-populate chat list with sample messages
+function prePopulateMessages() {
+    // Clear existing list messages
+    messagesList.forEach(msg => {
+        if (msg.parentNode) {
+            msg.remove();
+        }
+    });
+    messagesList.length = 0;
+    
+    // Add 6 sample messages
+    const sampleCount = 6;
+    for (let i = 0; i < sampleCount; i++) {
+        const msg = msgs[i % msgs.length];
+        const color = userColors[i % userColors.length];
+        
+        const listMessageEl = document.createElement('div');
+        listMessageEl.className = 'message in-list ghost-style';
+        listMessageEl.style.top = (settings.listY + (i * (50 + settings.gap))) + 'px';
+        listMessageEl.style.left = '0';
+        
+        // Get current style
+        const body = document.body;
+        let currentStyle = 'default';
+        for (let i = 1; i <= 21; i++) {
+            if (body.classList.contains(`chat-style-option-${i}`)) {
+                currentStyle = `option-${i}`;
+                break;
+            }
+        }
+        
+        // Use getListHTML which handles different styles
+        const html = getListHTML(msg, color, currentStyle);
+        listMessageEl.innerHTML = `<div class="entry">${html}</div>`;
+        
+        canvas.appendChild(listMessageEl);
+        messagesList.push(listMessageEl);
+    }
+    
+    // Force reflow
+    void canvas.offsetHeight;
+    
+    updateListPositions();
+    updateListBackground();
+}
 
 // Sample messages
 const msgs = [
@@ -133,16 +210,45 @@ function getGhostHTML(msg, color) {
     return `<img class="profile-pic" src="${msg.avatar}" alt="${msg.user}"><div class="content"><span class="user" style="color:${color}">${msg.user}</span>${msg.text}</div>`;
 }
 
-function getListHTML(msg, color) {
-    return `<div class="content"><span class="user" style="color:${color}">${msg.user}</span>${msg.text}</div>`;
+function getListHTML(msg, color, styleOverride = null) {
+    // Get current style to determine HTML structure
+    const body = document.body;
+    let style = styleOverride || 'default';
+    
+    if (!styleOverride) {
+        for (let i = 1; i <= 14; i++) {
+            if (body.classList.contains(`chat-style-option-${i}`)) {
+                style = `option-${i}`;
+                break;
+            }
+        }
+    }
+    
+    // Different HTML structures for different styles
+    switch(style) {
+        case 'option-10': // Inline compact
+            return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}</span><span class="inline-text">${msg.text}</span></div>`;
+        case 'option-11': // Vertical timeline
+            return `<div class="content timeline-vertical"><div class="timeline-line"></div><span class="user" style="color:${color}">${msg.user}</span>${msg.text}</div>`;
+        case 'option-21': // Vertical timeline with colored lines
+            return `<div class="content timeline-vertical-colored"><div class="timeline-line-colored" style="background:linear-gradient(to bottom, ${color}, transparent)"></div><span class="user" style="color:${color}">${msg.user}</span>${msg.text}</div>`;
+        case 'option-19': // Brackets style
+            return `<div class="content brackets-style"><div class="bracket-user-wrapper"><span class="bracket-open" style="color:${color}">[</span><span class="bracket-user" style="color:${color}">${msg.user}</span><span class="bracket-close" style="color:${color}">]</span></div><span class="bracket-text">${msg.text}</span></div>`;
+        default:
+            return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}</span><span class="inline-text">${msg.text}</span></div>`;
+    }
 }
 
 function updateListPositions() {
+    const body = document.body;
+    
     let currentY = settings.listY;
     
     messagesList.forEach((el, index) => {
         if (!el.classList.contains('exiting')) {
             el.style.top = currentY + 'px';
+            el.style.left = '0';
+            el.style.position = 'absolute';
             currentY += el.offsetHeight + settings.gap;
         }
     });
