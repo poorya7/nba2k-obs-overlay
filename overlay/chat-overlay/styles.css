@@ -165,6 +165,12 @@ body {
     border-radius: 16px;
     color: #e2e8f0;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    width: var(--stage-width);
+    max-width: var(--stage-width);
+    min-width: var(--stage-width);
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .message.staged.ghost-style .user {
@@ -197,7 +203,7 @@ body {
    ===================================================== */
 .ghost-style .entry {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 15px;
     line-height: 1.4;
 }
@@ -219,6 +225,9 @@ body {
 
 .ghost-style.staged .profile-pic {
     opacity: 1;
+    flex-shrink: 0;
+    position: relative;
+    top: 0;
 }
 
 /* Staged entries are fully opaque */
@@ -256,8 +265,12 @@ body {
     line-height: 1.4;
     background: rgba(var(--bg-color-r), var(--bg-color-g), var(--bg-color-b), var(--bg-alpha));
     width: var(--stage-width);
+    max-width: var(--stage-width);
+    min-width: var(--stage-width);
     box-sizing: border-box;
-    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* In-list uses base transition (no override needed) */
@@ -267,6 +280,10 @@ body {
     opacity: 0;
     filter: blur(15px);
     transform: scale(1.3);
+    width: var(--stage-width) !important;
+    max-width: var(--stage-width) !important;
+    min-width: var(--stage-width) !important;
+    box-sizing: border-box;
 }
 
 /* Staged state - final values (transitions from entering) */
@@ -274,8 +291,11 @@ body {
     opacity: 1;
     filter: blur(0);
     transform: scale(1);
-    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     transition-delay: var(--bubble-delay);
+    width: var(--stage-width) !important;
+    max-width: var(--stage-width) !important;
+    min-width: var(--stage-width) !important;
 }
 
 .ghost-style .user {

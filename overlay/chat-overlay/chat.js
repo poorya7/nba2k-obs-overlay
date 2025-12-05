@@ -314,6 +314,11 @@ function addMessage() {
     messageEl.innerHTML = `<div class="entry">${getGhostHTML(msg, color)}</div>`;
     
     canvas.appendChild(messageEl);
+    
+    // Force layout calculation to ensure correct size before fade-in
+    void messageEl.offsetWidth;
+    void messageEl.offsetHeight;
+    
     isStaging = true;
     stagedMessage = messageEl;
 
