@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "YouTube Live Chat Reader",
+  "version": "1.0.0",
+  "description": "Reads YouTube live chat messages from the DOM for NBA 2K OBS Overlay",
+  "permissions": [
+    "activeTab",
+    "https://www.youtube.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch*"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
+
