@@ -132,6 +132,13 @@ class ModeCoordinator {
             // Render first page of SORTED games
             this.otherGamesView.renderGames(sortedGames, 0, 3);
             
+            // Verify content was actually rendered before showing box
+            if (!gamesContainer || gamesContainer.innerHTML.trim() === '') {
+                // No content rendered, return to current game mode
+                this.returnToCurrentGameMode();
+                return;
+            }
+            
             // Use hardcoded max height for the number of games on first page
             const gamesOnFirstPage = Math.min(3, sortedGames.length);
             const maxHeights = { 1: 156, 2: 316, 3: 476 };
