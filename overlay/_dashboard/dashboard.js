@@ -25,6 +25,8 @@ async function init() {
   document.getElementById('simMVPToggle').addEventListener('click', toggleSimMVP);
   document.getElementById('fastForwardToggle').addEventListener('click', toggleFastForward);
   document.getElementById('socialsToggle').addEventListener('click', toggleSocials);
+  document.getElementById('clearChatBtn').addEventListener('click', clearChatMessages);
+  document.getElementById('refreshChatBtn').addEventListener('click', refreshChatList);
   
   // Quarter tracking event listeners
   document.querySelectorAll('.quarter-btn').forEach(btn => {
@@ -656,6 +658,94 @@ function updateTimerDisplay() {
   
   // Show timer section
   timerSection.classList.add('show');
+}
+
+/**
+ * Clear all chat messages from server
+ */
+async function clearChatMessages() {
+  const btn = document.getElementById('clearChatBtn');
+  const originalText = btn.textContent;
+  
+  try {
+    btn.disabled = true;
+    btn.textContent = 'Clearing...';
+    
+    const response = await fetch('http://localhost:3000/api/chat', {
+      method: 'DELETE'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Show success feedback
+    btn.textContent = '✓ Cleared!';
+    btn.style.background = '#10b981';
+    
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = '#ef4444';
+      btn.disabled = false;
+    }, 2000);
+    
+  } catch (error) {
+    console.error('Error clearing chat messages:', error);
+    btn.textContent = '✗ Error';
+    btn.style.background = '#991b1b';
+    
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = '#ef4444';
+      btn.disabled = false;
+    }, 2000);
+  }
+}
+
+/**
+ * Refresh chat list on overlay (fetches all messages at once)
+ */
+async function refreshChatList() {
+  const btn = document.getElementById('refreshChatBtn');
+  const originalText = btn.textContent;
+  
+  try {
+    btn.disabled = true;
+    btn.textContent = 'Refreshing...';
+    
+    const response = await fetch('http://localhost:3000/api/chat/refresh', {
+      method: 'POST'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Show success feedback
+    btn.textContent = '✓ Refreshed!';
+    btn.style.background = '#10b981';
+    
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = '#667eea';
+      btn.disabled = false;
+    }, 2000);
+    
+  } catch (error) {
+    console.error('Error refreshing chat list:', error);
+    btn.textContent = '✗ Error';
+    btn.style.background = '#991b1b';
+    
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = '#667eea';
+      btn.disabled = false;
+    }, 2000);
+  }
 }
 
 // Initialize on page load

@@ -25,6 +25,7 @@ class StateStore {
     this.socialsEnabled = true;  // Socials overlay toggle (default: enabled)
     this.chatMessages = [];     // In-memory chat messages storage
     this.maxChatMessages = 200;  // Keep last 200 messages
+    this.chatRefreshTrigger = null;  // Timestamp to trigger chat overlay refresh
   }
 
   // Game selection
@@ -80,6 +81,15 @@ class StateStore {
   clearChatMessages() {
     this.chatMessages = [];
   }
+
+  // Chat refresh trigger
+  triggerChatRefresh() {
+    this.chatRefreshTrigger = Date.now();
+  }
+
+  getChatRefreshTrigger() {
+    return this.chatRefreshTrigger;
+  }
 }
 
 const state = new StateStore();
@@ -116,7 +126,7 @@ function sendJson(res, statusCode, data) {
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type'
   };
   res.writeHead(statusCode, headers);
@@ -257,7 +267,23 @@ async function handlePostChat(req, res) {
 // GET /api/chat - Get all chat messages (for testing/display)
 function handleGetChat(req, res) {
   const messages = state.getChatMessages();
-  sendJson(res, 200, { messages, count: messages.length });
+  const refreshTrigger = state.getChatRefreshTrigger();
+  sendJson(res, 200, { messages, count: messages.length, refreshTrigger });
+}
+
+// DELETE /api/chat - Clear all chat messages
+function handleDeleteChat(req, res) {
+  state.clearChatMessages();
+  state.triggerChatRefresh(); // Trigger refresh after clearing
+  console.log('🗑️ Chat messages cleared');
+  sendJson(res, 200, { success: true, message: 'Chat messages cleared' });
+}
+
+// POST /api/chat/refresh - Trigger chat overlay refresh
+function handlePostChatRefresh(req, res) {
+  state.triggerChatRefresh();
+  console.log('🔄 Chat refresh triggered');
+  sendJson(res, 200, { success: true, message: 'Chat refresh triggered', refreshTrigger: state.getChatRefreshTrigger() });
 }
 
 // ==================== STATIC FILE SERVING ====================
@@ -289,7 +315,9 @@ const API_ROUTES = {
   'GET /api/socials-enabled': handleGetSocialsEnabled,
   'POST /api/socials-enabled': handlePostSocialsEnabled,
   'GET /api/chat': handleGetChat,
-  'POST /api/chat': handlePostChat
+  'POST /api/chat': handlePostChat,
+  'DELETE /api/chat': handleDeleteChat,
+  'POST /api/chat/refresh': handlePostChatRefresh
 };
 
 /**
@@ -309,7 +337,7 @@ async function routeApiRequest(req, res) {
   if (req.method === 'OPTIONS') {
     const headers = {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': '86400' // 24 hours
     };

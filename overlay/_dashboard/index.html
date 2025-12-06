@@ -80,8 +80,8 @@
     .preview-card {
       background: #f9fafb;
       border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 16px;
+      border-radius: 8px;
+      padding: 8px 12px;
       display: none;
     }
 
@@ -89,22 +89,26 @@
       display: block;
     }
 
+    #previewSection {
+      margin-bottom: 16px;
+    }
+
     .preview-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 6px;
     }
 
     .preview-time {
-      font-size: 13px;
+      font-size: 11px;
       color: #6b7280;
     }
 
     .preview-status {
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 10px;
       font-weight: 600;
     }
 
@@ -133,7 +137,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
     }
 
     .preview-team {
@@ -142,27 +146,27 @@
     }
 
     .preview-team img {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 6px;
+      width: 24px;
+      height: 24px;
+      margin-bottom: 2px;
     }
 
     .preview-team-name {
       font-weight: 600;
       color: #1f2937;
-      font-size: 13px;
-      margin-bottom: 4px;
+      font-size: 11px;
+      margin-bottom: 2px;
     }
 
     .preview-team-score {
-      font-size: 24px;
+      font-size: 16px;
       font-weight: 700;
       color: #1f2937;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .preview-vs {
-      font-size: 14px;
+      font-size: 11px;
       color: #9ca3af;
       font-weight: 600;
     }
@@ -477,6 +481,18 @@
       <div style="display: flex; align-items: center; gap: 12px;">
         <button id="simMVPToggle" class="mvp-toggle-btn" data-state="off" style="flex: 1;">MVP</button>
         <button id="fastForwardToggle" class="mvp-toggle-btn" data-state="off" style="flex: 1;">Fast Forward</button>
+      </div>
+    </div>
+
+    <!-- Chat Control -->
+    <div class="section">
+      <div style="display: flex; gap: 12px;">
+        <button id="clearChatBtn" class="refresh-btn" style="background: #ef4444; flex: 1;">
+          🗑️ Clear All Chat Messages
+        </button>
+        <button id="refreshChatBtn" class="refresh-btn" style="flex: 1;">
+          🔄 Refresh Chat List
+        </button>
       </div>
     </div>
   </div>

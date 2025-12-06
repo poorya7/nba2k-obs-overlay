@@ -39,6 +39,7 @@ class ChatController {
         // Server polling
         this.serverPollInterval = null;
         this.displayedMessageIds = new Set(); // Track displayed message IDs to prevent duplicates
+        this.lastRefreshTrigger = null; // Track last refresh trigger timestamp
     }
     
     /**
@@ -85,6 +86,14 @@ class ChatController {
         try {
             const response = await fetch('http://localhost:3000/api/chat');
             const data = await response.json();
+            
+            // Check if refresh is triggered
+            if (data.refreshTrigger && data.refreshTrigger !== this.lastRefreshTrigger) {
+                this.lastRefreshTrigger = data.refreshTrigger;
+                // Trigger full refresh
+                await this.prePopulate();
+                return; // Skip normal polling this cycle
+            }
             
             if (data.messages && data.messages.length > 0) {
                 // Filter out already displayed messages and sort by timestamp (oldest first)
