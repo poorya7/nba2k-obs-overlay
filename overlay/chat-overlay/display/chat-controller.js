@@ -144,19 +144,30 @@ class ChatController {
         tempDiv.innerHTML = text || '';
         const textLength = tempDiv.textContent.length;
         
-        // Base: "put wane back in" = 17 characters = 6 seconds (6000ms)
-        // Target: "4Worst coach in the NBA" = 24 characters = 6.5 seconds (6500ms)
-        // Using linear interpolation: time = a * textLength + b
-        // Solving: 6000 = a * 17 + b, 6500 = a * 24 + b
-        // a = 500/7 = 71.43, b = 6000 - 71.43*17 = 4785.7
-        const minStageTime = 1000; // 1 second minimum
-        const maxStageTime = 10000; // 10 seconds maximum
+        // Count emoji images (each <img> tag counts as 1 character)
+        const emojiCount = tempDiv.querySelectorAll('img').length;
         
-        // Linear formula: time = 71.43 * textLength + 4785.7
-        const calculatedTime = (71.43 * textLength) + 4785.7;
+        // Total length = text characters + emojis
+        const totalLength = textLength + emojiCount;
+        
+        // For emoji-only messages (no text), treat as 0 length so they get clamped to minimum
+        const calculationLength = textLength === 0 ? 0 : totalLength;
+        
+        const minStageTime = 2000; // 2.0 seconds minimum
+        const maxStageTime = 8000; // 8.0 seconds maximum
+        
+        // Formula: time = 1.8 + 0.044 × c (in seconds)
+        // Converted to milliseconds: time = 1800 + 44 × calculationLength
+        const calculatedTime = 1800 + (44 * calculationLength);
         
         // Apply min/max constraints
-        return Math.max(minStageTime, Math.min(maxStageTime, calculatedTime));
+        const finalTime = Math.max(minStageTime, Math.min(maxStageTime, calculatedTime));
+        
+        // Debug logging
+        const textPreview = tempDiv.textContent.substring(0, 50) + (tempDiv.textContent.length > 50 ? '...' : '');
+        console.log(`text: "${textPreview}" length: ${totalLength} (text: ${textLength}, emojis: ${emojiCount}) wait time: ${(finalTime / 1000).toFixed(2)}s`);
+        
+        return finalTime;
     }
     
     /**
@@ -177,6 +188,9 @@ class ChatController {
             return false; // Return false to indicate message was skipped
         }
         
+        // Set staging state IMMEDIATELY to prevent race conditions
+        this.stateManager.setIsStaging(true);
+        
         // Get user color
         const color = this.dataFormatter.getUserColor(this.stateManager.getMsgIdx());
         this.stateManager.incrementMsgIdx();
@@ -190,12 +204,15 @@ class ChatController {
         
         this.chatView.appendToCanvas(messageEl);
         
-        // Set staging state
-        this.stateManager.setIsStaging(true);
+        // Set staged message immediately
         this.stateManager.setStagedMessage(messageEl);
         
-        // Animate entry - callback will be called after bubble delay
-        this.stageAnimator.animateEntry(messageEl, () => {
+        // Wait for avatar image to load before starting animation to prevent layout shifts
+        const profilePic = messageEl.querySelector('.profile-pic');
+        const startAnimation = () => {
+            
+            // Animate entry - callback will be called after bubble delay
+            this.stageAnimator.animateEntry(messageEl, () => {
             // Set up transition timeout (after bubble delay, wait dynamicStageTime, then transition)
             const timeout = setTimeout(() => {
                 // Format list HTML
@@ -227,6 +244,36 @@ class ChatController {
             }, dynamicStageTime);
             this.stateManager.setCurrentStageTimeout(timeout);
         });
+        };
+        
+        // Wait for avatar image to load, or start immediately if already loaded or no image
+        // Also verify this is still the current staged message before starting animation
+        if (!profilePic || !profilePic.src || profilePic.src.trim() === '') {
+            // No profile pic or empty src, start immediately
+            if (this.stateManager.getStagedMessage() === messageEl) {
+                startAnimation();
+            }
+        } else if (profilePic.complete && profilePic.naturalHeight !== 0) {
+            // Image already loaded
+            if (this.stateManager.getStagedMessage() === messageEl) {
+                startAnimation();
+            }
+        } else {
+            // Wait for image to load (with timeout fallback to prevent infinite waiting)
+            let animationStarted = false;
+            const safeStart = () => {
+                // Only start if this is still the current staged message (prevent race conditions)
+                if (!animationStarted && this.stateManager.getStagedMessage() === messageEl) {
+                    animationStarted = true;
+                    startAnimation();
+                }
+            };
+            profilePic.addEventListener('load', safeStart, { once: true });
+            profilePic.addEventListener('error', safeStart, { once: true }); // Start even if image fails to load
+            // Fallback timeout: start animation after 1000ms max wait
+            // This gives images more time to load, especially on first load (not cached)
+            setTimeout(safeStart, 1000);
+        }
         
         return true; // Return true to indicate message was successfully displayed
     }

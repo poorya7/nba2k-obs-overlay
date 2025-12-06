@@ -169,7 +169,7 @@ body {
     max-width: var(--stage-width);
     min-width: var(--stage-width);
     box-sizing: border-box;
-    word-wrap: break-word;
+    word-break: normal;
     overflow-wrap: break-word;
 }
 
@@ -247,6 +247,7 @@ body {
     object-fit: cover;
     filter: drop-shadow(0 0 20px rgba(200, 200, 255, 0.6));
     border: 2px solid rgba(200, 200, 255, 0.4);
+    flex-shrink: 0;
 }
 
 /* Profile pic transitions with NO delay */
@@ -268,7 +269,7 @@ body {
     max-width: var(--stage-width);
     min-width: var(--stage-width);
     box-sizing: border-box;
-    word-wrap: break-word;
+    word-break: normal;
     overflow-wrap: break-word;
     transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

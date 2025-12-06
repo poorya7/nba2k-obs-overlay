@@ -116,7 +116,7 @@ function sendJson(res, statusCode, data) {
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type'
   };
   res.writeHead(statusCode, headers);
@@ -260,6 +260,13 @@ function handleGetChat(req, res) {
   sendJson(res, 200, { messages, count: messages.length });
 }
 
+// DELETE /api/chat - Clear all chat messages
+function handleDeleteChat(req, res) {
+  state.clearChatMessages();
+  console.log('🗑️ Chat messages cleared');
+  sendJson(res, 200, { success: true, message: 'Chat messages cleared' });
+}
+
 // ==================== STATIC FILE SERVING ====================
 
 // MIME types for different file extensions
@@ -289,7 +296,8 @@ const API_ROUTES = {
   'GET /api/socials-enabled': handleGetSocialsEnabled,
   'POST /api/socials-enabled': handlePostSocialsEnabled,
   'GET /api/chat': handleGetChat,
-  'POST /api/chat': handlePostChat
+  'POST /api/chat': handlePostChat,
+  'DELETE /api/chat': handleDeleteChat
 };
 
 /**
@@ -309,7 +317,7 @@ async function routeApiRequest(req, res) {
   if (req.method === 'OPTIONS') {
     const headers = {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': '86400' // 24 hours
     };
