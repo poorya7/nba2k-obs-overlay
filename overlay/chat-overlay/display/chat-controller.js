@@ -52,10 +52,10 @@ class ChatController {
         // Pre-populate initial messages from server
         this.prePopulate();
         
-        // Start server polling (same interval as test page)
+        // Start server polling
         this.serverPollInterval = setInterval(() => {
             this.pollServerMessages();
-        }, 2000); // 2 seconds
+        }, 200); // 200ms (5 polls per second)
     }
     
     /**
@@ -87,13 +87,17 @@ class ChatController {
             const data = await response.json();
             
             if (data.messages && data.messages.length > 0) {
-                // Process each message - only show new ones we haven't displayed yet
-                data.messages.forEach(serverMsg => {
-                    // Skip if we've already displayed this message
-                    if (this.displayedMessageIds.has(serverMsg.id)) {
-                        return;
-                    }
-                    
+                // Filter out already displayed messages and sort by timestamp (oldest first)
+                const newMessages = data.messages
+                    .filter(serverMsg => !this.displayedMessageIds.has(serverMsg.id))
+                    .sort((a, b) => {
+                        const timestampA = a.timestamp || 0;
+                        const timestampB = b.timestamp || 0;
+                        return timestampA - timestampB; // Oldest first
+                    });
+                
+                // Process each message in timestamp order
+                newMessages.forEach(serverMsg => {
                     // Convert server format to overlay format
                     // Use textHtml if available (for emojis), fallback to text
                     const text = serverMsg.textHtml || serverMsg.text || '';
@@ -141,13 +145,15 @@ class ChatController {
         const textLength = tempDiv.textContent.length;
         
         // Base: "put wane back in" = 17 characters = 6 seconds (6000ms)
-        const baseTextLength = 17;
-        const baseStageTime = 6000;
-        const minStageTime = 4000; // 4 seconds minimum
+        // Target: "4Worst coach in the NBA" = 24 characters = 6.5 seconds (6500ms)
+        // Using linear interpolation: time = a * textLength + b
+        // Solving: 6000 = a * 17 + b, 6500 = a * 24 + b
+        // a = 500/7 = 71.43, b = 6000 - 71.43*17 = 4785.7
+        const minStageTime = 1000; // 1 second minimum
         const maxStageTime = 10000; // 10 seconds maximum
         
-        // Calculate: (textLength / baseLength) * baseTime
-        const calculatedTime = (textLength / baseTextLength) * baseStageTime;
+        // Linear formula: time = 71.43 * textLength + 4785.7
+        const calculatedTime = (71.43 * textLength) + 4785.7;
         
         // Apply min/max constraints
         return Math.max(minStageTime, Math.min(maxStageTime, calculatedTime));
