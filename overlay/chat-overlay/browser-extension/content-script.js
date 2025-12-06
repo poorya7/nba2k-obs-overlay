@@ -1574,7 +1574,7 @@ ${errorText}`;
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                     color: #fff;
                     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-                    display: flex;
+                    display: none !important; /* Hidden - can be shown again by removing this line */
                     flex-direction: column;
                 }
                 #chat-reader-overlay.collapsed {

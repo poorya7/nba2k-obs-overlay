@@ -38,7 +38,7 @@ class ChatDataFormatter {
             }
         }
         
-        return `<img class="profile-pic" src="${msg.avatar}" alt="${msg.user}"><div class="content"><span class="user" style="color:${color}">${msg.user}</span>${badgesHtml}${badgesHtml ? ' ' : ''}${msg.text}</div>`;
+        return `<img class="profile-pic" src="${msg.avatar}" alt="${msg.user}"><div class="content"><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> ${msg.text}</div>`;
     }
     
     /**
@@ -83,15 +83,15 @@ class ChatDataFormatter {
         // Different HTML structures for different styles
         switch(style) {
             case 'option-10': // Inline compact
-                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}</span>${badgesHtml}${badgesHtml ? ' ' : ''}<span class="inline-text">${msg.text}</span></div>`;
+                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> <span class="inline-text">${msg.text}</span></div>`;
             case 'option-11': // Vertical timeline
-                return `<div class="content timeline-vertical"><div class="timeline-line"></div><span class="user" style="color:${color}">${msg.user}</span>${badgesHtml}${badgesHtml ? ' ' : ''}${msg.text}</div>`;
+                return `<div class="content timeline-vertical"><div class="timeline-line"></div><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> ${msg.text}</div>`;
             case 'option-21': // Vertical timeline with colored lines
-                return `<div class="content timeline-vertical-colored"><div class="timeline-line-colored" style="background:linear-gradient(to bottom, ${color}, transparent)"></div><span class="user" style="color:${color}">${msg.user}</span>${badgesHtml}${badgesHtml ? ' ' : ''}${msg.text}</div>`;
+                return `<div class="content timeline-vertical-colored"><div class="timeline-line-colored" style="background:linear-gradient(to bottom, ${color}, transparent)"></div><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> ${msg.text}</div>`;
             case 'option-19': // Brackets style
-                return `<div class="content brackets-style"><div class="bracket-user-wrapper"><span class="bracket-open" style="color:${color}">[</span><span class="bracket-user" style="color:${color}">${msg.user}</span>${badgesHtml}${badgesHtml ? ' ' : ''}<span class="bracket-close" style="color:${color}">]</span></div><span class="bracket-text">${msg.text}</span></div>`;
+                return `<div class="content brackets-style"><div class="bracket-user-wrapper"><span class="bracket-open" style="color:${color}">[</span><span class="bracket-user" style="color:${color}">${msg.user}${badgesHtml}</span><span class="bracket-close" style="color:${color}">]</span></div><span class="bracket-text">${msg.text}</span></div>`;
             default:
-                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}</span>${badgesHtml}${badgesHtml ? ' ' : ''}<span class="inline-text">${msg.text}</span></div>`;
+                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> <span class="inline-text">${msg.text}</span></div>`;
         }
     }
     
