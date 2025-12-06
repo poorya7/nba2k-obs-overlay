@@ -303,7 +303,6 @@
                     
                     container.innerHTML = data.messages
                         .slice()
-                        .reverse() // Show newest first
                         .map(formatMessage)
                         .join('');
                 } else {

@@ -36,27 +36,9 @@ class ChatController {
         this.stageAnimator = dependencies.stageAnimator;
         this.config = dependencies.config;
         
-        // Sample messages for testing (will be replaced with API data)
-        this.sampleMessages = [
-            { user: 'longtime_lurker', text: 'been watching for months and this is still the best asmr basketball content on the platform hands down', avatar: 'https://i.pravatar.cc/150?img=25' },
-            { user: 'hoops_enthusiast', text: 'the way you handle those controls is just so smooth and satisfying to watch fr fr', avatar: 'https://i.pravatar.cc/150?img=30' },
-            { user: 'midnight_viewer', text: 'this is literally perfect for falling asleep to thank you so much for this content seriously', avatar: 'https://i.pravatar.cc/150?img=33' },
-            { user: 'hushswish_fan', text: 'so relaxing', avatar: 'https://i.pravatar.cc/150?img=1' },
-            { user: 'bball_lover', text: 'love the vibes', avatar: 'https://i.pravatar.cc/150?img=3' },
-            { user: 'nightowl23', text: 'whos winning?', avatar: 'https://i.pravatar.cc/150?img=5' },
-            { user: 'silent_hoops', text: 'W stream', avatar: 'https://i.pravatar.cc/150?img=7' },
-            { user: 'asmr_addict', text: 'keyboard sounds 🔥', avatar: 'https://i.pravatar.cc/150?img=8' },
-            { user: 'chill_gamer', text: 'perfect vibes', avatar: 'https://i.pravatar.cc/150?img=11' },
-            { user: 'zen_master', text: 'so peaceful', avatar: 'https://i.pravatar.cc/150?img=12' },
-            { user: 'newbie_here', text: 'first time!', avatar: 'https://i.pravatar.cc/150?img=14' },
-            { user: 'lol_master', text: 'lmaooo 💀', avatar: 'https://i.pravatar.cc/150?img=15' },
-            { user: 'RTB_18', text: 'pullin up', avatar: 'https://i.pravatar.cc/150?img=18' },
-            { user: 'KaponeONS', text: 'how to be 99 overall', avatar: 'https://i.pravatar.cc/150?img=20' },
-            { user: 'Thatchy2k', text: 'YOUUUU', avatar: 'https://i.pravatar.cc/150?img=22' },
-        ];
-        
-        // Auto-add interval (for testing with sample messages)
-        this.autoAddInterval = null;
+        // Server polling
+        this.serverPollInterval = null;
+        this.displayedMessageIds = new Set(); // Track displayed message IDs to prevent duplicates
     }
     
     /**
@@ -67,26 +49,13 @@ class ChatController {
         this.updateStyles();
         this.updateFadeAnimations();
         
-        // Pre-populate initial messages
+        // Pre-populate initial messages from server
         this.prePopulate();
         
-        // Start auto-adding messages for testing (will be replaced with API polling)
-        setTimeout(() => {
-            const firstMsg = this.sampleMessages[this.stateManager.getMsgIdx() % this.sampleMessages.length];
-            this.displayNewChat({
-                username: firstMsg.user,
-                text: firstMsg.text,
-                avatar: firstMsg.avatar
-            });
-            this.autoAddInterval = setInterval(() => {
-                const msg = this.sampleMessages[this.stateManager.getMsgIdx() % this.sampleMessages.length];
-                this.displayNewChat({
-                    username: msg.user,
-                    text: msg.text,
-                    avatar: msg.avatar
-                });
-            }, 2000); // 2 seconds
-        }, 500);
+        // Start server polling (same interval as test page)
+        this.serverPollInterval = setInterval(() => {
+            this.pollServerMessages();
+        }, 2000); // 2 seconds
     }
     
     /**
@@ -94,10 +63,10 @@ class ChatController {
      * @returns {void}
      */
     stop() {
-        // Stop auto-add interval
-        if (this.autoAddInterval) {
-            clearInterval(this.autoAddInterval);
-            this.autoAddInterval = null;
+        // Stop server polling interval
+        if (this.serverPollInterval) {
+            clearInterval(this.serverPollInterval);
+            this.serverPollInterval = null;
         }
         
         // Clear stage timeout
@@ -109,25 +78,105 @@ class ChatController {
     }
     
     /**
+     * Poll server for new chat messages (reuses test page logic)
+     * @returns {Promise<void>}
+     */
+    async pollServerMessages() {
+        try {
+            const response = await fetch('http://localhost:3000/api/chat');
+            const data = await response.json();
+            
+            if (data.messages && data.messages.length > 0) {
+                // Process each message - only show new ones we haven't displayed yet
+                data.messages.forEach(serverMsg => {
+                    // Skip if we've already displayed this message
+                    if (this.displayedMessageIds.has(serverMsg.id)) {
+                        return;
+                    }
+                    
+                    // Convert server format to overlay format
+                    // Use textHtml if available (for emojis), fallback to text
+                    const text = serverMsg.textHtml || serverMsg.text || '';
+                    
+                    // Display the message using existing animation system
+                    // Pass the message ID so we can mark it as displayed AFTER successful display
+                    const wasDisplayed = this.displayNewChat({
+                        username: serverMsg.username,
+                        text: text,
+                        avatar: serverMsg.avatar || '',
+                        badges: serverMsg.badges || null,
+                        id: serverMsg.id // Pass ID for tracking
+                    });
+                    
+                    // Only mark as displayed if the message was actually shown
+                    // (not skipped due to staging/pause state)
+                    if (wasDisplayed && serverMsg.id) {
+                        this.displayedMessageIds.add(serverMsg.id);
+                        
+                        // Keep displayed IDs manageable (only last 500)
+                        if (this.displayedMessageIds.size > 500) {
+                            const idsArray = Array.from(this.displayedMessageIds);
+                            this.displayedMessageIds = new Set(idsArray.slice(-500));
+                        }
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching messages from server:', error);
+            // Don't break overlay if server is unavailable - just silently fail
+        }
+    }
+    
+    /**
+     * Calculate dynamic stage time based on text length
+     * Base: "put wane back in" (17 chars) = 6 seconds
+     * Min: 4 seconds, Max: 10 seconds
+     * @param {string} text - Message text (can be HTML)
+     * @returns {number} Stage time in milliseconds
+     */
+    calculateStageTime(text) {
+        // Extract plain text length (strip HTML tags)
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = text || '';
+        const textLength = tempDiv.textContent.length;
+        
+        // Base: "put wane back in" = 17 characters = 6 seconds (6000ms)
+        const baseTextLength = 17;
+        const baseStageTime = 6000;
+        const minStageTime = 4000; // 4 seconds minimum
+        const maxStageTime = 10000; // 10 seconds maximum
+        
+        // Calculate: (textLength / baseLength) * baseTime
+        const calculatedTime = (textLength / baseTextLength) * baseStageTime;
+        
+        // Apply min/max constraints
+        return Math.max(minStageTime, Math.min(maxStageTime, calculatedTime));
+    }
+    
+    /**
      * Display a new chat message (main public API)
-     * @param {Object} chatData - {username, text, avatar} or {user, text, avatar}
-     * @returns {void}
+     * @param {Object} chatData - {username, text, avatar, badges, id} or {user, text, avatar, badges, id}
+     * @returns {boolean} True if message was displayed, false if skipped
      */
     displayNewChat(chatData) {
         // Normalize chat data (support both 'username' and 'user')
         const msg = {
             user: chatData.username || chatData.user,
             text: chatData.text,
-            avatar: chatData.avatar
+            avatar: chatData.avatar,
+            badges: chatData.badges || null
         };
         
         if (this.stateManager.getIsStaging() || this.stateManager.getIsPaused()) {
-            return;
+            return false; // Return false to indicate message was skipped
         }
         
         // Get user color
         const color = this.dataFormatter.getUserColor(this.stateManager.getMsgIdx());
         this.stateManager.incrementMsgIdx();
+        
+        // Calculate dynamic stage time based on text length
+        const dynamicStageTime = this.calculateStageTime(msg.text);
         
         // Create stage message element
         const stageHTML = this.dataFormatter.formatStageHTML(msg, color);
@@ -141,7 +190,7 @@ class ChatController {
         
         // Animate entry - callback will be called after bubble delay
         this.stageAnimator.animateEntry(messageEl, () => {
-            // Set up transition timeout (after bubble delay, wait stageTime, then transition)
+            // Set up transition timeout (after bubble delay, wait dynamicStageTime, then transition)
             const timeout = setTimeout(() => {
                 // Format list HTML
                 const listHTML = this.dataFormatter.formatListHTML(msg, color);
@@ -169,58 +218,109 @@ class ChatController {
                     // Update background
                     this.chatView.updateBackground(this.stateManager.getMessagesList());
                 });
-            }, this.config.settings.stageTime);
+            }, dynamicStageTime);
             this.stateManager.setCurrentStageTimeout(timeout);
         });
+        
+        return true; // Return true to indicate message was successfully displayed
     }
     
     /**
-     * Pre-populate chat list with sample messages
-     * @returns {void}
+     * Pre-populate chat list with ALL existing messages from server
+     * Sorted by message timestamp, added directly to list (no staging animation)
+     * @returns {Promise<void>}
      */
-    prePopulate() {
+    async prePopulate() {
         // Clear existing list messages
         const messagesList = this.stateManager.getMessagesList();
         messagesList.forEach(msg => {
             this.chatView.removeElement(msg);
         });
         this.stateManager.clearMessagesList();
+        this.displayedMessageIds.clear();
         
-        // Add 6 sample messages
-        const sampleCount = 6;
-        for (let i = 0; i < sampleCount; i++) {
-            const msg = this.sampleMessages[i % this.sampleMessages.length];
-            const color = this.dataFormatter.getUserColor(i);
+        try {
+            // Fetch ALL existing messages from server
+            const response = await fetch('http://localhost:3000/api/chat');
+            const data = await response.json();
             
-            // Get current style
-            const body = document.body;
-            let currentStyle = 'default';
-            for (let j = 1; j <= 21; j++) {
-                if (body.classList.contains(`chat-style-option-${j}`)) {
-                    currentStyle = `option-${j}`;
-                    break;
+            if (data.messages && data.messages.length > 0) {
+                // Get current style
+                const body = document.body;
+                let currentStyle = 'default';
+                for (let j = 1; j <= 21; j++) {
+                    if (body.classList.contains(`chat-style-option-${j}`)) {
+                        currentStyle = `option-${j}`;
+                        break;
+                    }
                 }
+                
+                // Sort messages by timestamp (oldest first) - use message timestamp, not server time
+                const sortedMessages = [...data.messages].sort((a, b) => {
+                    const timestampA = a.timestamp || 0;
+                    const timestampB = b.timestamp || 0;
+                    return timestampA - timestampB; // Oldest first
+                });
+                
+                // Add ALL messages to the list directly (no staging animation)
+                sortedMessages.forEach((serverMsg, i) => {
+                    // Mark as displayed
+                    if (serverMsg.id) {
+                        this.displayedMessageIds.add(serverMsg.id);
+                    }
+                    
+                    // Convert server format to overlay format
+                    const text = serverMsg.textHtml || serverMsg.text || '';
+                    const msg = {
+                        user: serverMsg.username,
+                        text: text,
+                        avatar: serverMsg.avatar || '',
+                        badges: serverMsg.badges || null
+                    };
+                    
+                    const color = this.dataFormatter.getUserColor(i);
+                    
+                    // Format HTML
+                    const html = this.dataFormatter.formatListHTML(msg, color, currentStyle);
+                    
+                    // Create list message element
+                    const listMessageEl = this.chatView.createListMessageElement(
+                        html,
+                        this.config.settings.listY + (i * (50 + this.config.settings.gap))
+                    );
+                    this.chatView.removeClass(listMessageEl, 'fading-in'); // Make visible immediately
+                    
+                    this.chatView.appendToCanvas(listMessageEl);
+                    this.stateManager.addToMessagesList(listMessageEl);
+                });
+                
+                // Force reflow
+                void this.chatView.getCanvas().offsetHeight;
+                
+                // Update positions and background for all messages
+                this.chatView.updatePositions(this.stateManager.getMessagesList());
+                
+                // Remove old messages if list exceeds max height (same logic as displayNewChat)
+                while (this.chatView.calculateTotalListHeight(this.stateManager.getMessagesList()) > this.config.settings.maxHeight && this.stateManager.getMessagesList().length > 1) {
+                    const oldest = this.stateManager.shiftMessagesList();
+                    this.chatView.addClass(oldest, 'exiting');
+                    setTimeout(() => {
+                        this.chatView.removeElement(oldest);
+                        this.chatView.updatePositions(this.stateManager.getMessagesList());
+                        // Update background after exit animation completes
+                        setTimeout(() => {
+                            this.chatView.updateBackground(this.stateManager.getMessagesList());
+                        }, 50);
+                    }, 1200);
+                    this.chatView.updatePositions(this.stateManager.getMessagesList());
+                }
+                
+                this.chatView.updateBackground(this.stateManager.getMessagesList());
             }
-            
-            // Format HTML
-            const html = this.dataFormatter.formatListHTML(msg, color, currentStyle);
-            
-            // Create list message element
-            const listMessageEl = this.chatView.createListMessageElement(
-                html,
-                this.config.settings.listY + (i * (50 + this.config.settings.gap))
-            );
-            this.chatView.removeClass(listMessageEl, 'fading-in'); // Make visible immediately
-            
-            this.chatView.appendToCanvas(listMessageEl);
-            this.stateManager.addToMessagesList(listMessageEl);
+        } catch (error) {
+            console.error('Error pre-populating messages from server:', error);
+            // Don't break overlay if server is unavailable - just start with empty list
         }
-        
-        // Force reflow
-        void this.chatView.getCanvas().offsetHeight;
-        
-        this.chatView.updatePositions(this.stateManager.getMessagesList());
-        this.chatView.updateBackground(this.stateManager.getMessagesList());
     }
     
     /**

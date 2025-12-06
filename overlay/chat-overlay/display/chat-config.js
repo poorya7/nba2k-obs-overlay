@@ -16,7 +16,7 @@ const ChatConfig = {
         listFontSize: 18,
         entryGap: 6,
         bgPadding: 15,
-        stageTime: 1918,
+        stageTime: 6000,
         bgAlpha: 0.88,
         bgColor: '#0a1428',
         maxHeight: 494,
