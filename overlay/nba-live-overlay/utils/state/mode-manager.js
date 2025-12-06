@@ -13,7 +13,7 @@ class ModeManager {
         // Other games tracking
         this.lastQuarterStartTime = null;
         this.hasShownOtherGamesThisQuarter = false;
-        this.OTHER_GAMES_DELAY_MS = 60000; // 60 seconds
+        this.OTHER_GAMES_DELAY_MS = 90000; // 90 seconds
     }
 
     /**
