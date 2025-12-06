@@ -49,8 +49,13 @@ async function sendChatToServer(messageData) {
             };
         }
         
+        // Parse response to get serverClearTimestamp
+        const responseData = await response.json().catch(() => ({}));
         console.log('✅ Background: Chat sent successfully');
-        return { success: true };
+        return { 
+            success: true,
+            serverClearTimestamp: responseData.serverClearTimestamp || null
+        };
     } catch (error) {
         console.error('❌ Background: Error sending chat', error);
         // Determine error type

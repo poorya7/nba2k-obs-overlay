@@ -26,6 +26,7 @@ class StateStore {
     this.chatMessages = [];     // In-memory chat messages storage
     this.maxChatMessages = 200;  // Keep last 200 messages
     this.chatRefreshTrigger = null;  // Timestamp to trigger chat overlay refresh
+    this.chatClearTimestamp = null;  // Timestamp when chat was last cleared (for extension to reset tracking)
   }
 
   // Game selection
@@ -80,6 +81,11 @@ class StateStore {
 
   clearChatMessages() {
     this.chatMessages = [];
+    this.chatClearTimestamp = Date.now(); // Update timestamp when cleared
+  }
+  
+  getChatClearTimestamp() {
+    return this.chatClearTimestamp;
   }
 
   // Chat refresh trigger
@@ -257,7 +263,11 @@ async function handlePostChat(req, res) {
     state.addChatMessage(message);
     console.log('💬 Chat received:', message.username, '-', (message.text || message.textHtml).substring(0, 50), `[ID: ${message.id}]`);
     
-    sendJson(res, 200, { success: true, messageId: message.id });
+    sendJson(res, 200, { 
+      success: true, 
+      messageId: message.id,
+      serverClearTimestamp: state.getChatClearTimestamp() // Include so extension can detect clears
+    });
   } catch (error) {
     console.error('❌ Chat error:', error.message);
     sendJson(res, 400, { error: error.message });

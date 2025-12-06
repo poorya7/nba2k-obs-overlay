@@ -5,10 +5,11 @@
     'use strict';
     
 
-    // Check if we're on a YouTube watch page
+    // Check if we're on a YouTube watch page or live page
     function isYouTubeWatchPage() {
         return window.location.hostname === 'www.youtube.com' && 
-               window.location.pathname.startsWith('/watch');
+               (window.location.pathname.startsWith('/watch') || 
+                window.location.pathname.startsWith('/live'));
     }
 
     // Check if this is a live stream (has live indicator)
@@ -54,6 +55,7 @@
             this.lastServerSuccess = null;
             this.errorLog = []; // Array of error objects with details
             this.sentMessagesLog = []; // Array of messages sent to server (for debugging)
+            this.lastServerClearTimestamp = null; // Track last server clear timestamp to detect when server is cleared
             
             this.init();
         }
@@ -92,6 +94,7 @@
             // Also watch for initial chat load
             this.watchForChatContainer();
             } catch (error) {
+                console.error('[Chat Reader] Error in start():', error);
                 this.isActive = false;
             }
     }
@@ -285,8 +288,13 @@
         try {
             const chatContainer = this.findChatContainer();
             if (!chatContainer) {
+                // DEBUG: Log if chat container not found
+                console.warn('[Chat Reader] Chat container not found - chat may not be loaded yet');
                 return; // Silently return - chat not available
             }
+            
+            // DEBUG: Log successful setup
+            console.log('[Chat Reader] Chat observer setup successful');
 
             // Don't create duplicate observers
             if (this.observer) {
@@ -323,6 +331,11 @@
         try {
             // Find all chat message elements
             const messages = this.findChatMessages();
+            
+            // DEBUG: Log if we're finding messages
+            if (messages.length > 0 && this.isInitialScan) {
+                console.log('[Chat Reader] Found', messages.length, 'messages in DOM');
+            }
             
             let newCount = 0;
             let processedCount = 0;
@@ -392,29 +405,47 @@
             
             // Chat messages are always inside the iframe, so only search there
             const chatIframe = document.querySelector('iframe#chatframe');
-            if (chatIframe) {
-                try {
-                    const iframeDoc = chatIframe.contentDocument || chatIframe.contentWindow?.document;
-                    if (iframeDoc) {
-                        for (const selector of selectors) {
-                            try {
-                                const elements = iframeDoc.querySelectorAll(selector);
-                                if (elements.length > 0) {
-                                }
-                                elements.forEach(el => {
-                                    if (el && !messages.includes(el)) {
-                                        messages.push(el);
-                                    }
-                                });
-                            } catch (e) {
-                                continue;
+            if (!chatIframe) {
+                // DEBUG: Log if iframe not found
+                if (this.isInitialScan) {
+                    console.warn('[Chat Reader] Chat iframe not found!');
+                }
+                return [];
+            }
+            
+            try {
+                const iframeDoc = chatIframe.contentDocument || chatIframe.contentWindow?.document;
+                if (!iframeDoc) {
+                    // DEBUG: Log if can't access iframe
+                    if (this.isInitialScan) {
+                        console.warn('[Chat Reader] Cannot access iframe content (CORS or not loaded yet)');
+                    }
+                    return [];
+                }
+                
+                for (const selector of selectors) {
+                    try {
+                        const elements = iframeDoc.querySelectorAll(selector);
+                        if (elements.length > 0) {
+                            // DEBUG: Log what we found
+                            if (this.isInitialScan && messages.length === 0) {
+                                console.log('[Chat Reader] Found', elements.length, 'elements with selector:', selector);
                             }
                         }
-                    } else {
+                        elements.forEach(el => {
+                            if (el && !messages.includes(el)) {
+                                messages.push(el);
+                            }
+                        });
+                    } catch (e) {
+                        continue;
                     }
-                } catch (e) {
                 }
-            } else {
+            } catch (e) {
+                // DEBUG: Log iframe access errors
+                if (this.isInitialScan) {
+                    console.error('[Chat Reader] Error accessing iframe:', e.message);
+                }
             }
 
             // Only log total if we found messages
@@ -422,6 +453,10 @@
             }
             return messages;
         } catch (error) {
+            // DEBUG: Log general errors
+            if (this.isInitialScan) {
+                console.error('[Chat Reader] Error in findChatMessages:', error);
+            }
             return [];
         }
     }
@@ -1145,11 +1180,26 @@
     }
 
     async onNewMessage(messageData) {
+        // DEBUG: Log all new messages
+        const isOwnUser = this.isOwnUsername(messageData.username);
+        if (isOwnUser) {
+            console.log('[Chat Reader] 🔍 New message from own user:', {
+                id: messageData.id,
+                username: messageData.username,
+                text: (messageData.text || messageData.textHtml || '').substring(0, 50),
+                timestamp: messageData.timestamp,
+                avatar: messageData.avatar ? 'has avatar' : 'no avatar'
+            });
+        }
+        
         // Use unified duplicate detection - same logic for both display and server send
         const { shouldProcess, oldIdToRemove } = this.checkDuplicateAndShouldProcess(messageData);
         
         if (!shouldProcess) {
             // Duplicate detected - don't show and don't send to server
+            if (isOwnUser) {
+                console.log('[Chat Reader] ❌ Duplicate detected, skipping:', messageData.id);
+            }
             // Also cancel any pending send for this content
             let contentForKey = messageData.text && messageData.text.trim().length > 0 
                 ? messageData.text 
@@ -1161,6 +1211,10 @@
                 this.pendingUserSends.delete(contentKey);
             }
             return;
+        }
+        
+        if (isOwnUser) {
+            console.log('[Chat Reader] ✅ Message passed duplicate check, processing:', messageData.id);
         }
         
         // If we need to replace an old message, remove it from overlay first
@@ -1184,8 +1238,7 @@
         this.addMessageToOverlay(messageData);
         
         // Check if this is from user's own username (needs 1-second delay)
-        const isOwnUser = this.isOwnUsername(messageData.username);
-        
+        // Note: isOwnUser is already declared at the top of this function
         if (isOwnUser) {
             // Delay sending by 1 second to catch duplicates
             let contentForKey = messageData.text && messageData.text.trim().length > 0 
@@ -1197,15 +1250,19 @@
             const existingPending = this.pendingUserSends.get(contentKey);
             if (existingPending) {
                 // Duplicate arrived within the delay window - compare and only send the better one
+                console.log('[Chat Reader] 🔄 Duplicate found in delay window, comparing messages');
                 clearTimeout(existingPending.timeout);
                 const betterMessage = this.compareMessages(existingPending.messageData, messageData);
                 this.pendingUserSends.delete(contentKey);
                 
                 // Send only the better one
+                console.log('[Chat Reader] 📤 Sending better message immediately:', betterMessage.id);
                 this.sendMessageToServer(betterMessage);
             } else {
                 // No duplicate yet - delay sending by 1 second
+                console.log('[Chat Reader] ⏳ Scheduling send in 1 second for:', messageData.id);
                 const timeout = setTimeout(() => {
+                    console.log('[Chat Reader] ⏰ 1-second delay expired, sending:', messageData.id);
                     this.pendingUserSends.delete(contentKey);
                     this.sendMessageToServer(messageData);
                 }, 1000);
@@ -1219,6 +1276,16 @@
     }
     
     async sendMessageToServer(messageData) {
+        // DEBUG: Log when sending to server
+        const isOwnUser = this.isOwnUsername(messageData.username);
+        if (isOwnUser) {
+            console.log('[Chat Reader] 📤 sendMessageToServer called for:', {
+                id: messageData.id,
+                username: messageData.username,
+                text: (messageData.text || messageData.textHtml || '').substring(0, 50)
+            });
+        }
+        
         // Prepare data to send - clean badges to remove DOM element references
         let cleanedBadges = null;
         if (messageData.badges) {
@@ -1249,13 +1316,23 @@
         
         // Send to server via background script (required for Firefox)
         try {
+            if (isOwnUser) {
+                console.log('[Chat Reader] 📡 Sending to background script...');
+            }
             const result = await browser.runtime.sendMessage({
                 action: 'sendChat',
                 data: dataToSend
             });
             
+            if (isOwnUser) {
+                console.log('[Chat Reader] 📥 Background script response:', result);
+            }
+            
             if (!result || !result.success) {
                 // Server returned error or network error
+                if (isOwnUser) {
+                    console.log('[Chat Reader] ❌ Server error:', result?.error || 'Unknown error');
+                }
                 this.serverFailedCount++;
                 const error = result?.error || { type: 'UNKNOWN_ERROR', message: 'Unknown error' };
                 const errorDetails = {
@@ -1286,9 +1363,24 @@
                 }
             } else {
                 // Success!
+                if (isOwnUser) {
+                    console.log('[Chat Reader] ✅ Server response success for:', messageData.id);
+                }
                 this.serverSentCount++;
                 this.lastServerSuccess = new Date().toLocaleTimeString();
                 this.updateServerStatus('success', `Sent at ${this.lastServerSuccess}`);
+                
+                // Check if server was cleared (serverClearTimestamp is newer than what we last saw)
+                if (result.serverClearTimestamp && 
+                    result.serverClearTimestamp !== this.lastServerClearTimestamp &&
+                    this.lastServerClearTimestamp !== null) {
+                    // Server was cleared - reset our tracking so we can re-process messages
+                    console.log('[Chat Reader] Server was cleared - resetting message tracking');
+                    this.processedMessageIds.clear();
+                    this.recentMessagesByContent.clear();
+                    this.addedToOverlayIds.clear();
+                }
+                this.lastServerClearTimestamp = result.serverClearTimestamp || null;
                 
                 // Mark message as successful in sent log
                 const sentMsg = this.sentMessagesLog.find(m => m.id === messageData.id);
@@ -1298,6 +1390,9 @@
             }
         } catch (error) {
             // Error sending message to background script
+            if (isOwnUser) {
+                console.error('[Chat Reader] ❌ Exception in sendMessageToServer:', error);
+            }
             this.serverFailedCount++;
             const errorDetails = {
                 type: 'MESSAGE_ERROR',
@@ -1515,6 +1610,7 @@ ${errorText}`;
 
     createOverlay() {
         try {
+            console.log('[Chat Reader] Creating overlay...');
             // Remove existing overlay if it exists
             const existing = document.getElementById('chat-reader-overlay');
             if (existing) {
@@ -1530,29 +1626,26 @@ ${errorText}`;
                     <div class="chat-reader-stats">
                         <span id="chat-reader-count">0</span> messages
                     </div>
-                    <button id="chat-reader-toggle" class="chat-reader-btn">−</button>
-                    <button id="chat-reader-clear" class="chat-reader-btn">Clear</button>
+                    <div class="chat-reader-buttons">
+                        <button id="chat-reader-toggle" class="chat-reader-btn">−</button>
+                        <button id="chat-reader-clear" class="chat-reader-btn">Clear</button>
+                    </div>
                 </div>
                 <div class="chat-reader-server-status" id="chat-reader-server-status">
-                    <div class="server-status-header">
-                        <span>🖥️ Server Status</span>
-                        <span id="server-status-indicator" class="status-indicator status-unknown">●</span>
-                    </div>
                     <div class="server-status-details">
                         <div class="status-row">
-                            <span>Sent:</span>
-                            <span id="server-sent-count">0</span>
-                        </div>
-                        <div class="status-row">
-                            <span>Failed:</span>
-                            <span id="server-failed-count" style="color: #f87171;">0</span>
+                            <span>Sent: <span id="server-sent-count">0</span></span>
+                            <span>Failed: <span id="server-failed-count" style="color: #f87171;">0</span></span>
+                            <span id="server-status-indicator" class="status-indicator status-unknown">●</span>
                         </div>
                         <div class="status-row" id="server-last-status" style="display: none;">
                             <span id="server-last-status-text"></span>
                         </div>
-                        <button id="chat-reader-test-connection" class="chat-reader-btn" style="margin-top: 8px; width: 100%; font-size: 11px; padding: 6px;">🔌 Test Connection</button>
-                        <button id="chat-reader-copy-errors" class="chat-reader-btn" style="margin-top: 4px; width: 100%; font-size: 11px; padding: 6px;">📋 Copy Error Log</button>
-                        <button id="chat-reader-copy-sent-log" class="chat-reader-btn" style="margin-top: 4px; width: 100%; font-size: 11px; padding: 6px;">📤 Copy Sent Messages Log</button>
+                    </div>
+                    <div class="chat-reader-buttons">
+                        <button id="chat-reader-test-connection" class="chat-reader-btn">🔌 Test</button>
+                        <button id="chat-reader-copy-errors" class="chat-reader-btn">📋 Errors</button>
+                        <button id="chat-reader-copy-sent-log" class="chat-reader-btn">📤 Sent</button>
                     </div>
                 </div>
                 <div id="chat-reader-messages" class="chat-reader-messages"></div>
@@ -1560,21 +1653,28 @@ ${errorText}`;
 
             // Add styles
             const style = document.createElement('style');
+            // Import Inter font
+            const fontLink = document.createElement('link');
+            fontLink.rel = 'stylesheet';
+            fontLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap';
+            document.head.appendChild(fontLink);
+            
             style.textContent = `
                 #chat-reader-overlay {
                     position: fixed;
-                    top: 80px;
+                    top: 10px;
                     left: 20px;
                     width: 400px;
                     max-height: 600px;
-                    background: rgba(15, 15, 15, 0.95);
-                    border: 2px solid #ff0000;
-                    border-radius: 8px;
+                    background: rgba(10, 20, 40, 1.0);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(59, 130, 246, 0.55);
+                    border-radius: 16px;
                     z-index: 999999;
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    font-family: 'Inter', sans-serif;
                     color: #fff;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-                    display: none !important; /* Hidden - can be shown again by removing this line */
+                    box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+                    display: flex; /* Re-enabled for debugging */
                     flex-direction: column;
                 }
                 #chat-reader-overlay.collapsed {
@@ -1584,52 +1684,66 @@ ${errorText}`;
                     display: none;
                 }
                 .chat-reader-header {
-                    background: rgba(255, 0, 0, 0.2);
-                    padding: 12px;
+                    background: rgba(59, 130, 246, 0.2);
+                    padding: 8px 12px;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    border-bottom: 1px solid #333;
+                    border-bottom: 1px solid rgba(59, 130, 246, 0.3);
                     flex-shrink: 0;
+                    gap: 8px;
                 }
                 .chat-reader-header h3 {
                     margin: 0;
-                    font-size: 16px;
-                    font-weight: bold;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #60a5fa;
+                    flex-shrink: 0;
+                    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
                 }
                 .chat-reader-stats {
-                    font-size: 12px;
-                    color: #aaa;
+                    font-size: 11px;
+                    color: #93c5fd;
+                    flex-shrink: 0;
+                }
+                .chat-reader-buttons {
+                    display: flex;
+                    gap: 4px;
+                    flex-shrink: 0;
                 }
                 .chat-reader-btn {
-                    background: rgba(255, 255, 255, 0.1);
-                    border: 1px solid #555;
-                    color: #fff;
+                    background: rgba(59, 130, 246, 0.2);
+                    border: 1px solid rgba(59, 130, 246, 0.4);
+                    color: #bfdbfe;
                     padding: 4px 8px;
-                    border-radius: 4px;
+                    border-radius: 6px;
                     cursor: pointer;
-                    font-size: 12px;
-                    margin-left: 5px;
+                    font-size: 11px;
+                    white-space: nowrap;
+                    transition: all 0.2s ease;
                 }
                 .chat-reader-btn:hover {
-                    background: rgba(255, 255, 255, 0.2);
+                    background: rgba(59, 130, 246, 0.3);
+                    border-color: rgba(59, 130, 246, 0.6);
+                    color: #dbeafe;
                 }
                 #chat-reader-messages {
                     overflow-y: auto;
-                    max-height: 520px;
+                    max-height: 270px;
                     padding: 8px;
                     flex: 1;
                 }
                 .chat-reader-message {
                     padding: 8px;
                     margin-bottom: 8px;
-                    background: rgba(255, 255, 255, 0.05);
-                    border-left: 3px solid #ff0000;
-                    border-radius: 4px;
+                    background: rgba(59, 130, 246, 0.08);
+                    border-left: 3px solid rgba(59, 130, 246, 0.6);
+                    border-radius: 6px;
                     font-size: 13px;
                 }
                 .chat-reader-message:hover {
-                    background: rgba(255, 255, 255, 0.1);
+                    background: rgba(59, 130, 246, 0.15);
+                    border-left-color: rgba(59, 130, 246, 0.8);
                 }
                 .chat-reader-message-content {
                     display: flex;
@@ -1660,11 +1774,12 @@ ${errorText}`;
                     margin-bottom: 4px;
                 }
                 .chat-reader-username {
-                    color: #ff6b6b;
-                    font-weight: bold;
+                    color: #60a5fa;
+                    font-weight: 600;
+                    text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
                 }
                 .chat-reader-text {
-                    color: #fff;
+                    color: #dbeafe;
                     word-wrap: break-word;
                     line-height: 1.4;
                 }
@@ -1688,9 +1803,9 @@ ${errorText}`;
                 }
                 .chat-reader-badge {
                     display: inline-block;
-                    font-size: 11px;
-                    padding: 2px 8px;
-                    margin-left: 6px;
+                    font-size: 9px;
+                    padding: 1px 4px;
+                    margin-left: 3px;
                     font-weight: 500;
                 }
                 .chat-reader-badge-tier {
@@ -1722,58 +1837,55 @@ ${errorText}`;
                     object-fit: contain;
                 }
                 .chat-reader-server-status {
-                    background: rgba(0, 0, 0, 0.3);
-                    border-top: 1px solid #333;
-                    border-bottom: 1px solid #333;
-                    padding: 10px 12px;
+                    background: rgba(59, 130, 246, 0.1);
+                    border-top: 1px solid rgba(59, 130, 246, 0.3);
+                    border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+                    padding: 4px 12px;
                     font-size: 11px;
                     flex-shrink: 0;
                 }
-                .server-status-header {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-bottom: 6px;
-                    font-weight: 600;
-                    color: #94a3b8;
-                }
                 .status-indicator {
                     font-size: 12px;
-                    margin-left: 8px;
+                    margin-left: auto;
                 }
                 .status-indicator.status-success {
-                    color: #4ade80;
+                    color: #86efac;
                 }
                 .status-indicator.status-error {
                     color: #f87171;
                 }
                 .status-indicator.status-unknown {
-                    color: #64748b;
+                    color: #93c5fd;
                 }
                 .server-status-details {
                     display: flex;
                     flex-direction: column;
-                    gap: 4px;
+                    gap: 2px;
+                }
+                .chat-reader-server-status .chat-reader-buttons {
+                    margin-top: 4px;
                 }
                 .status-row {
                     display: flex;
                     justify-content: space-between;
+                    align-items: center;
                     font-size: 10px;
-                    color: #cbd5e1;
+                    color: #bfdbfe;
+                    gap: 8px;
                 }
                 .status-row span:first-child {
-                    color: #94a3b8;
+                    color: #93c5fd;
                 }
                 #server-last-status {
                     margin-top: 4px;
                     padding-top: 4px;
-                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    border-top: 1px solid rgba(59, 130, 246, 0.3);
                     font-size: 9px;
-                    color: #94a3b8;
+                    color: #93c5fd;
                     word-break: break-word;
                 }
                 #server-last-status.success {
-                    color: #4ade80;
+                    color: #86efac;
                 }
                 #server-last-status.error {
                     color: #f87171;
@@ -1781,6 +1893,7 @@ ${errorText}`;
             `;
             document.head.appendChild(style);
             document.body.appendChild(overlay);
+            console.log('[Chat Reader] Overlay created and appended to DOM');
 
             this.overlay = overlay;
 
@@ -1809,7 +1922,9 @@ ${errorText}`;
                 this.testServerConnection();
             });
 
+            console.log('[Chat Reader] Overlay setup complete');
         } catch (error) {
+            console.error('[Chat Reader] Error creating overlay:', error);
         }
     }
 

@@ -30,7 +30,7 @@ const ChatConfig = {
         fadeInDelay: 50, // milliseconds - delay after scroll before fade-in starts
         moveUpAmount: 40, // pixels
         stageBgColor: '#0a1428', // Stage background color
-        stageBgAlpha: 0.7, // Stage background transparency (0-1)
+        stageBgAlpha: 1, // Stage background transparency (0-1)
         listOffsetX: 30 // Horizontal offset for list only (not stage)
     },
     

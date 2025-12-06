@@ -23,7 +23,7 @@ body {
     --stage-bg-r: 10;
     --stage-bg-g: 20;
     --stage-bg-b: 40;
-    --stage-bg-alpha: 0.5;
+    --stage-bg-alpha: 1;
 }
 
 
@@ -225,7 +225,7 @@ body {
 }
 
 .ghost-style.staged .profile-pic {
-    opacity: 0.7;
+    opacity: 1;
     flex-shrink: 0;
     position: relative;
     top: 0;
@@ -238,7 +238,7 @@ body {
 
 /* List entries have reduced opacity */
 .ghost-style.in-list .entry {
-    opacity: 0.9;
+    opacity: 1;
 }
 
 .ghost-style .profile-pic {
