@@ -35,9 +35,12 @@
             this.processedMessageIds = new Set();
             this.addedToOverlayIds = new Set(); // Track messages added to overlay
             this.recentMessagesByContent = new Map(); // Track recent messages by username+text to detect optimistic duplicates
-            this.sentToServerIds = new Set(); // Track messages sent to server to prevent duplicates
+            this.pendingUserSends = new Map(); // Track pending sends for user's own messages (key: contentKey, value: {timeout, messageData})
             this.isActive = false;
             this.observer = null;
+            
+            // Usernames that need 1-second delay to catch duplicates
+            this.userOwnUsernames = ['retrohead', 'silent_basketballl'];
             this.initAttempts = 0;
             this.maxInitAttempts = 30; // Stop trying after 30 seconds
             this.isInitialScan = true; // Track if this is the first scan
@@ -998,28 +1001,223 @@
         }
     }
 
+    /**
+     * Check if message should be processed (unified duplicate detection)
+     * Returns object with shouldProcess flag and optional oldIdToRemove for replacement
+     * @param {Object} messageData - Message data
+     * @returns {Object} {shouldProcess: boolean, oldIdToRemove: string|null}
+     */
+    checkDuplicateAndShouldProcess(messageData) {
+        const messagesContainer = document.getElementById('chat-reader-messages');
+        
+        // Check if message with same ID already exists in DOM
+        if (messagesContainer) {
+            const existingById = messagesContainer.querySelector(`[data-message-id="${messageData.id}"]`);
+            if (existingById) {
+                return { shouldProcess: false, oldIdToRemove: null };
+            }
+        }
+        
+        // Content-based duplicate detection (username+text+timestamp within 1000ms)
+        let contentForKey = messageData.text && messageData.text.trim().length > 0 
+            ? messageData.text 
+            : (messageData.textHtml || ''); // For emoji-only messages, use textHtml
+        const contentKey = `${messageData.username}:${contentForKey}`;
+        const recentMessage = this.recentMessagesByContent.get(contentKey);
+        const messageTimestamp = messageData.timestamp;
+        const TIME_WINDOW = 1000; // 1000ms - only filter if timestamps are VERY close (optimistic duplicate)
+        
+        // Check if duplicate within time window and different IDs
+        if (recentMessage && Math.abs(messageTimestamp - recentMessage.timestamp) < TIME_WINDOW && recentMessage.id !== messageData.id) {
+            // Found a duplicate within time window
+            // Check if avatar is a placeholder: data URIs, 1x1 transparent GIFs, or not a valid YouTube CDN URL
+            const isPlaceholderAvatar = !messageData.avatar || 
+                messageData.avatar.includes('data:image/gif;base64') ||
+                messageData.avatar.includes('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') ||
+                !messageData.avatar.match(/https?:\/\/(yt[34]\.ggpht\.com|i\.ytimg\.com)/);
+            const existingIsPlaceholder = !recentMessage.avatar || 
+                recentMessage.avatar.includes('data:image/gif;base64') ||
+                recentMessage.avatar.includes('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') ||
+                !recentMessage.avatar.match(/https?:\/\/(yt[34]\.ggpht\.com|i\.ytimg\.com)/);
+            
+            if (isPlaceholderAvatar && !existingIsPlaceholder) {
+                // New message has placeholder avatar but existing has real avatar - skip the new one
+                return { shouldProcess: false, oldIdToRemove: null };
+            } else if (!isPlaceholderAvatar && existingIsPlaceholder) {
+                // New message has real avatar but existing has placeholder - replace the old one
+                // Update tracking
+                this.recentMessagesByContent.set(contentKey, {
+                    id: messageData.id,
+                    username: messageData.username,
+                    text: messageData.text,
+                    avatar: messageData.avatar,
+                    timestamp: messageTimestamp
+                });
+                return { shouldProcess: true, oldIdToRemove: recentMessage.id };
+            } else {
+                // Both have same avatar type (both real or both placeholder)
+                // Keep the newer one (second message) as it's more likely to be the final/correct version
+                // Replace the old one with the new one
+                this.recentMessagesByContent.set(contentKey, {
+                    id: messageData.id,
+                    username: messageData.username,
+                    text: messageData.text,
+                    avatar: messageData.avatar,
+                    timestamp: messageTimestamp
+                });
+                return { shouldProcess: true, oldIdToRemove: recentMessage.id };
+            }
+        } else {
+            // No recent duplicate found - but check if this is a placeholder that might be replaced soon
+            const isPlaceholderAvatar = !messageData.avatar || 
+                messageData.avatar.includes('data:image/gif;base64') ||
+                messageData.avatar.includes('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') ||
+                !messageData.avatar.match(/https?:\/\/(yt[34]\.ggpht\.com|i\.ytimg\.com)/);
+            
+            // If this is a placeholder, we'll process it but track it
+            // If a real avatar version comes within the time window, it will replace this one
+            // Add to tracking
+            this.recentMessagesByContent.set(contentKey, {
+                id: messageData.id,
+                username: messageData.username,
+                text: messageData.text,
+                avatar: messageData.avatar,
+                timestamp: messageTimestamp
+            });
+            
+            // Clean up old entries from the map (older than 10 seconds)
+            const now = Date.now();
+            for (const [key, value] of this.recentMessagesByContent.entries()) {
+                if (now - value.timestamp > 10000) {
+                    this.recentMessagesByContent.delete(key);
+                }
+            }
+            
+            return { shouldProcess: true, oldIdToRemove: null };
+        }
+    }
+
+    /**
+     * Check if username is one of the user's own usernames (needs delay)
+     * @param {string} username - Username to check
+     * @returns {boolean}
+     */
+    isOwnUsername(username) {
+        if (!username) return false;
+        const usernameLower = username.toLowerCase().replace('@', '');
+        return this.userOwnUsernames.some(own => usernameLower === own.toLowerCase());
+    }
+    
+    /**
+     * Check if avatar is a placeholder
+     * @param {string} avatar - Avatar URL
+     * @returns {boolean}
+     */
+    isPlaceholderAvatar(avatar) {
+        return !avatar || 
+            avatar.includes('data:image/gif;base64') ||
+            avatar.includes('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') ||
+            !avatar.match(/https?:\/\/(yt[34]\.ggpht\.com|i\.ytimg\.com)/);
+    }
+    
+    /**
+     * Compare two messages and return the better one
+     * Prefers: real avatar over placeholder, newer over older
+     * @param {Object} msg1 - First message
+     * @param {Object} msg2 - Second message
+     * @returns {Object} The better message
+     */
+    compareMessages(msg1, msg2) {
+        const msg1IsPlaceholder = this.isPlaceholderAvatar(msg1.avatar);
+        const msg2IsPlaceholder = this.isPlaceholderAvatar(msg2.avatar);
+        
+        // If one has real avatar and one has placeholder, prefer the real one
+        if (msg1IsPlaceholder && !msg2IsPlaceholder) {
+            return msg2;
+        }
+        if (!msg1IsPlaceholder && msg2IsPlaceholder) {
+            return msg1;
+        }
+        
+        // Both have same avatar type - prefer the newer one (higher timestamp)
+        return (msg2.timestamp || 0) > (msg1.timestamp || 0) ? msg2 : msg1;
+    }
+
     async onNewMessage(messageData) {
-        // Check if we've already sent this message ID to the server (prevent duplicate server sends)
-        // Note: The existing duplicate detection in addMessageToOverlay handles UI duplicates
-        // This check is specifically to prevent sending the same message to the server twice
-        if (this.sentToServerIds.has(messageData.id)) {
-            // Already sent to server, skip sending again (but still update UI if needed)
-            // The addMessageToOverlay will handle UI duplicate detection
-            this.addMessageToOverlay(messageData);
+        // Use unified duplicate detection - same logic for both display and server send
+        const { shouldProcess, oldIdToRemove } = this.checkDuplicateAndShouldProcess(messageData);
+        
+        if (!shouldProcess) {
+            // Duplicate detected - don't show and don't send to server
+            // Also cancel any pending send for this content
+            let contentForKey = messageData.text && messageData.text.trim().length > 0 
+                ? messageData.text 
+                : (messageData.textHtml || '');
+            const contentKey = `${messageData.username}:${contentForKey}`;
+            const pending = this.pendingUserSends.get(contentKey);
+            if (pending) {
+                clearTimeout(pending.timeout);
+                this.pendingUserSends.delete(contentKey);
+            }
             return;
         }
         
-        // Mark as sent to server BEFORE sending (prevents race conditions)
-        this.sentToServerIds.add(messageData.id);
-        if (this.sentToServerIds.size > 1000) {
-            // Keep set size manageable - keep only recent 500 IDs
-            const idsArray = Array.from(this.sentToServerIds);
-            this.sentToServerIds = new Set(idsArray.slice(-500));
+        // If we need to replace an old message, remove it from overlay first
+        if (oldIdToRemove) {
+            const messagesContainer = document.getElementById('chat-reader-messages');
+            if (messagesContainer) {
+                const oldMessageEl = messagesContainer.querySelector(`[data-message-id="${oldIdToRemove}"]`);
+                if (oldMessageEl) {
+                    oldMessageEl.remove();
+                    this.addedToOverlayIds.delete(oldIdToRemove);
+                    this.messageCount = Math.max(0, this.messageCount - 1);
+                    const countEl = document.getElementById('chat-reader-count');
+                    if (countEl) {
+                        countEl.textContent = this.messageCount;
+                    }
+                }
+            }
         }
         
-        // Update overlay UI (this has its own duplicate detection)
+        // Show in extension overlay
         this.addMessageToOverlay(messageData);
         
+        // Check if this is from user's own username (needs 1-second delay)
+        const isOwnUser = this.isOwnUsername(messageData.username);
+        
+        if (isOwnUser) {
+            // Delay sending by 1 second to catch duplicates
+            let contentForKey = messageData.text && messageData.text.trim().length > 0 
+                ? messageData.text 
+                : (messageData.textHtml || '');
+            const contentKey = `${messageData.username}:${contentForKey}`;
+            
+            // Check if there's already a pending send for this content
+            const existingPending = this.pendingUserSends.get(contentKey);
+            if (existingPending) {
+                // Duplicate arrived within the delay window - compare and only send the better one
+                clearTimeout(existingPending.timeout);
+                const betterMessage = this.compareMessages(existingPending.messageData, messageData);
+                this.pendingUserSends.delete(contentKey);
+                
+                // Send only the better one
+                this.sendMessageToServer(betterMessage);
+            } else {
+                // No duplicate yet - delay sending by 1 second
+                const timeout = setTimeout(() => {
+                    this.pendingUserSends.delete(contentKey);
+                    this.sendMessageToServer(messageData);
+                }, 1000);
+                
+                this.pendingUserSends.set(contentKey, { timeout, messageData });
+            }
+        } else {
+            // Not user's own message - send immediately
+            this.sendMessageToServer(messageData);
+        }
+    }
+    
+    async sendMessageToServer(messageData) {
         // Prepare data to send - clean badges to remove DOM element references
         let cleanedBadges = null;
         if (messageData.badges) {
@@ -1637,102 +1835,8 @@ ${errorText}`;
             const messagesContainer = document.getElementById('chat-reader-messages');
             if (!messagesContainer) return;
             
-            // Check if message already exists in overlay DOM (prevent duplicates by ID only)
-            // NOTE: We only check by message ID, NOT by content. This means if someone
-            // sends the same message multiple times, each will show up (they have different IDs).
-            const existingById = messagesContainer.querySelector(`[data-message-id="${messageData.id}"]`);
-            if (existingById) {
-                if (isUserMessage) {
-                }
-                this.addedToOverlayIds.add(messageData.id); // Track it even though we're skipping
-                return;
-            }
-            
-            // Content-based duplicate detection for optimistic updates (YouTube shows your messages twice)
-            // ONLY apply this to messages from the current user (optimistic updates)
-            // When loading many messages at once from a live stream, we should NOT filter duplicates
-            // Use YouTube's actual timestamps - if timestamps differ by more than 500ms, they're different messages
-            let contentForKey = messageData.text && messageData.text.trim().length > 0 
-                ? messageData.text 
-                : (messageData.textHtml || ''); // For emoji-only messages, use textHtml which has the actual emoji image URLs
-            const contentKey = `${messageData.username}:${contentForKey}`;
-            const recentMessage = this.recentMessagesByContent.get(contentKey);
-            const messageTimestamp = messageData.timestamp; // Use YouTube's actual timestamp
-            const TIME_WINDOW = 500; // 500ms - only filter if timestamps are VERY close (optimistic duplicate)
-            
-            // Only apply content-based duplicate detection if timestamps are extremely close (optimistic update)
-            // AND if we haven't already processed this exact message ID
-            if (recentMessage && Math.abs(messageTimestamp - recentMessage.timestamp) < TIME_WINDOW && recentMessage.id !== messageData.id) {
-                // Found a duplicate within time window
-                const isPlaceholderAvatar = messageData.avatar && (
-                    messageData.avatar.includes('data:image/gif;base64') ||
-                    messageData.avatar.includes('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')
-                );
-                const existingIsPlaceholder = recentMessage.avatar && (
-                    recentMessage.avatar.includes('data:image/gif;base64') ||
-                    recentMessage.avatar.includes('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')
-                );
-                
-                if (isPlaceholderAvatar && !existingIsPlaceholder) {
-                    // New message has placeholder avatar but existing has real avatar - skip the new one
-                    if (isUserMessage) {
-                    }
-                    return;
-                } else if (!isPlaceholderAvatar && existingIsPlaceholder) {
-                    // New message has real avatar but existing has placeholder - replace the old one
-                    if (isUserMessage) {
-                    }
-                    
-                    // Remove the old message from overlay
-                    const oldMessageEl = messagesContainer.querySelector(`[data-message-id="${recentMessage.id}"]`);
-                    if (oldMessageEl) {
-                        oldMessageEl.remove();
-                        this.addedToOverlayIds.delete(recentMessage.id);
-                        this.messageCount = Math.max(0, this.messageCount - 1);
-                        document.getElementById('chat-reader-count').textContent = this.messageCount;
-                    }
-                    
-                    // Update the recent message entry with the new one
-                    this.recentMessagesByContent.set(contentKey, {
-                        id: messageData.id,
-                        username: messageData.username,
-                        text: messageData.text,
-                        avatar: messageData.avatar,
-                        timestamp: messageTimestamp
-                    });
-                } else {
-                    // Both have same avatar type or both are real - check if it's actually the same message ID
-                    // If different IDs, they might be legitimate duplicates from different sources - show both
-                    if (recentMessage.id === messageData.id) {
-                        // Same message ID - definitely a duplicate, skip
-                        return;
-                    } else {
-                        // Different IDs but same content - could be legitimate (e.g., bot repeating messages)
-                        // Allow it through if timestamps are different enough
-                        // Continue processing - don't return
-                    }
-                }
-            } else {
-                // No recent duplicate - add to tracking using YouTube's timestamp
-                this.recentMessagesByContent.set(contentKey, {
-                    id: messageData.id,
-                    username: messageData.username,
-                    text: messageData.text,
-                    avatar: messageData.avatar,
-                    timestamp: messageTimestamp
-                });
-                
-                // Clean up old entries from the map (older than 10 seconds)
-                const now = Date.now();
-                for (const [key, value] of this.recentMessagesByContent.entries()) {
-                    if (now - value.timestamp > 10000) {
-                        this.recentMessagesByContent.delete(key);
-                    }
-                }
-            }
-            
-            if (isUserMessage) {
-            }
+            // Duplicate detection is now handled in checkDuplicateAndShouldProcess()
+            // This method is only called after duplicate check passes, so just display the message
 
             // Create message element
             const messageEl = document.createElement('div');
