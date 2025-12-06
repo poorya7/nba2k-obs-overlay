@@ -5,8 +5,13 @@
   "description": "Reads YouTube live chat messages from the DOM for NBA 2K OBS Overlay",
   "permissions": [
     "activeTab",
-    "https://www.youtube.com/*"
+    "https://www.youtube.com/*",
+    "http://localhost:3000/*"
   ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/watch*"],

@@ -23,6 +23,8 @@ class StateStore {
       startTime: null       // timestamp when quarter started
     };
     this.socialsEnabled = true;  // Socials overlay toggle (default: enabled)
+    this.chatMessages = [];     // In-memory chat messages storage
+    this.maxChatMessages = 200;  // Keep last 200 messages
   }
 
   // Game selection
@@ -56,6 +58,28 @@ class StateStore {
   // Socials overlay
   getSocialsEnabled() { return this.socialsEnabled; }
   setSocialsEnabled(enabled) { this.socialsEnabled = enabled; }
+
+  // Chat messages
+  addChatMessage(message) {
+    // Add timestamp if not present
+    if (!message.receivedAt) {
+      message.receivedAt = Date.now();
+    }
+    this.chatMessages.push(message);
+    
+    // Keep only last maxChatMessages
+    if (this.chatMessages.length > this.maxChatMessages) {
+      this.chatMessages.shift();
+    }
+  }
+
+  getChatMessages() {
+    return [...this.chatMessages]; // Return copy
+  }
+
+  clearChatMessages() {
+    this.chatMessages = [];
+  }
 }
 
 const state = new StateStore();
@@ -89,7 +113,13 @@ function parseJsonBody(req) {
  * @param {Object} data 
  */
 function sendJson(res, statusCode, data) {
-  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  };
+  res.writeHead(statusCode, headers);
   res.end(JSON.stringify(data));
 }
 
@@ -190,6 +220,46 @@ async function handlePostSocialsEnabled(req, res) {
   }
 }
 
+// POST /api/chat - Receive chat message from browser extension
+async function handlePostChat(req, res) {
+  try {
+    const message = await parseJsonBody(req);
+    
+    // Validate required fields (more lenient - allow empty strings if at least one exists)
+    const hasText = message.text && message.text.trim().length > 0;
+    const hasTextHtml = message.textHtml && message.textHtml.trim().length > 0;
+    
+    // Only validate username and content - ID is optional (extension handles duplicates)
+    if (!message.username || (!hasText && !hasTextHtml)) {
+      console.log('❌ Chat rejected - missing fields:', {
+        hasUsername: !!message.username,
+        hasText: hasText,
+        hasTextHtml: hasTextHtml,
+        textLength: message.text?.length || 0,
+        textHtmlLength: message.textHtml?.length || 0,
+        username: message.username
+      });
+      sendJson(res, 400, { error: 'Missing required fields: username, text/textHtml' });
+      return;
+    }
+    
+    // Add message to storage
+    state.addChatMessage(message);
+    console.log('💬 Chat received:', message.username, '-', (message.text || message.textHtml).substring(0, 50), `[ID: ${message.id}]`);
+    
+    sendJson(res, 200, { success: true, messageId: message.id });
+  } catch (error) {
+    console.error('❌ Chat error:', error.message);
+    sendJson(res, 400, { error: error.message });
+  }
+}
+
+// GET /api/chat - Get all chat messages (for testing/display)
+function handleGetChat(req, res) {
+  const messages = state.getChatMessages();
+  sendJson(res, 200, { messages, count: messages.length });
+}
+
 // ==================== STATIC FILE SERVING ====================
 
 // MIME types for different file extensions
@@ -217,7 +287,9 @@ const API_ROUTES = {
   'GET /api/quarter': handleGetQuarter,
   'POST /api/quarter': handlePostQuarter,
   'GET /api/socials-enabled': handleGetSocialsEnabled,
-  'POST /api/socials-enabled': handlePostSocialsEnabled
+  'POST /api/socials-enabled': handlePostSocialsEnabled,
+  'GET /api/chat': handleGetChat,
+  'POST /api/chat': handlePostChat
 };
 
 /**
@@ -227,8 +299,33 @@ const API_ROUTES = {
  * @returns {boolean} True if route was handled
  */
 async function routeApiRequest(req, res) {
-  const routeKey = `${req.method} ${req.url}`;
-  const handler = API_ROUTES[routeKey];
+  // Normalize URL (remove query string and trailing slash)
+  const urlWithoutQuery = req.url.split('?')[0];
+  const normalizedUrl = urlWithoutQuery.endsWith('/') && urlWithoutQuery.length > 1
+    ? urlWithoutQuery.slice(0, -1)
+    : urlWithoutQuery;
+  
+  // Handle CORS preflight (OPTIONS requests)
+  if (req.method === 'OPTIONS') {
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400' // 24 hours
+    };
+    res.writeHead(200, headers);
+    res.end();
+    return true;
+  }
+  
+  // Match route (try with and without trailing slash)
+  const routeKey = `${req.method} ${normalizedUrl}`;
+  let handler = API_ROUTES[routeKey];
+  
+  // If no handler found, try with trailing slash
+  if (!handler && !normalizedUrl.endsWith('/')) {
+    handler = API_ROUTES[`${req.method} ${normalizedUrl}/`];
+  }
   
   if (handler) {
     await handler(req, res);
@@ -270,6 +367,8 @@ const server = http.createServer(async (req, res) => {
     filePath = './overlay/socials-overlay/index.html';
   } else if (filePath === './overlay/chat' || filePath === './overlay/chat/') {
     filePath = './overlay/chat-overlay/index.html';
+  } else if (filePath === './chat-test' || filePath === './chat-test/') {
+    filePath = './overlay/chat-overlay/chat-test.html';
   } else if (filePath === './test' || filePath === './test/') {
     filePath = './overlay/_tests/index.html';
   } else if (filePath === './design-test' || filePath === './design-test/') {
@@ -319,8 +418,9 @@ server.listen(PORT, () => {
   console.log('🎯 Other Games (OBS): http://localhost:' + PORT + '/overlay/other-games');
   console.log('📝 Title Overlay (OBS): http://localhost:' + PORT + '/overlay/title');
   console.log('📱 Socials Overlay (OBS): http://localhost:' + PORT + '/overlay/socials');
-  console.log('💬 Chat Overlay (OBS): http://localhost:' + PORT + '/overlay/chat');
-  console.log('🎨 Design Tester: http://localhost:' + PORT + '/design-test');
+    console.log('💬 Chat Overlay (OBS): http://localhost:' + PORT + '/overlay/chat');
+    console.log('🧪 Chat Test Page: http://localhost:' + PORT + '/chat-test');
+    console.log('🎨 Design Tester: http://localhost:' + PORT + '/design-test');
   console.log('');
   console.log('Press Ctrl+C to stop the server');
 });

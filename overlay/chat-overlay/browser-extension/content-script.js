@@ -35,6 +35,7 @@
             this.processedMessageIds = new Set();
             this.addedToOverlayIds = new Set(); // Track messages added to overlay
             this.recentMessagesByContent = new Map(); // Track recent messages by username+text to detect optimistic duplicates
+            this.sentToServerIds = new Set(); // Track messages sent to server to prevent duplicates
             this.isActive = false;
             this.observer = null;
             this.initAttempts = 0;
@@ -42,6 +43,15 @@
             this.isInitialScan = true; // Track if this is the first scan
             this.overlay = null;
             this.messageCount = 0;
+            
+            // Server status tracking
+            this.serverSentCount = 0;
+            this.serverFailedCount = 0;
+            this.lastServerError = null;
+            this.lastServerSuccess = null;
+            this.errorLog = []; // Array of error objects with details
+            this.sentMessagesLog = []; // Array of messages sent to server (for debugging)
+            
             this.init();
         }
 
@@ -574,9 +584,65 @@
             }
 
             // Extract avatar/image - exact selector from DOM inspection
-            const avatarEl = messageElement.querySelector('#author-photo img') ||
-                            messageElement.querySelector('#author-photo yt-img-shadow img');
-            const avatar = avatarEl?.src || avatarEl?.getAttribute('src') || '';
+            // Try multiple selectors because YouTube may render user's own messages differently
+            let avatarEl = messageElement.querySelector('#author-photo img') ||
+                          messageElement.querySelector('#author-photo yt-img-shadow img') ||
+                          messageElement.querySelector('#author-photo yt-img-shadow') ||
+                          messageElement.querySelector('yt-live-chat-author-chip #author-photo img') ||
+                          messageElement.querySelector('yt-live-chat-author-chip #author-photo yt-img-shadow img') ||
+                          messageElement.querySelector('yt-live-chat-author-chip #author-photo yt-img-shadow');
+            
+            // Try to get src from various sources
+            let avatar = '';
+            if (avatarEl) {
+                // Try direct src property
+                avatar = avatarEl.src || '';
+                
+                // If no src, try getAttribute
+                if (!avatar) {
+                    avatar = avatarEl.getAttribute('src') || 
+                            avatarEl.getAttribute('data-src') || 
+                            avatarEl.getAttribute('data-thumb') || '';
+                }
+                
+                // For yt-img-shadow, try to get the actual img inside
+                if (!avatar && avatarEl.tagName === 'YT-IMG-SHADOW') {
+                    const innerImg = avatarEl.querySelector('img');
+                    if (innerImg) {
+                        avatar = innerImg.src || 
+                                innerImg.getAttribute('src') || 
+                                innerImg.getAttribute('data-src') || '';
+                    }
+                    
+                    // Also try shadowRoot if available
+                    if (!avatar && avatarEl.shadowRoot) {
+                        try {
+                            const shadowImg = avatarEl.shadowRoot.querySelector('img');
+                            if (shadowImg) {
+                                avatar = shadowImg.src || 
+                                        shadowImg.getAttribute('src') || 
+                                        shadowImg.getAttribute('data-src') || '';
+                            }
+                        } catch (e) {
+                            // Shadow DOM access might fail
+                        }
+                    }
+                }
+            }
+            
+            // Final fallback: check if there's a background-image style
+            if (!avatar) {
+                const authorPhoto = messageElement.querySelector('#author-photo');
+                if (authorPhoto) {
+                    const bgImage = window.getComputedStyle(authorPhoto).backgroundImage;
+                    if (bgImage && bgImage !== 'none') {
+                        const urlMatch = bgImage.match(/url\(['"]?([^'"]+)['"]?\)/);
+                        if (urlMatch && urlMatch[1]) {
+                            avatar = urlMatch[1];
+                        }
+                    }
+                }
+            }
 
             // Extract timestamp display text from DOM (just for display purposes)
             const timestampEl = messageElement.querySelector('#timestamp');
@@ -932,14 +998,319 @@
         }
     }
 
-    onNewMessage(messageData) {
-        // For now, just log it - later we'll send to server
+    async onNewMessage(messageData) {
+        // Check if we've already sent this message ID to the server (prevent duplicate server sends)
+        // Note: The existing duplicate detection in addMessageToOverlay handles UI duplicates
+        // This check is specifically to prevent sending the same message to the server twice
+        if (this.sentToServerIds.has(messageData.id)) {
+            // Already sent to server, skip sending again (but still update UI if needed)
+            // The addMessageToOverlay will handle UI duplicate detection
+            this.addMessageToOverlay(messageData);
+            return;
+        }
         
-        // Update overlay UI
+        // Mark as sent to server BEFORE sending (prevents race conditions)
+        this.sentToServerIds.add(messageData.id);
+        if (this.sentToServerIds.size > 1000) {
+            // Keep set size manageable - keep only recent 500 IDs
+            const idsArray = Array.from(this.sentToServerIds);
+            this.sentToServerIds = new Set(idsArray.slice(-500));
+        }
+        
+        // Update overlay UI (this has its own duplicate detection)
         this.addMessageToOverlay(messageData);
         
-        // TODO: Send to server
-        // TODO: Format for overlay display
+        // Prepare data to send - clean badges to remove DOM element references
+        let cleanedBadges = null;
+        if (messageData.badges) {
+            cleanedBadges = {
+                membershipTier: messageData.badges.membershipTier || null,
+                badgeImages: (messageData.badges.badgeImages || []).map(badge => ({
+                    src: badge.src || '',
+                    alt: badge.alt || ''
+                    // Remove 'element' property - can't be cloned by Firefox
+                }))
+            };
+        }
+        
+        const dataToSend = {
+            id: messageData.id,
+            username: messageData.username,
+            text: messageData.text || '',
+            textHtml: messageData.textHtml || '',
+            avatar: messageData.avatar || '',
+            timestamp: messageData.timestamp,
+            timestampText: messageData.timestampText || '',
+            badges: cleanedBadges
+        };
+        
+        // Log message being sent
+        this.logSentMessage(dataToSend);
+        
+        // Send to server via background script (required for Firefox)
+        try {
+            const result = await browser.runtime.sendMessage({
+                action: 'sendChat',
+                data: dataToSend
+            });
+            
+            if (!result || !result.success) {
+                // Server returned error or network error
+                this.serverFailedCount++;
+                const error = result?.error || { type: 'UNKNOWN_ERROR', message: 'Unknown error' };
+                const errorDetails = {
+                    type: error.type || 'NETWORK_ERROR',
+                    message: error.message || 'Connection failed',
+                    diagnostic: error.diagnostic || '',
+                    status: error.status,
+                    statusText: error.statusText,
+                    body: error.body,
+                    stack: error.stack || '',
+                    timestamp: new Date().toISOString(),
+                    messageId: messageData.id,
+                    username: messageData.username,
+                    text: (messageData.text || '').substring(0, 50), // Include text for debugging
+                    url: 'http://localhost:3000/api/chat',
+                    userAgent: navigator.userAgent,
+                    browser: this.detectBrowser()
+                };
+                this.logError(errorDetails);
+                this.lastServerError = `${errorDetails.type}: ${errorDetails.message}`;
+                this.updateServerStatus('error', this.lastServerError);
+                
+                // Also log the failed message in sent log with failure flag
+                const failedMsg = this.sentMessagesLog.find(m => m.id === messageData.id);
+                if (failedMsg) {
+                    failedMsg.failed = true;
+                    failedMsg.failureReason = errorDetails.message;
+                }
+            } else {
+                // Success!
+                this.serverSentCount++;
+                this.lastServerSuccess = new Date().toLocaleTimeString();
+                this.updateServerStatus('success', `Sent at ${this.lastServerSuccess}`);
+                
+                // Mark message as successful in sent log
+                const sentMsg = this.sentMessagesLog.find(m => m.id === messageData.id);
+                if (sentMsg) {
+                    sentMsg.success = true;
+                }
+            }
+        } catch (error) {
+            // Error sending message to background script
+            this.serverFailedCount++;
+            const errorDetails = {
+                type: 'MESSAGE_ERROR',
+                message: error.message || 'Failed to communicate with background script',
+                stack: error.stack || '',
+                timestamp: new Date().toISOString(),
+                messageId: messageData.id,
+                username: messageData.username,
+                browser: this.detectBrowser()
+            };
+            this.logError(errorDetails);
+            this.lastServerError = `MESSAGE_ERROR: ${errorDetails.message}`;
+            this.updateServerStatus('error', this.lastServerError);
+        }
+    }
+    
+    detectBrowser() {
+        const ua = navigator.userAgent;
+        if (ua.includes('Firefox')) return 'Firefox';
+        if (ua.includes('Chrome')) return 'Chrome';
+        if (ua.includes('Safari')) return 'Safari';
+        if (ua.includes('Edge')) return 'Edge';
+        return 'Unknown';
+    }
+    
+    async testServerConnection() {
+        const btn = document.getElementById('chat-reader-test-connection');
+        const originalText = btn.textContent;
+        btn.textContent = '⏳ Testing...';
+        btn.disabled = true;
+        
+        try {
+            const result = await browser.runtime.sendMessage({
+                action: 'testConnection'
+            });
+            
+            if (result && result.success) {
+                btn.textContent = '✅ Connected!';
+                btn.style.background = 'rgba(74, 222, 128, 0.3)';
+                this.updateServerStatus('success', result.message || 'Server reachable');
+            } else {
+                btn.textContent = '❌ Failed';
+                btn.style.background = 'rgba(239, 68, 68, 0.3)';
+                this.updateServerStatus('error', result?.message || 'Connection failed');
+                
+                // Log test error
+                this.logError({
+                    type: 'CONNECTION_TEST_FAILED',
+                    message: result?.message || result?.error || 'Connection test failed',
+                    timestamp: new Date().toISOString(),
+                    browser: this.detectBrowser()
+                });
+            }
+        } catch (error) {
+            btn.textContent = '❌ Failed';
+            btn.style.background = 'rgba(239, 68, 68, 0.3)';
+            this.updateServerStatus('error', 'Failed to communicate with background script');
+            
+            // Log test error
+            this.logError({
+                type: 'CONNECTION_TEST_FAILED',
+                message: error.message || 'Failed to communicate with background script',
+                timestamp: new Date().toISOString(),
+                browser: this.detectBrowser()
+            });
+        } finally {
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.disabled = false;
+            }, 3000);
+        }
+    }
+    
+    logError(errorDetails) {
+        // Keep last 20 errors
+        this.errorLog.push(errorDetails);
+        if (this.errorLog.length > 20) {
+            this.errorLog.shift();
+        }
+    }
+    
+    logSentMessage(messageData) {
+        // Keep last 100 sent messages
+        this.sentMessagesLog.push({
+            ...messageData,
+            sentAt: Date.now(),
+            sentAtText: new Date().toLocaleTimeString()
+        });
+        if (this.sentMessagesLog.length > 100) {
+            this.sentMessagesLog.shift();
+        }
+    }
+    
+    copySentMessagesLogToClipboard() {
+        if (this.sentMessagesLog.length === 0) {
+            alert('No messages logged yet.');
+            return;
+        }
+        
+        const logText = this.sentMessagesLog.map((msg, index) => {
+            const status = msg.failed ? `❌ FAILED: ${msg.failureReason || 'Unknown error'}` : (msg.success ? '✅ Success' : '⏳ Pending');
+            return `Message #${index + 1}:
+Status: ${status}
+ID: ${msg.id || 'NO ID'}
+Username: ${msg.username || 'NO USERNAME'}
+Text: ${(msg.text || '').substring(0, 100)}${(msg.text || '').length > 100 ? '...' : ''}
+TextHtml Length: ${(msg.textHtml || '').length}
+Avatar: ${msg.avatar ? 'Yes' : 'No'}
+Timestamp: ${msg.timestamp}
+TimestampText: ${msg.timestampText || ''}
+Badges: ${msg.badges ? (msg.badges.membershipTier ? `Tier #${msg.badges.membershipTier}` : '') + (msg.badges.badgeImages ? ` + ${msg.badges.badgeImages.length} images` : '') : 'None'}
+Sent At: ${msg.sentAtText}
+---
+`;
+        }).join('\n');
+        
+        const summary = `Chat Reader - Sent Messages Log
+Total Messages Sent: ${this.sentMessagesLog.length}
+Server Sent Count: ${this.serverSentCount}
+Server Failed Count: ${this.serverFailedCount}
+
+=== SENT MESSAGES ===
+
+${logText}`;
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(summary).then(() => {
+            const btn = document.getElementById('chat-reader-copy-sent-log');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Copied!';
+            btn.style.background = 'rgba(74, 222, 128, 0.3)';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 2000);
+        }).catch(err => {
+            alert('Failed to copy to clipboard. Error: ' + err.message);
+        });
+    }
+    
+    copyErrorLogToClipboard() {
+        if (this.errorLog.length === 0) {
+            alert('No errors logged yet.');
+            return;
+        }
+        
+        const errorText = this.errorLog.map((error, index) => {
+            return `Error #${index + 1}:
+Type: ${error.type}
+Message: ${error.message}
+Timestamp: ${error.timestamp}
+${error.diagnostic ? `Diagnostic: ${error.diagnostic}` : ''}
+${error.messageId ? `Message ID: ${error.messageId}` : ''}
+${error.username ? `Username: ${error.username}` : ''}
+${error.status ? `HTTP Status: ${error.status} ${error.statusText || ''}` : ''}
+${error.body ? `Response Body: ${error.body}` : ''}
+${error.browser ? `Browser: ${error.browser}` : ''}
+${error.userAgent ? `User Agent: ${error.userAgent}` : ''}
+${error.stack ? `Stack: ${error.stack}` : ''}
+${error.url ? `URL: ${error.url}` : ''}
+---
+`;
+        }).join('\n');
+        
+        const summary = `Chat Reader Error Log
+Total Errors: ${this.errorLog.length}
+Sent: ${this.serverSentCount}
+Failed: ${this.serverFailedCount}
+Last Success: ${this.lastServerSuccess || 'Never'}
+Last Error: ${this.lastServerError || 'None'}
+
+=== ERROR DETAILS ===
+
+${errorText}`;
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(summary).then(() => {
+            const btn = document.getElementById('chat-reader-copy-errors');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Copied!';
+            btn.style.background = 'rgba(74, 222, 128, 0.3)';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 2000);
+        }).catch(err => {
+            alert('Failed to copy to clipboard. Error: ' + err.message);
+        });
+    }
+    
+    updateServerStatus(status, message) {
+        const indicator = document.getElementById('server-status-indicator');
+        const sentCount = document.getElementById('server-sent-count');
+        const failedCount = document.getElementById('server-failed-count');
+        const lastStatus = document.getElementById('server-last-status');
+        const lastStatusText = document.getElementById('server-last-status-text');
+        
+        if (!indicator) return;
+        
+        // Update indicator
+        indicator.className = `status-indicator status-${status}`;
+        
+        // Update counts
+        if (sentCount) sentCount.textContent = this.serverSentCount;
+        if (failedCount) failedCount.textContent = this.serverFailedCount;
+        
+        // Update last status message
+        if (lastStatus && lastStatusText) {
+            lastStatus.style.display = 'flex';
+            lastStatus.className = `status-row ${status}`;
+            lastStatusText.textContent = message || '';
+        }
     }
 
     createOverlay() {
@@ -961,6 +1332,28 @@
                     </div>
                     <button id="chat-reader-toggle" class="chat-reader-btn">−</button>
                     <button id="chat-reader-clear" class="chat-reader-btn">Clear</button>
+                </div>
+                <div class="chat-reader-server-status" id="chat-reader-server-status">
+                    <div class="server-status-header">
+                        <span>🖥️ Server Status</span>
+                        <span id="server-status-indicator" class="status-indicator status-unknown">●</span>
+                    </div>
+                    <div class="server-status-details">
+                        <div class="status-row">
+                            <span>Sent:</span>
+                            <span id="server-sent-count">0</span>
+                        </div>
+                        <div class="status-row">
+                            <span>Failed:</span>
+                            <span id="server-failed-count" style="color: #f87171;">0</span>
+                        </div>
+                        <div class="status-row" id="server-last-status" style="display: none;">
+                            <span id="server-last-status-text"></span>
+                        </div>
+                        <button id="chat-reader-test-connection" class="chat-reader-btn" style="margin-top: 8px; width: 100%; font-size: 11px; padding: 6px;">🔌 Test Connection</button>
+                        <button id="chat-reader-copy-errors" class="chat-reader-btn" style="margin-top: 4px; width: 100%; font-size: 11px; padding: 6px;">📋 Copy Error Log</button>
+                        <button id="chat-reader-copy-sent-log" class="chat-reader-btn" style="margin-top: 4px; width: 100%; font-size: 11px; padding: 6px;">📤 Copy Sent Messages Log</button>
+                    </div>
                 </div>
                 <div id="chat-reader-messages" class="chat-reader-messages"></div>
             `;
@@ -1128,6 +1521,63 @@
                     vertical-align: middle;
                     object-fit: contain;
                 }
+                .chat-reader-server-status {
+                    background: rgba(0, 0, 0, 0.3);
+                    border-top: 1px solid #333;
+                    border-bottom: 1px solid #333;
+                    padding: 10px 12px;
+                    font-size: 11px;
+                    flex-shrink: 0;
+                }
+                .server-status-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 6px;
+                    font-weight: 600;
+                    color: #94a3b8;
+                }
+                .status-indicator {
+                    font-size: 12px;
+                    margin-left: 8px;
+                }
+                .status-indicator.status-success {
+                    color: #4ade80;
+                }
+                .status-indicator.status-error {
+                    color: #f87171;
+                }
+                .status-indicator.status-unknown {
+                    color: #64748b;
+                }
+                .server-status-details {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+                .status-row {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 10px;
+                    color: #cbd5e1;
+                }
+                .status-row span:first-child {
+                    color: #94a3b8;
+                }
+                #server-last-status {
+                    margin-top: 4px;
+                    padding-top: 4px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    font-size: 9px;
+                    color: #94a3b8;
+                    word-break: break-word;
+                }
+                #server-last-status.success {
+                    color: #4ade80;
+                }
+                #server-last-status.error {
+                    color: #f87171;
+                }
             `;
             document.head.appendChild(style);
             document.body.appendChild(overlay);
@@ -1145,6 +1595,18 @@
                 document.getElementById('chat-reader-messages').innerHTML = '';
                 this.messageCount = 0;
                 document.getElementById('chat-reader-count').textContent = '0';
+            });
+            
+            document.getElementById('chat-reader-copy-errors').addEventListener('click', () => {
+                this.copyErrorLogToClipboard();
+            });
+            
+            document.getElementById('chat-reader-copy-sent-log').addEventListener('click', () => {
+                this.copySentMessagesLogToClipboard();
+            });
+            
+            document.getElementById('chat-reader-test-connection').addEventListener('click', () => {
+                this.testServerConnection();
             });
 
         } catch (error) {
