@@ -270,9 +270,9 @@ class ChatController {
             };
             profilePic.addEventListener('load', safeStart, { once: true });
             profilePic.addEventListener('error', safeStart, { once: true }); // Start even if image fails to load
-            // Fallback timeout: start animation after 1000ms max wait
+            // Fallback timeout: start animation after 500ms max wait
             // This gives images more time to load, especially on first load (not cached)
-            setTimeout(safeStart, 1000);
+            setTimeout(safeStart, 500);
         }
         
         return true; // Return true to indicate message was successfully displayed

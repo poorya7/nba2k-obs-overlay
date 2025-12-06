@@ -160,7 +160,6 @@
     <h1>Avatar Loading Test</h1>
     
     <div class="controls">
-        <button onclick="clearServerMessages()" style="background: #f44336;">Clear Server Messages</button>
         <button onclick="loadAvatars()">Load All Avatars</button>
         <button class="export" onclick="exportData()">Export Results</button>
     </div>
@@ -175,26 +174,6 @@
     
     <script>
         let avatarData = [];
-        
-        async function clearServerMessages() {
-            try {
-                const response = await fetch('http://localhost:3000/api/chat', {
-                    method: 'DELETE'
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                if (data.success) {
-                    alert('Server messages cleared!');
-                } else {
-                    alert('Failed to clear messages');
-                }
-            } catch (error) {
-                console.error('Error clearing messages:', error);
-                alert('Error clearing messages: ' + error.message);
-            }
-        }
         
         async function loadAvatars() {
             const grid = document.getElementById('avatarGrid');
@@ -280,16 +259,16 @@
                         if (animationStarted) return;
                         animationStarted = true;
                         
-                        // Check if image is loaded - rely on complete and naturalHeight (not offsetWidth for off-screen elements)
-                        const isLoaded = img.complete && img.naturalHeight !== 0;
+                        // Check if image is actually visible/loaded
+                        const isVisible = img.complete && img.naturalHeight !== 0 && img.offsetWidth > 0;
                         const elapsed = Date.now() - startTime;
                         
-                        if (isLoaded) {
+                        if (isVisible) {
                             loaded = true;
                             updateStatus(index, avatarInfo, true, elapsed);
                         } else {
                             failed = true;
-                            updateStatus(index, avatarInfo, false, elapsed, 'Image not loaded after timeout');
+                            updateStatus(index, avatarInfo, false, elapsed, 'Image not visible after load');
                         }
                         
                         // Clean up
@@ -314,12 +293,12 @@
                             document.body.removeChild(canvas);
                         }, { once: true });
                         
-                        // Fallback timeout: 1000ms (increased to allow slower-loading images)
+                        // Fallback timeout: 500ms (same as chat overlay)
                         setTimeout(() => {
                             if (!animationStarted) {
                                 startAnimation();
                             }
-                        }, 1000);
+                        }, 500);
                     }
                     
                     // Store data
