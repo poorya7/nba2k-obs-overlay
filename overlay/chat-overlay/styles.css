@@ -26,6 +26,7 @@ body {
     --stage-bg-alpha: 0.5;
 }
 
+
 /* CHAT CANVAS - positioned dynamically */
 .chat-canvas {
     position: fixed;
@@ -116,7 +117,7 @@ body {
     backdrop-filter: none;
     padding: 0;
     border-radius: 0;
-    font-size: 14px;
+    font-size: var(--list-font-size);
     width: var(--list-width);
     display: flex;
     align-items: baseline;
@@ -132,7 +133,7 @@ body {
 .message.in-list.ghost-style .user {
     color: #60a5fa;
     font-weight: 600;
-    font-size: 13px;
+    font-size: calc(var(--list-font-size) * 0.72);
     margin-right: 0;
     flex-shrink: 0;
     width: 120px;
@@ -142,7 +143,7 @@ body {
     color: #cbd5e1;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     flex: 1;
-    font-size: 14px;
+    font-size: var(--list-font-size);
 }
 
 .message.in-list.ghost-style .profile-pic {

@@ -88,12 +88,19 @@ class ChatController {
             
             if (data.messages && data.messages.length > 0) {
                 // Filter out already displayed messages and sort by timestamp (oldest first)
+                // Use domOrder as tiebreaker when timestamps are equal (preserves YouTube DOM order)
                 const newMessages = data.messages
                     .filter(serverMsg => !this.displayedMessageIds.has(serverMsg.id))
                     .sort((a, b) => {
                         const timestampA = a.timestamp || 0;
                         const timestampB = b.timestamp || 0;
-                        return timestampA - timestampB; // Oldest first
+                        if (timestampA !== timestampB) {
+                            return timestampA - timestampB; // Oldest first
+                        }
+                        // Timestamps are equal - use DOM order as tiebreaker
+                        const domOrderA = a.domOrder !== undefined ? a.domOrder : Infinity;
+                        const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
+                        return domOrderA - domOrderB; // Lower DOM order (earlier in YouTube) comes first
                     });
                 
                 // Process each message in timestamp order
@@ -191,8 +198,8 @@ class ChatController {
         // Set staging state IMMEDIATELY to prevent race conditions
         this.stateManager.setIsStaging(true);
         
-        // Get user color
-        const color = this.dataFormatter.getUserColor(this.stateManager.getMsgIdx());
+        // Get user color (check map first, assign new if needed)
+        const color = this.dataFormatter.getUserColor(msg.user, this.stateManager.getMsgIdx(), this.stateManager);
         this.stateManager.incrementMsgIdx();
         
         // Calculate dynamic stage time based on text length
@@ -309,10 +316,17 @@ class ChatController {
                 }
                 
                 // Sort messages by timestamp (oldest first) - use message timestamp, not server time
+                // Use domOrder as tiebreaker when timestamps are equal (preserves YouTube DOM order)
                 const sortedMessages = [...data.messages].sort((a, b) => {
                     const timestampA = a.timestamp || 0;
                     const timestampB = b.timestamp || 0;
-                    return timestampA - timestampB; // Oldest first
+                    if (timestampA !== timestampB) {
+                        return timestampA - timestampB; // Oldest first
+                    }
+                    // Timestamps are equal - use DOM order as tiebreaker
+                    const domOrderA = a.domOrder !== undefined ? a.domOrder : Infinity;
+                    const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
+                    return domOrderA - domOrderB; // Lower DOM order (earlier in YouTube) comes first
                 });
                 
                 // Add ALL messages to the list directly (no staging animation)
@@ -331,7 +345,7 @@ class ChatController {
                         badges: serverMsg.badges || null
                     };
                     
-                    const color = this.dataFormatter.getUserColor(i);
+                    const color = this.dataFormatter.getUserColor(msg.user, i, this.stateManager);
                     
                     // Format HTML
                     const html = this.dataFormatter.formatListHTML(msg, color, currentStyle);

@@ -9,6 +9,9 @@ class ChatStateManager {
         this.messagesList = [];
         this.msgIdx = 0;
         
+        // User color mapping (username -> color)
+        this.userColorMap = new Map();
+        
         // Staging state
         this.isStaging = false;
         this.stagedMessage = null;
@@ -52,6 +55,15 @@ class ChatStateManager {
     
     incrementMsgIdx() {
         this.msgIdx++;
+    }
+    
+    // User color mapping
+    getUserColor(username) {
+        return this.userColorMap.get(username);
+    }
+    
+    setUserColor(username, color) {
+        this.userColorMap.set(username, color);
     }
     
     // Staging state

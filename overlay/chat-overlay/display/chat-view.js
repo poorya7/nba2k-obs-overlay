@@ -184,14 +184,14 @@ class ChatView {
         const g = parseInt(hex.slice(3, 5), 16);
         const b = parseInt(hex.slice(5, 7), 16);
         
-        // Show and size the background with padding and alpha
-        bgEl.style.display = 'block';
-        bgEl.style.top = (firstTop - this.config.settings.listBgPadding) + 'px';
-        bgEl.style.left = (this.config.settings.listOffsetX - this.config.settings.listBgPadding) + 'px';
-        bgEl.style.width = (this.config.settings.listWidth + (this.config.settings.listBgPadding * 2)) + 'px';
-        bgEl.style.height = (totalHeight + (this.config.settings.listBgPadding * 2)) + 'px';
-        bgEl.style.padding = this.config.settings.listBgPadding + 'px';
-        bgEl.style.background = `rgba(${r}, ${g}, ${b}, ${this.config.settings.listBgAlpha})`;
+        // Background is hidden via CSS - don't show it
+        // bgEl.style.setProperty('display', 'block', 'important');
+        // bgEl.style.top = (firstTop - this.config.settings.listBgPadding) + 'px';
+        // bgEl.style.left = (this.config.settings.listOffsetX - this.config.settings.listBgPadding) + 'px';
+        // bgEl.style.width = (this.config.settings.listWidth + (this.config.settings.listBgPadding * 2)) + 'px';
+        // bgEl.style.height = (totalHeight + (this.config.settings.listBgPadding * 2)) + 'px';
+        // bgEl.style.padding = this.config.settings.listBgPadding + 'px';
+        // bgEl.style.background = `rgba(${r}, ${g}, ${b}, ${this.config.settings.listBgAlpha})`;
     }
 }
 

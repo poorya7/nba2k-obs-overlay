@@ -107,12 +107,26 @@ class ChatDataFormatter {
     }
     
     /**
-     * Get user color by index
-     * @param {number} index - Message index
+     * Get user color by username (with fallback to index-based assignment for new users)
+     * @param {string} username - Username
+     * @param {number} index - Message index (for new users)
+     * @param {ChatStateManager} stateManager - State manager to access color map
      * @returns {string} Color hex code
      */
-    getUserColor(index) {
-        return this.config.userColors[index % this.config.userColors.length];
+    getUserColor(username, index, stateManager) {
+        // Check if user already has a color assigned
+        const existingColor = stateManager.getUserColor(username);
+        if (existingColor) {
+            return existingColor;
+        }
+        
+        // New user - assign color from array based on index
+        const color = this.config.userColors[index % this.config.userColors.length];
+        
+        // Store the mapping for future messages from this user
+        stateManager.setUserColor(username, color);
+        
+        return color;
     }
 }
 

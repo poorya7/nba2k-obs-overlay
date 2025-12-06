@@ -61,6 +61,15 @@
                     // Pre-populate messages for the new style
                     chatController.prePopulate();
                 }
+                
+                // Listen for font size changes
+                if (event.data && event.data.type === 'changeFontSize') {
+                    const fontSize = event.data.fontSize;
+                    if (fontSize && fontSize >= 10 && fontSize <= 30) {
+                        chatController.config.settings.listFontSize = fontSize;
+                        chatController.updateStyles();
+                    }
+                }
             });
         });
     </script>

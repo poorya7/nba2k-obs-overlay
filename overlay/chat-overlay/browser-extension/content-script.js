@@ -333,7 +333,7 @@
             
             messages.forEach((messageEl, index) => {
                 try {
-                    const messageData = this.extractMessageData(messageEl);
+                    const messageData = this.extractMessageData(messageEl, index);
                     if (!messageData) {
                         // Log all extraction failures for debugging (especially for messages with emojis)
                         const usernameEl = messageEl.querySelector('#author-name');
@@ -426,7 +426,7 @@
         }
     }
 
-    extractMessageData(messageElement) {
+    extractMessageData(messageElement, domOrder = null) {
         try {
             // Extract message ID (YouTube uses data attributes or IDs)
             // Extract YouTube's actual message ID - try multiple locations
@@ -988,7 +988,8 @@
                 avatar,
                 timestamp,
                 timestampText,
-                badges
+                badges,
+                domOrder: domOrder !== null ? domOrder : undefined // DOM order for tiebreaking when timestamps are equal
             };
             
             // Debug: Log successful extraction for emoji-only messages
@@ -1239,7 +1240,8 @@
             avatar: messageData.avatar || '',
             timestamp: messageData.timestamp,
             timestampText: messageData.timestampText || '',
-            badges: cleanedBadges
+            badges: cleanedBadges,
+            domOrder: messageData.domOrder // DOM order for tiebreaking when timestamps are equal
         };
         
         // Log message being sent
