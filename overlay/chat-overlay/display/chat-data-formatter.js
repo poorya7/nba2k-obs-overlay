@@ -38,7 +38,12 @@ class ChatDataFormatter {
             }
         }
         
-        return `<img class="profile-pic" src="${msg.avatar}" alt="${msg.user}"><div class="content"><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> ${msg.text}</div>`;
+        const displayUser = msg.user.replace(/^@/, '');
+        
+        // Truncate HTML text (preserving emoji img tags) if longer than 150 characters
+        const displayText = this.truncateHtmlWithEmojis(msg.text, 150);
+        
+        return `<img class="profile-pic" src="${msg.avatar}" alt="${displayUser}"><div class="content"><span class="user" style="color:${color}">${displayUser}${badgesHtml}</span> ${displayText}</div>`;
     }
     
     /**
@@ -80,18 +85,24 @@ class ChatDataFormatter {
             }
         }
         
+        // Remove @ from username if present
+        const displayUser = msg.user.replace(/^@/, '');
+        
+        // Truncate HTML text (preserving emoji img tags) if longer than 150 characters
+        const displayText = this.truncateHtmlWithEmojis(msg.text, 150);
+        
         // Different HTML structures for different styles
         switch(style) {
             case 'option-10': // Inline compact
-                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}</span> <span class="inline-text">${badgesHtml} ${msg.text}</span></div>`;
+                return `<div class="content inline"><span class="user" style="color:${color}">${displayUser}</span> <span class="inline-text">${badgesHtml} ${displayText}</span></div>`;
             case 'option-11': // Vertical timeline
-                return `<div class="content timeline-vertical"><div class="timeline-line"></div><span class="user" style="color:${color}">${msg.user}</span> ${badgesHtml} ${msg.text}</div>`;
+                return `<div class="content timeline-vertical"><div class="timeline-line"></div><span class="user" style="color:${color}">${displayUser}</span> ${badgesHtml} ${displayText}</div>`;
             case 'option-21': // Vertical timeline with colored lines
-                return `<div class="content timeline-vertical-colored"><div class="timeline-line-colored" style="background:linear-gradient(to bottom, ${color}, transparent)"></div><span class="user" style="color:${color}">${msg.user}</span> ${badgesHtml} ${msg.text}</div>`;
+                return `<div class="content timeline-vertical-colored"><div class="timeline-line-colored" style="background:linear-gradient(to bottom, ${color}, transparent)"></div><span class="user" style="color:${color}">${displayUser}</span> ${badgesHtml} ${displayText}</div>`;
             case 'option-19': // Brackets style
-                return `<div class="content brackets-style"><div class="bracket-user-wrapper"><span class="bracket-open" style="color:${color}">[</span><span class="bracket-user" style="color:${color}">${msg.user}</span><span class="bracket-close" style="color:${color}">]</span></div><span class="bracket-text">${badgesHtml} ${msg.text}</span></div>`;
+                return `<div class="content brackets-style"><div class="bracket-user-wrapper"><span class="bracket-open" style="color:${color}">[</span><span class="bracket-user" style="color:${color}">${displayUser}</span><span class="bracket-close" style="color:${color}">]</span></div><span class="bracket-text">${badgesHtml} ${displayText}</span></div>`;
             default:
-                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}</span> <span class="inline-text">${badgesHtml} ${msg.text}</span></div>`;
+                return `<div class="content inline"><span class="user" style="color:${color}">${displayUser}</span> <span class="inline-text">${badgesHtml} ${displayText}</span></div>`;
         }
     }
     
@@ -104,6 +115,106 @@ class ChatDataFormatter {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+    
+    /**
+     * Truncate HTML text while preserving emoji img tags
+     * @param {string} htmlText - HTML text that may contain emoji img tags
+     * @param {number} maxLength - Maximum character length (emojis count as 1)
+     * @returns {string} Truncated HTML with ellipsis if needed
+     */
+    truncateHtmlWithEmojis(htmlText, maxLength) {
+        if (!htmlText) return '';
+        
+        // Check if it's plain text (no HTML tags)
+        if (!htmlText.includes('<')) {
+            // Plain text - simple truncation
+            if (htmlText.length > maxLength) {
+                return this.escapeHtml(htmlText.substring(0, maxLength)) + '...';
+            }
+            return this.escapeHtml(htmlText);
+        }
+        
+        // Parse HTML to extract text and emoji img tags
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlText;
+        
+        // Get all text content and emoji images
+        const textContent = tempDiv.textContent || '';
+        const emojiImages = tempDiv.querySelectorAll('img.chat-reader-emoji');
+        
+        // Count total length: text characters + emojis (each counts as 1)
+        const totalLength = textContent.length + emojiImages.length;
+        
+        if (totalLength <= maxLength) {
+            // No truncation needed - just escape text parts and preserve emojis
+            return this.escapeHtmlTextPreservingEmojis(htmlText);
+        }
+        
+        // Need to truncate - rebuild HTML with truncation
+        let charCount = 0;
+        let result = '';
+        let truncated = false;
+        
+        const walkNodes = (node) => {
+            if (truncated) return;
+            
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent;
+                const remaining = maxLength - charCount;
+                
+                if (text.length <= remaining) {
+                    result += this.escapeHtml(text);
+                    charCount += text.length;
+                } else {
+                    result += this.escapeHtml(text.substring(0, remaining)) + '...';
+                    truncated = true;
+                }
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'IMG' && node.classList.contains('chat-reader-emoji')) {
+                if (charCount < maxLength) {
+                    result += node.outerHTML;
+                    charCount += 1;
+                } else {
+                    truncated = true;
+                }
+            } else {
+                // For other elements, process children
+                Array.from(node.childNodes).forEach(child => walkNodes(child));
+            }
+        };
+        
+        Array.from(tempDiv.childNodes).forEach(child => walkNodes(child));
+        
+        return result;
+    }
+    
+    /**
+     * Escape HTML text while preserving emoji img tags
+     * @param {string} htmlText - HTML text with emoji img tags
+     * @returns {string} Escaped HTML with emojis preserved
+     */
+    escapeHtmlTextPreservingEmojis(htmlText) {
+        if (!htmlText) return '';
+        
+        // Create temp div to parse
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlText;
+        
+        let result = '';
+        
+        const walkNodes = (node) => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                result += this.escapeHtml(node.textContent);
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'IMG' && node.classList.contains('chat-reader-emoji')) {
+                result += node.outerHTML;
+            } else {
+                Array.from(node.childNodes).forEach(child => walkNodes(child));
+            }
+        };
+        
+        Array.from(tempDiv.childNodes).forEach(child => walkNodes(child));
+        
+        return result;
     }
     
     /**

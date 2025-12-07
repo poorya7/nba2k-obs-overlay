@@ -13,8 +13,8 @@ const ChatConfig = {
         picStaged: 100,
         picList: 10,
         stageFontSize: 21,
-        listFontSize: 18,
-        entryGap: 6,
+        listFontSize: 15,
+        entryGap: 8,
         bgPadding: 15,
         stageTime: 6000,
         bgAlpha: 0.88,
@@ -35,18 +35,11 @@ const ChatConfig = {
     },
     
     userColors: [
-        "#FF0000", // Pure Red
-        "#00FF00", // Pure Green
-        "#0000FF", // Pure Blue
-        "#FFFF00", // Pure Yellow
-        "#FF00FF", // Magenta
-        "#00FFFF", // Cyan
-        "#FF8800", // Orange
-        "#8800FF", // Purple
-        "#FF0088", // Hot Pink
-        "#88FF00", // Lime
-        "#0088FF", // Sky Blue
-        "#00FF88"  // Mint
+        "#22d3ee", // Cyan (Style 2)
+        "#2dd4bf", // Teal (Style 2)
+        "#60a5fa", // Blue (Style 2)
+        "#a78bfa", // Purple (Style 2)
+        "#f472b6"  // Pink (Style 2)
     ]
 };
 

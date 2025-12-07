@@ -16,6 +16,9 @@
     </div>
 
 
+
+
+
     <!-- Chat overlay display modules -->
     <script src="/overlay/chat-overlay/display/chat-config.js"></script>
     <script src="/overlay/chat-overlay/display/chat-state-manager.js"></script>
@@ -31,13 +34,15 @@
             // Create dependencies
             const config = ChatConfig;
             
-            // Set fixed values for chat list
+            // Set fixed values for chat list (Style 2: Floating Minimal)
             config.settings.listWidth = 324;
-            config.settings.listOffsetX = -1;
+            config.settings.listOffsetX = -35;
+            config.settings.listFontSize = 15;
+            config.settings.entryGap = 8;
             document.documentElement.style.setProperty('--list-width', '324px');
-            document.documentElement.style.setProperty('--list-offset-x', '-1px');
-            document.documentElement.style.setProperty('--username-width', '129px');
-            document.documentElement.style.setProperty('--username-text-gap', '20px');
+            document.documentElement.style.setProperty('--list-offset-x', '-35px');
+            document.documentElement.style.setProperty('--username-width', '157px');
+            document.documentElement.style.setProperty('--username-text-gap', '6px');
             
             const stateManager = new ChatStateManager();
             const dataFormatter = new ChatDataFormatter(config);
@@ -57,6 +62,13 @@
             chatController.start();
             
             window.chatController = chatController;
+
+            // Set fixed values
+            document.documentElement.style.setProperty('--chat-text-opacity', '1.0');
+            document.documentElement.style.setProperty('--chat-text-color', '197, 197, 197');
+            document.documentElement.style.setProperty('--username-opacity', '1.0');
+            document.documentElement.style.setProperty('--username-width', '157px');
+            document.documentElement.style.setProperty('--list-offset-x', '-35px');
             
             // Listen for style changes from parent window
             window.addEventListener('message', (event) => {
