@@ -21,7 +21,7 @@ const ChatConfig = {
         bgColor: '#0a1428',
         maxHeight: 494,
         stageWidth: 260,
-        listWidth: 290,
+        listWidth: 324,
         bubbleDelay: 100,
         listBgPadding: 22,
         listBgAlpha: 0.45,
@@ -31,9 +31,22 @@ const ChatConfig = {
         moveUpAmount: 40, // pixels
         stageBgColor: '#0a1428', // Stage background color
         stageBgAlpha: 1, // Stage background transparency (0-1)
-        listOffsetX: 30 // Horizontal offset for list only (not stage)
+        listOffsetX: -1 // Horizontal offset for list only (not stage)
     },
     
-    userColors: ['#f472b6', '#fb923c', '#a78bfa', '#4ade80', '#60a5fa', '#fbbf24', '#f87171', '#2dd4bf', '#c084fc', '#fb7185', '#34d399', '#38bdf8']
+    userColors: [
+        "#FF0000", // Pure Red
+        "#00FF00", // Pure Green
+        "#0000FF", // Pure Blue
+        "#FFFF00", // Pure Yellow
+        "#FF00FF", // Magenta
+        "#00FFFF", // Cyan
+        "#FF8800", // Orange
+        "#8800FF", // Purple
+        "#FF0088", // Hot Pink
+        "#88FF00", // Lime
+        "#0088FF", // Sky Blue
+        "#00FF88"  // Mint
+    ]
 };
 

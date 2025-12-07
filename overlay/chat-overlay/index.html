@@ -15,6 +15,7 @@
         <div class="chat-list-background" id="chat-list-bg"></div>
     </div>
 
+
     <!-- Chat overlay display modules -->
     <script src="/overlay/chat-overlay/display/chat-config.js"></script>
     <script src="/overlay/chat-overlay/display/chat-state-manager.js"></script>
@@ -29,6 +30,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Create dependencies
             const config = ChatConfig;
+            
+            // Set fixed values for chat list
+            config.settings.listWidth = 324;
+            config.settings.listOffsetX = -1;
+            document.documentElement.style.setProperty('--list-width', '324px');
+            document.documentElement.style.setProperty('--list-offset-x', '-1px');
+            document.documentElement.style.setProperty('--username-width', '129px');
+            document.documentElement.style.setProperty('--username-text-gap', '20px');
+            
             const stateManager = new ChatStateManager();
             const dataFormatter = new ChatDataFormatter(config);
             const chatView = new ChatView(config);
@@ -45,6 +55,8 @@
             
             // Start the chat overlay
             chatController.start();
+            
+            window.chatController = chatController;
             
             // Listen for style changes from parent window
             window.addEventListener('message', (event) => {
@@ -73,6 +85,7 @@
             });
         });
     </script>
+
 </body>
 </html>
 

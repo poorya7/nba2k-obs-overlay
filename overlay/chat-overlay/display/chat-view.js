@@ -56,6 +56,42 @@ class ChatView {
         listMessageEl.style.top = top + 'px';
         listMessageEl.style.left = this.config.settings.listOffsetX + 'px';
         listMessageEl.innerHTML = `<div class="entry">${html}</div>`;
+        
+        // Explicitly set width on content element to ensure it uses current CSS variable value
+        // Use CSS variable as source of truth since slider updates it directly
+        const contentEl = listMessageEl.querySelector('.content');
+        if (contentEl) {
+            // Get current width from CSS variable (slider updates this)
+            const listWidth = getComputedStyle(document.documentElement).getPropertyValue('--list-width').trim();
+            if (listWidth) {
+                contentEl.style.width = listWidth;
+                contentEl.style.maxWidth = listWidth;
+            } else {
+                // Fallback to config value
+                const currentWidth = this.config.settings.listWidth || 400;
+                contentEl.style.width = currentWidth + 'px';
+                contentEl.style.maxWidth = currentWidth + 'px';
+            }
+        }
+        
+        // Also ensure username width is applied from CSS variable
+        const userEl = listMessageEl.querySelector('.user');
+        if (userEl) {
+            const usernameWidth = getComputedStyle(document.documentElement).getPropertyValue('--username-width').trim();
+            if (usernameWidth) {
+                userEl.style.width = usernameWidth;
+            }
+        }
+        
+        // Ensure gap is applied
+        const inlineEl = listMessageEl.querySelector('.inline, .content');
+        if (inlineEl) {
+            const gap = getComputedStyle(document.documentElement).getPropertyValue('--username-text-gap').trim();
+            if (gap) {
+                inlineEl.style.gap = gap;
+            }
+        }
+        
         return listMessageEl;
     }
     

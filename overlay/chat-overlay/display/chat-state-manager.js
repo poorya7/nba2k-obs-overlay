@@ -66,6 +66,10 @@ class ChatStateManager {
         this.userColorMap.set(username, color);
     }
     
+    clearUserColorMap() {
+        this.userColorMap.clear();
+    }
+    
     // Staging state
     getIsStaging() {
         return this.isStaging;

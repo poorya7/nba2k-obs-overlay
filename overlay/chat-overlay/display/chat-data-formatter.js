@@ -83,15 +83,15 @@ class ChatDataFormatter {
         // Different HTML structures for different styles
         switch(style) {
             case 'option-10': // Inline compact
-                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> <span class="inline-text">${msg.text}</span></div>`;
+                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}</span> <span class="inline-text">${badgesHtml} ${msg.text}</span></div>`;
             case 'option-11': // Vertical timeline
-                return `<div class="content timeline-vertical"><div class="timeline-line"></div><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> ${msg.text}</div>`;
+                return `<div class="content timeline-vertical"><div class="timeline-line"></div><span class="user" style="color:${color}">${msg.user}</span> ${badgesHtml} ${msg.text}</div>`;
             case 'option-21': // Vertical timeline with colored lines
-                return `<div class="content timeline-vertical-colored"><div class="timeline-line-colored" style="background:linear-gradient(to bottom, ${color}, transparent)"></div><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> ${msg.text}</div>`;
+                return `<div class="content timeline-vertical-colored"><div class="timeline-line-colored" style="background:linear-gradient(to bottom, ${color}, transparent)"></div><span class="user" style="color:${color}">${msg.user}</span> ${badgesHtml} ${msg.text}</div>`;
             case 'option-19': // Brackets style
-                return `<div class="content brackets-style"><div class="bracket-user-wrapper"><span class="bracket-open" style="color:${color}">[</span><span class="bracket-user" style="color:${color}">${msg.user}${badgesHtml}</span><span class="bracket-close" style="color:${color}">]</span></div><span class="bracket-text">${msg.text}</span></div>`;
+                return `<div class="content brackets-style"><div class="bracket-user-wrapper"><span class="bracket-open" style="color:${color}">[</span><span class="bracket-user" style="color:${color}">${msg.user}</span><span class="bracket-close" style="color:${color}">]</span></div><span class="bracket-text">${badgesHtml} ${msg.text}</span></div>`;
             default:
-                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}${badgesHtml}</span> <span class="inline-text">${msg.text}</span></div>`;
+                return `<div class="content inline"><span class="user" style="color:${color}">${msg.user}</span> <span class="inline-text">${badgesHtml} ${msg.text}</span></div>`;
         }
     }
     
@@ -113,20 +113,128 @@ class ChatDataFormatter {
      * @param {ChatStateManager} stateManager - State manager to access color map
      * @returns {string} Color hex code
      */
-    getUserColor(username, index, stateManager) {
-        // Check if user already has a color assigned
+    getUserColor(username, index, stateManager, messagesList = null) {
+        // STEP 1: Check if user already has a color assigned (from before)
+        // If yes, reuse it for consistency - even if it conflicts with visible users
         const existingColor = stateManager.getUserColor(username);
         if (existingColor) {
             return existingColor;
         }
         
-        // New user - assign color from array based on index
-        const color = this.config.userColors[index % this.config.userColors.length];
+        // STEP 2: New user - get colors of currently visible users in chat list
+        // We only care about the last 8 visible messages (the ones that actually stay on screen)
+        // Don't check ALL messages - only the ones that are actually visible
+        const visibleColors = new Set();
+        if (messagesList && messagesList.length > 0) {
+            // Only check the LAST 8 messages (these are the ones that stay visible)
+            // Slice from the end, not the beginning
+            const visibleMessages = messagesList.slice(-8);
+            
+            visibleMessages.forEach(msgEl => {
+                // Skip if message is exiting/fading out
+                if (msgEl.classList.contains('exiting') || msgEl.classList.contains('fading-out')) {
+                    return;
+                }
+                
+                const userEl = msgEl.querySelector('.user');
+                if (userEl) {
+                    // Get username - try multiple methods to extract it reliably
+                    let visibleUsername = null;
+                    
+                    // Method 1: Check if there's a direct text node (username before badges)
+                    for (let node of userEl.childNodes) {
+                        if (node.nodeType === 3) { // Text node
+                            visibleUsername = node.textContent.trim();
+                            break;
+                        } else if (node.nodeType === 1 && node.tagName === 'SPAN') {
+                            // If username is in a span
+                            visibleUsername = node.textContent.trim();
+                            break;
+                        }
+                    }
+                    
+                    // Method 2: Get text content and try to extract username (before badges)
+                    if (!visibleUsername) {
+                        const fullText = userEl.textContent.trim();
+                        // Try to find username pattern (starts with @ or is first part before space/special chars)
+                        const match = fullText.match(/^(@?[^\s@]+)/);
+                        if (match) {
+                            visibleUsername = match[1].replace(/^@/, '');
+                        } else {
+                            visibleUsername = fullText;
+                        }
+                    }
+                    
+                    if (visibleUsername && visibleUsername !== username) {
+                        // Get color assigned to this visible user from state manager
+                        const userColor = stateManager.getUserColor(visibleUsername);
+                        if (userColor) {
+                            visibleColors.add(userColor.toUpperCase());
+                        } else {
+                            // Fallback: get color from inline style
+                            const colorStyle = userEl.style.color;
+                            if (colorStyle) {
+                                const hexColor = this.normalizeColorToHex(colorStyle);
+                                if (hexColor) {
+                                    visibleColors.add(hexColor.toUpperCase());
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
         
-        // Store the mapping for future messages from this user
-        stateManager.setUserColor(username, color);
+        // STEP 3: Find first color from palette that's NOT currently visible
+        let assignedColor = null;
+        for (const color of this.config.userColors) {
+            const colorUpper = color.toUpperCase();
+            if (!visibleColors.has(colorUpper)) {
+                assignedColor = color;
+                break;
+            }
+        }
         
-        return color;
+        // STEP 4: If all colors are in use (shouldn't happen with 7-8 users and 12+ colors),
+        // pick the least recently used or use hash for consistency
+        if (!assignedColor) {
+            // This should rarely happen, but if it does, use hash
+            let hash = 5381;
+            for (let i = 0; i < username.length; i++) {
+                hash = ((hash << 5) + hash) + username.charCodeAt(i);
+            }
+            const colorIndex = Math.abs(hash) % this.config.userColors.length;
+            assignedColor = this.config.userColors[colorIndex];
+        }
+        
+        // Store the color for this user (they'll keep it even when they scroll out)
+        stateManager.setUserColor(username, assignedColor);
+        
+        return assignedColor;
+    }
+    
+    // Helper to normalize any color format to hex
+    normalizeColorToHex(color) {
+        if (!color) return null;
+        
+        // If already hex format
+        if (color.startsWith('#')) {
+            return color;
+        }
+        
+        // If rgb/rgba format like "rgb(255, 0, 0)" or "rgba(255, 0, 0, 1)"
+        const rgbMatch = color.match(/\d+/g);
+        if (rgbMatch && rgbMatch.length >= 3) {
+            const r = parseInt(rgbMatch[0]);
+            const g = parseInt(rgbMatch[1]);
+            const b = parseInt(rgbMatch[2]);
+            return '#' + [r, g, b].map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('').toUpperCase();
+        }
+        
+        return null;
     }
 }
 

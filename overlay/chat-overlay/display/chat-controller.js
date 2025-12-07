@@ -208,7 +208,13 @@ class ChatController {
         this.stateManager.setIsStaging(true);
         
         // Get user color (check map first, assign new if needed)
-        const color = this.dataFormatter.getUserColor(msg.user, this.stateManager.getMsgIdx(), this.stateManager);
+        // Pass messages list to ensure visible users get different colors
+        const color = this.dataFormatter.getUserColor(
+            msg.user, 
+            this.stateManager.getMsgIdx(), 
+            this.stateManager,
+            this.stateManager.getMessagesList()
+        );
         this.stateManager.incrementMsgIdx();
         
         // Calculate dynamic stage time based on text length
@@ -306,6 +312,7 @@ class ChatController {
             this.chatView.removeElement(msg);
         });
         this.stateManager.clearMessagesList();
+        this.stateManager.clearUserColorMap(); // Clear color map - start fresh
         this.displayedMessageIds.clear();
         
         try {
@@ -354,7 +361,12 @@ class ChatController {
                         badges: serverMsg.badges || null
                     };
                     
-                    const color = this.dataFormatter.getUserColor(msg.user, i, this.stateManager);
+                    const color = this.dataFormatter.getUserColor(
+                        msg.user, 
+                        i, 
+                        this.stateManager,
+                        this.stateManager.getMessagesList()
+                    );
                     
                     // Format HTML
                     const html = this.dataFormatter.formatListHTML(msg, color, currentStyle);
