@@ -170,7 +170,7 @@ class ChatController {
         const calculationLength = textLength === 0 ? 0 : totalLength;
         
         const minStageTime = 2000; // 2.0 seconds minimum
-        const maxStageTime = 8000; // 8.0 seconds maximum
+        const maxStageTime = 7000; // 7.0 seconds maximum
         
         // Formula: time = 1.8 + 0.044 × c (in seconds)
         // Converted to milliseconds: time = 1800 + 44 × calculationLength

@@ -40,8 +40,8 @@ class ChatDataFormatter {
         
         const displayUser = msg.user.replace(/^@/, '');
         
-        // Truncate HTML text (preserving emoji img tags) if longer than 150 characters
-        const displayText = this.truncateHtmlWithEmojis(msg.text, 150);
+        // Truncate HTML text (preserving emoji img tags) if longer than 110 characters
+        const displayText = this.truncateHtmlWithEmojis(msg.text, 110);
         
         return `<img class="profile-pic" src="${msg.avatar}" alt="${displayUser}"><div class="content"><span class="user" style="color:${color}">${displayUser}${badgesHtml}</span> ${displayText}</div>`;
     }
@@ -88,8 +88,8 @@ class ChatDataFormatter {
         // Remove @ from username if present
         const displayUser = msg.user.replace(/^@/, '');
         
-        // Truncate HTML text (preserving emoji img tags) if longer than 150 characters
-        const displayText = this.truncateHtmlWithEmojis(msg.text, 150);
+        // Truncate HTML text (preserving emoji img tags) if longer than 110 characters
+        const displayText = this.truncateHtmlWithEmojis(msg.text, 110);
         
         // Different HTML structures for different styles
         switch(style) {
