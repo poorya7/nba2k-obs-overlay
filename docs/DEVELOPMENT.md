@@ -98,7 +98,22 @@ nba2k-obs-overlay/
 │   │
 │   ├── title-overlay/      # Channel branding
 │   │
-│   └── _tests/             # Social media overlay tests
+│   ├── chat-overlay/       # YouTube chat overlay
+│   │   ├── browser-extension/  # Chrome extension
+│   │   │   ├── background.js
+│   │   │   ├── content-script.js
+│   │   │   └── manifest.json
+│   │   ├── display/        # Overlay display modules
+│   │   │   ├── chat-config.js
+│   │   │   ├── chat-controller.js
+│   │   │   ├── chat-data-formatter.js
+│   │   │   ├── chat-state-manager.js
+│   │   │   ├── chat-view.js
+│   │   │   └── stage-animator.js
+│   │   ├── index.html
+│   │   └── styles.css
+│   │
+│   └── _tests/             # Test pages
 │
 └── docs/                   # Documentation
 ```
@@ -262,6 +277,80 @@ Overlay:
   - Changing colors/fonts
   - Adjusting layout
   - Modifying animations (slide, fade)
+  - Customizing appearance
+
+#### `overlay/chat-overlay/display/chat-controller.js`
+- **Purpose:** Main orchestration for chat overlay
+- **When to modify:**
+  - Changing polling interval
+  - Modifying message processing logic
+  - Adding new features to chat display
+  - Adjusting refresh trigger handling
+
+#### `overlay/chat-overlay/display/chat-view.js`
+- **Purpose:** DOM manipulation for chat messages
+- **When to modify:**
+  - Changing message rendering
+  - Modifying list/stage display
+  - Adjusting message formatting
+
+#### `overlay/chat-overlay/display/chat-state-manager.js`
+- **Purpose:** State management for chat overlay
+- **When to modify:**
+  - Changing state tracking logic
+  - Adding new state properties
+  - Modifying timeout management
+
+#### `overlay/chat-overlay/display/stage-animator.js`
+- **Purpose:** Animation logic for chat messages
+- **When to modify:**
+  - Changing animation timings
+  - Modifying fade/move animations
+  - Adjusting stage transitions
+
+#### `overlay/chat-overlay/display/chat-data-formatter.js`
+- **Purpose:** Format chat message data for display
+- **When to modify:**
+  - Changing message text processing
+  - Modifying username formatting
+  - Adjusting HTML sanitization
+
+#### `overlay/chat-overlay/display/chat-config.js`
+- **Purpose:** Configuration constants for chat overlay
+- **When to modify:**
+  - Changing positioning (listX, listY, stageX, stageY)
+  - Adjusting timing (stageTime, fade durations)
+  - Modifying colors, fonts, sizes
+  - Changing max message limits
+
+#### `overlay/chat-overlay/browser-extension/content-script.js`
+- **Purpose:** Extract chat messages from YouTube DOM
+- **When to modify:**
+  - YouTube DOM structure changes
+  - Adding new message filters
+  - Modifying duplicate detection
+  - Adjusting message extraction logic
+
+#### `overlay/chat-overlay/browser-extension/background.js`
+- **Purpose:** Extension background script for message handling
+- **When to modify:**
+  - Changing extension behavior
+  - Adding new extension features
+  - Modifying message sending logic
+
+#### `overlay/chat-overlay/index.html`
+- **Purpose:** Chat overlay HTML structure
+- **When to modify:**
+  - Changing HTML structure
+  - Adding new UI elements
+  - Modifying initialization
+
+#### `overlay/chat-overlay/styles.css`
+- **Purpose:** Chat overlay styling
+- **When to modify:**
+  - Changing colors/fonts
+  - Adjusting layout
+  - Modifying animations
   - Customizing appearance
 
 ---
@@ -449,6 +538,61 @@ setInterval(() => {
 7. Verify scores change automatically in simulation
 8. Test other games cycling at 60s mark
 
+### Testing Chat Overlay
+
+1. **Install Browser Extension:**
+   - Open Chrome/Edge
+   - Go to `chrome://extensions/` or `edge://extensions/`
+   - Enable "Developer mode"
+   - Click "Load unpacked"
+   - Select `overlay/chat-overlay/browser-extension/` folder
+
+2. **Start Server:**
+   ```bash
+   npm start
+   ```
+
+3. **Open Chat Overlay:**
+   - In OBS, add Browser Source
+   - URL: `http://localhost:3000/overlay/chat`
+   - Width: 1920, Height: 1080
+
+4. **Test with YouTube Live:**
+   - Open YouTube live stream in browser
+   - Extension automatically detects chat messages
+   - Messages appear in overlay with animations
+   - Test stage view (messages scroll up from bottom)
+   - Test list view (messages appear in list on left)
+
+5. **Test API Manually:**
+   ```javascript
+   // Send test message
+   await fetch('/api/chat', {
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: JSON.stringify({
+       username: 'testuser',
+       text: 'Test message',
+       textHtml: '<span>Test message</span>'
+     })
+   });
+   
+   // Get all messages
+   const res = await fetch('/api/chat');
+   const data = await res.json();
+   console.log(data.messages);
+   
+   // Clear messages
+   await fetch('/api/chat', { method: 'DELETE' });
+   ```
+
+6. **Test Refresh Trigger:**
+   ```javascript
+   // Trigger refresh
+   await fetch('/api/chat/refresh', { method: 'POST' });
+   // Overlay should reload all messages
+   ```
+
 ---
 
 ## Troubleshooting
@@ -511,6 +655,51 @@ const PORT = 3001;  // Use different port
 **Fix:**
 - This should already be handled by `formatSecondsToMMSS` in `nbaApi.js`
 - If not working, check that function is being called correctly
+
+#### Chat Overlay Not Showing Messages
+
+**Cause:** Browser extension not installed, not active, or server not receiving messages.
+
+**Debug:**
+1. Check browser extension is installed and enabled
+2. Verify extension is active on YouTube page (check extension icon)
+3. Check browser console for errors (F12)
+4. Verify server is running (`http://localhost:3000/api/chat` should return messages)
+5. Test manually: `POST /api/chat` with test message
+
+**Fix:**
+- Install extension from `overlay/chat-overlay/browser-extension/`
+- Ensure extension has permission to access YouTube
+- Check server logs for incoming POST requests
+
+#### Chat Messages Not Updating
+
+**Cause:** Extension or overlay polling issues.
+
+**Debug:**
+1. Extension polls YouTube DOM every 200ms
+2. Overlay polls server every 200ms
+3. Check Network tab for failed `/api/chat` requests
+4. Verify messages are being stored: `GET /api/chat`
+
+**Fix:**
+- Check browser console for JavaScript errors
+- Verify extension content script is running
+- Test API endpoints manually
+
+#### Chat Overlay Refresh Not Working
+
+**Cause:** Refresh trigger not being detected.
+
+**Debug:**
+1. Use `POST /api/chat/refresh` to trigger refresh
+2. Overlay checks `refreshTrigger` timestamp on each poll
+3. If timestamp changed, overlay reloads all messages
+
+**Fix:**
+- Verify overlay is polling `/api/chat` endpoint
+- Check that `refreshTrigger` is being compared correctly
+- Test refresh trigger manually via API
 
 ---
 

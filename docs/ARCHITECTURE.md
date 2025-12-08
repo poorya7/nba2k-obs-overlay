@@ -2,7 +2,7 @@
 
 ## Overview
 
-The NBA 2K OBS Overlay is a local web application that displays live NBA game statistics as an overlay for OBS streaming. The system consists of three main components that work together to fetch, select, and display real-time NBA game data.
+The NBA 2K OBS Overlay is a local web application that displays live NBA game statistics and chat messages as overlays for OBS streaming. The system consists of multiple components that work together to fetch, select, and display real-time NBA game data and YouTube chat messages.
 
 ## System Components
 
@@ -19,19 +19,33 @@ The NBA 2K OBS Overlay is a local web application that displays live NBA game st
 │                                                               │
 │  • Serves static files (HTML/CSS/JS)                        │
 │  • API: GET/POST /api/selected-game                         │
-│  • API: GET /api/simulation                                 │
-│  • In-memory storage for selected game ID                   │
-└───────────────────┬─────────────────────┬───────────────────┘
-                    │                     │
-        ┌───────────▼─────────┐  ┌───────▼───────────┐
-        │   Control Dashboard  │  │  OBS Overlays     │
-        │   /dashboard         │  │  /overlay/        │
-        │                      │  │                   │
-        │  • Game/mode select  │  │  • nba-live       │
-        │  • Quarter controls  │  │  • title          │
-        │  • Simulation mode   │  │  • socials        │
-        │  • Saves to server   │  │                   │
-        └──────────────────────┘  └───────────────────┘
+│  • API: GET/POST /api/simulation                           │
+│  • API: GET/POST /api/quarter                              │
+│  • API: GET/POST /api/socials-enabled                      │
+│  • API: GET/POST/DELETE /api/chat                          │
+│  • API: GET/POST /api/selected-style                        │
+│  • In-memory storage (game ID, chat messages, state)        │
+└───────┬───────────┬───────────┬───────────┬─────────────────┘
+        │           │           │           │
+        │           │           │           └──────────────┐
+        │           │           │                          │
+┌───────▼──────┐ ┌──▼──────┐ ┌──▼──────┐    ┌─────────────▼──────────┐
+│   Control    │ │ Browser │ │  OBS    │    │   YouTube Live Chat   │
+│  Dashboard   │ │Extension│ │ Overlays│    │   (via Extension)      │
+│ /dashboard   │ │         │ │/overlay/│    └─────────────┬──────────┘
+│              │ │         │ │         │                  │
+│ • Game select│ │ • Reads │ │ • nba-  │                  │ POST /api/chat
+│ • Quarter    │ │   chat  │ │   live  │                  │
+│ • Simulation │ │ • Sends │ │ • title │                  │
+│ • Socials    │ │   to    │ │ • socials│                 │
+│   toggle     │ │   server│ │ • chat  │                  │
+└──────────────┘ └──────────┘ └─────────┘                  │
+                                                           │
+                                                           ▼
+                                                  ┌─────────────────┐
+                                                  │  Chat Messages   │
+                                                  │  (In-Memory)     │
+                                                  └─────────────────┘
 ```
 
 ## Data Flow
@@ -145,7 +159,23 @@ nba2k-obs-overlay/
 │   │   └── styles.css         # Styling
 │   │
 │   ├── socials-overlay/       # Social media overlay
-│   │   └── index.html         # Static socials display
+│   │   └── index.html         # Dynamic socials display (quarter-based)
+│   │
+│   ├── chat-overlay/         # YouTube chat overlay
+│   │   ├── browser-extension/ # Chrome extension for YouTube
+│   │   │   ├── background.js      # Extension background script
+│   │   │   ├── content-script.js   # YouTube page injection
+│   │   │   └── manifest.json       # Extension manifest
+│   │   ├── display/          # Overlay display modules
+│   │   │   ├── chat-config.js           # Configuration constants
+│   │   │   ├── chat-controller.js       # Main orchestration
+│   │   │   ├── chat-data-formatter.js   # Message formatting
+│   │   │   ├── chat-state-manager.js    # State management
+│   │   │   ├── chat-view.js             # DOM manipulation
+│   │   │   └── stage-animator.js         # Animation logic
+│   │   ├── index.html        # Chat overlay page
+│   │   ├── styles.css        # Chat overlay styling
+│   │   └── NOTES.md          # Development notes
 │   │
 │   └── _tests/                # Test pages
 │
@@ -171,9 +201,14 @@ nba2k-obs-overlay/
 - `/overlay/nba-live` → Unified NBA OBS Overlay (maps to `/overlay/nba-live-overlay/index.html`)
 - `/overlay/title` → Title overlay (maps to `/overlay/title-overlay/index.html`)
 - `/overlay/socials` → Socials overlay (maps to `/overlay/socials-overlay/index.html`)
+- `/overlay/chat` → Chat overlay (maps to `/overlay/chat-overlay/index.html`)
 - `/api/selected-game` → Game selection API (GET/POST)
 - `/api/quarter` → Quarter tracking API (GET/POST)
 - `/api/simulation` → Simulation control API (GET/POST)
+- `/api/socials-enabled` → Socials overlay toggle API (GET/POST)
+- `/api/chat` → Chat message API (GET/POST/DELETE)
+- `/api/chat/refresh` → Chat refresh trigger API (POST)
+- `/api/selected-style` → Chat overlay style API (GET/POST)
 
 ### Shared Utilities (`overlay/_shared/`)
 
@@ -315,9 +350,21 @@ ESPN API integration layer providing:
 // In-memory storage (resets on server restart)
 let selectedGameId = null;
 let simulationState = { enabled: false, state: 'pregame' };
+let quarter = { current: null, startTime: null };
+let socialsEnabled = true;
+let chatMessages = [];  // Array of chat message objects
+let maxChatMessages = 200;  // Keep last 200 messages
+let chatRefreshTrigger = null;  // Timestamp for refresh trigger
+let selectedStyle = 'pill-green';
 ```
 
-**Persistence:** Game selection persists while server is running. Resets on restart.
+**Persistence:** All state persists while server is running. Resets on restart.
+
+**Chat Message Storage:**
+- Messages stored in-memory array (max 200 messages)
+- Automatically trimmed when limit exceeded
+- Each message includes: id, username, text, textHtml, receivedAt, domOrder
+- Refresh trigger timestamp used to force overlay reload
 
 ### Client State (Overlay)
 ```javascript
@@ -369,8 +416,37 @@ Overlay → ESPN API: GET scoreboard (every 3 seconds)
 ```
 Dashboard → Server: POST /api/selected-game (on selection)
 Dashboard → Server: POST /api/simulation (on simulation toggle)
+Dashboard → Server: POST /api/quarter (on quarter change)
+Dashboard → Server: POST /api/socials-enabled (on toggle)
 Overlay → Server: GET /api/selected-game (every 3 seconds)
 Overlay → Server: GET /api/simulation (every 3 seconds)
+Overlay → Server: GET /api/quarter (every second for socials)
+Overlay → Server: GET /api/socials-enabled (every second for socials)
+Chat Overlay → Server: GET /api/chat (every 200ms)
+Browser Extension → Server: POST /api/chat (on new message)
+Browser Extension → Server: GET /api/chat (to check for clears)
+```
+
+### Chat Data Flow
+
+```
+YouTube Live Chat (DOM)
+    │
+    ├─> Browser Extension (content-script.js)
+    │   • Monitors YouTube chat DOM
+    │   • Extracts message data
+    │   • Sends to server via POST /api/chat
+    │
+    ├─> Server (server.js)
+    │   • Stores messages in-memory array
+    │   • Maintains max 200 messages
+    │   • Tracks refresh triggers
+    │
+    └─> Chat Overlay (chat-controller.js)
+        • Polls GET /api/chat every 200ms
+        • Detects refresh triggers
+        • Displays messages with animations
+        • Manages stage and list views
 ```
 
 ## Scalability Considerations

@@ -1,6 +1,12 @@
 # 🏀 NBA 2K OBS Overlay
 
-Live NBA game stats overlay for your NBA 2K streams. Shows real-time scores, quarters, and team info from actual NBA games while you play NBA 2K.
+Complete overlay system for NBA 2K streams. Includes live NBA game stats, channel branding, social media handles, and YouTube chat integration - all designed with a clean ASMR aesthetic for your streaming setup.
+
+## 🎯 About
+
+This overlay system was built for **Silent Basketball (HushSwish)** - an ASMR basketball channel on YouTube. The streamer plays NBA 2K26 with crowd sounds and announcers muted, creating a focused ASMR experience with only the sounds of swishes, shoe squeaks, and ball dribbling.
+
+The overlays provide real NBA game context (live scores, team info, chat messages) while maintaining a clean, minimalist ASMR aesthetic that doesn't distract from the game sounds. Everything is designed to be subtle, smooth, and professional - perfect for the ASMR streaming vibe.
 
 ## ✨ Features
 

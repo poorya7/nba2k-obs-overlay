@@ -192,6 +192,404 @@ console.log(data.success); // true
 
 ---
 
+#### GET /api/quarter
+
+**Description:** Retrieve the current quarter tracking information.
+
+**Request:**
+```http
+GET /api/quarter
+```
+
+**Response:**
+```json
+{
+  "current": "Q1",
+  "startTime": 1700000000000
+}
+```
+
+**Response (no quarter active):**
+```json
+{
+  "current": null,
+  "startTime": null
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/quarter');
+const data = await response.json();
+console.log(data.current); // "Q1", "Q2", "Q3", "Q4", or null
+console.log(data.startTime); // timestamp in milliseconds
+```
+
+---
+
+#### POST /api/quarter
+
+**Description:** Set the current quarter and start time. Used by dashboard to track game progress for overlay timing.
+
+**Request:**
+```http
+POST /api/quarter
+Content-Type: application/json
+
+{
+  "quarter": "Q1"
+}
+```
+
+**Request (clear quarter):**
+```http
+POST /api/quarter
+Content-Type: application/json
+
+{
+  "quarter": null
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "quarter": {
+    "current": "Q1",
+    "startTime": 1700000000000
+  }
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+- `400 Bad Request` - Invalid JSON payload
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/quarter', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ quarter: 'Q1' })
+});
+
+const data = await response.json();
+console.log(data.success); // true
+```
+
+---
+
+#### GET /api/socials-enabled
+
+**Description:** Check if the socials overlay is enabled.
+
+**Request:**
+```http
+GET /api/socials-enabled
+```
+
+**Response:**
+```json
+{
+  "enabled": true
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/socials-enabled');
+const data = await response.json();
+console.log(data.enabled); // true or false
+```
+
+---
+
+#### POST /api/socials-enabled
+
+**Description:** Enable or disable the socials overlay.
+
+**Request:**
+```http
+POST /api/socials-enabled
+Content-Type: application/json
+
+{
+  "enabled": true
+}
+```
+
+**Response:**
+```json
+{
+  "success": true
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+- `400 Bad Request` - Invalid JSON payload
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/socials-enabled', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ enabled: true })
+});
+
+const data = await response.json();
+console.log(data.success); // true
+```
+
+---
+
+#### GET /api/chat
+
+**Description:** Retrieve all stored chat messages from the server.
+
+**Request:**
+```http
+GET /api/chat
+```
+
+**Response:**
+```json
+{
+  "messages": [
+    {
+      "id": "chat-123",
+      "username": "viewer123",
+      "text": "Great stream!",
+      "textHtml": "<span>Great stream!</span>",
+      "receivedAt": 1700000000000,
+      "domOrder": 1
+    }
+  ],
+  "count": 1,
+  "refreshTrigger": 1700000000000
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/chat');
+const data = await response.json();
+console.log(data.messages.length); // number of messages
+console.log(data.count); // same as messages.length
+console.log(data.refreshTrigger); // timestamp or null
+```
+
+---
+
+#### POST /api/chat
+
+**Description:** Add a new chat message to the server storage. Used by browser extension to send YouTube chat messages to the overlay.
+
+**Request:**
+```http
+POST /api/chat
+Content-Type: application/json
+
+{
+  "id": "chat-123",
+  "username": "viewer123",
+  "text": "Great stream!",
+  "textHtml": "<span>Great stream!</span>"
+}
+```
+
+**Request Body:**
+- `id` (string, optional) - Unique message identifier
+- `username` (string, required) - Username of the chat sender
+- `text` (string, required if textHtml not provided) - Plain text message content
+- `textHtml` (string, required if text not provided) - HTML formatted message content
+- `receivedAt` (number, optional) - Timestamp in milliseconds (auto-added if not provided)
+- `domOrder` (number, optional) - DOM order for sorting
+
+**Response:**
+```json
+{
+  "success": true,
+  "messageId": "chat-123",
+  "serverClearTimestamp": 1700000000000
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+- `400 Bad Request` - Missing required fields (username or text/textHtml)
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/chat', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    id: 'chat-123',
+    username: 'viewer123',
+    text: 'Great stream!',
+    textHtml: '<span>Great stream!</span>'
+  })
+});
+
+const data = await response.json();
+console.log(data.success); // true
+console.log(data.messageId); // "chat-123"
+```
+
+---
+
+#### DELETE /api/chat
+
+**Description:** Clear all stored chat messages and trigger overlay refresh.
+
+**Request:**
+```http
+DELETE /api/chat
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Chat messages cleared"
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/chat', {
+  method: 'DELETE'
+});
+
+const data = await response.json();
+console.log(data.success); // true
+```
+
+---
+
+#### POST /api/chat/refresh
+
+**Description:** Trigger a refresh of the chat overlay without clearing messages. The overlay will detect the refresh trigger and reload all messages.
+
+**Request:**
+```http
+POST /api/chat/refresh
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Chat refresh triggered",
+  "refreshTrigger": 1700000000000
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/chat/refresh', {
+  method: 'POST'
+});
+
+const data = await response.json();
+console.log(data.success); // true
+console.log(data.refreshTrigger); // timestamp
+```
+
+---
+
+#### GET /api/selected-style
+
+**Description:** Retrieve the currently selected chat overlay style.
+
+**Request:**
+```http
+GET /api/selected-style
+```
+
+**Response:**
+```json
+{
+  "style": "pill-green"
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/selected-style');
+const data = await response.json();
+console.log(data.style); // "pill-green" or other style name
+```
+
+---
+
+#### POST /api/selected-style
+
+**Description:** Set the chat overlay style.
+
+**Request:**
+```http
+POST /api/selected-style
+Content-Type: application/json
+
+{
+  "style": "pill-green"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true
+}
+```
+
+**Status Codes:**
+- `200 OK` - Success
+- `400 Bad Request` - Invalid JSON payload
+
+**Example (JavaScript):**
+```javascript
+const response = await fetch('/api/selected-style', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ style: 'pill-green' })
+});
+
+const data = await response.json();
+console.log(data.success); // true
+```
+
+---
+
 ## NBAApi Client
 
 JavaScript client for interacting with ESPN's NBA API. Available globally as `window.NBAApi`.
@@ -579,6 +977,33 @@ interface MvpPlayerData {
 }
 ```
 
+### Chat Message Object
+
+Data structure for chat messages stored on the server.
+
+```typescript
+interface ChatMessage {
+  id?: string;                    // Unique message identifier (optional)
+  username: string;              // Username of the chat sender
+  text?: string;                 // Plain text message content
+  textHtml?: string;             // HTML formatted message content (at least one of text/textHtml required)
+  receivedAt?: number;           // Timestamp in milliseconds (auto-added if not provided)
+  domOrder?: number;             // DOM order for sorting (used by browser extension)
+}
+```
+
+**Example:**
+```json
+{
+  "id": "chat-123",
+  "username": "viewer123",
+  "text": "Great stream!",
+  "textHtml": "<span>Great stream!</span>",
+  "receivedAt": 1700000000000,
+  "domOrder": 1
+}
+```
+
 ---
 
 ## Usage Examples
@@ -641,6 +1066,62 @@ setInterval(async () => {
   const updatedGame = await window.NBAApi.getGameById(gameId);
   // Update display...
 }, 3000); // 3 second refresh
+```
+
+### Complete Chat Overlay Flow
+
+```javascript
+// Browser extension sends chat message to server
+async function sendChatMessage(message) {
+  const response = await fetch('/api/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: message.id,
+      username: message.username,
+      text: message.text,
+      textHtml: message.textHtml
+    })
+  });
+  
+  const data = await response.json();
+  console.log('Message sent:', data.messageId);
+}
+
+// Chat overlay polls for messages
+async function pollChatMessages() {
+  const response = await fetch('/api/chat');
+  const data = await response.json();
+  
+  // Check for refresh trigger
+  if (data.refreshTrigger && data.refreshTrigger !== lastRefreshTrigger) {
+    lastRefreshTrigger = data.refreshTrigger;
+    // Reload all messages
+    reloadAllMessages(data.messages);
+    return;
+  }
+  
+  // Process new messages
+  const newMessages = data.messages.filter(msg => !displayedIds.has(msg.id));
+  newMessages.forEach(msg => {
+    displayMessage(msg);
+    displayedIds.add(msg.id);
+  });
+}
+
+// Clear chat messages
+async function clearChat() {
+  const response = await fetch('/api/chat', {
+    method: 'DELETE'
+  });
+  
+  const data = await response.json();
+  if (data.success) {
+    console.log('Chat cleared');
+  }
+}
 ```
 
 ### Error Handling Best Practices
