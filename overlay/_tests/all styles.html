@@ -22,7 +22,18 @@
             overflow: hidden;
         }
 
-        /* Video gameplay background */
+        /* Video container - uses viewport units so it doesn't scale with zoom */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Video gameplay background - fixed size, doesn't scale with zoom */
         .gameplay-video {
             position: absolute;
             top: 0;
@@ -30,7 +41,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 0;
         }
 
         /* ========================================
@@ -284,38 +294,40 @@
            ======================================== */
         .style-switcher {
             position: fixed;
-            top: 120px;
-            left: 230px;
+            bottom: 20px;
+            left: 20px;
             z-index: 1000;
-            background: rgba(15, 23, 42, 0.95);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(59, 130, 246, 0.4);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
             display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-height: 80vh;
-            overflow-y: auto;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .style-switcher:hover {
+            opacity: 1;
         }
 
         .style-switcher h3 {
-            color: #60a5fa;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+            display: none; /* Hide title in horizontal layout */
         }
 
         .style-btn {
-            padding: 8px 12px;
+            padding: 6px 10px;
             background: rgba(59, 130, 246, 0.2);
             border: 1px solid rgba(59, 130, 246, 0.4);
-            border-radius: 6px;
+            border-radius: 5px;
             color: #93c5fd;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
         .style-btn:hover {
@@ -327,6 +339,63 @@
             background: rgba(59, 130, 246, 0.5);
             border-color: #60a5fa;
             color: #ffffff;
+        }
+
+        .height-slider-container {
+            margin: 0;
+            padding: 0;
+            padding-left: 10px;
+            border-left: 1px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .height-slider-label {
+            color: #93c5fd;
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .height-slider-value {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 10px;
+            min-width: 40px;
+        }
+
+        .height-slider {
+            width: 120px;
+            height: 5px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .height-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+        }
+
+        .height-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
         }
 
 
@@ -375,12 +444,12 @@
 
         .chat-style-1 .chat-header {
             font-size: 12px;
-            color: #60a5fa;
+            color: #6ee7b7;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            border-bottom: 1px solid rgba(100, 255, 200, 0.3);
         }
 
         .chat-style-1 .chat-message {
@@ -388,75 +457,85 @@
         }
 
         .chat-style-1 .chat-username {
-            color: #60a5fa;
+            color: #6ee7b7;
+            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
+        }
+
+        .chat-style-1 .chat-text {
+            color: #d1fae5;
         }
 
         /* ========================================
-           STYLE 5: Gradient Wave
+           STYLE 2: Gradient Wave
            ======================================== */
-        .chat-style-5 {
+        .chat-style-2 {
             background: transparent;
             padding: 8px;
         }
 
-        .chat-style-5 .chat-message {
+        .chat-style-2 .chat-message {
             font-size: 13px;
             padding: 8px 12px;
             margin-bottom: 6px;
             border-radius: 8px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(147, 51, 234, 0.3) 100%);
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            background: linear-gradient(135deg, rgba(0, 50, 50, 0.3) 0%, rgba(30, 0, 50, 0.3) 100%);
+            border: 1px solid rgba(100, 255, 200, 0.3);
         }
 
-        .chat-style-5 .chat-message:nth-child(even) {
-            background: linear-gradient(135deg, rgba(147, 51, 234, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%);
-            border-color: rgba(236, 72, 153, 0.3);
+        .chat-style-2 .chat-message:nth-child(even) {
+            background: linear-gradient(135deg, rgba(0, 50, 50, 0.3) 0%, rgba(30, 0, 50, 0.3) 100%);
+            border-color: rgba(100, 255, 200, 0.3);
         }
 
-        .chat-style-5 .chat-username {
-            color: #e879f9;
+        .chat-style-2 .chat-username {
+            color: #6ee7b7;
+            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
+        }
+
+        .chat-style-2 .chat-text {
+            color: #d1fae5;
         }
 
         /* ========================================
-           STYLE 7: Holographic
+           STYLE 3: Holographic
            ======================================== */
-        .chat-style-7 {
+        .chat-style-3 {
             background: linear-gradient(135deg, 
-                rgba(0, 255, 255, 0.1) 0%, 
-                rgba(255, 0, 255, 0.1) 50%, 
-                rgba(0, 255, 255, 0.1) 100%);
+                rgba(0, 50, 50, 0.1) 0%, 
+                rgba(30, 0, 50, 0.1) 50%, 
+                rgba(0, 30, 60, 0.1) 100%);
             padding: 16px;
             border-radius: 12px;
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            border: 1px solid rgba(100, 255, 200, 0.3);
             backdrop-filter: blur(10px);
             animation: holoShift 3s ease-in-out infinite;
         }
 
         @keyframes holoShift {
-            0%, 100% { border-color: rgba(0, 255, 255, 0.5); }
-            50% { border-color: rgba(255, 0, 255, 0.5); }
+            0%, 100% { border-color: rgba(100, 255, 200, 0.5); }
+            50% { border-color: rgba(110, 231, 183, 0.5); }
         }
 
-        .chat-style-7 .chat-message {
+        .chat-style-3 .chat-message {
             font-size: 14px;
             margin-bottom: 8px;
             padding-left: 10px;
-            border-left: 2px solid rgba(0, 255, 255, 0.5);
+            border-left: 2px solid rgba(100, 255, 200, 0.5);
         }
 
-        .chat-style-7 .chat-username {
-            color: #00ffff;
-            text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+        .chat-style-3 .chat-username {
+            color: #6ee7b7;
+            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
         }
 
-        .chat-style-7 .chat-text {
-            color: rgba(255, 255, 255, 0.9);
+        .chat-style-3 .chat-text {
+            color: #d1fae5;
         }
 
         /* ========================================
-           STYLE 12: Aurora
+           STYLE 4: Aurora
            ======================================== */
-        .chat-style-12 {
+        .chat-style-4 {
             background: linear-gradient(135deg, 
                 rgba(0, 50, 50, 0.9) 0%, 
                 rgba(30, 0, 50, 0.9) 50%,
@@ -482,29 +561,29 @@
             }
         }
 
-        .chat-style-12 .chat-message {
+        .chat-style-4 .chat-message {
             font-size: 14px;
             padding: 6px 0;
         }
 
-        .chat-style-12 .chat-username {
+        .chat-style-4 .chat-username {
             color: #6ee7b7;
             text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
         }
 
-        .chat-style-12 .chat-text {
+        .chat-style-4 .chat-text {
             color: #d1fae5;
         }
 
         /* ========================================
-           STYLE 13: Spotlight
+           STYLE 5: Spotlight
            ======================================== */
-        .chat-style-13 {
+        .chat-style-5 {
             background: transparent;
             padding: 0;
         }
 
-        .chat-style-13 .chat-message {
+        .chat-style-5 .chat-message {
             font-size: 14px;
             padding: 8px 12px;
             margin-bottom: 4px;
@@ -514,30 +593,31 @@
             transition: all 0.4s ease;
         }
 
-        .chat-style-13 .chat-message:last-child {
+        .chat-style-5 .chat-message:last-child {
             opacity: 1;
-            background: rgba(59, 130, 246, 0.3);
-            border: 1px solid rgba(59, 130, 246, 0.5);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            background: rgba(0, 50, 50, 0.3);
+            border: 1px solid rgba(100, 255, 200, 0.5);
+            box-shadow: 0 0 20px rgba(100, 255, 200, 0.3);
         }
 
-        .chat-style-13 .chat-username {
-            color: #60a5fa;
+        .chat-style-5 .chat-username {
+            color: #6ee7b7;
+            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
         }
 
-        .chat-style-13 .chat-text {
-            color: #e2e8f0;
+        .chat-style-5 .chat-text {
+            color: #d1fae5;
         }
 
         /* ========================================
-           STYLE 14: MVP Star
+           STYLE 6: MVP Star
            ======================================== */
-        .chat-style-14 {
+        .chat-style-6 {
             background: transparent;
             padding: 0;
         }
 
-        .chat-style-14 .chat-message {
+        .chat-style-6 .chat-message {
             font-size: 14px;
             padding: 8px 12px;
             margin-bottom: 4px;
@@ -547,44 +627,37 @@
             transition: all 0.5s ease;
         }
 
-        .chat-style-14 .chat-message:last-child {
+        .chat-style-6 .chat-message:last-child {
             opacity: 1;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.4) 0%, rgba(236, 72, 153, 0.3) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.5);
-            box-shadow: 0 0 25px rgba(139, 92, 246, 0.3);
+            background: linear-gradient(135deg, rgba(0, 50, 50, 0.4) 0%, rgba(30, 0, 50, 0.3) 100%);
+            border: 1px solid rgba(100, 255, 200, 0.5);
+            box-shadow: 0 0 25px rgba(100, 255, 200, 0.3);
             transform: scale(1.02);
         }
 
-        .chat-style-14 .chat-message:last-child::before {
-            content: '⭐ MVP: ';
-            color: #fbbf24;
+        .chat-style-6 .chat-message:last-child .chat-username {
+            color: #6ee7b7;
             font-weight: 700;
-            font-size: 11px;
-            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
         }
 
-        .chat-style-14 .chat-message:last-child .chat-username {
-            color: #c4b5fd;
-            font-weight: 700;
-        }
-
-        .chat-style-14 .chat-username {
+        .chat-style-6 .chat-username {
             color: #64748b;
         }
 
-        .chat-style-14 .chat-text {
-            color: #cbd5e1;
+        .chat-style-6 .chat-text {
+            color: #d1fae5;
         }
 
         /* ========================================
-           STYLE 15: Featured (big highlight)
+           STYLE 7: Featured (big highlight)
            ======================================== */
-        .chat-style-15 {
+        .chat-style-7 {
             background: transparent;
             padding: 0;
         }
 
-        .chat-style-15 .chat-message {
+        .chat-style-7 .chat-message {
             font-size: 12px;
             padding: 4px 8px;
             opacity: 0.35;
@@ -592,37 +665,33 @@
             transition: all 0.5s ease;
         }
 
-        .chat-style-15 .chat-message:last-child {
+        .chat-style-7 .chat-message:last-child {
             opacity: 1;
             font-size: 16px;
             padding: 14px 18px;
-            background: rgba(10, 20, 40, 0.9);
+            background: linear-gradient(135deg, rgba(0, 50, 50, 0.9) 0%, rgba(30, 0, 50, 0.9) 50%, rgba(0, 30, 60, 0.9) 100%);
             backdrop-filter: blur(12px);
             border-radius: 14px;
-            border: 2px solid rgba(59, 130, 246, 0.5);
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+            border: 2px solid rgba(100, 255, 200, 0.5);
+            box-shadow: 0 8px 32px rgba(100, 255, 200, 0.3);
             margin-top: 8px;
         }
 
-        .chat-style-15 .chat-message:last-child .chat-username {
-            color: #60a5fa;
+        .chat-style-7 .chat-message:last-child .chat-username {
+            color: #6ee7b7;
             font-size: 12px;
             display: block;
             margin-bottom: 6px;
             letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
         }
 
-        .chat-style-15 .chat-message:last-child .chat-username::before {
-            content: '✨ FEATURED: ';
-            color: #fbbf24;
-        }
-
-        .chat-style-15 .chat-username {
+        .chat-style-7 .chat-username {
             color: #64748b;
         }
 
-        .chat-style-15 .chat-text {
-            color: #f1f5f9;
+        .chat-style-7 .chat-text {
+            color: #d1fae5;
         }
 
         /* Username color variations for visual interest */
@@ -677,9 +746,11 @@
 <body>
 
     <!-- Gameplay Video Background -->
-    <video class="gameplay-video" autoplay loop muted>
-        <source src="../game.mp4" type="video/mp4">
-    </video>
+    <div class="video-container">
+        <video class="gameplay-video" autoplay loop muted>
+            <source src="../game.mp4" type="video/mp4">
+        </video>
+    </div>
 
     <!-- TITLE OVERLAY (Static) -->
     <div class="title-overlay">
@@ -733,14 +804,20 @@
     <!-- STYLE SWITCHER -->
     <div class="style-switcher">
         <h3>💬 CHAT STYLE</h3>
-        <button class="style-btn active" onclick="switchStyle(1)">1. Glass Panel</button>
-        <button class="style-btn" onclick="switchStyle(5)">5. Gradient Wave</button>
-        <button class="style-btn" onclick="switchStyle(7)">7. Holographic</button>
-        <button class="style-btn" onclick="switchStyle(12)">12. Aurora</button>
-        <button class="style-btn" onclick="switchStyle(13)">13. Spotlight</button>
-        <button class="style-btn" onclick="switchStyle(14)">14. MVP Star ⭐</button>
-        <button class="style-btn" onclick="switchStyle(15)">15. Featured ✨</button>
-        <button class="style-btn" onclick="switchStyle(0)" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">Hide Chat</button>
+        <button class="style-btn active" onclick="switchStyle(1)">1</button>
+        <button class="style-btn" onclick="switchStyle(2)">2</button>
+        <button class="style-btn" onclick="switchStyle(3)">3</button>
+        <button class="style-btn" onclick="switchStyle(4)">4</button>
+        <button class="style-btn" onclick="switchStyle(5)">5</button>
+        <button class="style-btn" onclick="switchStyle(6)">6</button>
+        <button class="style-btn" onclick="switchStyle(7)">7</button>
+        <button class="style-btn" onclick="switchStyle(0)" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">Hide</button>
+        
+        <div class="height-slider-container">
+            <span class="height-slider-label">H:</span>
+            <input type="range" min="80" max="400" value="127" class="height-slider" id="height-slider" oninput="updateChatHeight(this.value)">
+            <span class="height-slider-value" id="height-value">127px</span>
+        </div>
     </div>
 
     <!-- CHAT STYLE 1: Glass Panel -->
@@ -753,7 +830,34 @@
         </div>
     </div>
 
-    <!-- CHAT STYLE 5: Gradient Wave -->
+    <!-- CHAT STYLE 2: Gradient Wave -->
+    <div class="chat-overlay chat-style-2" id="chat-2">
+        <div class="chat-messages-wrapper">
+            <div class="chat-messages">
+                <!-- Messages loaded from server -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT STYLE 3: Holographic -->
+    <div class="chat-overlay chat-style-3" id="chat-3">
+        <div class="chat-messages-wrapper">
+            <div class="chat-messages">
+                <!-- Messages loaded from server -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT STYLE 4: Aurora -->
+    <div class="chat-overlay chat-style-4" id="chat-4">
+        <div class="chat-messages-wrapper">
+            <div class="chat-messages">
+                <!-- Messages loaded from server -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT STYLE 5: Spotlight -->
     <div class="chat-overlay chat-style-5" id="chat-5">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
@@ -762,44 +866,17 @@
         </div>
     </div>
 
-    <!-- CHAT STYLE 7: Holographic -->
+    <!-- CHAT STYLE 6: MVP Star -->
+    <div class="chat-overlay chat-style-6" id="chat-6">
+        <div class="chat-messages-wrapper">
+            <div class="chat-messages">
+                <!-- Messages loaded from server -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT STYLE 7: Featured -->
     <div class="chat-overlay chat-style-7" id="chat-7">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 12: Aurora -->
-    <div class="chat-overlay chat-style-12" id="chat-12">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 13: Spotlight -->
-    <div class="chat-overlay chat-style-13" id="chat-13">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 14: MVP Star -->
-    <div class="chat-overlay chat-style-14" id="chat-14">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 15: Featured -->
-    <div class="chat-overlay chat-style-15" id="chat-15">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
                 <!-- Messages loaded from server -->
@@ -832,6 +909,21 @@
         let isProcessingQueue = false;
         let queueProcessingInterval = null;
 
+        // Update chat height for all 7 styles
+        function updateChatHeight(height) {
+            const heightPx = height + 'px';
+            document.getElementById('height-value').textContent = heightPx;
+            
+            // Update all 7 chat wrappers
+            const styleNumbers = [1, 2, 3, 4, 5, 6, 7];
+            styleNumbers.forEach(styleNum => {
+                const wrapper = document.querySelector(`#chat-${styleNum} .chat-messages-wrapper`);
+                if (wrapper) {
+                    wrapper.style.height = heightPx;
+                }
+            });
+        }
+
         function switchStyle(styleNum) {
             // Hide all chat overlays
             document.querySelectorAll('.chat-overlay').forEach(el => {
@@ -863,7 +955,11 @@
             const div = document.createElement('div');
             div.className = 'chat-message new-message';
             
-            const username = serverMsg.username || '';
+            // Remove @ from username if present
+            let username = serverMsg.username || '';
+            if (username.startsWith('@')) {
+                username = username.substring(1);
+            }
             const text = serverMsg.textHtml || serverMsg.text || '';
             const color = getUserColor(username);
             
@@ -901,7 +997,7 @@
 
         function showMessageOneAtATime(serverMsg) {
             // Add message to all 7 styles
-            const styleNumbers = [1, 5, 7, 12, 13, 14, 15];
+            const styleNumbers = [1, 2, 3, 4, 5, 6, 7];
             
             styleNumbers.forEach(styleNum => {
                 const wrapper = document.querySelector(`#chat-${styleNum} .chat-messages-wrapper`);
@@ -976,7 +1072,7 @@
         // Populate all styles with existing messages from server
         async function prePopulate() {
             // Clear all styles
-            const styleNumbers = [1, 5, 7, 12, 13, 14, 15];
+            const styleNumbers = [1, 2, 3, 4, 5, 6, 7];
             styleNumbers.forEach(styleNum => {
                 const container = document.querySelector(`#chat-${styleNum} .chat-messages`);
                 if (container) {
