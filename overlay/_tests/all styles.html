@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Overlay Style Test</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Russo+One&family=Zen+Maru+Gothic:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
@@ -392,75 +392,6 @@
         }
 
         /* ========================================
-           STYLE 2: Floating Minimal
-           ======================================== */
-        .chat-style-2 {
-            background: transparent;
-            padding: 0;
-        }
-
-        .chat-style-2 .chat-message {
-            font-size: 15px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8),
-                         0 1px 3px rgba(0, 0, 0, 0.9);
-            opacity: 0.9;
-        }
-
-        .chat-style-2 .chat-username {
-            color: #22d3ee;
-            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
-        }
-
-        /* ========================================
-           STYLE 3: Fade Stack
-           ======================================== */
-        .chat-style-3 {
-            background: linear-gradient(to top, rgba(10, 20, 40, 0.7) 0%, transparent 100%);
-            padding: 20px 16px 16px 16px;
-            border-radius: 12px;
-        }
-
-        .chat-style-3 .chat-message {
-            font-size: 14px;
-            padding: 4px 0;
-        }
-
-        .chat-style-3 .chat-username {
-            color: #93c5fd;
-        }
-
-        /* ========================================
-           STYLE 4: Whisper
-           ======================================== */
-        .chat-style-4 {
-            background: transparent;
-            padding: 0;
-        }
-
-        .chat-style-4 .chat-message {
-            font-size: 14px;
-            opacity: 0.4;
-            transition: opacity 0.5s ease;
-        }
-
-        .chat-style-4 .chat-message:last-child {
-            opacity: 0.7;
-        }
-
-        .chat-style-4 .chat-message:nth-last-child(2) {
-            opacity: 0.5;
-        }
-
-        .chat-style-4 .chat-username {
-            color: #94a3b8;
-            font-weight: 400;
-        }
-
-        .chat-style-4 .chat-text {
-            color: #cbd5e1;
-        }
-
-        /* ========================================
            STYLE 5: Gradient Wave
            ======================================== */
         .chat-style-5 {
@@ -484,49 +415,6 @@
 
         .chat-style-5 .chat-username {
             color: #e879f9;
-        }
-
-        /* ========================================
-           STYLE 6: Comic Bubble
-           ======================================== */
-        .chat-style-6 {
-            background: transparent;
-            padding: 0;
-        }
-
-        .chat-style-6 .chat-message {
-            background: #ffffff;
-            color: #1a1a1a;
-            padding: 10px 14px;
-            border-radius: 18px;
-            margin-bottom: 10px;
-            position: relative;
-            font-size: 14px;
-            box-shadow: 2px 2px 0 #000;
-            border: 2px solid #000;
-        }
-
-        .chat-style-6 .chat-message::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 20px;
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 8px solid #ffffff;
-        }
-
-        .chat-style-6 .chat-username {
-            color: #dc2626;
-            font-weight: 700;
-            display: block;
-            font-size: 12px;
-        }
-
-        .chat-style-6 .chat-text {
-            color: #1a1a1a;
         }
 
         /* ========================================
@@ -563,139 +451,6 @@
 
         .chat-style-7 .chat-text {
             color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* ========================================
-           STYLE 8: Smoke Rising
-           ======================================== */
-        .chat-style-8 {
-            background: transparent;
-            padding: 0;
-        }
-
-        .chat-style-8 .chat-message {
-            font-size: 14px;
-            padding: 6px 0;
-            color: rgba(200, 200, 200, 0.9);
-            text-shadow: 0 0 20px rgba(100, 100, 100, 0.5);
-            animation: smokeRise 0.8s ease-out;
-        }
-
-        @keyframes smokeRise {
-            from { 
-                opacity: 0; 
-                transform: translateY(10px);
-                filter: blur(2px);
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0);
-                filter: blur(0);
-            }
-        }
-
-        .chat-style-8 .chat-username {
-            color: rgba(180, 180, 180, 0.7);
-            font-weight: 400;
-        }
-
-        .chat-style-8 .chat-text {
-            color: rgba(220, 220, 220, 0.8);
-        }
-
-        /* ========================================
-           STYLE 9: Frosted Ice
-           ======================================== */
-        .chat-style-9 {
-            background: linear-gradient(180deg, 
-                rgba(200, 230, 255, 0.15) 0%, 
-                rgba(150, 200, 255, 0.1) 100%);
-            backdrop-filter: blur(16px);
-            padding: 16px;
-            border-radius: 16px;
-            border: 1px solid rgba(200, 230, 255, 0.3);
-            box-shadow: 0 4px 30px rgba(150, 200, 255, 0.1),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .chat-style-9 .chat-message {
-            font-size: 14px;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(200, 230, 255, 0.1);
-        }
-
-        .chat-style-9 .chat-message:last-child {
-            border-bottom: none;
-        }
-
-        .chat-style-9 .chat-username {
-            color: #7dd3fc;
-        }
-
-        .chat-style-9 .chat-text {
-            color: #e0f2fe;
-        }
-
-        /* ========================================
-           STYLE 10: Ocean Depth
-           ======================================== */
-        .chat-style-10 {
-            background: linear-gradient(180deg, 
-                rgba(0, 30, 60, 0.9) 0%, 
-                rgba(0, 50, 80, 0.85) 100%);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 150, 200, 0.4);
-            box-shadow: 0 8px 32px rgba(0, 100, 150, 0.3);
-        }
-
-        .chat-style-10 .chat-message {
-            font-size: 14px;
-            padding: 6px 10px;
-            margin-bottom: 4px;
-            border-left: 2px solid rgba(0, 200, 255, 0.4);
-            background: rgba(0, 100, 150, 0.2);
-            border-radius: 0 8px 8px 0;
-        }
-
-        .chat-style-10 .chat-username {
-            color: #67e8f9;
-        }
-
-        .chat-style-10 .chat-text {
-            color: #cffafe;
-        }
-
-        /* ========================================
-           STYLE 11: Zen Bamboo
-           ======================================== */
-        .chat-style-11 {
-            background: linear-gradient(180deg, 
-                rgba(30, 40, 30, 0.9) 0%, 
-                rgba(20, 30, 20, 0.95) 100%);
-            padding: 16px;
-            border-radius: 4px;
-            border-left: 3px solid #4ade80;
-            font-family: 'Zen Maru Gothic', sans-serif;
-        }
-
-        .chat-style-11 .chat-message {
-            font-size: 14px;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(74, 222, 128, 0.15);
-        }
-
-        .chat-style-11 .chat-message:last-child {
-            border-bottom: none;
-        }
-
-        .chat-style-11 .chat-username {
-            color: #86efac;
-            font-weight: 500;
-        }
-
-        .chat-style-11 .chat-text {
-            color: #d1fae5;
         }
 
         /* ========================================
@@ -979,16 +734,8 @@
     <div class="style-switcher">
         <h3>💬 CHAT STYLE</h3>
         <button class="style-btn active" onclick="switchStyle(1)">1. Glass Panel</button>
-        <button class="style-btn" onclick="switchStyle(2)">2. Floating Minimal</button>
-        <button class="style-btn" onclick="switchStyle(3)">3. Fade Stack</button>
-        <button class="style-btn" onclick="switchStyle(4)">4. Whisper</button>
         <button class="style-btn" onclick="switchStyle(5)">5. Gradient Wave</button>
-        <button class="style-btn" onclick="switchStyle(6)">6. Comic Bubble</button>
         <button class="style-btn" onclick="switchStyle(7)">7. Holographic</button>
-        <button class="style-btn" onclick="switchStyle(8)">8. Smoke Rising</button>
-        <button class="style-btn" onclick="switchStyle(9)">9. Frosted Ice</button>
-        <button class="style-btn" onclick="switchStyle(10)">10. Ocean Depth</button>
-        <button class="style-btn" onclick="switchStyle(11)">11. Zen Bamboo</button>
         <button class="style-btn" onclick="switchStyle(12)">12. Aurora</button>
         <button class="style-btn" onclick="switchStyle(13)">13. Spotlight</button>
         <button class="style-btn" onclick="switchStyle(14)">14. MVP Star ⭐</button>
@@ -1001,50 +748,7 @@
         <div class="chat-header">Live Chat</div>
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username username-cyan">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username username-teal">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username username-blue">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username username-purple">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username username-pink">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 2: Floating Minimal -->
-    <div class="chat-overlay chat-style-2" id="chat-2">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 3: Fade Stack -->
-    <div class="chat-overlay chat-style-3" id="chat-3">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username username-cyan">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username username-teal">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username username-blue">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username username-purple">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username username-pink">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 4: Whisper -->
-    <div class="chat-overlay chat-style-4" id="chat-4">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
+                <!-- Messages loaded from server -->
             </div>
         </div>
     </div>
@@ -1053,22 +757,7 @@
     <div class="chat-overlay chat-style-5" id="chat-5">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 6: Comic Bubble -->
-    <div class="chat-overlay chat-style-6" id="chat-6">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
+                <!-- Messages loaded from server -->
             </div>
         </div>
     </div>
@@ -1077,63 +766,7 @@
     <div class="chat-overlay chat-style-7" id="chat-7">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 8: Smoke Rising -->
-    <div class="chat-overlay chat-style-8" id="chat-8">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 9: Frosted Ice -->
-    <div class="chat-overlay chat-style-9" id="chat-9">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 10: Ocean Depth -->
-    <div class="chat-overlay chat-style-10" id="chat-10">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 11: Zen Bamboo -->
-    <div class="chat-overlay chat-style-11" id="chat-11">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
+                <!-- Messages loaded from server -->
             </div>
         </div>
     </div>
@@ -1142,11 +775,7 @@
     <div class="chat-overlay chat-style-12" id="chat-12">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
+                <!-- Messages loaded from server -->
             </div>
         </div>
     </div>
@@ -1155,11 +784,7 @@
     <div class="chat-overlay chat-style-13" id="chat-13">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
+                <!-- Messages loaded from server -->
             </div>
         </div>
     </div>
@@ -1168,11 +793,7 @@
     <div class="chat-overlay chat-style-14" id="chat-14">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
+                <!-- Messages loaded from server -->
             </div>
         </div>
     </div>
@@ -1181,39 +802,35 @@
     <div class="chat-overlay chat-style-15" id="chat-15">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
-                <div class="chat-message"><span class="chat-username">hushswish_fan</span><span class="chat-text">this is so relaxing 😌</span></div>
-                <div class="chat-message"><span class="chat-username">bball_lover</span><span class="chat-text">love the vibes</span></div>
-                <div class="chat-message"><span class="chat-username">nightowl23</span><span class="chat-text">who's winning?</span></div>
-                <div class="chat-message"><span class="chat-username">silent_hoops</span><span class="chat-text">W stream</span></div>
-                <div class="chat-message"><span class="chat-username">asmr_addict</span><span class="chat-text">the keyboard sounds 🔥</span></div>
+                <!-- Messages loaded from server -->
             </div>
         </div>
     </div>
 
     <script>
-        // Sample chat messages to cycle through
-        const sampleMessages = [
-            { user: 'hushswish_fan', text: 'this is so relaxing 😌', color: 'cyan' },
-            { user: 'bball_lover', text: 'love the vibes', color: 'teal' },
-            { user: 'nightowl23', text: 'who\'s winning?', color: 'blue' },
-            { user: 'silent_hoops', text: 'W stream', color: 'purple' },
-            { user: 'asmr_addict', text: 'the keyboard sounds 🔥', color: 'pink' },
-            { user: 'chill_gamer', text: 'perfect background noise', color: 'cyan' },
-            { user: 'late_night_ball', text: 'cant sleep, this helps', color: 'teal' },
-            { user: 'hoops_4life', text: 'Lakers looking good!', color: 'blue' },
-            { user: 'zen_master', text: '🧘‍♂️', color: 'purple' },
-            { user: 'newbie_here', text: 'first time here, love it', color: 'pink' },
-            { user: 'ballin_247', text: 'goat stream fr', color: 'cyan' },
-            { user: 'sleepy_viewer', text: 'zzz 💤', color: 'teal' },
-            { user: 'court_side', text: 'nice shot!', color: 'blue' },
-            { user: 'midnight_hooper', text: 'the vibes are immaculate', color: 'purple' },
-            { user: 'whisper_watcher', text: 'so peaceful', color: 'pink' },
-        ];
+        // Username color mapping (same as chat overlay)
+        const userColors = ['cyan', 'teal', 'blue', 'purple', 'pink'];
+        const userColorMap = new Map();
+        let userColorIndex = 0;
 
-        let messageIndex = 5; // Start after initial messages
-        let simulationInterval = null;
+        function getUserColor(username) {
+            if (!userColorMap.has(username)) {
+                userColorMap.set(username, userColors[userColorIndex % userColors.length]);
+                userColorIndex++;
+            }
+            return userColorMap.get(username);
+        }
+
         let activeStyleNum = 1; // Track which style is active
+        let displayedMessageIds = new Set(); // Track displayed message IDs
+        let lastRefreshTrigger = null;
+        let serverPollInterval = null;
         const MAX_MESSAGES = 15; // Keep more messages, mask handles visual fade
+        
+        // Message queue for one-at-a-time display
+        let messageQueue = [];
+        let isProcessingQueue = false;
+        let queueProcessingInterval = null;
 
         function switchStyle(styleNum) {
             // Hide all chat overlays
@@ -1229,25 +846,28 @@
             // Show selected style
             if (styleNum > 0) {
                 document.getElementById('chat-' + styleNum).classList.add('active');
-                document.querySelectorAll('.style-btn')[styleNum - 1].classList.add('active');
+                // Find button by onclick attribute
+                const buttons = document.querySelectorAll('.style-btn');
+                buttons.forEach(btn => {
+                    if (btn.getAttribute('onclick') === `switchStyle(${styleNum})`) {
+                        btn.classList.add('active');
+                    }
+                });
                 activeStyleNum = styleNum;
             } else {
                 activeStyleNum = 0;
             }
         }
 
-        function createMessageElement(msg, styleNum) {
+        function createMessageElement(serverMsg) {
             const div = document.createElement('div');
             div.className = 'chat-message new-message';
             
-            // Styles that need block username display
-            if (styleNum === 6) {
-                div.innerHTML = `<span class="chat-username">${msg.user}</span><span class="chat-text">${msg.text}</span>`;
-            }
-            // Default with color class
-            else {
-                div.innerHTML = `<span class="chat-username username-${msg.color}">${msg.user}</span><span class="chat-text">${msg.text}</span>`;
-            }
+            const username = serverMsg.username || '';
+            const text = serverMsg.textHtml || serverMsg.text || '';
+            const color = getUserColor(username);
+            
+            div.innerHTML = `<span class="chat-username username-${color}">${username}</span><span class="chat-text">${text}</span>`;
             
             return div;
         }
@@ -1279,58 +899,185 @@
             requestAnimationFrame(animate);
         }
 
-        function addNewMessage() {
-            // Only add to the active style!
-            if (activeStyleNum === 0) return;
+        function showMessageOneAtATime(serverMsg) {
+            // Add message to all 7 styles
+            const styleNumbers = [1, 5, 7, 12, 13, 14, 15];
             
-            const msg = sampleMessages[messageIndex % sampleMessages.length];
-            messageIndex++;
+            styleNumbers.forEach(styleNum => {
+                const wrapper = document.querySelector(`#chat-${styleNum} .chat-messages-wrapper`);
+                const container = document.querySelector(`#chat-${styleNum} .chat-messages`);
+                if (!container || !wrapper) return;
 
-            const i = activeStyleNum;
-            const wrapper = document.querySelector(`#chat-${i} .chat-messages-wrapper`);
-            const container = document.querySelector(`#chat-${i} .chat-messages`);
-            if (!container || !wrapper) return;
+                const newMsg = createMessageElement(serverMsg);
+                
+                // Add new message at bottom
+                container.appendChild(newMsg);
 
-            const newMsg = createMessageElement(msg, i);
-            
-            // Add new message at bottom
-            container.appendChild(newMsg);
+                // Force reflow
+                void newMsg.offsetHeight;
 
-            // Force reflow
-            void newMsg.offsetHeight;
+                // Fade in the new message
+                requestAnimationFrame(() => {
+                    newMsg.classList.remove('new-message');
+                });
 
-            // Fade in the new message
-            requestAnimationFrame(() => {
-                newMsg.classList.remove('new-message');
+                // Smooth scroll to show new message - 1 second duration!
+                // Use double requestAnimationFrame to ensure DOM is fully updated
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        const targetScroll = wrapper.scrollHeight - wrapper.clientHeight;
+                        smoothScrollTo(wrapper, targetScroll, 1000);
+                    });
+                });
+
+                // Clean up old messages (already scrolled out of view)
+                const messages = container.querySelectorAll('.chat-message');
+                if (messages.length > MAX_MESSAGES) {
+                    messages[0].remove();
+                }
             });
-
-            // Smooth scroll to show new message - 1 second duration!
-            const targetScroll = wrapper.scrollHeight - wrapper.clientHeight;
-            smoothScrollTo(wrapper, targetScroll, 1000); // 1000ms = 1 second
-
-            // Clean up old messages (already scrolled out of view)
-            const messages = container.querySelectorAll('.chat-message');
-            if (messages.length > MAX_MESSAGES) {
-                messages[0].remove();
-            }
         }
 
-        // Start simulation - new message every 3-5 seconds (relaxed pace)
-        function startSimulation() {
-            if (simulationInterval) return;
+        // Process message queue one at a time
+        function processMessageQueue() {
+            if (isProcessingQueue || messageQueue.length === 0) {
+                return;
+            }
             
-            function scheduleNext() {
-                const delay = 3000 + Math.random() * 2000; // 3-5 seconds
-                simulationInterval = setTimeout(() => {
-                    addNewMessage();
-                    scheduleNext();
-                }, delay);
+            isProcessingQueue = true;
+            const serverMsg = messageQueue.shift();
+            
+            if (serverMsg && serverMsg.id) {
+                displayedMessageIds.add(serverMsg.id);
             }
-            scheduleNext();
+            
+            // Show the message
+            showMessageOneAtATime(serverMsg);
+            
+            // Wait before showing next message (4 seconds for ASMR pace)
+            setTimeout(() => {
+                isProcessingQueue = false;
+                // Process next message if queue has more
+                if (messageQueue.length > 0) {
+                    processMessageQueue();
+                }
+            }, 4000); // 4 seconds between messages
         }
 
-        // Auto-start simulation
-        startSimulation();
+        // Add message to queue
+        function addMessageToQueue(serverMsg) {
+            messageQueue.push(serverMsg);
+            // Start processing if not already processing
+            if (!isProcessingQueue) {
+                processMessageQueue();
+            }
+        }
+
+        // Populate all styles with existing messages from server
+        async function prePopulate() {
+            // Clear all styles
+            const styleNumbers = [1, 5, 7, 12, 13, 14, 15];
+            styleNumbers.forEach(styleNum => {
+                const container = document.querySelector(`#chat-${styleNum} .chat-messages`);
+                if (container) {
+                    container.innerHTML = '';
+                }
+            });
+            
+            displayedMessageIds.clear();
+            userColorMap.clear();
+            userColorIndex = 0;
+            messageQueue = []; // Clear queue
+            isProcessingQueue = false; // Reset processing flag
+
+            try {
+                const response = await fetch('http://localhost:3000/api/chat');
+                const data = await response.json();
+                
+                if (data.messages && data.messages.length > 0) {
+                    // Sort messages by timestamp (oldest first)
+                    const sortedMessages = [...data.messages].sort((a, b) => {
+                        const timestampA = a.timestamp || 0;
+                        const timestampB = b.timestamp || 0;
+                        if (timestampA !== timestampB) {
+                            return timestampA - timestampB;
+                        }
+                        const domOrderA = a.domOrder !== undefined ? a.domOrder : Infinity;
+                        const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
+                        return domOrderA - domOrderB;
+                    });
+                    
+                    // Add all messages to queue (will be shown one at a time)
+                    sortedMessages.forEach(serverMsg => {
+                        if (serverMsg.id) {
+                            displayedMessageIds.add(serverMsg.id);
+                        }
+                        messageQueue.push(serverMsg);
+                    });
+                    
+                    // Start processing queue
+                    if (messageQueue.length > 0) {
+                        processMessageQueue();
+                    }
+                }
+            } catch (error) {
+                console.error('Error pre-populating messages from server:', error);
+            }
+        }
+
+        // Poll server for new messages (same as chat overlay)
+        async function pollServerMessages() {
+            try {
+                const response = await fetch('http://localhost:3000/api/chat');
+                const data = await response.json();
+                
+                // Check if refresh is triggered
+                if (data.refreshTrigger && data.refreshTrigger !== lastRefreshTrigger) {
+                    lastRefreshTrigger = data.refreshTrigger;
+                    await prePopulate();
+                    return;
+                }
+                
+                if (data.messages && data.messages.length > 0) {
+                    // Filter out already displayed messages and sort by timestamp
+                    const newMessages = data.messages
+                        .filter(serverMsg => !displayedMessageIds.has(serverMsg.id))
+                        .sort((a, b) => {
+                            const timestampA = a.timestamp || 0;
+                            const timestampB = b.timestamp || 0;
+                            if (timestampA !== timestampB) {
+                                return timestampA - timestampB;
+                            }
+                            const domOrderA = a.domOrder !== undefined ? a.domOrder : Infinity;
+                            const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
+                            return domOrderA - domOrderB;
+                        });
+                    
+                    // Add new messages to queue (will be shown one at a time)
+                    newMessages.forEach(serverMsg => {
+                        addMessageToQueue(serverMsg);
+                    });
+                }
+            } catch (error) {
+                // Silently fail - don't break overlay if server is unavailable
+            }
+        }
+
+        // Start polling server (same interval as chat overlay: 200ms)
+        function startPolling() {
+            if (serverPollInterval) return;
+            
+            // Initial populate
+            prePopulate();
+            
+            // Then poll every 200ms
+            serverPollInterval = setInterval(() => {
+                pollServerMessages();
+            }, 200);
+        }
+
+        // Auto-start polling
+        startPolling();
     </script>
 
 </body>
