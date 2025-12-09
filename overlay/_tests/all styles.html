@@ -313,91 +313,6 @@
             opacity: 1;
         }
 
-        .style-switcher h3 {
-            display: none; /* Hide title in horizontal layout */
-        }
-
-        .style-btn {
-            padding: 6px 10px;
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            border-radius: 5px;
-            color: #93c5fd;
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .style-btn:hover {
-            background: rgba(59, 130, 246, 0.3);
-            color: #bfdbfe;
-        }
-
-        .style-btn.active {
-            background: rgba(59, 130, 246, 0.5);
-            border-color: #60a5fa;
-            color: #ffffff;
-        }
-
-        .height-slider-container {
-            margin: 0;
-            padding: 0;
-            padding-left: 10px;
-            border-left: 1px solid rgba(59, 130, 246, 0.3);
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .height-slider-label {
-            color: #93c5fd;
-            font-size: 10px;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .height-slider-value {
-            color: #60a5fa;
-            font-weight: 600;
-            font-size: 10px;
-            min-width: 40px;
-        }
-
-        .height-slider {
-            width: 120px;
-            height: 5px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: rgba(59, 130, 246, 0.2);
-            border-radius: 3px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .height-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: #3b82f6;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
-        }
-
-        .height-slider::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            background: #3b82f6;
-            border-radius: 50%;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
-        }
-
         .height-value-display {
             color: #60a5fa;
             font-weight: 600;
@@ -438,197 +353,6 @@
 
         .chat-text {
             color: #f1f5f9;
-        }
-
-        /* ========================================
-           STYLE 1: Glass Panel
-           ======================================== */
-        .chat-style-1 {
-            background: rgba(10, 20, 40, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            padding: 16px;
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
-        }
-
-        .chat-style-1 .chat-header {
-            font-size: 12px;
-            color: #6ee7b7;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(100, 255, 200, 0.3);
-        }
-
-        .chat-style-1 .chat-message {
-            font-size: 14px;
-        }
-
-        .chat-style-1 .chat-username {
-            color: #6ee7b7;
-            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
-        }
-
-        .chat-style-1 .chat-text {
-            color: #d1fae5;
-        }
-
-        /* ========================================
-           STYLE 2: Gradient Wave
-           ======================================== */
-        .chat-style-2 {
-            background: transparent;
-            padding: 8px;
-        }
-
-        .chat-style-2 .chat-message {
-            font-size: 13px;
-            padding: 8px 12px;
-            margin-bottom: 6px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(0, 50, 50, 0.3) 0%, rgba(30, 0, 50, 0.3) 100%);
-            border: 1px solid rgba(100, 255, 200, 0.3);
-        }
-
-        .chat-style-2 .chat-message:nth-child(even) {
-            background: linear-gradient(135deg, rgba(0, 50, 50, 0.3) 0%, rgba(30, 0, 50, 0.3) 100%);
-            border-color: rgba(100, 255, 200, 0.3);
-        }
-
-        .chat-style-2 .chat-username {
-            color: #6ee7b7;
-            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
-        }
-
-        .chat-style-2 .chat-text {
-            color: #d1fae5;
-        }
-
-        /* ========================================
-           STYLE 3: Holographic
-           ======================================== */
-        .chat-style-3 {
-            background: linear-gradient(135deg, 
-                rgba(0, 50, 50, 0.1) 0%, 
-                rgba(30, 0, 50, 0.1) 50%, 
-                rgba(0, 30, 60, 0.1) 100%);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(100, 255, 200, 0.3);
-            backdrop-filter: blur(10px);
-            animation: holoShift 3s ease-in-out infinite;
-        }
-
-        @keyframes holoShift {
-            0%, 100% { border-color: rgba(100, 255, 200, 0.5); }
-            50% { border-color: rgba(110, 231, 183, 0.5); }
-        }
-
-        .chat-style-3 .chat-message {
-            font-size: 14px;
-            margin-bottom: 8px;
-            padding-left: 10px;
-            border-left: 2px solid rgba(100, 255, 200, 0.5);
-        }
-
-        .chat-style-3 .chat-username {
-            color: #6ee7b7;
-            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
-        }
-
-        .chat-style-3 .chat-text {
-            color: #d1fae5;
-        }
-
-        /* Fix overflow for style 3 - account for padding */
-        .chat-style-3 .chat-messages-wrapper {
-            height: calc(127px - 32px); /* Subtract top and bottom padding (16px * 2) */
-            max-height: calc(100% - 32px);
-        }
-
-        /* ========================================
-           STYLE 4: Aurora
-           ======================================== */
-        .chat-style-4 {
-            background: linear-gradient(135deg, 
-                rgba(0, 50, 50, 0.9) 0%, 
-                rgba(30, 0, 50, 0.9) 50%,
-                rgba(0, 30, 60, 0.9) 100%);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(100, 255, 200, 0.3);
-            animation: auroraShift 5s ease-in-out infinite;
-        }
-
-        @keyframes auroraShift {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(0, 255, 150, 0.2);
-                border-color: rgba(0, 255, 150, 0.4);
-            }
-            33% { 
-                box-shadow: 0 0 20px rgba(100, 0, 255, 0.2);
-                border-color: rgba(150, 100, 255, 0.4);
-            }
-            66% { 
-                box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
-                border-color: rgba(0, 200, 255, 0.4);
-            }
-        }
-
-        .chat-style-4 .chat-message {
-            font-size: 14px;
-            padding: 6px 0;
-        }
-
-        .chat-style-4 .chat-username {
-            color: #6ee7b7;
-            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
-        }
-
-        .chat-style-4 .chat-text {
-            color: #d1fae5;
-        }
-
-        /* Fix overflow for style 4 - account for padding */
-        .chat-style-4 .chat-messages-wrapper {
-            height: calc(127px - 32px); /* Subtract top and bottom padding (16px * 2) */
-            max-height: calc(100% - 32px);
-        }
-
-        /* ========================================
-           STYLE 5: Spotlight
-           ======================================== */
-        .chat-style-5 {
-            background: transparent;
-            padding: 0;
-        }
-
-        .chat-style-5 .chat-message {
-            font-size: 14px;
-            padding: 8px 12px;
-            margin-bottom: 4px;
-            background: rgba(20, 20, 30, 0.6);
-            border-radius: 8px;
-            opacity: 0.4;
-            transition: all 0.4s ease;
-        }
-
-        .chat-style-5 .chat-message:last-child {
-            opacity: 1;
-            background: rgba(0, 50, 50, 0.3);
-            border: 1px solid rgba(100, 255, 200, 0.5);
-            box-shadow: 0 0 20px rgba(100, 255, 200, 0.3);
-        }
-
-        .chat-style-5 .chat-username {
-            color: #6ee7b7;
-            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
-        }
-
-        .chat-style-5 .chat-text {
-            color: #d1fae5;
         }
 
         /* ========================================
@@ -685,52 +409,6 @@
         }
 
         .chat-style-6 .chat-text {
-            color: #d1fae5;
-        }
-
-        /* ========================================
-           STYLE 7: Featured (big highlight)
-           ======================================== */
-        .chat-style-7 {
-            background: transparent;
-            padding: 0;
-        }
-
-        .chat-style-7 .chat-message {
-            font-size: 12px;
-            padding: 4px 8px;
-            opacity: 0.35;
-            color: #94a3b8;
-            transition: all 0.5s ease;
-        }
-
-        .chat-style-7 .chat-message:last-child {
-            opacity: 1;
-            font-size: 16px;
-            padding: 14px 18px;
-            background: linear-gradient(135deg, rgba(0, 50, 50, 0.9) 0%, rgba(30, 0, 50, 0.9) 50%, rgba(0, 30, 60, 0.9) 100%);
-            backdrop-filter: blur(12px);
-            border-radius: 14px;
-            border: 2px solid rgba(100, 255, 200, 0.5);
-            box-shadow: 0 8px 32px rgba(100, 255, 200, 0.3);
-            margin-top: 8px;
-            transform: scale(1.02);
-        }
-
-        .chat-style-7 .chat-message:last-child .chat-username {
-            color: #6ee7b7;
-            font-size: 12px;
-            display: block;
-            margin-bottom: 6px;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
-        }
-
-        .chat-style-7 .chat-username {
-            color: #64748b;
-        }
-
-        .chat-style-7 .chat-text {
             color: #d1fae5;
         }
 
@@ -846,63 +524,8 @@
         <div class="height-value-display" id="height-value">700px</div>
     </div>
 
-    <!-- CHAT STYLE 1: Glass Panel -->
-    <div class="chat-overlay chat-style-1" id="chat-1">
-        <div class="chat-header">Live Chat</div>
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 2: Gradient Wave -->
-    <div class="chat-overlay chat-style-2" id="chat-2">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 3: Holographic -->
-    <div class="chat-overlay chat-style-3" id="chat-3">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 4: Aurora -->
-    <div class="chat-overlay chat-style-4" id="chat-4">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 5: Spotlight -->
-    <div class="chat-overlay chat-style-5" id="chat-5">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
     <!-- CHAT STYLE 6: MVP Star -->
     <div class="chat-overlay chat-style-6 active" id="chat-6">
-        <div class="chat-messages-wrapper">
-            <div class="chat-messages">
-                <!-- Messages loaded from server -->
-            </div>
-        </div>
-    </div>
-
-    <!-- CHAT STYLE 7: Featured -->
-    <div class="chat-overlay chat-style-7" id="chat-7">
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
                 <!-- Messages loaded from server -->
@@ -935,55 +558,25 @@
         let isProcessingQueue = false;
         let queueProcessingInterval = null;
 
-        // Update chat height for all 7 styles
+        // Update chat height for style 6
         function updateChatHeight(height) {
             const heightPx = height + 'px';
             document.getElementById('height-value').textContent = heightPx;
             
-            // Update all 7 chat wrappers
-            const styleNumbers = [1, 2, 3, 4, 5, 6, 7];
-            styleNumbers.forEach(styleNum => {
-                const wrapper = document.querySelector(`#chat-${styleNum} .chat-messages-wrapper`);
-                if (wrapper) {
-                    // For styles 1, 3, 4: parent container has 16px padding (32px total)
-                    // Subtract padding to ensure visible area matches desired height
-                    if (styleNum === 1 || styleNum === 3 || styleNum === 4) {
-                        const parentContainer = wrapper.parentElement;
-                        const parentPadding = parentContainer ? 
-                            (parseFloat(getComputedStyle(parentContainer).paddingTop) || 0) +
-                            (parseFloat(getComputedStyle(parentContainer).paddingBottom) || 0) : 32;
-                        const adjustedHeight = Math.max(height - parentPadding, 50); // Minimum 50px
-                        wrapper.style.height = adjustedHeight + 'px';
-                    } else {
-                        wrapper.style.height = heightPx;
-                    }
-                }
-            });
+            // Update style 6 wrapper
+            const wrapper = document.querySelector('#chat-6 .chat-messages-wrapper');
+            if (wrapper) {
+                wrapper.style.height = heightPx;
+            }
         }
 
         function switchStyle(styleNum) {
-            // Hide all chat overlays
-            document.querySelectorAll('.chat-overlay').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // Update button states
-            document.querySelectorAll('.style-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected style
-            if (styleNum > 0) {
-                document.getElementById('chat-' + styleNum).classList.add('active');
-                // Find button by onclick attribute
-                const buttons = document.querySelectorAll('.style-btn');
-                buttons.forEach(btn => {
-                    if (btn.getAttribute('onclick') === `switchStyle(${styleNum})`) {
-                        btn.classList.add('active');
-                    }
-                });
-                activeStyleNum = styleNum;
+            // Only style 6 is available
+            if (styleNum === 6) {
+                document.getElementById('chat-6').classList.add('active');
+                activeStyleNum = 6;
             } else {
+                document.getElementById('chat-6').classList.remove('active');
                 activeStyleNum = 0;
             }
         }
@@ -1033,13 +626,11 @@
         }
 
         function showMessageOneAtATime(serverMsg) {
-            // Add message to all 7 styles
-            const styleNumbers = [1, 2, 3, 4, 5, 6, 7];
-            
-            styleNumbers.forEach(styleNum => {
-                const wrapper = document.querySelector(`#chat-${styleNum} .chat-messages-wrapper`);
-                const container = document.querySelector(`#chat-${styleNum} .chat-messages`);
-                if (!container || !wrapper) return;
+            // Add message to style 6 only
+            const styleNum = 6;
+            const wrapper = document.querySelector(`#chat-${styleNum} .chat-messages-wrapper`);
+            const container = document.querySelector(`#chat-${styleNum} .chat-messages`);
+            if (!container || !wrapper) return;
 
                 const newMsg = createMessageElement(serverMsg);
                 
@@ -1061,7 +652,7 @@
                     // Get the actual message height to ensure full visibility
                     const msgHeight = newMsg.offsetHeight;
                     
-                    // Check if parent container has padding (styles 1, 3, 4 have 16px padding)
+                    // Check if parent container has padding (style 6 has no padding)
                     const parentContainer = wrapper.parentElement;
                     const parentPadding = parentContainer ? 
                         (parseFloat(getComputedStyle(parentContainer).paddingTop) || 0) +
@@ -1084,12 +675,11 @@
                     smoothScrollTo(wrapper, Math.min(targetScroll, maxScroll), 1000);
                 }, 100); // Increased delay to ensure DOM is fully updated and layout is complete
 
-                // Clean up old messages (already scrolled out of view)
-                const messages = container.querySelectorAll('.chat-message');
-                if (messages.length > MAX_MESSAGES) {
-                    messages[0].remove();
-                }
-            });
+            // Clean up old messages (already scrolled out of view)
+            const messages = container.querySelectorAll('.chat-message');
+            if (messages.length > MAX_MESSAGES) {
+                messages[0].remove();
+            }
         }
 
         // Process message queue one at a time
@@ -1161,16 +751,13 @@
             // Don't start processing here - let pollServerMessages start it after adding all messages
         }
 
-        // Populate all styles with existing messages from server
+        // Populate style 6 with existing messages from server
         async function prePopulate() {
-            // Clear all styles
-            const styleNumbers = [1, 2, 3, 4, 5, 6, 7];
-            styleNumbers.forEach(styleNum => {
-                const container = document.querySelector(`#chat-${styleNum} .chat-messages`);
-                if (container) {
-                    container.innerHTML = '';
-                }
-            });
+            // Clear style 6
+            const container = document.querySelector('#chat-6 .chat-messages');
+            if (container) {
+                container.innerHTML = '';
+            }
             
             displayedMessageIds.clear();
             userColorMap.clear();
