@@ -751,6 +751,26 @@
                     // Get the actual message height to ensure full visibility
                     const msgHeight = newMsg.offsetHeight;
                     
+                    // Calculate number of lines based on message height and line height
+                    const computedStyle = getComputedStyle(newMsg);
+                    const lineHeight = parseFloat(computedStyle.lineHeight) || parseFloat(computedStyle.fontSize) * 1.4;
+                    const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
+                    const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
+                    const contentHeight = msgHeight - paddingTop - paddingBottom;
+                    const estimatedLines = Math.max(1, Math.round(contentHeight / lineHeight));
+                    
+                    // Calculate scroll duration based on line count
+                    // 1 line = 1000ms, 7 lines = 2000ms, linear interpolation, cap at 2000ms
+                    let duration;
+                    if (estimatedLines <= 1) {
+                        duration = 1000;
+                    } else if (estimatedLines >= 7) {
+                        duration = 2000;
+                    } else {
+                        // Linear interpolation: 1000ms + (lines - 1) * ((2000 - 1000) / (7 - 1))
+                        duration = 1000 + (estimatedLines - 1) * (1000 / 6);
+                    }
+                    
                     // Check if parent container has padding (style 6 has no padding)
                     const parentContainer = wrapper.parentElement;
                     const parentPadding = parentContainer ? 
@@ -771,7 +791,7 @@
                     const maxScroll = wrapper.scrollHeight - wrapper.clientHeight;
                     
                     // Use the minimum to ensure we don't scroll beyond max, but ensure last message is visible
-                    smoothScrollTo(wrapper, Math.min(targetScroll, maxScroll), 1000);
+                    smoothScrollTo(wrapper, Math.min(targetScroll, maxScroll), duration);
                 }, 100); // Increased delay to ensure DOM is fully updated and layout is complete
 
             // Clean up old messages (already scrolled out of view)
