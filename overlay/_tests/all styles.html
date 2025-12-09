@@ -372,6 +372,11 @@
             opacity: 0.4;
             transition: all 0.5s ease;
         }
+        
+        /* Disable transition during animation */
+        .chat-style-6 .chat-message[class*="anim-"] {
+            transition: none;
+        }
 
         /* Allow overflow for style 6 to show scaled message borders */
         .chat-style-6 .chat-messages-wrapper {
@@ -392,8 +397,15 @@
             border-left: 2px solid rgba(100, 255, 200, 0.5);
             box-shadow: 0 8px 32px rgba(100, 255, 200, 0.3);
             margin-top: 8px;
+        }
+        
+        /* Apply scale only when NOT animating (no animation class present) */
+        .chat-style-6 .chat-message:last-child:not([class*="anim-"]) {
             transform: scale(1.02);
         }
+        
+        /* For animations that complete, add scale after animation via JavaScript will handle this */
+        /* Animation transforms will take precedence during animation due to animation-fill-mode: forwards */
 
         .chat-style-6 .chat-message:last-child .chat-username {
             color: #6ee7b7;
@@ -457,6 +469,90 @@
         /* New message fades in */
         .chat-message.new-message {
             opacity: 0;
+        }
+
+        /* ========================================
+           ANIMATION SWITCHER UI
+           ======================================== */
+        .animation-switcher {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.7);
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .animation-switcher:hover {
+            opacity: 1;
+        }
+
+        .animation-switcher-label {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 12px;
+            margin-right: 4px;
+        }
+
+        .animation-btn {
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        .animation-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+            color: #60a5fa;
+        }
+
+        .animation-btn.active {
+            background: rgba(59, 130, 246, 0.4);
+            border-color: rgba(59, 130, 246, 0.7);
+            color: #dbeafe;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+        }
+
+        /* ========================================
+           ANIMATION VARIATIONS
+           ======================================== */
+
+        /* Animation 4: Smooth Glow */
+        .chat-message.anim-4.new-message {
+            opacity: 0;
+            filter: brightness(0.2) drop-shadow(0 0 0px rgba(100, 255, 200, 0));
+        }
+        .chat-message.anim-4 {
+            animation: smoothGlow 1.5s ease-out forwards;
+        }
+        @keyframes smoothGlow {
+            from {
+                opacity: 0;
+                filter: brightness(0.2) drop-shadow(0 0 0px rgba(100, 255, 200, 0));
+            }
+            to {
+                opacity: 0.999;
+                filter: brightness(1.2) drop-shadow(0 0 20px rgba(100, 255, 200, 0.6));
+            }
+        }
+        .chat-style-6 .chat-message.anim-4:not(:last-child) {
+            opacity: 0.4 !important;
         }
 
     </style>
@@ -524,6 +620,7 @@
         <div class="height-value-display" id="height-value">700px</div>
     </div>
 
+
     <!-- CHAT STYLE 6: MVP Star -->
     <div class="chat-overlay chat-style-6 active" id="chat-6">
         <div class="chat-messages-wrapper">
@@ -548,6 +645,7 @@
         }
 
         let activeStyleNum = 6; // Track which style is active
+        const activeAnimation = 4; // Always use animation 4 (Smooth Glow)
         let displayedMessageIds = new Set(); // Track displayed message IDs
         let lastRefreshTrigger = null;
         let serverPollInterval = null;
@@ -583,7 +681,7 @@
 
         function createMessageElement(serverMsg) {
             const div = document.createElement('div');
-            div.className = 'chat-message new-message';
+            div.className = 'chat-message new-message anim-4';
             
             // Remove @ from username if present
             let username = serverMsg.username || '';
@@ -637,13 +735,14 @@
                 // Add new message at bottom
                 container.appendChild(newMsg);
 
-                // Force reflow
+                // Force reflow to ensure initial state is applied
                 void newMsg.offsetHeight;
 
-                // Fade in the new message
-                requestAnimationFrame(() => {
+                // Trigger animation by removing new-message class
+                // The animation should trigger when new-message is removed
+                setTimeout(() => {
                     newMsg.classList.remove('new-message');
-                });
+                }, 10);
 
                 // Smooth scroll to show new message - wait for DOM to fully update
                 // Use setTimeout to ensure scrollHeight is calculated after layout
@@ -859,6 +958,7 @@
         // Initialize with style 6 and height 700px
         switchStyle(6);
         updateChatHeight(700);
+
     </script>
 
 </body>
