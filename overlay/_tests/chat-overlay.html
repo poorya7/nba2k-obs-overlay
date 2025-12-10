@@ -38,11 +38,6 @@
             display: block;
         }
 
-        .chat-message {
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
         .chat-username {
             font-weight: 600;
             margin-right: 6px;
@@ -123,6 +118,8 @@
 
         /* Individual messages */
         .chat-message {
+            margin-bottom: 8px;
+            line-height: 1.4;
             opacity: 1;
             transition: opacity 0.4s ease-out;
         }
@@ -267,7 +264,6 @@
         // Message queue for one-at-a-time display
         let messageQueue = [];
         let isProcessingQueue = false;
-        let queueProcessingInterval = null;
         let processingScheduled = false; // Track if processing has been scheduled
         let activeTimeoutId = null; // Track active setTimeout to prevent duplicates
         let processMessageQueueLock = false; // Lock to ensure only one processMessageQueue call executes
