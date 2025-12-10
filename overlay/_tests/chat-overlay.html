@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Overlay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            width: 1920px;
+            height: 1080px;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ========================================
+           CHAT OVERLAY BASE
+           ======================================== */
+        .chat-overlay {
+            position: fixed;
+            right: 19px;
+            top: 38px;
+            width: 281px;
+            max-height: 400px;
+            z-index: 10;
+            display: none;
+        }
+
+        .chat-overlay.active {
+            display: block;
+        }
+
+        .chat-message {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .chat-username {
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        .chat-text {
+            color: #f1f5f9;
+        }
+
+        /* ========================================
+           STYLE 13: Spotlight
+           ======================================== */
+        .chat-style-13 {
+            background: transparent;
+            padding: 0;
+        }
+
+        .chat-style-13 .chat-message {
+            font-size: 14px;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            background: rgba(20, 20, 30, 0.6);
+            border-radius: 8px;
+            opacity: 0.4;
+            transition: all 0.4s ease;
+        }
+
+        .chat-style-13 .chat-message:last-child {
+            opacity: 1;
+            background: rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .chat-style-13 .chat-username {
+            color: #60a5fa;
+        }
+
+        .chat-style-13 .chat-text {
+            color: #e2e8f0;
+        }
+
+        /* Username color variations for visual interest */
+        .username-cyan { color: #22d3ee !important; }
+        .username-teal { color: #2dd4bf !important; }
+        .username-blue { color: #60a5fa !important; }
+        .username-purple { color: #a78bfa !important; }
+        .username-pink { color: #f472b6 !important; }
+
+        /* ========================================
+           CHAT ANIMATIONS - Smooth ASMR-friendly
+           ======================================== */
+        
+        /* Wrapper - fixed height, scrollable but hidden scrollbar */
+        .chat-messages-wrapper {
+            height: 127px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: relative;
+            /* Hide scrollbar */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+            /* Gradient mask - fades out at top */
+            mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
+        }
+
+        .chat-messages-wrapper::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        /* Inner container that actually scrolls */
+        .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+        }
+
+        /* Individual messages */
+        .chat-message {
+            opacity: 1;
+            transition: opacity 0.4s ease-out;
+        }
+
+        /* New message fades in */
+        .chat-message.new-message {
+            opacity: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- CHAT STYLE 13: Spotlight -->
+    <div class="chat-overlay chat-style-13 active" id="chat-13">
+        <div class="chat-messages-wrapper">
+            <div class="chat-messages">
+                <!-- Messages loaded from server -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Username color mapping (same as chat overlay)
+        const userColors = ['cyan', 'teal', 'blue', 'purple', 'pink'];
+        const userColorMap = new Map();
+        let userColorIndex = 0;
+
+        function getUserColor(username) {
+            if (!userColorMap.has(username)) {
+                userColorMap.set(username, userColors[userColorIndex % userColors.length]);
+                userColorIndex++;
+            }
+            return userColorMap.get(username);
+        }
+
+        let displayedMessageIds = new Set(); // Track displayed message IDs
+        let lastRefreshTrigger = null;
+        let serverPollInterval = null;
+        const MAX_MESSAGES = 15; // Keep more messages, mask handles visual fade
+        const STYLE_NUM = 13; // Only style 13
+        
+        // Message queue for one-at-a-time display
+        let messageQueue = [];
+        let isProcessingQueue = false;
+        let queueProcessingInterval = null;
+
+        function createMessageElement(serverMsg) {
+            const div = document.createElement('div');
+            div.className = 'chat-message new-message';
+            
+            const username = serverMsg.username || '';
+            const text = serverMsg.textHtml || serverMsg.text || '';
+            const color = getUserColor(username);
+            
+            div.innerHTML = `<span class="chat-username username-${color}">${username}</span><span class="chat-text">${text}</span>`;
+            
+            return div;
+        }
+
+        // Smooth scroll animation - SLOW and gentle for ASMR
+        function smoothScrollTo(element, targetScroll, duration) {
+            const startScroll = element.scrollTop;
+            const distance = targetScroll - startScroll;
+            
+            // If no distance to scroll, skip
+            if (Math.abs(distance) < 1) return;
+            
+            const startTime = performance.now();
+            
+            function animate(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease-out quad (gentler than cubic)
+                const easeOut = 1 - Math.pow(1 - progress, 2);
+                
+                element.scrollTop = startScroll + (distance * easeOut);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        function showMessageOneAtATime(serverMsg) {
+            // Add message to style 13 only
+            const styleNum = STYLE_NUM;
+            const wrapper = document.querySelector(`#chat-${styleNum} .chat-messages-wrapper`);
+            const container = document.querySelector(`#chat-${styleNum} .chat-messages`);
+            if (!container || !wrapper) return;
+
+            const newMsg = createMessageElement(serverMsg);
+            
+            // Add new message at bottom
+            container.appendChild(newMsg);
+
+            // Force reflow
+            void newMsg.offsetHeight;
+
+            // Fade in the new message
+            requestAnimationFrame(() => {
+                newMsg.classList.remove('new-message');
+            });
+
+            // Smooth scroll to show new message - 1 second duration!
+            // Use double requestAnimationFrame to ensure DOM is fully updated
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    const targetScroll = wrapper.scrollHeight - wrapper.clientHeight;
+                    smoothScrollTo(wrapper, targetScroll, 1000);
+                });
+            });
+
+            // Clean up old messages (already scrolled out of view)
+            const messages = container.querySelectorAll('.chat-message');
+            if (messages.length > MAX_MESSAGES) {
+                messages[0].remove();
+            }
+        }
+
+        // Process message queue one at a time
+        function processMessageQueue() {
+            if (isProcessingQueue || messageQueue.length === 0) {
+                return;
+            }
+            
+            isProcessingQueue = true;
+            const serverMsg = messageQueue.shift();
+            
+            if (serverMsg && serverMsg.id) {
+                displayedMessageIds.add(serverMsg.id);
+            }
+            
+            // Show the message
+            showMessageOneAtATime(serverMsg);
+            
+            // Wait before showing next message (4 seconds for ASMR pace)
+            setTimeout(() => {
+                isProcessingQueue = false;
+                // Process next message if queue has more
+                if (messageQueue.length > 0) {
+                    processMessageQueue();
+                }
+            }, 4000); // 4 seconds between messages
+        }
+
+        // Add message to queue
+        function addMessageToQueue(serverMsg) {
+            messageQueue.push(serverMsg);
+            // Start processing if not already processing
+            if (!isProcessingQueue) {
+                processMessageQueue();
+            }
+        }
+
+        // Populate all styles with existing messages from server
+        async function prePopulate() {
+            // Clear style 13 only
+            const styleNum = STYLE_NUM;
+            const container = document.querySelector(`#chat-${styleNum} .chat-messages`);
+            if (container) {
+                container.innerHTML = '';
+            }
+            
+            displayedMessageIds.clear();
+            userColorMap.clear();
+            userColorIndex = 0;
+            messageQueue = []; // Clear queue
+            isProcessingQueue = false; // Reset processing flag
+
+            try {
+                const response = await fetch('http://localhost:3000/api/chat');
+                const data = await response.json();
+                
+                if (data.messages && data.messages.length > 0) {
+                    // Sort messages by timestamp (oldest first)
+                    const sortedMessages = [...data.messages].sort((a, b) => {
+                        const timestampA = a.timestamp || 0;
+                        const timestampB = b.timestamp || 0;
+                        if (timestampA !== timestampB) {
+                            return timestampA - timestampB;
+                        }
+                        const domOrderA = a.domOrder !== undefined ? a.domOrder : Infinity;
+                        const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
+                        return domOrderA - domOrderB;
+                    });
+                    
+                    // Add all messages to queue (will be shown one at a time)
+                    sortedMessages.forEach(serverMsg => {
+                        if (serverMsg.id) {
+                            displayedMessageIds.add(serverMsg.id);
+                        }
+                        messageQueue.push(serverMsg);
+                    });
+                    
+                    // Start processing queue
+                    if (messageQueue.length > 0) {
+                        processMessageQueue();
+                    }
+                }
+            } catch (error) {
+                console.error('Error pre-populating messages from server:', error);
+            }
+        }
+
+        // Poll server for new messages (same as chat overlay)
+        async function pollServerMessages() {
+            try {
+                const response = await fetch('http://localhost:3000/api/chat');
+                const data = await response.json();
+                
+                // Check if refresh is triggered
+                if (data.refreshTrigger && data.refreshTrigger !== lastRefreshTrigger) {
+                    lastRefreshTrigger = data.refreshTrigger;
+                    await prePopulate();
+                    return;
+                }
+                
+                if (data.messages && data.messages.length > 0) {
+                    // Filter out already displayed messages and sort by timestamp
+                    const newMessages = data.messages
+                        .filter(serverMsg => !displayedMessageIds.has(serverMsg.id))
+                        .sort((a, b) => {
+                            const timestampA = a.timestamp || 0;
+                            const timestampB = b.timestamp || 0;
+                            if (timestampA !== timestampB) {
+                                return timestampA - timestampB;
+                            }
+                            const domOrderA = a.domOrder !== undefined ? a.domOrder : Infinity;
+                            const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
+                            return domOrderA - domOrderB;
+                        });
+                    
+                    // Add new messages to queue (will be shown one at a time)
+                    newMessages.forEach(serverMsg => {
+                        addMessageToQueue(serverMsg);
+                    });
+                }
+            } catch (error) {
+                // Silently fail - don't break overlay if server is unavailable
+            }
+        }
+
+        // Start polling server (same interval as chat overlay: 200ms)
+        function startPolling() {
+            if (serverPollInterval) return;
+            
+            // Initial populate
+            prePopulate();
+            
+            // Then poll every 200ms
+            serverPollInterval = setInterval(() => {
+                pollServerMessages();
+            }, 200);
+        }
+
+        // Auto-start polling
+        startPolling();
+    </script>
+
+</body>
+</html>
+
