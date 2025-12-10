@@ -72,7 +72,7 @@
 
         .chat-style-13 .chat-message:last-child {
             opacity: 1;
-            background: rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, var(--last-message-bg-alpha, 0.3));
             border: 1px solid rgba(59, 130, 246, 0.5);
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
         }
@@ -98,7 +98,7 @@
         
         /* Wrapper - fixed height, scrollable but hidden scrollbar */
         .chat-messages-wrapper {
-            height: 127px;
+            height: var(--chat-wrapper-height, 127px);
             overflow-y: scroll;
             overflow-x: hidden;
             position: relative;
@@ -132,6 +132,86 @@
             opacity: 0;
         }
 
+        /* Control sliders container */
+        .controls-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Height control slider */
+        .height-control,
+        .transparency-control {
+            background: rgba(20, 20, 30, 0.9);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+
+        .height-control label {
+            font-size: 12px;
+            color: #60a5fa;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .height-control-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .height-control input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .height-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #60a5fa;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+        }
+
+        .height-control input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #60a5fa;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+        }
+
+        .height-value,
+        .transparency-value {
+            font-size: 14px;
+            color: #e2e8f0;
+            font-weight: 600;
+            min-width: 45px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
     </style>
 </head>
 <body>
@@ -141,6 +221,25 @@
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
                 <!-- Messages loaded from server -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Sliders -->
+    <div class="controls-container">
+        <div class="height-control">
+            <label>Chat Height</label>
+            <div class="height-control-row">
+                <input type="range" id="height-slider" min="80" max="2000" value="127" step="1">
+                <span class="height-value" id="height-value">127px</span>
+            </div>
+        </div>
+        
+        <div class="transparency-control">
+            <label>Last Message Transparency</label>
+            <div class="height-control-row">
+                <input type="range" id="transparency-slider" min="0" max="100" value="30" step="1">
+                <span class="transparency-value" id="transparency-value">30%</span>
             </div>
         </div>
     </div>
@@ -169,6 +268,9 @@
         let messageQueue = [];
         let isProcessingQueue = false;
         let queueProcessingInterval = null;
+        let processingScheduled = false; // Track if processing has been scheduled
+        let activeTimeoutId = null; // Track active setTimeout to prevent duplicates
+        let processMessageQueueLock = false; // Lock to ensure only one processMessageQueue call executes
 
         function createMessageElement(serverMsg) {
             const div = document.createElement('div');
@@ -248,26 +350,66 @@
 
         // Process message queue one at a time
         function processMessageQueue() {
-            if (isProcessingQueue || messageQueue.length === 0) {
+            // CRITICAL: Lock check must be FIRST and ATOMIC
+            // If lock is already set, another call is executing - return immediately
+            if (processMessageQueueLock) {
                 return;
             }
             
+            // ATOMIC CHECK-AND-SET: Set lock IMMEDIATELY after lock check
+            // This prevents any other call from entering, even if they passed the initial check
+            processMessageQueueLock = true;
+            
+            // Now check other conditions
+            if (isProcessingQueue || messageQueue.length === 0) {
+                processMessageQueueLock = false; // Release lock before returning
+                return;
+            }
+            
+            // Set processing flag
             isProcessingQueue = true;
+            processingScheduled = false; // Reset scheduled flag now that we're processing
+            
             const serverMsg = messageQueue.shift();
             
-            if (serverMsg && serverMsg.id) {
+            if (!serverMsg) {
+                isProcessingQueue = false;
+                processMessageQueueLock = false; // Release lock
+                return;
+            }
+            
+            // Mark as displayed AFTER we start showing it (prevents duplicates)
+            if (serverMsg.id) {
                 displayedMessageIds.add(serverMsg.id);
+                
+                // Keep displayed IDs manageable (only last 500)
+                if (displayedMessageIds.size > 500) {
+                    const idsArray = Array.from(displayedMessageIds);
+                    displayedMessageIds = new Set(idsArray.slice(-500));
+                }
             }
             
             // Show the message
             showMessageOneAtATime(serverMsg);
             
             // Wait before showing next message (4 seconds for ASMR pace)
-            setTimeout(() => {
+            // Clear any existing timeout to prevent multiple timers
+            if (activeTimeoutId !== null) {
+                clearTimeout(activeTimeoutId);
+                activeTimeoutId = null;
+            }
+            
+            activeTimeoutId = setTimeout(() => {
+                // Clear the timeout ID since this callback is executing
+                activeTimeoutId = null;
+                
+                // Reset flags and process next message if queue has more
                 isProcessingQueue = false;
-                // Process next message if queue has more
-                if (messageQueue.length > 0) {
-                    processMessageQueue();
+                processMessageQueueLock = false; // Release lock
+                if (messageQueue.length > 0 && !processingScheduled) {
+                    processingScheduled = true;
+                    // Use setTimeout(0) to defer, ensuring flag is set before processMessageQueue executes
+                    setTimeout(() => processMessageQueue(), 0);
                 }
             }, 4000); // 4 seconds between messages
         }
@@ -275,13 +417,19 @@
         // Add message to queue
         function addMessageToQueue(serverMsg) {
             messageQueue.push(serverMsg);
-            // Start processing if not already processing
-            if (!isProcessingQueue) {
+            // Start processing if not already processing or scheduled
+            // ATOMIC CHECK-AND-SET: Check both flags, then set processingScheduled immediately
+            if (!isProcessingQueue && !processingScheduled && messageQueue.length > 0) {
+                // Set flag IMMEDIATELY to prevent race condition
+                processingScheduled = true;
+                // Call directly (not setTimeout) - processMessageQueue will handle the flag
                 processMessageQueue();
             }
         }
 
-        // Populate all styles with existing messages from server
+        // Pre-populate chat list with ALL existing messages from server
+        // EXACT COPY of logic from working chat-controller.js prePopulate()
+        // Sorted by message timestamp, added to queue (will be shown one at a time)
         async function prePopulate() {
             // Clear style 13 only
             const styleNum = STYLE_NUM;
@@ -295,43 +443,56 @@
             userColorIndex = 0;
             messageQueue = []; // Clear queue
             isProcessingQueue = false; // Reset processing flag
+            processingScheduled = false; // Reset scheduled flag
+            processMessageQueueLock = false; // Reset lock
+            // Clear any active timeout
+            if (activeTimeoutId !== null) {
+                clearTimeout(activeTimeoutId);
+                activeTimeoutId = null;
+            }
 
             try {
+                // Fetch ALL existing messages from server
                 const response = await fetch('http://localhost:3000/api/chat');
                 const data = await response.json();
                 
                 if (data.messages && data.messages.length > 0) {
-                    // Sort messages by timestamp (oldest first)
+                    // Sort messages by timestamp (oldest first) - use message timestamp, not server time
+                    // Use domOrder as tiebreaker when timestamps are equal (preserves YouTube DOM order)
                     const sortedMessages = [...data.messages].sort((a, b) => {
                         const timestampA = a.timestamp || 0;
                         const timestampB = b.timestamp || 0;
                         if (timestampA !== timestampB) {
-                            return timestampA - timestampB;
+                            return timestampA - timestampB; // Oldest first
                         }
+                        // Timestamps are equal - use DOM order as tiebreaker
                         const domOrderA = a.domOrder !== undefined ? a.domOrder : Infinity;
                         const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
-                        return domOrderA - domOrderB;
+                        return domOrderA - domOrderB; // Lower DOM order (earlier in YouTube) comes first
                     });
                     
-                    // Add all messages to queue (will be shown one at a time)
+                    // Add ALL messages to queue (will be shown one at a time)
                     sortedMessages.forEach(serverMsg => {
+                        // Mark as displayed
                         if (serverMsg.id) {
                             displayedMessageIds.add(serverMsg.id);
                         }
                         messageQueue.push(serverMsg);
                     });
                     
-                    // Start processing queue
-                    if (messageQueue.length > 0) {
+                    // Start processing queue - use processingScheduled flag to prevent race
+                    if (messageQueue.length > 0 && !isProcessingQueue && !processingScheduled) {
+                        processingScheduled = true;
                         processMessageQueue();
                     }
                 }
             } catch (error) {
                 console.error('Error pre-populating messages from server:', error);
+                // Don't break overlay if server is unavailable - just start with empty list
             }
         }
 
-        // Poll server for new messages (same as chat overlay)
+        // Poll server for new messages (EXACT COPY from working chat-controller.js)
         async function pollServerMessages() {
             try {
                 const response = await fetch('http://localhost:3000/api/chat');
@@ -340,32 +501,38 @@
                 // Check if refresh is triggered
                 if (data.refreshTrigger && data.refreshTrigger !== lastRefreshTrigger) {
                     lastRefreshTrigger = data.refreshTrigger;
+                    // Trigger full refresh
                     await prePopulate();
-                    return;
+                    return; // Skip normal polling this cycle
                 }
                 
                 if (data.messages && data.messages.length > 0) {
-                    // Filter out already displayed messages and sort by timestamp
+                    // Filter out already displayed messages and sort by timestamp (oldest first)
+                    // Use domOrder as tiebreaker when timestamps are equal (preserves YouTube DOM order)
                     const newMessages = data.messages
                         .filter(serverMsg => !displayedMessageIds.has(serverMsg.id))
                         .sort((a, b) => {
                             const timestampA = a.timestamp || 0;
                             const timestampB = b.timestamp || 0;
                             if (timestampA !== timestampB) {
-                                return timestampA - timestampB;
+                                return timestampA - timestampB; // Oldest first
                             }
+                            // Timestamps are equal - use DOM order as tiebreaker
                             const domOrderA = a.domOrder !== undefined ? a.domOrder : Infinity;
                             const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
-                            return domOrderA - domOrderB;
+                            return domOrderA - domOrderB; // Lower DOM order (earlier in YouTube) comes first
                         });
                     
-                    // Add new messages to queue (will be shown one at a time)
+                    // Process each message in timestamp order
                     newMessages.forEach(serverMsg => {
+                        // Add new messages to queue (will be shown one at a time)
+                        // Don't mark as displayed yet - that happens when message is actually shown
                         addMessageToQueue(serverMsg);
                     });
                 }
             } catch (error) {
-                // Silently fail - don't break overlay if server is unavailable
+                console.error('Error fetching messages from server:', error);
+                // Don't break overlay if server is unavailable - just silently fail
             }
         }
 
@@ -384,6 +551,58 @@
 
         // Auto-start polling
         startPolling();
+
+        // Height control slider
+        (function() {
+            const slider = document.getElementById('height-slider');
+            const valueDisplay = document.getElementById('height-value');
+            
+            // Load saved height from localStorage
+            const savedHeight = localStorage.getItem('chatOverlayHeight');
+            if (savedHeight) {
+                const height = parseInt(savedHeight, 10);
+                slider.value = height;
+                valueDisplay.textContent = height + 'px';
+                document.documentElement.style.setProperty('--chat-wrapper-height', height + 'px');
+            }
+            
+            // Update height when slider changes
+            slider.addEventListener('input', function() {
+                const height = parseInt(this.value, 10);
+                valueDisplay.textContent = height + 'px';
+                document.documentElement.style.setProperty('--chat-wrapper-height', height + 'px');
+                // Save to localStorage
+                localStorage.setItem('chatOverlayHeight', height);
+            });
+        })();
+
+        // Transparency control slider
+        (function() {
+            const slider = document.getElementById('transparency-slider');
+            const valueDisplay = document.getElementById('transparency-value');
+            
+            // Load saved transparency from localStorage
+            const savedTransparency = localStorage.getItem('chatOverlayTransparency');
+            if (savedTransparency) {
+                const transparency = parseInt(savedTransparency, 10);
+                slider.value = transparency;
+                valueDisplay.textContent = transparency + '%';
+                // Convert percentage to decimal (0-1 range for rgba alpha)
+                const alpha = transparency / 100;
+                document.documentElement.style.setProperty('--last-message-bg-alpha', alpha);
+            }
+            
+            // Update transparency when slider changes
+            slider.addEventListener('input', function() {
+                const transparency = parseInt(this.value, 10);
+                valueDisplay.textContent = transparency + '%';
+                // Convert percentage to decimal (0-1 range for rgba alpha)
+                const alpha = transparency / 100;
+                document.documentElement.style.setProperty('--last-message-bg-alpha', alpha);
+                // Save to localStorage
+                localStorage.setItem('chatOverlayTransparency', transparency);
+            });
+        })();
     </script>
 
 </body>

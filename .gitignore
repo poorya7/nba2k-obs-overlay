@@ -11,6 +11,7 @@ overlay/config.js
 # IDE
 .vscode/
 .idea/
+.cursor/
 
 # OS
 .DS_Store
