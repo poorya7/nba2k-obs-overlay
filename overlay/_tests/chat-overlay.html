@@ -248,6 +248,20 @@
             return wrapped.join(' ');
         }
 
+        // Color @mentions with the mentioned user's color
+        function colorMentions(text) {
+            if (!text) return '';
+            
+            // Match @username patterns (alphanumeric, underscores, hyphens)
+            const mentionRegex = /@([a-zA-Z0-9_-]+)/g;
+            
+            return text.replace(mentionRegex, (match, username) => {
+                // Get or assign color for the mentioned user
+                const color = getUserColor(username);
+                return `<span class="username-${color}" style="font-weight:600">@${username}</span>`;
+            });
+        }
+
         function createMessageElement(serverMsg) {
             const div = document.createElement('div');
             div.className = 'chat-message new-message';
@@ -263,7 +277,8 @@
             
             const rawText = serverMsg.textHtml || serverMsg.text || '';
             const truncatedText = truncateText(rawText, 110);
-            const wrappedText = wrapWords(truncatedText);
+            const coloredText = colorMentions(truncatedText);
+            const wrappedText = wrapWords(coloredText);
             const color = getUserColor(username);
             
             // Get plain text length for line-fit calculation
