@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotlight Chat Overlay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- CHAT STYLE 13: Spotlight -->
+    <div class="chat-overlay chat-style-13 active" id="chat-13">
+        <div class="chat-messages-wrapper">
+            <div class="chat-messages">
+                <!-- Messages loaded from server -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load modules in dependency order -->
+    <script src="config.js"></script>
+    <script src="state-manager.js"></script>
+    <script src="data-formatter.js"></script>
+    <script src="view.js"></script>
+    <script src="controller.js"></script>
+    
+    <!-- Bootstrap: Wire dependencies and start -->
+    <script>
+        // Create instances with dependency injection
+        const stateManager = new SpotlightStateManager();
+        const dataFormatter = new SpotlightDataFormatter(SpotlightConfig);
+        const view = new SpotlightView(SpotlightConfig);
+        
+        const controller = new SpotlightController({
+            view: view,
+            stateManager: stateManager,
+            dataFormatter: dataFormatter,
+            config: SpotlightConfig
+        });
+        
+        // Start the overlay
+        controller.start();
+    </script>
+
+</body>
+</html>
+

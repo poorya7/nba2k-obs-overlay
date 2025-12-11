@@ -1,0 +1,139 @@
+/**
+ * Spotlight Chat Overlay Styles
+ * Style 13: Spotlight effect with neon glow on newest message
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    width: 1920px;
+    height: 1080px;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ========================================
+   CHAT OVERLAY BASE
+   ======================================== */
+.chat-overlay {
+    position: fixed;
+    right: 19px;
+    top: -14px;
+    width: 281px;
+    z-index: 10;
+    display: none;
+}
+
+.chat-overlay.active {
+    display: block;
+}
+
+.chat-username {
+    font-weight: 600;
+    margin-right: 6px;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+.chat-text {
+    color: #f1f5f9;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+/* ========================================
+   STYLE 13: Spotlight
+   ======================================== */
+.chat-style-13 {
+    background: transparent;
+    padding: 0;
+}
+
+.chat-style-13 .chat-message {
+    font-size: 14px;
+    padding: 4px 12px;
+    margin-bottom: 1px;
+    background: rgba(20, 20, 30, 0.6);
+    border-radius: 8px;
+    opacity: 0.4;
+    transition: all 0.4s ease;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+/* Newest message: Midnight Blue - NEON GLOW */
+.chat-style-13 .chat-message:last-child {
+    opacity: 1;
+    background: rgba(28, 49, 91, 0.65);
+    border: 3px solid rgba(28, 49, 91, 0.8);
+    box-shadow: 
+        0 0 1.75px rgba(28, 49, 91, 0.21),
+        0 0 5.25px rgba(28, 49, 91, 0.175),
+        0 0 10.5px rgba(28, 49, 91, 0.14),
+        0 0 17.5px rgba(28, 49, 91, 0.0875),
+        0 0 28px rgba(28, 49, 91, 0.0525),
+        inset 0 0 5.25px rgba(28, 49, 91, 0.035);
+    font-size: 22px;
+    padding: 18px 27px;
+    line-height: 1.5;
+    min-height: auto;
+    height: auto;
+    overflow: visible;
+    text-shadow: 0 0 3.5px rgba(28, 49, 91, 0.105);
+}
+
+.chat-style-13 .chat-username {
+    color: #60a5fa;
+}
+
+.chat-style-13 .chat-text {
+    color: #e2e8f0;
+}
+
+/* Username color variations for visual interest */
+.username-cyan { color: #22d3ee !important; }
+.username-teal { color: #2dd4bf !important; }
+.username-blue { color: #60a5fa !important; }
+.username-purple { color: #a78bfa !important; }
+.username-pink { color: #f472b6 !important; }
+
+/* ========================================
+   CHAT ANIMATIONS - Smooth ASMR-friendly
+   ======================================== */
+
+/* Wrapper - fixed height, scrollable but hidden scrollbar */
+.chat-messages-wrapper {
+    height: 572px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: relative;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    /* Gradient mask - fades out at top */
+    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
+}
+
+.chat-messages-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+/* Inner container that actually scrolls */
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    padding-top: 30px;
+}
+
+/* New message fades in */
+.chat-message.new-message {
+    opacity: 0;
+}
+
