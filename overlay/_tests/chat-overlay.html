@@ -40,15 +40,14 @@
         .chat-username {
             font-weight: 600;
             margin-right: 6px;
-            word-wrap: break-word;
             overflow-wrap: break-word;
+            word-break: normal;
         }
 
         .chat-text {
             color: #f1f5f9;
-            word-wrap: break-word;
             overflow-wrap: break-word;
-            word-break: break-word;
+            word-break: normal;
         }
 
         /* ========================================
@@ -67,10 +66,8 @@
             border-radius: 8px;
             opacity: 0.4;
             transition: all 0.4s ease;
-            word-wrap: break-word;
             overflow-wrap: break-word;
-            word-break: break-word;
-            white-space: normal;
+            word-break: normal;
         }
 
         /* Newest message: Midnight Blue - NEON GLOW */
@@ -183,6 +180,74 @@
         let activeTimeoutId = null; // Track active setTimeout to prevent duplicates
         let processMessageQueueLock = false; // Lock to ensure only one processMessageQueue call executes
 
+        // Truncate text to max length with ellipsis (preserves emojis)
+        function truncateText(text, maxLength = 110) {
+            if (!text) return '';
+            
+            // Get plain text length for comparison
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = text;
+            const plainText = tempDiv.textContent || tempDiv.innerText || '';
+            
+            if (plainText.length <= maxLength) {
+                return text; // Return ORIGINAL text with HTML/emojis intact
+            }
+            
+            // Need to truncate - strip to plain text and truncate
+            return plainText.substring(0, maxLength) + '...';
+        }
+
+        // Wrap words to prevent mid-word breaks (preserves HTML tags like emoji <img>)
+        function wrapWords(text) {
+            if (!text) return '';
+            
+            // Check if text contains HTML tags (like emoji <img>)
+            const hasHtml = /<[^>]+>/.test(text);
+            
+            if (hasHtml) {
+                // Text has HTML - extract tags, process text, restore tags
+                const parts = [];
+                const tagRegex = /(<[^>]+>)/g;
+                let lastIndex = 0;
+                let match;
+                
+                while ((match = tagRegex.exec(text)) !== null) {
+                    // Text before this tag
+                    if (match.index > lastIndex) {
+                        const textPart = text.substring(lastIndex, match.index);
+                        parts.push(wrapPlainText(textPart));
+                    }
+                    // The tag itself (don't wrap)
+                    parts.push(match[1]);
+                    lastIndex = tagRegex.lastIndex;
+                }
+                // Remaining text after last tag
+                if (lastIndex < text.length) {
+                    parts.push(wrapPlainText(text.substring(lastIndex)));
+                }
+                return parts.join('');
+            }
+            
+            // No HTML - simple word wrapping
+            return wrapPlainText(text);
+        }
+        
+        // Helper: wrap plain text words
+        function wrapPlainText(text) {
+            if (!text) return '';
+            const words = text.split(' ');
+            const wrapped = words.map(word => {
+                if (!word) return '';
+                // If word is too long (20+ chars), let it break naturally
+                if (word.length > 20) {
+                    return word;
+                }
+                // Wrap normal words in nowrap span to keep them together
+                return `<span style="white-space:nowrap">${word}</span>`;
+            });
+            return wrapped.join(' ');
+        }
+
         function createMessageElement(serverMsg) {
             const div = document.createElement('div');
             div.className = 'chat-message new-message';
@@ -191,10 +256,26 @@
             let username = serverMsg.username || '';
             username = username.replace(/^@/, '');
             
-            const text = serverMsg.textHtml || serverMsg.text || '';
+            // Wrap username if short enough (≤20 chars), otherwise let it break
+            const wrappedUsername = username.length <= 20 
+                ? `<span style="white-space:nowrap">${username}</span>` 
+                : username;
+            
+            const rawText = serverMsg.textHtml || serverMsg.text || '';
+            const truncatedText = truncateText(rawText, 110);
+            const wrappedText = wrapWords(truncatedText);
             const color = getUserColor(username);
             
-            div.innerHTML = `<span class="chat-username username-${color}">${username}</span><span class="chat-text">${text}</span>`;
+            // Get plain text length for line-fit calculation
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = truncatedText;
+            const plainTextLength = (tempDiv.textContent || '').length;
+            
+            // If username + message won't fit on one line (~17 chars), put message on new line
+            const charsPerLine = 17;
+            const separator = (username.length + plainTextLength + 1) > charsPerLine ? '<br>' : ' ';
+            
+            div.innerHTML = `<span class="chat-username username-${color}">${wrappedUsername}</span>${separator}<span class="chat-text">${wrappedText}</span>`;
             
             return div;
         }
