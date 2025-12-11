@@ -67,25 +67,18 @@ body {
     word-break: normal;
 }
 
-/* Newest message: Midnight Blue - NEON GLOW */
+/* Newest message: Match game overlay style */
 .chat-style-13 .chat-message:last-child {
     opacity: 1;
-    background: rgba(28, 49, 91, 0.65);
-    border: 3px solid rgba(28, 49, 91, 0.8);
-    box-shadow: 
-        0 0 1.75px rgba(28, 49, 91, 0.21),
-        0 0 5.25px rgba(28, 49, 91, 0.175),
-        0 0 10.5px rgba(28, 49, 91, 0.14),
-        0 0 17.5px rgba(28, 49, 91, 0.0875),
-        0 0 28px rgba(28, 49, 91, 0.0525),
-        inset 0 0 5.25px rgba(28, 49, 91, 0.035);
+    background: rgba(10, 20, 40, 0.95);
+    border: 1px solid rgba(59, 130, 246, 0.55);
+    box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
     font-size: 22px;
     padding: 18px 27px;
     line-height: 1.5;
     min-height: auto;
     height: auto;
     overflow: visible;
-    text-shadow: 0 0 3.5px rgba(28, 49, 91, 0.105);
 }
 
 .chat-style-13 .chat-username {

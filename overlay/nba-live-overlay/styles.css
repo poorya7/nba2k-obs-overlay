@@ -61,7 +61,7 @@ body {
     position: fixed;
     left: 20px;
     z-index: 10;
-    background: rgba(10, 20, 40, 0.6);
+    background: rgba(10, 20, 40, 0.95);
     backdrop-filter: blur(10px);
     padding: 13px 15.5px 18px 15.5px;
     border-radius: 16px;
