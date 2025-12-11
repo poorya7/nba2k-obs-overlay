@@ -10,8 +10,12 @@ const SpotlightConfig = {
     
     // Timing
     pollInterval: 200,         // Server poll interval (ms)
-    messageDelay: 4000,        // Time between messages (ms) - ASMR pace
     scrollDuration: 1000,      // Smooth scroll animation duration (ms)
+    
+    // Dynamic message duration (based on text length)
+    minMessageTime: 2000,      // 2.0 seconds minimum
+    maxMessageTime: 7000,      // 7.0 seconds maximum
+    // Formula: time = 1800 + (44 × charCount) ms
     
     // Text limits
     maxTextLength: 110,        // Truncate messages at this length

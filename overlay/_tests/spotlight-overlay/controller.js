@@ -177,13 +177,19 @@ class SpotlightController {
         // Mark as displayed
         this.stateManager.markMessageDisplayed(serverMsg.id);
         
+        // Get message text for duration calculation
+        const messageText = serverMsg.textHtml || serverMsg.text || '';
+        
+        // Calculate dynamic duration based on message length
+        const messageDuration = this._calculateMessageDuration(messageText);
+        
         // Show the message
         this._showMessage(serverMsg);
         
         // Clear any existing timeout
         this.stateManager.clearActiveTimeout();
         
-        // Wait before showing next message (ASMR pace)
+        // Wait before showing next message (dynamic duration based on text length)
         const timeoutId = setTimeout(() => {
             this.stateManager.setActiveTimeout(null);
             this.stateManager.setIsProcessing(false);
@@ -194,7 +200,7 @@ class SpotlightController {
                 this.stateManager.setIsScheduled(true);
                 setTimeout(() => this._processQueue(), 0);
             }
-        }, this.config.messageDelay);
+        }, messageDuration);
         
         this.stateManager.setActiveTimeout(timeoutId);
     }
@@ -223,6 +229,39 @@ class SpotlightController {
     // ========================================
     // Helpers
     // ========================================
+    
+    /**
+     * Calculate dynamic message duration based on text length
+     * Formula: time = 1800 + (44 × charCount) ms
+     * @param {string} text - Message text (can be HTML)
+     * @returns {number} Duration in milliseconds
+     */
+    _calculateMessageDuration(text) {
+        // Extract plain text length (strip HTML tags)
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = text || '';
+        const textLength = tempDiv.textContent.length;
+        
+        // Count emoji images (each <img> tag counts as 1 character)
+        const emojiCount = tempDiv.querySelectorAll('img').length;
+        
+        // Total length = text characters + emojis
+        const totalLength = textLength + emojiCount;
+        
+        // For emoji-only messages (no text), treat as 0 length → clamped to minimum
+        const calculationLength = textLength === 0 ? 0 : totalLength;
+        
+        // Formula: time = 1800 + (44 × charCount) ms
+        const calculatedTime = 1800 + (44 * calculationLength);
+        
+        // Apply min/max constraints
+        const finalTime = Math.max(
+            this.config.minMessageTime,
+            Math.min(this.config.maxMessageTime, calculatedTime)
+        );
+        
+        return finalTime;
+    }
     
     _sortMessages(messages) {
         return [...messages].sort((a, b) => this._compareMessages(a, b));
