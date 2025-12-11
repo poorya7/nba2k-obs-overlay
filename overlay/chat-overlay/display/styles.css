@@ -62,7 +62,7 @@ body {
     background: rgba(20, 20, 30, 0.6);
     border-radius: 8px;
     opacity: 0.4;
-    transition: all 0.4s ease;
+    transition: font-size 0.4s ease, padding 0.4s ease, opacity 0.4s ease, background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
     overflow-wrap: break-word;
     word-break: normal;
 }
@@ -79,6 +79,7 @@ body {
     min-height: auto;
     height: auto;
     overflow: visible;
+    transition: font-size 0.4s ease, padding 0.4s ease, opacity 0.4s ease, background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
 }
 
 .chat-style-13 .chat-username {
