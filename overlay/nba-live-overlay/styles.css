@@ -12,6 +12,11 @@ body {
     width: 100vw;
     height: 100vh;
     position: relative;
+    pointer-events: auto !important;
+}
+
+html {
+    pointer-events: auto !important;
 }
 
 #gameplay-video {
@@ -75,7 +80,7 @@ body {
 
 /* Current Game Box - Top-anchored (grows from bottom for MVP) */
 .current-game-box {
-    top: 370px; /* Fixed top position */
+    top: 475px; /* Fixed top position */
     /* No transform - anchored at top, grows downward naturally */
     /* No default height - let content determine size */
     transition: height 0.4s ease-out;
@@ -83,7 +88,7 @@ body {
 
 /* Other Games Box - Center-anchored (grows from both sides) */
 .other-games-box {
-    top: 470px; /* Fixed center point */
+    top: 575px; /* Fixed center point (475 + 100 offset) */
     transform: translateY(-50%); /* Auto-center based on height */
     /* Height set dynamically during transitions */
     transition: top 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), height 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -737,5 +742,91 @@ body {
     font-size: 20.5px;
     letter-spacing: 1.5px;
     margin-bottom: 0;
+}
+
+/* Position Slider Control */
+.position-slider-container {
+    position: fixed;
+    top: 200px;
+    left: 220px;
+    z-index: 999999 !important;
+    background: rgba(10, 20, 40, 0.98);
+    backdrop-filter: blur(10px);
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 2px solid rgba(59, 130, 246, 0.8);
+    box-shadow: 0 8px 40px rgba(59, 130, 246, 0.5);
+    min-width: 220px;
+    display: block !important;
+    pointer-events: auto !important;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.slider-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.position-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.position-btn {
+    width: 50px;
+    height: 50px;
+    border: 2px solid rgba(59, 130, 246, 0.8);
+    background: rgba(59, 130, 246, 0.3) !important;
+    color: #ffffff !important;
+    font-size: 20px;
+    border-radius: 8px;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    pointer-events: auto !important;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    position: relative !important;
+    z-index: 10000000 !important;
+    margin: 0;
+    padding: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.position-btn:hover {
+    background: rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 1);
+    transform: scale(1.05);
+}
+
+.position-btn:active {
+    background: rgba(59, 130, 246, 0.6);
+    transform: scale(0.95);
+}
+
+.slider-value {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    margin-top: 5px;
 }
 

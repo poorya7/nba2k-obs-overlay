@@ -169,7 +169,7 @@ body {
 
 /* Wrapper - fixed height, scrollable but hidden scrollbar */
 .chat-messages-wrapper {
-    height: 572px;
+    height: var(--chat-list-height, 572px);
     overflow-y: scroll;
     overflow-x: visible; /* Allow last message to overflow horizontally */
     position: relative;
@@ -193,7 +193,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 572px;
+    height: var(--chat-list-height, 572px);
     pointer-events: none;
     mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);

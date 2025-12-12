@@ -21,10 +21,10 @@
     <!-- Load modules in dependency order -->
     <script src="config.js"></script>
     <script src="state-manager.js"></script>
-    <script src="data-formatter.js"></script>
+    <script src="utils/data-formatter.js"></script>
     <script src="view.js"></script>
     <script src="controller.js"></script>
-    <script src="message-box-styles.js"></script>
+    <script src="utils/message-box-styles.js"></script>
     
     <!-- Bootstrap: Wire dependencies and start -->
     <script>
@@ -42,6 +42,10 @@
         
         // Start the overlay
         controller.start();
+        
+        // Set chat list height to 630px
+        const chatOverlay = document.getElementById('chat-13');
+        chatOverlay.style.setProperty('--chat-list-height', '630px');
     </script>
 
 </body>
