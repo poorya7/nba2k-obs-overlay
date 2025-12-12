@@ -121,12 +121,6 @@ class SpotlightView {
             const currentMessages = this.elements.container.querySelectorAll('.chat-message');
             if (currentMessages.length > 0) {
                 const lastIndex = currentMessages.length - 1;
-                const chatOverlay = document.getElementById('chat-13');
-                const activeStyle = chatOverlay ? Array.from(chatOverlay.classList).find(c => c.startsWith('profile-style-')) || 'none' : 'none';
-
-                // #region agent log
-                fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'view.js:removeOldMessages',message:'Removing old profile pics',data:{totalMessages:currentMessages.length,lastIndex,activeStyle},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-                // #endregion
 
                 currentMessages.forEach((msg, index) => {
                     // Keep spotlight class and profile pic only on the last message (newest)
@@ -137,11 +131,6 @@ class SpotlightView {
                         if (profilePic) {
                             profilePic.remove();
                         }
-                    } else {
-                        // #region agent log
-                        const hasPic = !!msg.querySelector('.profile-pic');
-                        fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'view.js:removeOldMessages',message:'Newest message check',data:{index,hasPic,activeStyle},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-                        // #endregion
                     }
                 });
             }

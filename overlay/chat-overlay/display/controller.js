@@ -61,11 +61,9 @@ class SpotlightController {
      * Pre-populate with existing messages from server
      */
     async prePopulate() {
-        console.log('[PREPOPULATE] Starting');
         // Reset state completely (clear everything including displayed message tracking)
         this.view.clearMessages();
         this.stateManager.reset();
-        console.log('[PREPOPULATE] After reset, queue length:', this.stateManager.getQueueLength());
 
         try {
             const response = await fetch(this.config.apiEndpoint);
@@ -80,8 +78,6 @@ class SpotlightController {
                 // Sort messages by timestamp (oldest first)
                 const sortedMessages = this._sortMessages(data.messages);
 
-                console.log('[PREPOPULATE] Total messages from server:', sortedMessages.length);
-
                 // Deduplicate messages by ID (same as pollServerMessages does)
                 const seenIds = new Set();
                 const uniqueMessages = sortedMessages.filter(msg => {
@@ -92,7 +88,6 @@ class SpotlightController {
                     return true;
                 });
 
-                console.log('[PREPOPULATE] Queueing', uniqueMessages.length, 'unique messages');
                 // Add unique messages to queue (will be shown one at a time)
                 uniqueMessages.forEach(serverMsg => {
                     if (serverMsg.id) {
@@ -101,12 +96,11 @@ class SpotlightController {
                     this.stateManager.enqueueMessage(serverMsg);
                 });
 
-                console.log('[PREPOPULATE] After queueing, queue length:', this.stateManager.getQueueLength());
                 // Start processing queue
                 this._startQueueProcessing();
             }
         } catch (error) {
-            console.error('Error pre-populating messages from server:', error);
+            // Silently handle errors
         }
     }
     
@@ -137,7 +131,7 @@ class SpotlightController {
                 });
             }
         } catch (error) {
-            console.error('Error fetching messages from server:', error);
+            // Silently handle errors
         }
     }
     
@@ -172,7 +166,6 @@ class SpotlightController {
      * Process message queue one at a time
      */
     _processQueue() {
-        console.log('[PROCESS QUEUE] Queue length:', this.stateManager.getQueueLength());
         // Lock check - prevent race conditions
         if (this.stateManager.getLock()) {
             return;
@@ -194,13 +187,10 @@ class SpotlightController {
         const serverMsg = this.stateManager.dequeueMessage();
 
         if (!serverMsg) {
-            console.log('[PROCESS QUEUE] No message to process');
             this.stateManager.setIsProcessing(false);
             this.stateManager.setLock(false);
             return;
         }
-
-        console.log('[PROCESS QUEUE] Processing:', serverMsg.id, serverMsg.text || serverMsg.textHtml);
 
         // Mark as displayed
         this.stateManager.markMessageDisplayed(serverMsg.id);
@@ -240,24 +230,11 @@ class SpotlightController {
      * Show a single message
      */
     _showMessage(serverMsg) {
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage',message:'Creating new message',data:{hasAvatar:!!serverMsg.avatar,avatarLength:serverMsg.avatar?.length||0,username:serverMsg.username},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-        // #endregion
-        
         // Format the message
         const formattedMsg = this.dataFormatter.formatMessage(serverMsg, this.stateManager);
         
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage',message:'After formatting',data:{hasFormattedAvatar:!!formattedMsg.avatar,formattedAvatarLength:formattedMsg.avatar?.length||0,textLength:formattedMsg.wrappedText?.length||0},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-        // #endregion
-        
         // Create and append element (newest message gets profile pic)
         const messageEl = this.view.createMessageElement(formattedMsg, true);
-        
-        // #region agent log
-        const hasPicInHTML = messageEl.innerHTML.includes('profile-pic');
-        fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage',message:'After createElement',data:{hasPicInHTML,innerHTMLLength:messageEl.innerHTML.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-        // #endregion
         
         this.view.appendMessage(messageEl);
         
@@ -266,12 +243,6 @@ class SpotlightController {
         const profilePic = messageEl.querySelector('.profile-pic');
         
         const showMessage = () => {
-            // #region agent log
-            const chatOverlay = document.getElementById('chat-13');
-            const activeStyle = chatOverlay ? Array.from(chatOverlay.classList).find(c => c.startsWith('profile-style-')) || 'none' : 'none';
-            fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage:showMessage',message:'Showing message after pic load',data:{activeStyle,hasPic:!!profilePic,picComplete:profilePic?.complete,picNaturalHeight:profilePic?.naturalHeight},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-            // #endregion
-            
             // Ensure profile pic is added if missing (fallback)
             const lastMessage = this.view.getContainer().querySelector('.chat-message:last-child');
             if (lastMessage === messageEl && formattedMsg.avatar && formattedMsg.avatar.trim() !== '') {
@@ -294,14 +265,6 @@ class SpotlightController {
             
             // Remove old messages (and their profile pics)
             this.view.removeOldMessages(this.config.maxMessages);
-            
-            // #region agent log
-            if (lastMessage) {
-                const computedStyle = window.getComputedStyle(lastMessage);
-                const boxRect = lastMessage.getBoundingClientRect();
-                fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage:showMessage',message:'Box dimensions after show',data:{activeStyle,display:computedStyle.display,width:boxRect.width,height:boxRect.height,overflow:computedStyle.overflow,hasPic:!!lastMessage.querySelector('.profile-pic')},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-            }
-            // #endregion
         };
         
         // Wait for avatar image to load, or start immediately if already loaded or no image
