@@ -1600,6 +1600,12 @@ ${errorText}`;
         if (sentCount) sentCount.textContent = this.serverSentCount;
         if (failedCount) failedCount.textContent = this.serverFailedCount;
         
+        // Update collapsed sent count
+        const collapsedSentCount = document.getElementById('collapsed-sent-count-value');
+        if (collapsedSentCount) {
+            collapsedSentCount.textContent = this.serverSentCount || '0';
+        }
+        
         // Update last status message
         if (lastStatus && lastStatusText) {
             lastStatus.style.display = 'flex';
@@ -1622,6 +1628,7 @@ ${errorText}`;
             overlay.id = 'chat-reader-overlay';
             overlay.innerHTML = `
                 <div class="chat-reader-header">
+                    <span class="collapsed-sent-count">Sent: <span id="collapsed-sent-count-value">0</span></span>
                     <h3>📺 Chat Reader</h3>
                     <div class="chat-reader-stats">
                         <span id="chat-reader-count">0</span> messages
@@ -1678,9 +1685,38 @@ ${errorText}`;
                     flex-direction: column;
                 }
                 #chat-reader-overlay.collapsed {
+                    width: auto;
+                    min-width: auto;
+                    max-width: none;
                     height: auto;
                 }
                 #chat-reader-overlay.collapsed #chat-reader-messages {
+                    display: none;
+                }
+                #chat-reader-overlay.collapsed .chat-reader-header h3 {
+                    display: none;
+                }
+                #chat-reader-overlay.collapsed .chat-reader-stats {
+                    display: none;
+                }
+                #chat-reader-overlay.collapsed #chat-reader-clear {
+                    display: none;
+                }
+                #chat-reader-overlay.collapsed .chat-reader-server-status {
+                    display: none;
+                }
+                #chat-reader-overlay.collapsed .chat-reader-header {
+                    padding: 4px 8px;
+                    gap: 6px;
+                    min-width: auto;
+                }
+                #chat-reader-overlay.collapsed .chat-reader-header .collapsed-sent-count {
+                    display: inline;
+                    font-size: 11px;
+                    color: #93c5fd;
+                    margin-right: 6px;
+                }
+                .chat-reader-header .collapsed-sent-count {
                     display: none;
                 }
                 .chat-reader-header {
