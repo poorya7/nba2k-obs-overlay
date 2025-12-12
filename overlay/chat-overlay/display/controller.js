@@ -209,21 +209,99 @@ class SpotlightController {
      * Show a single message
      */
     _showMessage(serverMsg) {
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage',message:'Creating new message',data:{hasAvatar:!!serverMsg.avatar,avatarLength:serverMsg.avatar?.length||0,username:serverMsg.username},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
+        
         // Format the message
         const formattedMsg = this.dataFormatter.formatMessage(serverMsg, this.stateManager);
         
-        // Create and append element
-        const messageEl = this.view.createMessageElement(formattedMsg);
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage',message:'After formatting',data:{hasFormattedAvatar:!!formattedMsg.avatar,formattedAvatarLength:formattedMsg.avatar?.length||0,textLength:formattedMsg.wrappedText?.length||0},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
+        
+        // Create and append element (newest message gets profile pic)
+        const messageEl = this.view.createMessageElement(formattedMsg, true);
+        
+        // #region agent log
+        const hasPicInHTML = messageEl.innerHTML.includes('profile-pic');
+        fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage',message:'After createElement',data:{hasPicInHTML,innerHTMLLength:messageEl.innerHTML.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
+        
         this.view.appendMessage(messageEl);
         
-        // Fade in
-        this.view.fadeInMessage(messageEl);
+        // Wait for profile pic to load before showing message (prevents layout shifts and ensures pic is visible)
+        // Same logic as old chat overlay
+        const profilePic = messageEl.querySelector('.profile-pic');
         
-        // Smooth scroll
-        this.view.smoothScrollToBottom(this.config.scrollDuration);
+        const showMessage = () => {
+            // #region agent log
+            const chatOverlay = document.getElementById('chat-13');
+            const activeStyle = chatOverlay ? Array.from(chatOverlay.classList).find(c => c.startsWith('profile-style-')) || 'none' : 'none';
+            fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage:showMessage',message:'Showing message after pic load',data:{activeStyle,hasPic:!!profilePic,picComplete:profilePic?.complete,picNaturalHeight:profilePic?.naturalHeight},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+            // #endregion
+            
+            // Ensure profile pic is added if missing (fallback)
+            const lastMessage = this.view.getContainer().querySelector('.chat-message:last-child');
+            if (lastMessage === messageEl && formattedMsg.avatar && formattedMsg.avatar.trim() !== '') {
+                const existingPic = lastMessage.querySelector('.profile-pic');
+                if (!existingPic) {
+                    const newPic = document.createElement('img');
+                    newPic.className = 'profile-pic';
+                    newPic.src = formattedMsg.avatar;
+                    newPic.alt = '';
+                    newPic.onerror = function() { this.style.display = 'none'; };
+                    lastMessage.insertBefore(newPic, lastMessage.firstChild);
+                }
+            }
+            
+            // Fade in
+            this.view.fadeInMessage(messageEl);
+            
+            // Smooth scroll
+            this.view.smoothScrollToBottom(this.config.scrollDuration);
+            
+            // Remove old messages (and their profile pics)
+            this.view.removeOldMessages(this.config.maxMessages);
+            
+            // #region agent log
+            if (lastMessage) {
+                const computedStyle = window.getComputedStyle(lastMessage);
+                const boxRect = lastMessage.getBoundingClientRect();
+                fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'controller.js:_showMessage:showMessage',message:'Box dimensions after show',data:{activeStyle,display:computedStyle.display,width:boxRect.width,height:boxRect.height,overflow:computedStyle.overflow,hasPic:!!lastMessage.querySelector('.profile-pic')},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+            }
+            // #endregion
+        };
         
-        // Remove old messages
-        this.view.removeOldMessages(this.config.maxMessages);
+        // Wait for avatar image to load, or start immediately if already loaded or no image
+        // Same logic as old chat overlay - but give browser a frame to start loading
+        if (!profilePic || !profilePic.src || profilePic.src.trim() === '') {
+            // No profile pic or empty src, start immediately
+            showMessage();
+        } else {
+            // Give browser one frame to start loading the image, then check
+            requestAnimationFrame(() => {
+                if (profilePic.complete && profilePic.naturalHeight !== 0) {
+                    // Image already loaded (cached or loaded very quickly)
+                    showMessage();
+                } else {
+                    // Wait for image to load (with timeout fallback to prevent infinite waiting)
+                    let messageShown = false;
+                    const safeShow = () => {
+                        // Only show once (prevent race conditions)
+                        if (!messageShown) {
+                            messageShown = true;
+                            showMessage();
+                        }
+                    };
+                    profilePic.addEventListener('load', safeShow, { once: true });
+                    profilePic.addEventListener('error', safeShow, { once: true }); // Show even if image fails to load
+                    // Fallback timeout: show message after 1000ms max wait (increased from 500ms)
+                    // This gives images more time to load, especially on first load (not cached)
+                    setTimeout(safeShow, 1000);
+                }
+            });
+        }
     }
     
     // ========================================

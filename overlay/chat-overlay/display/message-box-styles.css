@@ -1,0 +1,152 @@
+/**
+ * Chat Message Box Styles - Spotlight Style
+ * Complete CSS for the newest message box with profile pic and text wrapping
+ */
+
+/* ========================================
+   MESSAGE BOX BASE
+   ======================================== */
+
+.chat-style-13 {
+    background: transparent;
+    padding: 0;
+}
+
+.chat-style-13 .chat-message {
+    font-size: 14px;
+    padding: 4px 12px;
+    margin-bottom: 1px;
+    background: rgba(20, 20, 30, 0.6);
+    border-radius: 8px;
+    opacity: 0.4;
+    transition: font-size 0.4s ease, padding 0.4s ease, opacity 0.4s ease, background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   NEWEST MESSAGE BOX (Last Child)
+   ======================================== */
+
+.chat-style-13 .chat-message:last-child {
+    opacity: 1;
+    background: rgba(10, 20, 40, 0.95);
+    border: 1px solid rgba(59, 130, 246, 0.55);
+    box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+    font-size: 22px;
+    padding: 18px 27px;
+    line-height: 1.5;
+    min-height: 60px; /* Ensure space for floated profile pic */
+    height: auto;
+    max-height: none;
+    width: var(--message-box-width, 281px);
+    max-width: var(--message-box-width, 281px);
+    overflow: visible;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    transition: font-size 0.4s ease, padding 0.4s ease, opacity 0.4s ease, background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+    position: sticky;
+    bottom: 0;
+    margin-left: auto;
+    transform: translateX(var(--message-box-position, 0px));
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+    z-index: 1000;
+    isolation: isolate;
+}
+
+/* ========================================
+   PROFILE PICTURE (Circular Avatar)
+   ======================================== */
+
+.chat-style-13 .chat-message:last-child .profile-pic {
+    float: left;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.4);
+    animation: pulse-ring 2s ease-in-out infinite;
+    margin-right: 12px;
+    margin-bottom: 0px;
+    transform: translate(-17px, -8px);
+    /* KEY: shape-outside makes text wrap around the circular shape */
+    shape-outside: circle(30px at 30px 30px);
+    -webkit-shape-outside: circle(30px at 30px 30px); /* Safari support */
+    display: block !important;
+    visibility: visible !important;
+}
+
+@keyframes pulse-ring {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.4); }
+    50% { box-shadow: 0 0 30px rgba(59, 130, 246, 1), 0 0 60px rgba(59, 130, 246, 0.6); }
+}
+
+/* ========================================
+   MESSAGE CONTENT WRAPPER
+   ======================================== */
+
+.chat-style-13 .chat-message:last-child .message-content {
+    position: relative;
+    line-height: 1.4;
+    min-width: 0; /* allows text to shrink and wrap */
+}
+
+/* ========================================
+   USERNAME STYLING
+   ======================================== */
+
+.chat-style-13 .chat-message:last-child .chat-username {
+    font-weight: 600;
+    word-break: break-all;
+    display: inline;
+    white-space: normal;
+    max-width: 100%;
+    color: #60a5fa;
+}
+
+/* ========================================
+   MESSAGE TEXT STYLING
+   ======================================== */
+
+.chat-style-13 .chat-message:last-child .chat-text {
+    display: inline;
+    overflow-wrap: break-word;
+    white-space: normal;
+    margin-left: 4px; /* small spacing between username and message */
+    color: #e2e8f0;
+}
+
+/* ========================================
+   CLEAR FLOAT (Prevents Layout Collapse)
+   ======================================== */
+
+.chat-style-13 .chat-message:last-child::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+/* ========================================
+   HTML STRUCTURE EXAMPLE
+   ======================================== */
+
+/*
+<div class="chat-style-13">
+    <div class="chat-message">
+        <img class="profile-pic" src="avatar.jpg" alt="">
+        <div class="message-content">
+            <span class="chat-username">Username</span> 
+            <span class="chat-text">Message text here</span>
+        </div>
+    </div>
+</div>
+*/
+
+

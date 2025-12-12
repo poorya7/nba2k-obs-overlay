@@ -53,17 +53,38 @@ class SpotlightView {
     /**
      * Create message element from formatted data
      * @param {Object} formattedMsg - Formatted message from data formatter
+     * @param {boolean} isNewest - Whether this will be the newest message (gets profile pic)
      * @returns {HTMLElement}
      */
-    createMessageElement(formattedMsg) {
+    createMessageElement(formattedMsg, isNewest = true) {
         const div = document.createElement('div');
         div.className = 'chat-message new-message';
-        
-        const separator = formattedMsg.needsLineBreak ? '<br>' : ' ';
-        
-        div.innerHTML = `<span class="chat-username username-${formattedMsg.color}">${formattedMsg.wrappedUsername}</span>${separator}<span class="chat-text">${formattedMsg.wrappedText}</span>`;
-        
+
+        // Include profile picture ONLY for newest message (will be :last-child)
+        // Flat structure: profile-pic, username, text as siblings (no wrapper)
+        // This allows text to wrap around the floated profile pic using shape-outside
+        let avatarHtml = '';
+        if (isNewest && formattedMsg.avatar) {
+            const avatarUrl = formattedMsg.avatar.trim();
+            if (avatarUrl !== '') {
+                avatarHtml = `<div class="profile-pic" style="background-image: url('${this._escapeHtml(avatarUrl)}'); background-size: cover; background-position: center;"></div>`;
+            }
+        }
+
+        // Flat structure - username and text flow naturally around floated profile pic
+        div.innerHTML = `${avatarHtml}<span class="chat-username username-${formattedMsg.color}">${formattedMsg.wrappedUsername}</span> <span class="chat-text">${formattedMsg.wrappedText}</span>`;
+
         return div;
+    }
+    
+    /**
+     * Escape HTML to prevent XSS
+     * @private
+     */
+    _escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
     
     /**
@@ -72,10 +93,14 @@ class SpotlightView {
      */
     appendMessage(messageEl) {
         this.elements.container.appendChild(messageEl);
+        
+        // Force reflow to ensure DOM is updated before any subsequent operations
+        void messageEl.offsetHeight;
     }
     
     /**
      * Remove oldest message if over limit
+     * Also removes profile pic from messages that are no longer newest
      * @param {number} maxMessages - Maximum messages to keep
      */
     removeOldMessages(maxMessages) {
@@ -83,6 +108,38 @@ class SpotlightView {
         if (messages.length > maxMessages) {
             messages[0].remove();
         }
+        
+        // Remove profile pics from all messages except the newest (last-child)
+        // This ensures only the newest message has a profile pic
+        // Use requestAnimationFrame to ensure DOM is fully updated
+        requestAnimationFrame(() => {
+            const currentMessages = this.elements.container.querySelectorAll('.chat-message');
+            if (currentMessages.length > 0) {
+                const lastIndex = currentMessages.length - 1;
+                const chatOverlay = document.getElementById('chat-13');
+                const activeStyle = chatOverlay ? Array.from(chatOverlay.classList).find(c => c.startsWith('profile-style-')) || 'none' : 'none';
+                
+                // #region agent log
+                fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'view.js:removeOldMessages',message:'Removing old profile pics',data:{totalMessages:currentMessages.length,lastIndex,activeStyle},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+                // #endregion
+                
+                currentMessages.forEach((msg, index) => {
+                    // Keep profile pic only on the last message (newest)
+                    if (index !== lastIndex) {
+                        // Not the last message - remove profile pic if it exists
+                        const profilePic = msg.querySelector('.profile-pic');
+                        if (profilePic) {
+                            profilePic.remove();
+                        }
+                    } else {
+                        // #region agent log
+                        const hasPic = !!msg.querySelector('.profile-pic');
+                        fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'view.js:removeOldMessages',message:'Newest message check',data:{index,hasPic,activeStyle},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+                        // #endregion
+                    }
+                });
+            }
+        });
     }
     
     /**

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Overlay Preview - Profile Style Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .preview-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+        }
+
+        /* Video background */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Overlay iframes - positioned absolutely to match OBS layout */
+        .overlay-frame {
+            position: absolute;
+            border: none;
+            background: transparent;
+            pointer-events: none; /* Allow clicking through for testing */
+        }
+
+        /* Title overlay - top left */
+        .title-overlay-frame {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 10;
+        }
+
+        /* Game stats overlay - left side, vertically centered */
+        .game-stats-frame {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+        }
+
+        /* Socials overlay - bottom right */
+        .socials-overlay-frame {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 150px;
+            z-index: 15;
+        }
+
+        /* Chat overlay - inline (not iframe) so we can control styles */
+        .chat-overlay-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1920px;
+            height: 1080px;
+            z-index: 25;
+            pointer-events: auto; /* Enable controls interaction */
+        }
+
+
+        /* Profile Picture Styles - Add to existing styles */
+        
+        /* Ensure profile pics are always visible */
+        .chat-message:last-child .profile-pic {
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        /* Style 10: Top-left, floating */
+        .profile-style-10 .chat-message:last-child {
+            position: relative;
+            overflow: visible;
+            margin-top: 70px;
+        }
+        .profile-style-10 .chat-message:last-child .profile-pic {
+            width: 55px;
+            height: 55px;
+            position: absolute;
+            top: -70px;
+            left: 0;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            animation: float 3s ease-in-out infinite;
+            z-index: 10;
+            display: block;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Style 11: Glowing border ring */
+        .profile-style-11 .chat-message:last-child {
+            position: relative;
+        }
+        .profile-style-11 .chat-message:last-child .profile-pic {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.4);
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+        @keyframes pulse-ring {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 1), 0 0 60px rgba(59, 130, 246, 0.6); }
+        }
+        .profile-style-11 .chat-message:last-child .chat-username,
+        .profile-style-11 .chat-message:last-child .chat-text {
+            margin-left: 80px;
+        }
+
+        /* Style 12: Neon outline + pulse */
+        .profile-style-12 .chat-message:last-child {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            min-width: 0;
+        }
+        .profile-style-12 .chat-message:last-child .profile-pic {
+            width: 55px;
+            height: 55px;
+            flex-shrink: 0;
+            border: 3px solid rgba(59, 130, 246, 0.8);
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), inset 0 0 10px rgba(59, 130, 246, 0.3);
+            animation: neon-pulse 2s ease-in-out infinite;
+        }
+        .profile-style-12 .chat-message:last-child .message-content {
+            flex: 1;
+            min-width: 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        .profile-style-12 .chat-message:last-child .chat-username,
+        .profile-style-12 .chat-message:last-child .chat-text {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        @keyframes neon-pulse {
+            0%, 100% { border-color: rgba(59, 130, 246, 0.8); box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), inset 0 0 10px rgba(59, 130, 246, 0.3); }
+            50% { border-color: rgba(59, 130, 246, 1); box-shadow: 0 0 25px rgba(59, 130, 246, 1), inset 0 0 15px rgba(59, 130, 246, 0.5); }
+        }
+
+        /* Style 14: Like 10 but with profile pic on the left instead of top */
+        .profile-style-14 .chat-message:last-child {
+            position: relative;
+            overflow: visible;
+            margin-top: 0; /* No margin needed since no pic above */
+        }
+        /* Hide the profile pic at the top for style 14 */
+        .profile-style-14 .chat-message:last-child .profile-pic {
+            display: none !important;
+        }
+        /* Profile pic element - positioned outside to avoid clipping */
+        .style14-frame {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            animation: float 3s ease-in-out infinite;
+            z-index: 10;
+            pointer-events: none;
+            display: none;
+        }
+        .profile-style-14 ~ .style14-frame {
+            display: block;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-button {
+            background: rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.6);
+            color: #60a5fa;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+        }
+
+        .style-number {
+            color: #60a5fa;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 70px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <!-- Video Background -->
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="../../game.mp4" type="video/mp4">
+            Your browser does not support video.
+        </video>
+
+        <!-- Title Overlay (top left) -->
+        <iframe 
+            class="overlay-frame title-overlay-frame" 
+            src="../../title-overlay/index.html"
+            id="title-frame">
+        </iframe>
+
+        <!-- Game Stats Overlay (left side) -->
+        <iframe 
+            class="overlay-frame game-stats-frame" 
+            src="../../nba-live-overlay/index.html"
+            id="game-stats-frame">
+        </iframe>
+
+        <!-- Socials Overlay (bottom right) -->
+        <iframe 
+            class="overlay-frame socials-overlay-frame" 
+            src="../../socials-overlay/index.html"
+            id="socials-frame">
+        </iframe>
+
+        <!-- Chat Overlay - Inline (not iframe) so we can control styles -->
+        <div class="chat-overlay-container">
+            <!-- CHAT STYLE 13: Spotlight -->
+            <div class="chat-overlay chat-style-13 active" id="chat-13">
+                <div class="chat-messages-wrapper">
+                    <div class="chat-messages">
+                        <!-- Messages loaded from server -->
+                    </div>
+                </div>
+            </div>
+            <!-- Profile pic element for style 14 - positioned outside to avoid clipping -->
+            <img class="style14-frame" id="style14Frame" alt="">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+        <button class="nav-button" id="prevBtn">← Prev</button>
+        <div class="style-number" id="styleNumber">Style 10</div>
+        <button class="nav-button" id="nextBtn">Next →</button>
+    </div>
+
+
+    <!-- Load modules in dependency order -->
+    <script src="config.js"></script>
+    <script src="state-manager.js"></script>
+    <script src="data-formatter.js"></script>
+    <script src="view.js"></script>
+    <script src="controller.js"></script>
+    
+    <!-- Bootstrap: Wire dependencies and start -->
+    <script>
+        // Create instances with dependency injection
+        const stateManager = new SpotlightStateManager();
+        const dataFormatter = new SpotlightDataFormatter(SpotlightConfig);
+        const view = new SpotlightView(SpotlightConfig);
+        
+        const controller = new SpotlightController({
+            view: view,
+            stateManager: stateManager,
+            dataFormatter: dataFormatter,
+            config: SpotlightConfig
+        });
+        
+        // Start the overlay
+        controller.start();
+        
+        // Profile style switching - Only styles 10, 11, 12, 14
+        const availableStyles = [10, 11, 12, 14];
+        let currentStyleIndex = 0;
+        const chatOverlay = document.getElementById('chat-13');
+        const styleNumber = document.getElementById('styleNumber');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        function updateProfileStyle(styleNum) {
+            // Remove all profile style classes
+            availableStyles.forEach(style => {
+                chatOverlay.classList.remove(`profile-style-${style}`);
+            });
+            
+            // Add new style class
+            chatOverlay.classList.add(`profile-style-${styleNum}`);
+            
+            // Update style number display
+            styleNumber.textContent = `Style ${styleNum}`;
+            
+            
+            // #region agent log
+            const lastMessage = document.querySelector('#chat-13 .chat-message:last-child');
+            if (lastMessage) {
+                const computedStyle = window.getComputedStyle(lastMessage);
+                const boxRect = lastMessage.getBoundingClientRect();
+                const profilePic = lastMessage.querySelector('.profile-pic');
+                const hasPic = !!profilePic;
+                let picData = null;
+                if (profilePic) {
+                    const picStyle = window.getComputedStyle(profilePic);
+                    const picRect = profilePic.getBoundingClientRect();
+                    picData = {
+                        display: picStyle.display,
+                        visibility: picStyle.visibility,
+                        position: picStyle.position,
+                        left: picStyle.left,
+                        top: picStyle.top,
+                        width: picRect.width,
+                        height: picRect.height,
+                        x: picRect.x,
+                        y: picRect.y,
+                        zIndex: picStyle.zIndex
+                    };
+                }
+                const wrapper = document.querySelector('.chat-messages-wrapper');
+                const wrapperStyle = wrapper ? window.getComputedStyle(wrapper) : null;
+                const wrapperRect = wrapper ? wrapper.getBoundingClientRect() : null;
+                fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'test-profile-styles.html:updateProfileStyle',message:'Style changed',data:{styleNum,display:computedStyle.display,width:boxRect.width,height:boxRect.height,overflow:computedStyle.overflow,overflowX:computedStyle.overflowX,overflowY:computedStyle.overflowY,hasPic,picData,wrapperOverflowX:wrapperStyle?.overflowX,wrapperOverflowY:wrapperStyle?.overflowY,wrapperWidth:wrapperRect?.width,wrapperX:wrapperRect?.x},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+            }
+            // #endregion
+            
+            // Show/hide and sync frame for style 14
+            const frame = document.getElementById('style14Frame');
+            if (styleNum === 14) {
+                if (frame) {
+                    frame.style.display = 'block';
+                    syncFramePosition();
+                    // Keep syncing during animations
+                    if (!window.style14SyncInterval) {
+                        window.style14SyncInterval = setInterval(() => {
+                            if (chatOverlay.classList.contains('profile-style-14')) {
+                                syncFramePosition();
+                            }
+                        }, 16); // ~60fps
+                    }
+                }
+            } else {
+                if (frame) frame.style.display = 'none';
+                if (window.style14SyncInterval) {
+                    clearInterval(window.style14SyncInterval);
+                    window.style14SyncInterval = null;
+                }
+            }
+        }
+        
+        function syncFramePosition() {
+            const lastMessage = document.querySelector('#chat-13 .chat-message:last-child');
+            const frame = document.getElementById('style14Frame');
+            if (lastMessage && frame && chatOverlay.classList.contains('profile-style-14')) {
+                // Get profile pic from the message
+                const profilePic = lastMessage.querySelector('.profile-pic');
+                if (profilePic && profilePic.src) {
+                    frame.src = profilePic.src;
+                    frame.style.display = 'block';
+                } else {
+                    frame.style.display = 'none';
+                }
+                
+                // Get message position relative to chat-overlay-container
+                const messageRect = lastMessage.getBoundingClientRect();
+                const containerRect = document.querySelector('.chat-overlay-container').getBoundingClientRect();
+                
+                // Position profile pic: 70px to the left, aligned with top edge
+                frame.style.left = `${messageRect.left - containerRect.left - 70}px`;
+                frame.style.top = `${messageRect.top - containerRect.top}px`;
+            }
+        }
+        
+        function nextStyle() {
+            currentStyleIndex = (currentStyleIndex + 1) % availableStyles.length;
+            updateProfileStyle(availableStyles[currentStyleIndex]);
+        }
+        
+        function prevStyle() {
+            currentStyleIndex = currentStyleIndex === 0 ? availableStyles.length - 1 : currentStyleIndex - 1;
+            updateProfileStyle(availableStyles[currentStyleIndex]);
+        }
+        
+        // Button clicks
+        nextBtn.addEventListener('click', nextStyle);
+        prevBtn.addEventListener('click', prevStyle);
+        
+        // Arrow keys
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextStyle();
+            } else if (e.key === 'ArrowLeft') {
+                prevStyle();
+            }
+        });
+        
+        // Initialize with style 10
+        updateProfileStyle(availableStyles[currentStyleIndex]);
+        
+        
+        // Expose for debugging
+        window.controller = controller;
+    </script>
+
+</body>
+</html>

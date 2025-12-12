@@ -26,8 +26,11 @@ body {
     right: 19px;
     top: -14px;
     width: 281px;
+    max-width: 281px; /* Keep container width fixed */
     z-index: 10;
     display: none;
+    box-sizing: border-box;
+    overflow: visible; /* Allow last message to overflow */
 }
 
 .chat-overlay.active {
@@ -47,6 +50,7 @@ body {
     word-break: normal;
 }
 
+
 /* ========================================
    STYLE 13: Spotlight
    ======================================== */
@@ -64,7 +68,11 @@ body {
     opacity: 0.4;
     transition: font-size 0.4s ease, padding 0.4s ease, opacity 0.4s ease, background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
     overflow-wrap: break-word;
-    word-break: normal;
+    word-break: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 /* Newest message: Match game overlay style */
@@ -76,10 +84,68 @@ body {
     font-size: 22px;
     padding: 18px 27px;
     line-height: 1.5;
-    min-height: auto;
+    min-height: 60px; /* Ensure space for floated profile pic */
     height: auto;
+    max-height: none;
+    width: var(--message-box-width, 281px);
+    max-width: var(--message-box-width, 281px);
     overflow: visible;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
     transition: font-size 0.4s ease, padding 0.4s ease, opacity 0.4s ease, background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+    position: sticky; /* Sticky positioning to escape scroll clipping */
+    bottom: 0; /* Stick to bottom */
+    margin-left: auto; /* Align to right, expand from left */
+    transform: translateX(var(--message-box-position, 0px)); /* Move left/right */
+    /* Escape mask clipping */
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+    /* Force visibility outside parent bounds */
+    z-index: 1000; /* High z-index to be above other content */
+    isolation: isolate; /* Create new stacking context */
+}
+
+/* Profile pic for newest message - floated div with shape-outside for text wrap */
+.chat-style-13 .chat-message:last-child .profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.4);
+    animation: pulse-ring 2s ease-in-out infinite;
+    margin-right: 12px;
+    transform: translate(-17px, -8px);
+    shape-outside: circle(30px at 30px 30px);
+    -webkit-shape-outside: circle(30px at 30px 30px); /* Safari support */
+    float: left;
+    display: block !important;
+    visibility: visible !important;
+}
+
+@keyframes pulse-ring {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.4); }
+    50% { box-shadow: 0 0 30px rgba(59, 130, 246, 1), 0 0 60px rgba(59, 130, 246, 0.6); }
+}
+
+
+/* Username - matches box-wrap exactly */
+.chat-style-13 .chat-message:last-child .chat-username {
+    font-weight: 600;
+    word-break: break-all;
+}
+
+/* Message text - matches box-wrap exactly */
+.chat-style-13 .chat-message:last-child .chat-text {
+    margin-left: 4px;
+    overflow-wrap: break-word;
+}
+
+/* Clear float after message content */
+.chat-style-13 .chat-message:last-child::after {
+    content: '';
+    display: block;
+    clear: both;
 }
 
 .chat-style-13 .chat-username {
@@ -105,18 +171,33 @@ body {
 .chat-messages-wrapper {
     height: 572px;
     overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-x: visible; /* Allow last message to overflow horizontally */
     position: relative;
+    width: 100%;
+    max-width: 281px; /* Keep container width fixed */
+    box-sizing: border-box;
     /* Hide scrollbar */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE/Edge */
-    /* Gradient mask - fades out at top */
-    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
+    /* Gradient mask - fades out at top, applied via pseudo-element to avoid clipping last message */
 }
 
 .chat-messages-wrapper::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
+}
+
+/* Apply mask only to messages, not the last one */
+.chat-messages-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 572px;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%);
+    z-index: 1;
 }
 
 /* Inner container that actually scrolls */
@@ -124,6 +205,13 @@ body {
     display: flex;
     flex-direction: column;
     padding-top: 30px;
+    width: 100%;
+    max-width: 281px; /* Keep container width fixed */
+    box-sizing: border-box;
+    overflow: visible; /* Allow last message to overflow */
+    /* Don't clip children */
+    clip-path: none;
+    -webkit-clip-path: none;
 }
 
 /* New message fades in */

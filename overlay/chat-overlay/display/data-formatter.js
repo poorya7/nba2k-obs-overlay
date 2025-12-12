@@ -93,25 +93,13 @@ class SpotlightDataFormatter {
         const coloredText = this.colorMentions(truncatedText, stateManager);
         const wrappedText = this.wrapWords(coloredText);
         
-        // Calculate if message needs line break
-        // Strategy: Always use space separator, let CSS handle wrapping naturally
-        // This way:
-        // - New message (22px font): Text may wrap to new line if long (that's fine)
-        // - List message (14px font): Text will naturally fit on same line as username
-        // The browser will handle wrapping based on available width and font size
-        const needsLineBreak = false; // Always use space, let CSS wrap naturally
-        
-        // Wrap username if short enough
-        const wrappedUsername = username.length <= this.config.maxWordLength
-            ? `<span style="white-space:nowrap">${username}</span>`
-            : username;
-        
         return {
             username,
-            wrappedUsername,
-            wrappedText,
+            wrappedUsername: username, // No wrapping - matches box-wrap
+            wrappedText: coloredText,  // No word wrapping - matches box-wrap
             color,
-            needsLineBreak
+            needsLineBreak: false,
+            avatar: serverMsg.avatar || ''
         };
     }
     
