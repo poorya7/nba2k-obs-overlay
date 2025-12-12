@@ -74,6 +74,70 @@ class SpotlightDataFormatter {
     }
     
     /**
+     * Truncate URLs with ellipsis to prevent long links from breaking layout
+     * HTML-aware: Only processes URLs in plain text, not inside HTML tags (like img src)
+     * @param {string} text - Text that may contain URLs and HTML (emojis)
+     * @returns {string} Text with truncated URLs
+     */
+    truncateLinks(text) {
+        if (!text) return '';
+        
+        // Check if text contains HTML tags - if not, simple processing
+        if (!/<[^>]+>/.test(text)) {
+            // No HTML - process all URLs
+            const urlRegex = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+|www\.[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9-]+\.[a-zA-Z]{2,}[^\s<>"{}|\\^`\[\]]*)/gi;
+            return text.replace(urlRegex, (match) => {
+                return `<span class="link-truncated">${this._escapeHtml(match)}</span>`;
+            });
+        }
+        
+        // Has HTML - process carefully to avoid breaking HTML tags
+        const parts = [];
+        const tagRegex = /(<[^>]+>)/g;
+        let lastIndex = 0;
+        let match;
+        
+        while ((match = tagRegex.exec(text)) !== null) {
+            // Process text before this tag (plain text - can contain URLs)
+            if (match.index > lastIndex) {
+                const textPart = text.substring(lastIndex, match.index);
+                // Process URLs in this plain text portion
+                const urlRegex = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+|www\.[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9-]+\.[a-zA-Z]{2,}[^\s<>"{}|\\^`\[\]]*)/gi;
+                const processedText = textPart.replace(urlRegex, (urlMatch) => {
+                    return `<span class="link-truncated">${this._escapeHtml(urlMatch)}</span>`;
+                });
+                parts.push(processedText);
+            }
+            
+            // Keep the HTML tag as-is (don't process URLs inside tags)
+            parts.push(match[1]);
+            lastIndex = tagRegex.lastIndex;
+        }
+        
+        // Process remaining text after last tag
+        if (lastIndex < text.length) {
+            const textPart = text.substring(lastIndex);
+            const urlRegex = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+|www\.[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9-]+\.[a-zA-Z]{2,}[^\s<>"{}|\\^`\[\]]*)/gi;
+            const processedText = textPart.replace(urlRegex, (urlMatch) => {
+                return `<span class="link-truncated">${this._escapeHtml(urlMatch)}</span>`;
+            });
+            parts.push(processedText);
+        }
+        
+        return parts.join('');
+    }
+    
+    /**
+     * Escape HTML to prevent XSS (used by truncateLinks)
+     * @private
+     */
+    _escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    /**
      * Format message for display
      * @param {Object} serverMsg - Server message object
      * @param {SpotlightStateManager} stateManager - State manager for user colors
@@ -91,12 +155,13 @@ class SpotlightDataFormatter {
         const rawText = serverMsg.textHtml || serverMsg.text || '';
         const truncatedText = this.truncateText(rawText);
         const coloredText = this.colorMentions(truncatedText, stateManager);
-        const wrappedText = this.wrapWords(coloredText);
+        const linkTruncatedText = this.truncateLinks(coloredText);
+        const wrappedText = this.wrapWords(linkTruncatedText);
         
         return {
             username,
             wrappedUsername: username, // No wrapping - matches box-wrap
-            wrappedText: coloredText,  // No word wrapping - matches box-wrap
+            wrappedText: linkTruncatedText,  // Includes link truncation, no word wrapping - matches box-wrap
             color,
             needsLineBreak: false,
             avatar: serverMsg.avatar || ''

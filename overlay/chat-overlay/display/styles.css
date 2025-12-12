@@ -156,6 +156,17 @@ body {
     color: #e2e8f0;
 }
 
+/* Truncated links - Option 5: Truncate with ellipsis */
+.chat-style-13 .link-truncated {
+    display: inline-block;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+    color: #fbbf24;
+}
+
 /* Username color variations for visual interest */
 .username-cyan { color: #22d3ee !important; }
 .username-teal { color: #2dd4bf !important; }
