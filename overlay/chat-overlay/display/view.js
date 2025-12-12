@@ -72,7 +72,8 @@ class SpotlightView {
         if (isNewest && formattedMsg.avatar) {
             const avatarUrl = formattedMsg.avatar.trim();
             if (avatarUrl !== '') {
-                avatarHtml = `<div class="profile-pic" style="background-image: url('${this._escapeHtml(avatarUrl)}'); background-size: cover; background-position: center;"></div>`;
+                const proxyUrl = this._getProxyUrl(avatarUrl);
+                avatarHtml = `<div class="profile-pic" style="background-image: url('${this._escapeHtml(proxyUrl)}'); background-size: cover; background-position: center;"></div>`;
             }
         }
 
@@ -90,6 +91,18 @@ class SpotlightView {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+    
+    /**
+     * Convert avatar URL to proxy URL to bypass CORS
+     * @private
+     */
+    _getProxyUrl(avatarUrl) {
+        if (!avatarUrl || avatarUrl.trim() === '') {
+            return '';
+        }
+        // Use local server proxy to bypass CORS
+        return `http://localhost:3000/api/image-proxy?url=${encodeURIComponent(avatarUrl)}`;
     }
     
     /**

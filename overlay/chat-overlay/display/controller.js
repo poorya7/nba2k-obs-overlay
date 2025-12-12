@@ -89,10 +89,10 @@ class SpotlightController {
                 });
 
                 // Add unique messages to queue (will be shown one at a time)
+                // Mark as displayed when enqueued to prevent re-adding from pollServerMessages
                 uniqueMessages.forEach(serverMsg => {
-                    if (serverMsg.id) {
-                        this.stateManager.markMessageDisplayed(serverMsg.id);
-                    }
+                    const messageId = serverMsg.id || `${serverMsg.username || ''}_${serverMsg.text || serverMsg.textHtml || ''}_${serverMsg.timestamp || ''}`;
+                    this.stateManager.markMessageDisplayed(messageId);
                     this.stateManager.enqueueMessage(serverMsg);
                 });
 
@@ -121,8 +121,16 @@ class SpotlightController {
             
             if (data.messages && data.messages.length > 0) {
                 // Filter out already displayed messages and sort
+                // Also check if message is already in queue to prevent duplicates
                 const newMessages = data.messages
-                    .filter(msg => !this.stateManager.hasDisplayedMessage(msg.id))
+                    .filter(msg => {
+                        // Use same ID generation logic as when marking as displayed
+                        const messageId = msg.id || `${msg.username || ''}_${msg.text || msg.textHtml || ''}_${msg.timestamp || ''}`;
+                        const isDisplayed = this.stateManager.hasDisplayedMessage(messageId);
+                        const isInQueue = this.stateManager.isMessageInQueue(msg);
+                        
+                        return !isDisplayed && !isInQueue;
+                    })
                     .sort((a, b) => this._compareMessages(a, b));
 
                 // Add new messages to queue
@@ -192,8 +200,9 @@ class SpotlightController {
             return;
         }
 
-        // Mark as displayed
-        this.stateManager.markMessageDisplayed(serverMsg.id);
+        // Mark as displayed (use content-based ID if message has no ID)
+        const messageId = serverMsg.id || `${serverMsg.username || ''}_${serverMsg.text || serverMsg.textHtml || ''}_${serverMsg.timestamp || ''}`;
+        this.stateManager.markMessageDisplayed(messageId);
         
         // Get message text for duration calculation
         const messageText = serverMsg.textHtml || serverMsg.text || '';
@@ -250,7 +259,9 @@ class SpotlightController {
                 if (!existingPic) {
                     const newPic = document.createElement('img');
                     newPic.className = 'profile-pic';
-                    newPic.src = formattedMsg.avatar;
+                    // Use proxy URL to bypass CORS
+                    const proxyUrl = `http://localhost:3000/api/image-proxy?url=${encodeURIComponent(formattedMsg.avatar)}`;
+                    newPic.src = proxyUrl;
                     newPic.alt = '';
                     newPic.onerror = function() { this.style.display = 'none'; };
                     lastMessage.insertBefore(newPic, lastMessage.firstChild);
@@ -383,5 +394,6 @@ class SpotlightController {
         const domOrderB = b.domOrder !== undefined ? b.domOrder : Infinity;
         return domOrderA - domOrderB;
     }
+    
 }
 

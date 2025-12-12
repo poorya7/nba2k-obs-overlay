@@ -108,6 +108,20 @@ class SpotlightStateManager {
         this.messageQueue.length = 0;
     }
     
+    /**
+     * Check if a message is already in the queue
+     * @param {Object} msg - Message object to check
+     * @returns {boolean}
+     */
+    isMessageInQueue(msg) {
+        const msgId = msg.id || `${msg.username || ''}_${msg.text || msg.textHtml || ''}_${msg.timestamp || ''}`;
+        
+        return this.messageQueue.some(queuedMsg => {
+            const queuedId = queuedMsg.id || `${queuedMsg.username || ''}_${queuedMsg.text || queuedMsg.textHtml || ''}_${queuedMsg.timestamp || ''}`;
+            return queuedId === msgId;
+        });
+    }
+    
     // ========================================
     // Processing flags
     // ========================================

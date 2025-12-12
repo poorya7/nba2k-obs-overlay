@@ -1,8 +1,10 @@
 // Simple static file server for NBA 2K Overlay
 
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const { URL } = require('url');
 
 const PORT = 3000;
 
@@ -296,6 +298,65 @@ function handlePostChatRefresh(req, res) {
   sendJson(res, 200, { success: true, message: 'Chat refresh triggered', refreshTrigger: state.getChatRefreshTrigger() });
 }
 
+// GET /api/image-proxy?url=... - Proxy images to bypass CORS
+function handleGetImageProxy(req, res) {
+  const urlObj = new URL(req.url, `http://${req.headers.host}`);
+  const imageUrl = urlObj.searchParams.get('url');
+  
+  if (!imageUrl) {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    res.end('Missing url parameter');
+    return;
+  }
+  
+  try {
+    // Validate URL
+    const targetUrl = new URL(imageUrl);
+    
+    // Only allow http/https URLs for security
+    if (targetUrl.protocol !== 'http:' && targetUrl.protocol !== 'https:') {
+      res.writeHead(400, { 'Content-Type': 'text/plain' });
+      res.end('Invalid URL protocol');
+      return;
+    }
+    
+    // Use https for https URLs, http for http URLs
+    const client = targetUrl.protocol === 'https:' ? https : http;
+    
+    // Fetch the image
+    client.get(imageUrl, (imageRes) => {
+      // Check if response is successful
+      if (imageRes.statusCode !== 200) {
+        res.writeHead(imageRes.statusCode || 500, { 'Content-Type': 'text/plain' });
+        res.end('Failed to fetch image');
+        return;
+      }
+      
+      // Get content type from response or default to image
+      const contentType = imageRes.headers['content-type'] || 'image/jpeg';
+      
+      // Set CORS headers and content type
+      const headers = {
+        'Content-Type': contentType,
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
+      };
+      
+      res.writeHead(200, headers);
+      
+      // Pipe the image data to response
+      imageRes.pipe(res);
+    }).on('error', (error) => {
+      console.error('❌ Image proxy error:', error.message);
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end('Failed to fetch image');
+    });
+  } catch (error) {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    res.end('Invalid URL');
+  }
+}
+
 // ==================== STATIC FILE SERVING ====================
 
 // MIME types for different file extensions
@@ -327,7 +388,8 @@ const API_ROUTES = {
   'GET /api/chat': handleGetChat,
   'POST /api/chat': handlePostChat,
   'DELETE /api/chat': handleDeleteChat,
-  'POST /api/chat/refresh': handlePostChatRefresh
+  'POST /api/chat/refresh': handlePostChatRefresh,
+  'GET /api/image-proxy': handleGetImageProxy
 };
 
 /**
