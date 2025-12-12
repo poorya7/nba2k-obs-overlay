@@ -60,7 +60,12 @@ class SpotlightView {
         const div = document.createElement('div');
         div.className = 'chat-message new-message';
 
-        // Include profile picture ONLY for newest message (will be :last-child)
+        // Add spotlight class to newest message
+        if (isNewest) {
+            div.classList.add('spotlight');
+        }
+
+        // Include profile picture ONLY for newest message
         // Flat structure: profile-pic, username, text as siblings (no wrapper)
         // This allows text to wrap around the floated profile pic using shape-outside
         let avatarHtml = '';
@@ -100,7 +105,7 @@ class SpotlightView {
     
     /**
      * Remove oldest message if over limit
-     * Also removes profile pic from messages that are no longer newest
+     * Also removes spotlight class and profile pic from messages that are no longer newest
      * @param {number} maxMessages - Maximum messages to keep
      */
     removeOldMessages(maxMessages) {
@@ -108,9 +113,9 @@ class SpotlightView {
         if (messages.length > maxMessages) {
             messages[0].remove();
         }
-        
-        // Remove profile pics from all messages except the newest (last-child)
-        // This ensures only the newest message has a profile pic
+
+        // Remove spotlight class and profile pics from all messages except the newest
+        // This ensures only the newest message has spotlight styling and profile pic
         // Use requestAnimationFrame to ensure DOM is fully updated
         requestAnimationFrame(() => {
             const currentMessages = this.elements.container.querySelectorAll('.chat-message');
@@ -118,15 +123,16 @@ class SpotlightView {
                 const lastIndex = currentMessages.length - 1;
                 const chatOverlay = document.getElementById('chat-13');
                 const activeStyle = chatOverlay ? Array.from(chatOverlay.classList).find(c => c.startsWith('profile-style-')) || 'none' : 'none';
-                
+
                 // #region agent log
                 fetch('http://127.0.0.1:7242/ingest/788b04c6-dcca-4fb4-9a29-e41cad1eb37b',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'view.js:removeOldMessages',message:'Removing old profile pics',data:{totalMessages:currentMessages.length,lastIndex,activeStyle},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
                 // #endregion
-                
+
                 currentMessages.forEach((msg, index) => {
-                    // Keep profile pic only on the last message (newest)
+                    // Keep spotlight class and profile pic only on the last message (newest)
                     if (index !== lastIndex) {
-                        // Not the last message - remove profile pic if it exists
+                        // Not the last message - remove spotlight class and profile pic
+                        msg.classList.remove('spotlight');
                         const profilePic = msg.querySelector('.profile-pic');
                         if (profilePic) {
                             profilePic.remove();
@@ -147,6 +153,31 @@ class SpotlightView {
      */
     clearMessages() {
         this.elements.container.innerHTML = '';
+    }
+
+    /**
+     * Clear spotlight (remove spotlight class and profile pic from last message)
+     */
+    clearSpotlight() {
+        const messages = this.elements.container.querySelectorAll('.chat-message');
+        if (messages.length > 0) {
+            const lastMessage = messages[messages.length - 1];
+
+            // Remove spotlight class (triggers CSS transition to list mode)
+            lastMessage.classList.remove('spotlight');
+
+            // Remove inline font-size styles added by message-box-styles.js
+            const username = lastMessage.querySelector('.chat-username');
+            const text = lastMessage.querySelector('.chat-text');
+            if (username) username.style.fontSize = '';
+            if (text) text.style.fontSize = '';
+
+            // Remove profile pic
+            const profilePic = lastMessage.querySelector('.profile-pic');
+            if (profilePic) {
+                profilePic.remove();
+            }
+        }
     }
     
     /**

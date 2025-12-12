@@ -7,11 +7,11 @@ const baseFontSize = 22;
 const minFontSize = 18;
 
 function optimizeMessageFontSize() {
-    // First, reset all non-last messages to base font size (safety check)
+    // First, reset all non-spotlight messages to base font size (safety check)
     const allMessages = document.querySelectorAll('.chat-style-13 .chat-message');
-    allMessages.forEach((msg, index) => {
-        if (index < allMessages.length - 1) {
-            // Not the last message - reset font sizes
+    allMessages.forEach((msg) => {
+        if (!msg.classList.contains('spotlight')) {
+            // Not a spotlight message - reset font sizes
             const text = msg.querySelector('.chat-text');
             const username = msg.querySelector('.chat-username');
             if (text) text.style.fontSize = '';
@@ -19,8 +19,8 @@ function optimizeMessageFontSize() {
         }
     });
 
-    // Get the last (newest) chat message
-    const chatMessage = document.querySelector('.chat-style-13 .chat-message:last-child');
+    // Get the spotlight chat message
+    const chatMessage = document.querySelector('.chat-style-13 .chat-message.spotlight');
     if (!chatMessage) return;
 
     const chatUsername = chatMessage.querySelector('.chat-username');
@@ -65,17 +65,24 @@ document.addEventListener('DOMContentLoaded', optimizeMessageFontSize);
 const observer = new MutationObserver((mutations) => {
     let shouldOptimize = false;
     for (const mutation of mutations) {
-        // Only trigger if a message element was added/removed, not text changes
+        // Trigger if a message element was added/removed
         if (mutation.type === 'childList') {
-            // Check if any added/removed nodes are chat messages
-            const hasMessageChanges = 
-                Array.from(mutation.addedNodes).some(node => 
+            const hasMessageChanges =
+                Array.from(mutation.addedNodes).some(node =>
                     node.nodeType === 1 && node.classList && node.classList.contains('chat-message')
                 ) ||
-                Array.from(mutation.removedNodes).some(node => 
+                Array.from(mutation.removedNodes).some(node =>
                     node.nodeType === 1 && node.classList && node.classList.contains('chat-message')
                 );
             if (hasMessageChanges) {
+                shouldOptimize = true;
+                break;
+            }
+        }
+        // Trigger if spotlight class was added/removed from a message
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const target = mutation.target;
+            if (target.classList && target.classList.contains('chat-message')) {
                 shouldOptimize = true;
                 break;
             }
@@ -87,13 +94,15 @@ const observer = new MutationObserver((mutations) => {
     }
 });
 
-// Start observing when DOM is ready - only watch the messages container, not the whole chat overlay
+// Start observing when DOM is ready - watch the messages container and class changes on children
 document.addEventListener('DOMContentLoaded', () => {
     const chatMessagesContainer = document.querySelector('.chat-style-13 .chat-messages');
     if (chatMessagesContainer) {
         observer.observe(chatMessagesContainer, {
             childList: true,
-            subtree: false // Don't watch subtree, only direct children
+            subtree: true, // Watch subtree to catch class changes on messages
+            attributes: true, // Watch attribute changes
+            attributeFilter: ['class'] // Only watch class attribute
         });
     }
 });

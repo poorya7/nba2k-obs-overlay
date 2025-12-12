@@ -23,7 +23,10 @@ class SpotlightStateManager {
         
         // Active timeout tracking
         this.activeTimeoutId = null;
-        
+
+        // Spotlight auto-clear timeout
+        this.spotlightTimeoutId = null;
+
         // Server polling
         this.serverPollInterval = null;
     }
@@ -151,6 +154,25 @@ class SpotlightStateManager {
             this.activeTimeoutId = null;
         }
     }
+
+    // ========================================
+    // Spotlight timeout tracking
+    // ========================================
+
+    getSpotlightTimeout() {
+        return this.spotlightTimeoutId;
+    }
+
+    setSpotlightTimeout(id) {
+        this.spotlightTimeoutId = id;
+    }
+
+    clearSpotlightTimeout() {
+        if (this.spotlightTimeoutId !== null) {
+            clearTimeout(this.spotlightTimeoutId);
+            this.spotlightTimeoutId = null;
+        }
+    }
     
     // ========================================
     // Server polling
@@ -183,6 +205,7 @@ class SpotlightStateManager {
         this.processingScheduled = false;
         this.processMessageQueueLock = false;
         this.clearActiveTimeout();
+        this.clearSpotlightTimeout();
     }
 }
 

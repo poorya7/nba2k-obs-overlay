@@ -11,6 +11,7 @@ const SpotlightConfig = {
     // Timing
     pollInterval: 200,         // Server poll interval (ms)
     scrollDuration: 1000,      // Smooth scroll animation duration (ms)
+    totalSpotlightTime: 8000,  // Total time in spotlight including message duration (ms)
     
     // Dynamic message duration (based on text length)
     minMessageTime: 2000,      // 2.0 seconds minimum

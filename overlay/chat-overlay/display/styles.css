@@ -75,8 +75,8 @@ body {
     box-sizing: border-box;
 }
 
-/* Newest message: Match game overlay style */
-.chat-style-13 .chat-message:last-child {
+/* Spotlight message: Match game overlay style */
+.chat-style-13 .chat-message.spotlight {
     opacity: 1;
     background: rgba(10, 20, 40, 0.95);
     border: 1px solid rgba(59, 130, 246, 0.55);
@@ -106,8 +106,8 @@ body {
     isolation: isolate; /* Create new stacking context */
 }
 
-/* Profile pic for newest message - floated div with shape-outside for text wrap */
-.chat-style-13 .chat-message:last-child .profile-pic {
+/* Profile pic for spotlight message - floated div with shape-outside for text wrap */
+.chat-style-13 .chat-message.spotlight .profile-pic {
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -130,19 +130,19 @@ body {
 
 
 /* Username - matches box-wrap exactly */
-.chat-style-13 .chat-message:last-child .chat-username {
+.chat-style-13 .chat-message.spotlight .chat-username {
     font-weight: 600;
     word-break: break-all;
 }
 
 /* Message text - matches box-wrap exactly */
-.chat-style-13 .chat-message:last-child .chat-text {
+.chat-style-13 .chat-message.spotlight .chat-text {
     margin-left: 4px;
     overflow-wrap: break-word;
 }
 
 /* Clear float after message content */
-.chat-style-13 .chat-message:last-child::after {
+.chat-style-13 .chat-message.spotlight::after {
     content: '';
     display: block;
     clear: both;

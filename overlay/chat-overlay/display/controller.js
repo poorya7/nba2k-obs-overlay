@@ -54,33 +54,54 @@ class SpotlightController {
     stop() {
         this.stateManager.clearPollInterval();
         this.stateManager.clearActiveTimeout();
+        this.stateManager.clearSpotlightTimeout();
     }
     
     /**
      * Pre-populate with existing messages from server
      */
     async prePopulate() {
-        // Reset state
+        console.log('[PREPOPULATE] Starting');
+        // Reset state completely (clear everything including displayed message tracking)
         this.view.clearMessages();
         this.stateManager.reset();
-        
+        console.log('[PREPOPULATE] After reset, queue length:', this.stateManager.getQueueLength());
+
         try {
             const response = await fetch(this.config.apiEndpoint);
             const data = await response.json();
-            
+
+            // Initialize lastRefreshTrigger on first load to prevent immediate re-trigger
+            if (data.refreshTrigger && this.stateManager.getLastRefreshTrigger() === null) {
+                this.stateManager.setLastRefreshTrigger(data.refreshTrigger);
+            }
+
             if (data.messages && data.messages.length > 0) {
                 // Sort messages by timestamp (oldest first)
-                // Use domOrder as tiebreaker when timestamps are equal
                 const sortedMessages = this._sortMessages(data.messages);
-                
-                // Add ALL messages to queue (will be shown one at a time)
-                sortedMessages.forEach(serverMsg => {
+
+                console.log('[PREPOPULATE] Total messages from server:', sortedMessages.length);
+
+                // Deduplicate messages by ID (same as pollServerMessages does)
+                const seenIds = new Set();
+                const uniqueMessages = sortedMessages.filter(msg => {
+                    if (!msg.id || seenIds.has(msg.id)) {
+                        return false;
+                    }
+                    seenIds.add(msg.id);
+                    return true;
+                });
+
+                console.log('[PREPOPULATE] Queueing', uniqueMessages.length, 'unique messages');
+                // Add unique messages to queue (will be shown one at a time)
+                uniqueMessages.forEach(serverMsg => {
                     if (serverMsg.id) {
                         this.stateManager.markMessageDisplayed(serverMsg.id);
                     }
                     this.stateManager.enqueueMessage(serverMsg);
                 });
-                
+
+                console.log('[PREPOPULATE] After queueing, queue length:', this.stateManager.getQueueLength());
                 // Start processing queue
                 this._startQueueProcessing();
             }
@@ -109,7 +130,7 @@ class SpotlightController {
                 const newMessages = data.messages
                     .filter(msg => !this.stateManager.hasDisplayedMessage(msg.id))
                     .sort((a, b) => this._compareMessages(a, b));
-                
+
                 // Add new messages to queue
                 newMessages.forEach(serverMsg => {
                     this._addToQueue(serverMsg);
@@ -128,6 +149,9 @@ class SpotlightController {
      * Add message to queue and start processing
      */
     _addToQueue(serverMsg) {
+        // Clear spotlight timeout since new message is coming
+        this.stateManager.clearSpotlightTimeout();
+
         this.stateManager.enqueueMessage(serverMsg);
         this._startQueueProcessing();
     }
@@ -148,6 +172,7 @@ class SpotlightController {
      * Process message queue one at a time
      */
     _processQueue() {
+        console.log('[PROCESS QUEUE] Queue length:', this.stateManager.getQueueLength());
         // Lock check - prevent race conditions
         if (this.stateManager.getLock()) {
             return;
@@ -167,13 +192,16 @@ class SpotlightController {
         this.stateManager.setIsScheduled(false);
         
         const serverMsg = this.stateManager.dequeueMessage();
-        
+
         if (!serverMsg) {
+            console.log('[PROCESS QUEUE] No message to process');
             this.stateManager.setIsProcessing(false);
             this.stateManager.setLock(false);
             return;
         }
-        
+
+        console.log('[PROCESS QUEUE] Processing:', serverMsg.id, serverMsg.text || serverMsg.textHtml);
+
         // Mark as displayed
         this.stateManager.markMessageDisplayed(serverMsg.id);
         
@@ -194,14 +222,17 @@ class SpotlightController {
             this.stateManager.setActiveTimeout(null);
             this.stateManager.setIsProcessing(false);
             this.stateManager.setLock(false);
-            
+
             // Process next if queue has more
             if (this.stateManager.getQueueLength() > 0 && !this.stateManager.getIsScheduled()) {
                 this.stateManager.setIsScheduled(true);
                 setTimeout(() => this._processQueue(), 0);
+            } else {
+                // No more messages in queue - start spotlight timeout (total time - message duration)
+                this._startSpotlightTimeout(messageDuration);
             }
         }, messageDuration);
-        
+
         this.stateManager.setActiveTimeout(timeoutId);
     }
     
@@ -304,6 +335,37 @@ class SpotlightController {
         }
     }
     
+    // ========================================
+    // Spotlight timeout
+    // ========================================
+
+    /**
+     * Start spotlight auto-clear timeout
+     * @param {number} messageDuration - Duration the message was displayed for
+     */
+    _startSpotlightTimeout(messageDuration) {
+        // Clear any existing timeout
+        this.stateManager.clearSpotlightTimeout();
+
+        // Calculate remaining time: total spotlight time - message duration already shown
+        const remainingTime = Math.max(0, this.config.totalSpotlightTime - messageDuration);
+
+        // Start new timeout
+        const timeoutId = setTimeout(() => {
+            this.stateManager.setSpotlightTimeout(null);
+            this._clearSpotlight();
+        }, remainingTime);
+
+        this.stateManager.setSpotlightTimeout(timeoutId);
+    }
+
+    /**
+     * Clear spotlight (remove profile pic from last message)
+     */
+    _clearSpotlight() {
+        this.view.clearSpotlight();
+    }
+
     // ========================================
     // Helpers
     // ========================================
