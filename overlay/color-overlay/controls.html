@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Overlay Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Queue/Timer Display Container */
+        #queue-display {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            min-width: 320px;
+            background: rgba(10, 20, 40, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.55);
+            border-radius: 12px;
+            padding: 16px;
+            padding-top: 50px; /* Extra space for style number and username */
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+            z-index: 9997;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+
+        /* Style Option 1: Minimal Neon Dots */
+        .style-1 #queue-display {
+            background: rgba(10, 20, 40, 0.85);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        .style-1 .timer-display {
+            font-size: 24px;
+            color: #60a5fa;
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.8);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .style-1 .progress-bar-container {
+            width: 100%;
+            height: 3px;
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .style-1 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
+            box-shadow: 0 0 15px rgba(96, 165, 250, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-1 .queue-items {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .style-1 .queue-item {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+            transition: all 0.3s ease;
+        }
+        .style-1 .queue-item.active {
+            width: 16px;
+            height: 16px;
+            box-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Style Option 2: Neon Progress Bar */
+        .style-2 #queue-display {
+            background: rgba(10, 20, 40, 0.9);
+            border: 2px solid rgba(139, 92, 246, 0.6);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+        }
+        .style-2 .timer-display {
+            font-size: 28px;
+            color: #a78bfa;
+            text-shadow: 0 0 15px rgba(167, 139, 250, 0.9);
+            font-weight: 400;
+        }
+        .style-2 .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .style-2 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #a78bfa, #ec4899);
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.8);
+            transition: width 0.1s linear;
+            border-radius: 2px;
+        }
+        .style-2 .queue-count {
+            color: #c4b5fd;
+            font-size: 12px;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* Style Option 3: Glowing Rings */
+        .style-3 #queue-display {
+            background: rgba(10, 20, 40, 0.88);
+            border: none;
+            box-shadow: 0 0 50px rgba(236, 72, 153, 0.3);
+        }
+        .style-3 .timer-ring {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #ec4899;
+            border-right-color: #f472b6;
+            animation: spin-ring 2s linear infinite;
+            margin: 0 auto;
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.6);
+        }
+        @keyframes spin-ring {
+            to { transform: rotate(360deg); }
+        }
+        .style-3 .timer-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #f472b6;
+            text-shadow: 0 0 15px rgba(244, 114, 182, 0.9);
+        }
+        .style-3 .progress-bar-container {
+            width: 100%;
+            height: 3px;
+            background: rgba(236, 72, 153, 0.15);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .style-3 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ec4899, #f472b6);
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-3 .queue-items {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .style-3 .queue-item {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        /* Style Option 4: Neon Text Glow */
+        .style-4 #queue-display {
+            background: rgba(10, 20, 40, 0.92);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+        }
+        .style-4 .timer-display {
+            font-size: 32px;
+            color: #22c55e;
+            text-shadow: 
+                0 0 10px #22c55e,
+                0 0 20px #22c55e,
+                0 0 30px #22c55e;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+        .style-4 .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .style-4 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #86efac);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-4 .queue-preview {
+            display: flex;
+            gap: 4px;
+            margin-top: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .style-4 .queue-color-preview {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            box-shadow: 0 0 10px currentColor;
+            transition: all 0.3s ease;
+        }
+        
+        /* Common queue color preview styles */
+        .queue-color-preview {
+            transition: all 0.3s ease;
+        }
+
+        /* Style Option 5: Liquid Wave */
+        .style-5 #queue-display {
+            background: rgba(10, 20, 40, 0.9);
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            overflow: hidden;
+        }
+        .style-5 .timer-display {
+            font-size: 22px;
+            color: #93c5fd;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(147, 197, 253, 0.8);
+        }
+        .style-5 .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 3px;
+            margin-top: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .style-5 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+            background-size: 200% 100%;
+            animation: gradient-shift 3s ease infinite;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 3px;
+        }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .style-5 .wave-container {
+            width: 100%;
+            height: 30px;
+            position: relative;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .style-5 .wave {
+            position: absolute;
+            bottom: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(59, 130, 246, 0.4) 0%,
+                rgba(139, 92, 246, 0.4) 50%,
+                rgba(59, 130, 246, 0.4) 100%);
+            animation: wave-flow 4s ease-in-out infinite;
+            opacity: 0.6;
+        }
+        @keyframes wave-flow {
+            0%, 100% { transform: translateX(-50%); }
+            50% { transform: translateX(0%); }
+        }
+
+        /* Style Option 6: Pulsing Hexagons */
+        .style-6 #queue-display {
+            background: rgba(10, 20, 40, 0.88);
+            border: 1px solid rgba(251, 191, 36, 0.5);
+        }
+        .style-6 .timer-display {
+            font-size: 20px;
+            color: #fbbf24;
+            text-align: center;
+            text-shadow: 0 0 12px rgba(251, 191, 36, 0.8);
+        }
+        .style-6 .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(251, 191, 36, 0.15);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .style-6 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #fcd34d);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-6 .hex-container {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .style-6 .hex {
+            width: 30px;
+            height: 30px;
+            background: currentColor;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            box-shadow: 0 0 15px currentColor;
+            transition: all 0.3s ease;
+        }
+        .style-6 .hex.active {
+            animation: hex-pulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 25px currentColor, 0 0 50px currentColor;
+        }
+        @keyframes hex-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .style-6 .timer-display {
+            font-size: 20px;
+            color: #fbbf24;
+            text-align: center;
+            text-shadow: 0 0 12px rgba(251, 191, 36, 0.8);
+        }
+
+        /* Style Option 7: Gradient Orb */
+        .style-7 #queue-display {
+            background: rgba(10, 20, 40, 0.85);
+            border: none;
+        }
+        .style-7 .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .style-7 .progress-bar {
+            height: 100%;
+            background: radial-gradient(circle, currentColor, transparent);
+            box-shadow: 0 0 15px currentColor;
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-7 .orb-container {
+            width: 80px;
+            height: 80px;
+            margin: 12px auto 0;
+            position: relative;
+        }
+        .style-7 .orb {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, currentColor 0%, transparent 70%);
+            box-shadow: 
+                0 0 30px currentColor,
+                0 0 60px currentColor,
+                inset 0 0 30px rgba(255, 255, 255, 0.1);
+            animation: orb-float 3s ease-in-out infinite;
+        }
+        @keyframes orb-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.05); }
+        }
+        .style-7 .timer-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #fff;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        /* Style Option 8: Neon Lines */
+        .style-8 #queue-display {
+            background: rgba(10, 20, 40, 0.9);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.3);
+        }
+        .style-8 .timer-display {
+            font-size: 26px;
+            color: #fca5a5;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(252, 165, 165, 0.9);
+        }
+        .style-8 .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .style-8 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #f87171);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-8 .line-container {
+            width: 100%;
+            height: 20px;
+            position: relative;
+            margin-top: 12px;
+        }
+        .style-8 .neon-line {
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent,
+                #ef4444,
+                #f87171,
+                #ef4444,
+                transparent);
+            box-shadow: 0 0 10px #ef4444;
+            animation: line-scan 3s ease-in-out infinite;
+        }
+        @keyframes line-scan {
+            0%, 100% { width: 20%; margin-left: 0; }
+            50% { width: 60%; margin-left: 20%; }
+        }
+
+        /* Style Option 9: Matrix Style */
+        .style-9 #queue-display {
+            background: rgba(10, 20, 40, 0.95);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+        .style-9 .timer-display {
+            font-size: 24px;
+            color: #86efac;
+            text-align: center;
+            text-shadow: 0 0 12px rgba(134, 239, 172, 0.9);
+            font-family: 'Courier New', monospace;
+        }
+        .style-9 .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .style-9 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #86efac);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-9 .matrix-container {
+            width: 100%;
+            height: 40px;
+            position: relative;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .style-9 .matrix-line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                transparent,
+                #22c55e,
+                transparent);
+            box-shadow: 0 0 8px #22c55e;
+            animation: matrix-fall 3s linear infinite;
+        }
+        @keyframes matrix-fall {
+            to { transform: translateY(100%); }
+        }
+
+        /* Style Option 10: Glowing Particles */
+        .style-10 #queue-display {
+            background: rgba(10, 20, 40, 0.9);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
+        }
+        .style-10 .timer-display {
+            font-size: 26px;
+            color: #a855f7;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.9);
+        }
+        .style-10 .progress-bar-container {
+            width: 100%;
+            height: 5px;
+            background: rgba(168, 85, 247, 0.15);
+            border-radius: 3px;
+            margin-top: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .style-10 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #a855f7, #c084fc, #a855f7);
+            background-size: 200% 100%;
+            animation: particle-glow 2s ease infinite;
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.8);
+            transition: width 0.1s ease;
+            border-radius: 3px;
+        }
+        @keyframes particle-glow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .style-10 .queue-preview {
+            display: flex;
+            gap: 6px;
+            margin-top: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .style-10 .queue-color-preview {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 12px currentColor;
+            animation: particle-float 3s ease-in-out infinite;
+        }
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+        }
+
+        /* Style Option 11: Neon Grid */
+        .style-11 #queue-display {
+            background: rgba(10, 20, 40, 0.92);
+            border: 2px solid rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 35px rgba(6, 182, 212, 0.4);
+        }
+        .style-11 .timer-display {
+            font-size: 28px;
+            color: #06b6d4;
+            text-align: center;
+            text-shadow: 0 0 18px rgba(6, 182, 212, 0.9);
+            font-weight: 300;
+        }
+        .style-11 .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(6, 182, 212, 0.15);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .style-11 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #06b6d4, #22d3ee);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.7);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-11 .queue-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(22px, 1fr));
+            gap: 4px;
+            margin-top: 14px;
+            max-width: 100%;
+        }
+        .style-11 .queue-color-preview {
+            width: 22px;
+            height: 22px;
+            border-radius: 3px;
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        /* Style Option 12: Smooth Gradient Flow */
+        .style-12 #queue-display {
+            background: rgba(10, 20, 40, 0.88);
+            border: 1px solid rgba(236, 72, 153, 0.4);
+        }
+        .style-12 .timer-display {
+            font-size: 24px;
+            color: #ec4899;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(236, 72, 153, 0.8);
+        }
+        .style-12 .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(236, 72, 153, 0.15);
+            border-radius: 3px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .style-12 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ec4899, #f472b6, #ec4899);
+            background-size: 300% 100%;
+            animation: smooth-flow 4s ease infinite;
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 3px;
+        }
+        @keyframes smooth-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .style-12 .queue-preview {
+            display: flex;
+            gap: 5px;
+            margin-top: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .style-12 .queue-color-preview {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid rgba(236, 72, 153, 0.5);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        /* Style Option 13: Crystal Shards */
+        .style-13 #queue-display {
+            background: rgba(10, 20, 40, 0.9);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+        .style-13 .timer-display {
+            font-size: 22px;
+            color: #22c55e;
+            text-align: center;
+            text-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+        }
+        .style-13 .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .style-13 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #86efac);
+            box-shadow: 0 0 18px rgba(34, 197, 94, 0.7);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-13 .queue-preview {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .style-13 .queue-color-preview {
+            width: 24px;
+            height: 24px;
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            border: none;
+            box-shadow: 0 0 12px currentColor;
+        }
+
+        /* Style Option 14: Aurora Waves */
+        .style-14 #queue-display {
+            background: rgba(10, 20, 40, 0.85);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        .style-14 .timer-display {
+            font-size: 26px;
+            color: #60a5fa;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.9);
+        }
+        .style-14 .progress-bar-container {
+            width: 100%;
+            height: 5px;
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 3px;
+            margin-top: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .style-14 .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                #3b82f6 0%,
+                #8b5cf6 25%,
+                #ec4899 50%,
+                #8b5cf6 75%,
+                #3b82f6 100%);
+            background-size: 200% 100%;
+            animation: aurora-shift 5s ease infinite;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+            transition: width 0.1s ease;
+            border-radius: 3px;
+        }
+        @keyframes aurora-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .style-14 .queue-preview {
+            display: flex;
+            gap: 5px;
+            margin-top: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .style-14 .queue-color-preview {
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 12px currentColor;
+        }
+
+        /* Style Option 15: Minimalist Glow */
+        .style-15 #queue-display {
+            background: rgba(10, 20, 40, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.3);
+        }
+        .style-15 .timer-display {
+            font-size: 30px;
+            color: #93c5fd;
+            text-align: center;
+            text-shadow: 0 0 25px rgba(147, 197, 253, 0.9);
+            font-weight: 200;
+            letter-spacing: 3px;
+        }
+        .style-15 .progress-bar-container {
+            width: 100%;
+            height: 3px;
+            background: rgba(147, 197, 253, 0.1);
+            border-radius: 2px;
+            margin-top: 14px;
+            overflow: hidden;
+        }
+        .style-15 .progress-bar {
+            height: 100%;
+            background: #93c5fd;
+            box-shadow: 0 0 20px rgba(147, 197, 253, 0.8);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+        .style-15 .queue-preview {
+            display: flex;
+            gap: 4px;
+            margin-top: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .style-15 .queue-color-preview {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid rgba(147, 197, 253, 0.3);
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        /* Common queue display elements */
+        .timer-display {
+            font-size: 24px;
+            color: #60a5fa;
+            text-align: center;
+            margin-bottom: 8px;
+            display: none; /* Hidden - we use progress bar */
+        }
+        
+        /* Current username display styling for all styles */
+        #current-username-display {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .queue-info {
+            font-size: 11px;
+            color: #93c5fd;
+            text-align: center;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        /* Navigation buttons */
+        .style-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 80px;
+            display: flex;
+            gap: 6px;
+            z-index: 10000;
+            pointer-events: auto;
+        }
+
+        .style-nav-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(10, 20, 40, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 6px;
+            color: #93c5fd;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .style-nav-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.8);
+            transform: scale(1.1);
+        }
+
+        .style-nav-btn.active {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.8);
+            color: #60a5fa;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Color picker panel */
+        #color-picker-panel {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 280px;
+            background: rgba(10, 20, 40, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.55);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+            z-index: 9998;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .picker-section {
+            margin-bottom: 20px;
+        }
+
+        .picker-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .picker-label {
+            color: #60a5fa;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Color input */
+        #color-input {
+            width: 100%;
+            height: 50px;
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            cursor: pointer;
+            background: transparent;
+            padding: 0;
+            margin-bottom: 12px;
+        }
+
+        #color-input::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        #color-input::-webkit-color-swatch {
+            border: none;
+            border-radius: 6px;
+        }
+
+        /* Opacity slider */
+        #opacity-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(59, 130, 246, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            margin-bottom: 12px;
+        }
+
+        #opacity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #60a5fa;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+        }
+
+        #opacity-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #60a5fa;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+        }
+
+        /* Opacity value display */
+        #opacity-value {
+            color: #93c5fd;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        /* Preset colors */
+        .preset-colors {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .preset-color {
+            width: 100%;
+            height: 40px;
+            border-radius: 6px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .preset-color:hover {
+            border-color: rgba(59, 130, 246, 0.8);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Toggle button */
+        #toggle-picker {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(10, 20, 40, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.55);
+            border-radius: 50%;
+            color: #60a5fa;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.34);
+            transition: all 0.3s ease;
+            pointer-events: auto;
+        }
+
+        #toggle-picker:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.8);
+            transform: scale(1.1);
+        }
+
+        #color-picker-panel.hidden {
+            display: none;
+        }
+
+        #queue-display.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="style-1">
+    <!-- Queue/Timer Display -->
+    <div id="queue-display">
+        <!-- Style Number Display -->
+        <div id="style-number-display" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 16px; color: #93c5fd; opacity: 0.95; z-index: 10; pointer-events: none; text-align: center; font-weight: 700; letter-spacing: 3px; text-shadow: 0 0 10px rgba(147, 197, 253, 0.5);">1</div>
+        <!-- Current Color Username Display -->
+        <div id="current-username-display" style="position: absolute; top: 32px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #60a5fa; opacity: 0.9; z-index: 10; pointer-events: none; text-align: center; font-weight: 500; letter-spacing: 1px; text-shadow: 0 0 10px rgba(96, 165, 250, 0.7), 0 0 20px rgba(96, 165, 250, 0.4);"></div>
+        <!-- Style 1: Minimal Neon Dots -->
+        <div class="style-1-content" style="display: block;">
+            <div class="timer-display" id="timer-display-1">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-1"></div>
+            </div>
+            <div class="queue-items" id="queue-items-1"></div>
+            <div class="queue-info" id="queue-info-1">Queue: 0</div>
+        </div>
+
+        <!-- Style 2: Neon Progress Bar -->
+        <div class="style-2-content" style="display: none;">
+            <div class="timer-display" id="timer-display-2">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-2"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-2" style="display: flex; gap: 4px; margin-top: 12px; justify-content: center; flex-wrap: wrap;"></div>
+            <div class="queue-count" id="queue-count-2">Queue: 0 colors</div>
+        </div>
+
+        <!-- Style 3: Glowing Rings -->
+        <div class="style-3-content" style="display: none;">
+            <div style="position: relative; width: 60px; height: 60px; margin: 0 auto;">
+                <div class="timer-ring"></div>
+                <div class="timer-display" id="timer-display-3">10s</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-3"></div>
+            </div>
+            <div class="queue-items" id="queue-items-3"></div>
+        </div>
+
+        <!-- Style 4: Neon Text Glow -->
+        <div class="style-4-content" style="display: none;">
+            <div class="timer-display" id="timer-display-4">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-4"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-4"></div>
+        </div>
+
+        <!-- Style 5: Liquid Wave -->
+        <div class="style-5-content" style="display: none;">
+            <div class="timer-display" id="timer-display-5">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-5"></div>
+            </div>
+            <div class="wave-container">
+                <div class="wave"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-5" style="display: flex; gap: 4px; margin-top: 12px; justify-content: center; flex-wrap: wrap;"></div>
+            <div class="queue-info">Queue: <span id="queue-count-5">0</span></div>
+        </div>
+
+        <!-- Style 6: Pulsing Hexagons -->
+        <div class="style-6-content" style="display: none;">
+            <div class="timer-display" id="timer-display-6">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-6"></div>
+            </div>
+            <div class="hex-container" id="hex-container-6"></div>
+        </div>
+
+        <!-- Style 7: Gradient Orb -->
+        <div class="style-7-content" style="display: none;">
+            <div class="timer-display" id="timer-display-7" style="font-size: 20px; color: #fff; text-align: center; margin-bottom: 10px;">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-7"></div>
+            </div>
+            <div class="orb-container">
+                <div class="orb" id="orb-7"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-7" style="display: flex; gap: 4px; margin-top: 12px; justify-content: center; flex-wrap: wrap;"></div>
+            <div class="queue-info">Queue: <span id="queue-count-7">0</span></div>
+        </div>
+
+        <!-- Style 8: Neon Lines -->
+        <div class="style-8-content" style="display: none;">
+            <div class="timer-display" id="timer-display-8">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-8"></div>
+            </div>
+            <div class="line-container">
+                <div class="neon-line"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-8" style="display: flex; gap: 4px; margin-top: 12px; justify-content: center; flex-wrap: wrap;"></div>
+            <div class="queue-info">Queue: <span id="queue-count-8">0</span></div>
+        </div>
+
+        <!-- Style 9: Matrix Style -->
+        <div class="style-9-content" style="display: none;">
+            <div class="timer-display" id="timer-display-9">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-9"></div>
+            </div>
+            <div class="matrix-container" id="matrix-container-9"></div>
+            <div class="queue-preview" id="queue-preview-9" style="display: flex; gap: 4px; margin-top: 12px; justify-content: center; flex-wrap: wrap;"></div>
+            <div class="queue-info">Queue: <span id="queue-count-9">0</span></div>
+        </div>
+
+        <!-- Style 10: Glowing Particles -->
+        <div class="style-10-content" style="display: none;">
+            <div class="timer-display" id="timer-display-10">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-10"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-10"></div>
+            <div class="queue-info">Queue: <span id="queue-count-10">0</span></div>
+        </div>
+
+        <!-- Style 11: Neon Grid -->
+        <div class="style-11-content" style="display: none;">
+            <div class="timer-display" id="timer-display-11">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-11"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-11"></div>
+            <div class="queue-info">Queue: <span id="queue-count-11">0</span></div>
+        </div>
+
+        <!-- Style 12: Smooth Gradient Flow -->
+        <div class="style-12-content" style="display: none;">
+            <div class="timer-display" id="timer-display-12">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-12"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-12"></div>
+            <div class="queue-info">Queue: <span id="queue-count-12">0</span></div>
+        </div>
+
+        <!-- Style 13: Crystal Shards -->
+        <div class="style-13-content" style="display: none;">
+            <div class="timer-display" id="timer-display-13">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-13"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-13"></div>
+            <div class="queue-info">Queue: <span id="queue-count-13">0</span></div>
+        </div>
+
+        <!-- Style 14: Aurora Waves -->
+        <div class="style-14-content" style="display: none;">
+            <div class="timer-display" id="timer-display-14">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-14"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-14"></div>
+            <div class="queue-info">Queue: <span id="queue-count-14">0</span></div>
+        </div>
+
+        <!-- Style 15: Minimalist Glow -->
+        <div class="style-15-content" style="display: none;">
+            <div class="timer-display" id="timer-display-15">10s</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar-15"></div>
+            </div>
+            <div class="queue-preview" id="queue-preview-15"></div>
+            <div class="queue-info">Queue: <span id="queue-count-15">0</span></div>
+        </div>
+    </div>
+
+    <!-- Style Navigation Buttons -->
+    <div class="style-nav">
+        <button class="style-nav-btn active" data-style="1" title="Style 1 (Press 1)">1</button>
+        <button class="style-nav-btn" data-style="2" title="Style 2 (Press 2)">2</button>
+        <button class="style-nav-btn" data-style="3" title="Style 3 (Press 3)">3</button>
+        <button class="style-nav-btn" data-style="4" title="Style 4 (Press 4)">4</button>
+        <button class="style-nav-btn" data-style="5" title="Style 5 (Press 5)">5</button>
+        <button class="style-nav-btn" data-style="6" title="Style 6 (Press 6)">6</button>
+        <button class="style-nav-btn" data-style="7" title="Style 7 (Press 7)">7</button>
+        <button class="style-nav-btn" data-style="8" title="Style 8 (Press 8)">8</button>
+        <button class="style-nav-btn" data-style="9" title="Style 9 (Press 9)">9</button>
+        <button class="style-nav-btn" data-style="10" title="Style 10 (Press 0)">10</button>
+        <button class="style-nav-btn" data-style="11" title="Style 11">11</button>
+        <button class="style-nav-btn" data-style="12" title="Style 12">12</button>
+        <button class="style-nav-btn" data-style="13" title="Style 13">13</button>
+        <button class="style-nav-btn" data-style="14" title="Style 14">14</button>
+        <button class="style-nav-btn" data-style="15" title="Style 15">15</button>
+    </div>
+
+    <!-- Toggle button -->
+    <button id="toggle-picker" title="Toggle Color Picker">🎨</button>
+
+    <!-- Color picker panel -->
+    <div id="color-picker-panel" class="hidden">
+        <div class="picker-section">
+            <label class="picker-label" for="color-input">Color</label>
+            <input type="color" id="color-input" value="#000000">
+        </div>
+
+        <div class="picker-section">
+            <label class="picker-label" for="opacity-slider">Opacity</label>
+            <input type="range" id="opacity-slider" min="0" max="100" value="0">
+            <div id="opacity-value">0%</div>
+        </div>
+
+        <div class="picker-section">
+            <label class="picker-label">Presets</label>
+            <div class="preset-colors">
+                <div class="preset-color" style="background: rgba(0, 0, 0, 0.5);" data-color="#000000"></div>
+                <div class="preset-color" style="background: rgba(59, 130, 246, 0.3);" data-color="#3b82f6"></div>
+                <div class="preset-color" style="background: rgba(139, 92, 246, 0.3);" data-color="#8b5cf6"></div>
+                <div class="preset-color" style="background: rgba(236, 72, 153, 0.3);" data-color="#ec4899"></div>
+                <div class="preset-color" style="background: rgba(34, 197, 94, 0.3);" data-color="#22c55e"></div>
+                <div class="preset-color" style="background: rgba(251, 191, 36, 0.3);" data-color="#fbbf24"></div>
+                <div class="preset-color" style="background: rgba(239, 68, 68, 0.3);" data-color="#ef4444"></div>
+                <div class="preset-color" style="background: rgba(255, 255, 255, 0.2);" data-color="#ffffff"></div>
+            </div>
+        </div>
+
+        <div class="picker-section">
+            <label class="picker-label">Add to Queue</label>
+            <button id="add-to-queue-btn" style="width: 100%; padding: 10px; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.5); border-radius: 6px; color: #93c5fd; cursor: pointer; font-size: 13px; transition: all 0.2s ease;">
+                ➕ Add Current Color
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Color Queue System
+        class ColorQueue {
+            constructor() {
+                this.queue = [];
+                this.currentColor = null;
+                this.currentTimer = null;
+                this.timerInterval = null;
+                this.timeRemaining = 0;
+                this.duration = 5000; // 5 seconds
+                this.currentStyle = 1;
+            }
+
+            addToQueue(color, opacity, username = 'You') {
+                this.queue.push({ color, opacity, username, id: Date.now() });
+                this.updateQueueDisplay();
+                if (!this.currentColor && this.queue.length > 0) {
+                    this.startNextColor();
+                }
+            }
+
+            startNextColor() {
+                if (this.queue.length === 0) {
+                    this.currentColor = null;
+                    this.timeRemaining = 0;
+                    this.updateQueueDisplay();
+                    return;
+                }
+
+                const next = this.queue.shift();
+                this.currentColor = next;
+                this.timeRemaining = this.duration;
+
+                // Update overlay
+                this.updateOverlay(next.color, next.opacity);
+
+                // Start timer
+                this.timerInterval = setInterval(() => {
+                    this.timeRemaining -= 100;
+                    if (this.timeRemaining <= 0) {
+                        clearInterval(this.timerInterval);
+                        this.startNextColor();
+                    } else {
+                        this.updateQueueDisplay();
+                    }
+                }, 100);
+            }
+
+            updateOverlay(color, opacity) {
+                const overlayFrame = getColorOverlayFrame();
+                if (overlayFrame && overlayFrame.updateColorOverlay) {
+                    overlayFrame.updateColorOverlay(color, opacity);
+                } else {
+                    // Fallback
+                    try {
+                        const frames = window.parent.document.querySelectorAll('iframe');
+                        for (let frame of frames) {
+                            if (frame.src && frame.src.includes('color-overlay/index.html')) {
+                                const frameDoc = frame.contentDocument || frame.contentWindow.document;
+                                if (frameDoc) {
+                                    const colorOverlay = frameDoc.getElementById('color-overlay');
+                                    if (colorOverlay) {
+                                        const opacityValue = opacity / 100;
+                                        const rgb = hexToRgb(color);
+                                        if (rgb) {
+                                            colorOverlay.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacityValue})`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Could not update color overlay:', e);
+                    }
+                }
+            }
+
+            updateQueueDisplay() {
+                const queueLength = this.queue.length;
+                const progress = this.currentColor ? ((this.duration - this.timeRemaining) / this.duration) * 100 : 0;
+
+                // Update current username display
+                const currentUsernameDisplay = document.getElementById('current-username-display');
+                if (currentUsernameDisplay) {
+                    if (this.currentColor && this.currentColor.username) {
+                        currentUsernameDisplay.textContent = `@${this.currentColor.username}`;
+                        currentUsernameDisplay.style.display = 'block';
+                    } else {
+                        currentUsernameDisplay.style.display = 'none';
+                    }
+                }
+
+                // Update all style displays
+                for (let i = 1; i <= 15; i++) {
+                    // Hide timer text (we have progress bar)
+                    const timerEl = document.getElementById(`timer-display-${i}`);
+                    if (timerEl) {
+                        timerEl.style.display = 'none';
+                    }
+
+                    const queueInfoEl = document.getElementById(`queue-info-${i}`);
+                    const queueCountEl = document.getElementById(`queue-count-${i}`);
+                    if (queueInfoEl) {
+                        const countSpan = queueInfoEl.querySelector('span');
+                        if (countSpan) {
+                            countSpan.textContent = queueLength;
+                        } else {
+                            queueInfoEl.textContent = `Queue: ${queueLength}`;
+                        }
+                    }
+                    if (queueCountEl) {
+                        const countSpan = queueCountEl.querySelector('span');
+                        if (countSpan) {
+                            countSpan.textContent = queueLength;
+                        } else {
+                            queueCountEl.textContent = `Queue: ${queueLength} colors`;
+                        }
+                    }
+
+                    // Update progress bars for all styles
+                    const progressBar = document.getElementById(`progress-bar-${i}`);
+                    if (progressBar) {
+                        progressBar.style.width = `${progress}%`;
+                        // Update color for style 7 orb-based progress
+                        if (i === 7 && this.currentColor) {
+                            progressBar.style.color = this.currentColor.color;
+                        }
+                    }
+
+                    // Update queue items (styles 1, 3) - show ALL colors
+                    if (i === 1 || i === 3) {
+                        const queueItemsEl = document.getElementById(`queue-items-${i}`);
+                        if (queueItemsEl) {
+                            queueItemsEl.innerHTML = '';
+                            // Show current color first
+                            if (this.currentColor) {
+                                const activeItem = document.createElement('div');
+                                activeItem.className = 'queue-item active';
+                                activeItem.style.background = this.currentColor.color;
+                                activeItem.style.color = this.currentColor.color;
+                                queueItemsEl.appendChild(activeItem);
+                            }
+                            // Show ALL queue colors
+                            this.queue.forEach(item => {
+                                const queueItem = document.createElement('div');
+                                queueItem.className = 'queue-item';
+                                queueItem.style.background = item.color;
+                                queueItem.style.color = item.color;
+                                queueItemsEl.appendChild(queueItem);
+                            });
+                        }
+                    }
+
+                    // Update color previews (styles 2, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15) - show ALL colors
+                    if ([2, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(i)) {
+                        const previewEl = document.getElementById(`queue-preview-${i}`);
+                        if (previewEl) {
+                            previewEl.innerHTML = '';
+                            // Show current color first (highlighted)
+                            if (this.currentColor) {
+                                const current = document.createElement('div');
+                                current.className = 'queue-color-preview';
+                                current.style.width = '28px';
+                                current.style.height = '28px';
+                                current.style.borderRadius = '6px';
+                                current.style.background = this.currentColor.color;
+                                current.style.border = '2px solid rgba(59, 130, 246, 0.8)';
+                                current.style.boxShadow = `0 0 15px ${this.currentColor.color}`;
+                                previewEl.appendChild(current);
+                            }
+                            // Show ALL queue colors
+                            this.queue.forEach(item => {
+                                const preview = document.createElement('div');
+                                preview.className = 'queue-color-preview';
+                                preview.style.width = '24px';
+                                preview.style.height = '24px';
+                                preview.style.borderRadius = '4px';
+                                preview.style.background = item.color;
+                                preview.style.border = '1px solid rgba(59, 130, 246, 0.3)';
+                                preview.style.boxShadow = `0 0 8px ${item.color}`;
+                                previewEl.appendChild(preview);
+                            });
+                        }
+                    }
+
+                    // Update hexagons (style 6) - show ALL colors
+                    if (i === 6) {
+                        const hexContainer = document.getElementById('hex-container-6');
+                        if (hexContainer) {
+                            hexContainer.innerHTML = '';
+                            // Show current color first
+                            if (this.currentColor) {
+                                const activeHex = document.createElement('div');
+                                activeHex.className = 'hex active';
+                                activeHex.style.background = this.currentColor.color;
+                                activeHex.style.color = this.currentColor.color;
+                                hexContainer.appendChild(activeHex);
+                            }
+                            // Show ALL queue colors
+                            this.queue.forEach(item => {
+                                const hex = document.createElement('div');
+                                hex.className = 'hex';
+                                hex.style.background = item.color;
+                                hex.style.color = item.color;
+                                hexContainer.appendChild(hex);
+                            });
+                        }
+                    }
+
+                    // Update orb (style 7)
+                    if (i === 7) {
+                        const orb = document.getElementById('orb-7');
+                        if (orb && this.currentColor) {
+                            orb.style.color = this.currentColor.color;
+                        }
+                    }
+
+                    // Update matrix lines (style 9)
+                    if (i === 9) {
+                        const matrixContainer = document.getElementById('matrix-container-9');
+                        if (matrixContainer) {
+                            matrixContainer.innerHTML = '';
+                            for (let j = 0; j < 8; j++) {
+                                const line = document.createElement('div');
+                                line.className = 'matrix-line';
+                                line.style.left = `${j * 12.5}%`;
+                                line.style.animationDelay = `${j * 0.25}s`;
+                                matrixContainer.appendChild(line);
+                            }
+                        }
+                    }
+                }
+            }
+
+            clearQueue() {
+                this.queue = [];
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                }
+                this.currentColor = null;
+                this.timeRemaining = 0;
+                this.updateQueueDisplay();
+            }
+        }
+
+        // Get reference to color overlay iframe
+        function getColorOverlayFrame() {
+            const frames = window.parent.document.querySelectorAll('iframe');
+            for (let frame of frames) {
+                try {
+                    if (frame.src && frame.src.includes('color-overlay/index.html')) {
+                        return frame.contentWindow || frame.contentDocument.defaultView;
+                    }
+                } catch (e) {
+                    // Cross-origin, skip
+                }
+            }
+            return null;
+        }
+
+        // Convert hex to RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        // Initialize
+        const colorQueue = new ColorQueue();
+        const colorInput = document.getElementById('color-input');
+        const opacitySlider = document.getElementById('opacity-slider');
+        const opacityValue = document.getElementById('opacity-value');
+        const presetColors = document.querySelectorAll('.preset-color');
+        const togglePicker = document.getElementById('toggle-picker');
+        const pickerPanel = document.getElementById('color-picker-panel');
+        const addToQueueBtn = document.getElementById('add-to-queue-btn');
+        const styleNavBtns = document.querySelectorAll('.style-nav-btn');
+        const queueDisplay = document.getElementById('queue-display');
+
+        // Style names mapping
+        const styleNames = {
+            1: 'Minimal Neon Dots',
+            2: 'Neon Progress Bar',
+            3: 'Glowing Rings',
+            4: 'Neon Text Glow',
+            5: 'Liquid Wave',
+            6: 'Pulsing Hexagons',
+            7: 'Gradient Orb',
+            8: 'Neon Lines',
+            9: 'Matrix Style',
+            10: 'Glowing Particles',
+            11: 'Neon Grid',
+            12: 'Smooth Gradient Flow',
+            13: 'Crystal Shards',
+            14: 'Aurora Waves',
+            15: 'Minimalist Glow'
+        };
+
+        // Load saved settings
+        let currentColor = localStorage.getItem('colorOverlayColor') || '#000000';
+        let currentOpacity = parseInt(localStorage.getItem('colorOverlayOpacity') || '0');
+        let currentStyle = parseInt(localStorage.getItem('colorQueueStyle') || '1');
+
+        // Generate 40 example colors with usernames
+        const usernames = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Henry', 'Ivy', 'Jack',
+                          'Kate', 'Leo', 'Mia', 'Noah', 'Olivia', 'Paul', 'Quinn', 'Ryan', 'Sara', 'Tom',
+                          'Uma', 'Victor', 'Wendy', 'Xander', 'Yara', 'Zoe', 'Alex', 'Blake', 'Casey', 'Drew',
+                          'Emery', 'Finley', 'Gray', 'Harper', 'Indigo', 'Jordan', 'Kai', 'Logan', 'Morgan', 'Parker'];
+        const colorPalette = [
+            '#3b82f6', '#8b5cf6', '#ec4899', '#22c55e', '#fbbf24', '#ef4444', '#06b6d4',
+            '#a855f7', '#f472b6', '#10b981', '#f59e0b', '#f97316', '#14b8a6', '#6366f1',
+            '#8b5cf6', '#ec4899', '#22c55e', '#3b82f6', '#fbbf24', '#ef4444', '#06b6d4',
+            '#a855f7', '#f472b6', '#10b981', '#f59e0b', '#f97316', '#14b8a6', '#6366f1',
+            '#3b82f6', '#8b5cf6', '#ec4899', '#22c55e', '#fbbf24', '#ef4444', '#06b6d4',
+            '#a855f7', '#f472b6', '#10b981', '#f59e0b', '#f97316', '#14b8a6'
+        ];
+        const opacityValues = [25, 30, 35, 40, 28, 32, 38, 22, 27, 33, 29, 31, 36, 24, 26, 34, 37, 23, 25, 30,
+                              35, 28, 32, 40, 22, 27, 33, 29, 31, 36, 24, 26, 34, 37, 23, 25, 30, 35, 28, 32];
+        
+        const exampleColors = Array.from({ length: 40 }, (_, i) => ({
+            color: colorPalette[i % colorPalette.length],
+            opacity: opacityValues[i],
+            username: usernames[i]
+        }));
+        
+        // Add first color as current, rest to queue
+        if (exampleColors.length > 0) {
+            const first = exampleColors[0];
+            colorQueue.currentColor = { ...first, id: Date.now() };
+            colorQueue.timeRemaining = colorQueue.duration;
+            colorQueue.updateOverlay(first.color, first.opacity);
+            
+            // Add rest to queue
+            exampleColors.slice(1).forEach(item => {
+                colorQueue.queue.push({ ...item, id: Date.now() + Math.random() });
+            });
+            
+            // Start timer
+            colorQueue.timerInterval = setInterval(() => {
+                colorQueue.timeRemaining -= 100;
+                if (colorQueue.timeRemaining <= 0) {
+                    clearInterval(colorQueue.timerInterval);
+                    colorQueue.startNextColor();
+                } else {
+                    colorQueue.updateQueueDisplay();
+                }
+            }, 100);
+        }
+
+        // Initialize UI
+        colorInput.value = currentColor;
+        opacitySlider.value = currentOpacity;
+        setStyle(currentStyle);
+
+        // Style switching
+        function setStyle(styleNum) {
+            document.body.className = `style-${styleNum}`;
+            currentStyle = styleNum;
+            localStorage.setItem('colorQueueStyle', styleNum);
+
+            // Update style number display
+            const styleNumberDisplay = document.getElementById('style-number-display');
+            if (styleNumberDisplay) {
+                styleNumberDisplay.textContent = styleNum;
+            }
+
+            // Update button states
+            styleNavBtns.forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.style) === styleNum);
+            });
+
+            // Show/hide style content
+            for (let i = 1; i <= 15; i++) {
+                const content = document.querySelector(`.style-${i}-content`);
+                if (content) {
+                    content.style.display = i === styleNum ? 'block' : 'none';
+                }
+            }
+            
+            // Refresh queue display after style change
+            colorQueue.updateQueueDisplay();
+        }
+
+        // Style navigation buttons
+        styleNavBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setStyle(parseInt(btn.dataset.style));
+            });
+        });
+
+        // Keyboard shortcuts (1-9, 0 for 10, Arrow keys for navigation)
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '1' && e.key <= '9') {
+                setStyle(parseInt(e.key));
+            } else if (e.key === '0') {
+                setStyle(10);
+            } else if (e.key === 'ArrowLeft') {
+                // Navigate to previous style
+                const newStyle = currentStyle > 1 ? currentStyle - 1 : 15;
+                setStyle(newStyle);
+            } else if (e.key === 'ArrowRight') {
+                // Navigate to next style
+                const newStyle = currentStyle < 15 ? currentStyle + 1 : 1;
+                setStyle(newStyle);
+            }
+        });
+
+        // Toggle picker panel (queue display stays visible)
+        togglePicker.addEventListener('click', () => {
+            pickerPanel.classList.toggle('hidden');
+        });
+
+        // Color input change
+        colorInput.addEventListener('input', (e) => {
+            currentColor = e.target.value;
+            localStorage.setItem('colorOverlayColor', currentColor);
+        });
+
+        // Opacity slider change
+        opacitySlider.addEventListener('input', (e) => {
+            currentOpacity = parseInt(e.target.value);
+            localStorage.setItem('colorOverlayOpacity', currentOpacity);
+            opacityValue.textContent = currentOpacity + '%';
+        });
+
+        // Preset color clicks
+        presetColors.forEach(preset => {
+            preset.addEventListener('click', () => {
+                currentColor = preset.dataset.color;
+                colorInput.value = currentColor;
+                localStorage.setItem('colorOverlayColor', currentColor);
+            });
+        });
+
+        // Add to queue button
+        addToQueueBtn.addEventListener('click', () => {
+            // In a real scenario, you'd get the username from user input or session
+            const username = prompt('Enter your username (or leave blank for "You"):') || 'You';
+            colorQueue.addToQueue(currentColor, currentOpacity, username);
+        });
+
+        // Update queue display every 100ms for smooth timer
+        setInterval(() => {
+            colorQueue.updateQueueDisplay();
+        }, 100);
+    </script>
+</body>
+</html>
+

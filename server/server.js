@@ -467,6 +467,8 @@ const server = http.createServer(async (req, res) => {
     filePath = './overlay/socials-overlay/index.html';
   } else if (filePath === './overlay/chat' || filePath === './overlay/chat/') {
     filePath = './overlay/chat-overlay/index.html';
+  } else if (filePath === './overlay/color' || filePath === './overlay/color/') {
+    filePath = './overlay/color-overlay/index.html';
   } else if (filePath === './chat-test' || filePath === './chat-test/') {
     filePath = './overlay/chat-overlay/chat-test.html';
   } else if (filePath === './test' || filePath === './test/') {
@@ -518,7 +520,8 @@ server.listen(PORT, () => {
   console.log('🎯 Other Games (OBS): http://localhost:' + PORT + '/overlay/other-games');
   console.log('📝 Title Overlay (OBS): http://localhost:' + PORT + '/overlay/title');
   console.log('📱 Socials Overlay (OBS): http://localhost:' + PORT + '/overlay/socials');
-    console.log('💬 Chat Overlay (OBS): http://localhost:' + PORT + '/overlay/chat');
+  console.log('💬 Chat Overlay (OBS): http://localhost:' + PORT + '/overlay/chat');
+  console.log('🎨 Color Overlay (OBS): http://localhost:' + PORT + '/overlay/color');
     console.log('🧪 Chat Test Page: http://localhost:' + PORT + '/chat-test');
     console.log('🎨 Design Tester: http://localhost:' + PORT + '/design-test');
   console.log('');
