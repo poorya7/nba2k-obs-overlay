@@ -351,10 +351,14 @@ class SpotlightView {
     
     /**
      * Hide the stage box completely
+     * @param {Function} callback - Called when box is hidden
      */
-    hideStageBox() {
+    hideStageBox(callback) {
         const box = this.elements.stageBox;
-        if (!box) return;
+        if (!box) {
+            if (callback) callback();
+            return;
+        }
         
         // First exit any content
         const content = box.querySelector('.stage-content');
@@ -363,11 +367,13 @@ class SpotlightView {
                 box.classList.add('hidden');
                 box.style.height = '';
                 this.isBoxVisible = false;
+                if (callback) callback();
             });
         } else {
             box.classList.add('hidden');
             box.style.height = '';
             this.isBoxVisible = false;
+            if (callback) callback();
         }
     }
     

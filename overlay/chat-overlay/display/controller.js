@@ -235,29 +235,21 @@ class SpotlightController {
         // Check if there's a next message BEFORE starting exit
         const hasNextMessage = this.stateManager.getQueueLength() > 0;
         
-        // Start exit animation
-        this.view.exitStageContent(null, () => {
-            // Exit animation done
-            if (!hasNextMessage) {
-                // No next message - cleanup and start spotlight timeout
-                this.stateManager.setActiveTimeout(null);
-                this.stateManager.setIsProcessing(false);
-                this.stateManager.setLock(false);
-                this._startSpotlightTimeout(currentDuration);
-            }
-            // If there was a next message, it's already being shown (started below)
-        });
-        
-        // Add current message to list as exit animation is finishing
-        // Exit animation is 700ms, start list appearance at ~350ms
-        setTimeout(() => {
-            this._addToList(currentServerMsg);
-        }, 350);
-        
-        // If there's a next message, start showing it while current is exiting
-        // This creates overlap - no empty box period
         if (hasNextMessage) {
-            // Small delay so exit animation has started, then show next
+            // There's a next message - exit current content immediately
+            // Start exit animation
+            this.view.exitStageContent(null, () => {
+                // Exit animation done - next message is already being shown
+            });
+            
+            // Add current message to list as exit animation is finishing
+            // Exit animation is 700ms, start list appearance at ~350ms
+            setTimeout(() => {
+                this._addToList(currentServerMsg);
+            }, 350);
+            
+            // Start showing next message while current is exiting
+            // This creates overlap - no empty box period
             setTimeout(() => {
                 this.stateManager.setActiveTimeout(null);
                 this.stateManager.setIsProcessing(false);
@@ -265,6 +257,18 @@ class SpotlightController {
                 this.stateManager.setIsScheduled(true);
                 this._processQueue();
             }, 10); // Start next message 10ms into the 700ms exit
+        } else {
+            // No next message - keep content AND box visible for remaining spotlight time
+            // Don't add to list yet - wait until after it exits spotlight
+            
+            // Cleanup processing state
+            this.stateManager.setActiveTimeout(null);
+            this.stateManager.setIsProcessing(false);
+            this.stateManager.setLock(false);
+            
+            // Start spotlight timeout - when it fires, both content and box will exit together
+            // Then add message to list
+            this._startSpotlightTimeout(currentDuration, currentServerMsg);
         }
     }
     
@@ -340,8 +344,9 @@ class SpotlightController {
     /**
      * Start spotlight auto-clear timeout
      * @param {number} messageDuration - Duration the message was displayed for
+     * @param {Object} serverMsg - Message to add to list after clearing spotlight
      */
-    _startSpotlightTimeout(messageDuration) {
+    _startSpotlightTimeout(messageDuration, serverMsg) {
         // Clear any existing timeout
         this.stateManager.clearSpotlightTimeout();
 
@@ -351,7 +356,7 @@ class SpotlightController {
         // Start new timeout
         const timeoutId = setTimeout(() => {
             this.stateManager.setSpotlightTimeout(null);
-            this._clearSpotlight();
+            this._clearSpotlight(serverMsg);
         }, remainingTime);
 
         this.stateManager.setSpotlightTimeout(timeoutId);
@@ -359,9 +364,15 @@ class SpotlightController {
 
     /**
      * Clear spotlight (hide the stage box)
+     * @param {Object} serverMsg - Message to add to list after clearing spotlight
      */
-    _clearSpotlight() {
-        this.view.hideStageBox();
+    _clearSpotlight(serverMsg) {
+        this.view.hideStageBox(() => {
+            // After box is hidden, add message to list
+            if (serverMsg) {
+                this._addToList(serverMsg);
+            }
+        });
     }
 
     // ========================================
