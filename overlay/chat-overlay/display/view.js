@@ -15,8 +15,12 @@ class SpotlightView {
         this.elements = {
             wrapper: null,
             container: null,
-            stage: null
+            stage: null,
+            stageBox: null  // Persistent stage message box
         };
+        
+        // Track if box is visible
+        this.isBoxVisible = false;
     }
     
     /**
@@ -38,8 +42,23 @@ class SpotlightView {
             throw new Error(`SpotlightView: #chat-${styleNum} .chat-stage not found`);
         }
         
+        // Create persistent stage box
+        this._createPersistentStageBox();
+        
         // Initialize stage position
         this.updateStagePosition();
+    }
+    
+    /**
+     * Create the persistent stage message box (called once on init)
+     * @private
+     */
+    _createPersistentStageBox() {
+        const box = document.createElement('div');
+        box.className = 'chat-stage-message hidden';
+        this.elements.stage.appendChild(box);
+        this.elements.stageBox = box;
+        this.isBoxVisible = false;
     }
     
     /**
@@ -94,13 +113,13 @@ class SpotlightView {
     }
     
     /**
-     * Create stage message element (separate from list)
+     * Create stage content element (goes inside the persistent box)
      * @param {Object} formattedMsg - Formatted message from data formatter
      * @returns {HTMLElement}
      */
-    createStageMessage(formattedMsg) {
-        const div = document.createElement('div');
-        div.className = 'chat-stage-message stage-enter';
+    createStageContent(formattedMsg) {
+        const content = document.createElement('div');
+        content.className = 'stage-content content-enter';
 
         // Include profile picture
         let avatarHtml = '';
@@ -112,9 +131,16 @@ class SpotlightView {
             }
         }
 
-        div.innerHTML = `${avatarHtml}<span class="chat-username username-${formattedMsg.color}">${formattedMsg.wrappedUsername}</span> <span class="chat-text">${formattedMsg.wrappedText}</span>`;
+        content.innerHTML = `${avatarHtml}<span class="chat-username username-${formattedMsg.color}">${formattedMsg.wrappedUsername}</span> <span class="chat-text">${formattedMsg.wrappedText}</span>`;
 
-        return div;
+        return content;
+    }
+    
+    /**
+     * @deprecated Use createStageContent instead
+     */
+    createStageMessage(formattedMsg) {
+        return this.createStageContent(formattedMsg);
     }
     
     /**
@@ -155,70 +181,261 @@ class SpotlightView {
     }
     
     /**
-     * Show stage message (separate from list)
-     * @param {HTMLElement} stageEl - Stage message element
+     * Show stage content (adds content to persistent box)
+     * @param {HTMLElement} contentEl - Stage content element
+     * @param {Function} callback - Called when enter animation completes
      */
-    showStageMessage(stageEl) {
-        // Clear any existing stage message
-        this.clearStage();
+    showStageContent(contentEl, callback) {
+        const box = this.elements.stageBox;
+        if (!box) return;
         
-        this.elements.stage.appendChild(stageEl);
+        // Clear any existing content (exit should have already happened)
+        const existingContent = box.querySelector('.stage-content');
+        if (existingContent) {
+            existingContent.remove();
+        }
         
-        // Force reflow
-        void stageEl.offsetHeight;
+        // Show the box if hidden
+        if (!this.isBoxVisible) {
+            box.classList.remove('hidden');
+            this.isBoxVisible = true;
+        }
         
-        // Update stage position to follow messages
+        // Add new content
+        box.appendChild(contentEl);
+        
+        // Force reflow to get proper height
+        void contentEl.offsetHeight;
+        
+        // Measure and set height for smooth transitions
+        const newHeight = contentEl.offsetHeight;
+        box.style.height = newHeight + 'px';
+        
+        // Update stage position
         this.updateStagePosition();
+        
+        // Callback after animation completes
+        if (callback) {
+            const animDuration = 900; // Match CSS animation duration
+            setTimeout(callback, animDuration);
+        }
     }
     
     /**
-     * Exit stage message (animate out)
-     * @param {HTMLElement} stageEl - Stage message element
+     * @deprecated Use showStageContent instead
+     */
+    showStageMessage(stageEl) {
+        this.showStageContent(stageEl);
+    }
+    
+    /**
+     * Exit stage content (animate content out, keep box)
+     * @param {HTMLElement} contentEl - Content element to exit (optional, exits current if not provided)
      * @param {Function} callback - Called when exit animation completes
      */
-    exitStageMessage(stageEl, callback) {
-        if (!stageEl || !stageEl.parentNode) {
+    exitStageContent(contentEl, callback) {
+        const box = this.elements.stageBox;
+        if (!box) {
             if (callback) callback();
             return;
         }
         
-        stageEl.classList.remove('stage-enter');
-        stageEl.classList.add('stage-exit');
+        // Find content to exit
+        const content = contentEl || box.querySelector('.stage-content');
+        if (!content) {
+            if (callback) callback();
+            return;
+        }
         
-        // Remove after animation
-        const duration = 1000; // Max animation duration
+        // Animate content out
+        content.classList.remove('content-enter');
+        content.classList.add('content-exit');
+        
+        // Remove content after animation, but keep box
+        const exitDuration = 700; // Match CSS exit animation duration
         setTimeout(() => {
-            if (stageEl.parentNode) {
-                stageEl.remove();
+            if (content.parentNode) {
+                content.remove();
             }
             if (callback) callback();
-        }, duration);
+        }, exitDuration);
     }
     
     /**
-     * Clear stage (remove all stage messages)
+     * @deprecated Use exitStageContent instead  
+     */
+    exitStageMessage(stageEl, callback) {
+        this.exitStageContent(stageEl, callback);
+    }
+    
+    /**
+     * Swap stage content - exit current, enter new (with smooth box resize)
+     * @param {HTMLElement} newContentEl - New content element
+     * @param {Function} callback - Called when swap is complete
+     */
+    swapStageContent(newContentEl, callback) {
+        const box = this.elements.stageBox;
+        if (!box) {
+            if (callback) callback();
+            return;
+        }
+        
+        const currentContent = box.querySelector('.stage-content');
+        
+        if (!currentContent) {
+            // No current content, just show new
+            this.showStageContent(newContentEl, callback);
+            return;
+        }
+        
+        // Exit current content
+        this.exitStageContent(currentContent, () => {
+            // After exit, measure and animate to new size
+            this._animateBoxToNewContent(newContentEl, callback);
+        });
+    }
+    
+    /**
+     * Animate box size to fit new content, then show it
+     * @private
+     */
+    _animateBoxToNewContent(newContentEl, callback) {
+        const box = this.elements.stageBox;
+        
+        // Temporarily add content invisibly to measure
+        newContentEl.style.visibility = 'hidden';
+        newContentEl.style.position = 'absolute';
+        box.appendChild(newContentEl);
+        
+        // Force reflow and measure - scrollHeight includes padding
+        void newContentEl.offsetHeight;
+        const newHeight = newContentEl.offsetHeight;
+        
+        // Reset positioning
+        newContentEl.style.visibility = '';
+        newContentEl.style.position = '';
+        
+        // Animate box height
+        box.style.height = newHeight + 'px';
+        
+        // Show content with enter animation
+        newContentEl.classList.add('content-enter');
+        
+        // Update stage position
+        this.updateStagePosition();
+        
+        if (callback) {
+            const animDuration = 900;
+            setTimeout(callback, animDuration);
+        }
+    }
+    
+    /**
+     * Hide the stage box completely
+     */
+    hideStageBox() {
+        const box = this.elements.stageBox;
+        if (!box) return;
+        
+        // First exit any content
+        const content = box.querySelector('.stage-content');
+        if (content) {
+            this.exitStageContent(content, () => {
+                box.classList.add('hidden');
+                box.style.height = '';
+                this.isBoxVisible = false;
+            });
+        } else {
+            box.classList.add('hidden');
+            box.style.height = '';
+            this.isBoxVisible = false;
+        }
+    }
+    
+    /**
+     * Clear stage content (but keep box)
      */
     clearStage() {
-        this.elements.stage.innerHTML = '';
+        const box = this.elements.stageBox;
+        if (box) {
+            box.innerHTML = '';
+        }
     }
     
     /**
-     * Append message to list container
+     * Get current stage content element
+     * @returns {HTMLElement|null}
+     */
+    getCurrentStageContent() {
+        const box = this.elements.stageBox;
+        return box ? box.querySelector('.stage-content') : null;
+    }
+    
+    /**
+     * Append message to list container (no scroll adjustment here)
      * @param {HTMLElement} messageEl - Message element
      */
     appendMessage(messageEl) {
-        // Save current scroll position BEFORE adding message
-        const wrapper = this.elements.wrapper;
-        const scrollBefore = wrapper.scrollTop;
-        
         // Add the message
         this.elements.container.appendChild(messageEl);
         
         // Force reflow to ensure DOM is updated
         void messageEl.offsetHeight;
+    }
+    
+    /**
+     * Add message to list with coordinated smooth scroll and fade
+     * Message starts with no height, then expands + fades in via CSS transition
+     * @param {HTMLElement} messageEl - Message element
+     * @param {number} scrollDuration - Duration for scroll animation
+     */
+    addMessageWithSmoothScroll(messageEl, scrollDuration) {
+        const wrapper = this.elements.wrapper;
+        const container = this.elements.container;
         
-        // Restore scroll position to prevent browser auto-jump
-        wrapper.scrollTop = scrollBefore;
+        // Add the message (invisible AND takes no space due to new-message class)
+        container.appendChild(messageEl);
+        
+        // Force reflow so browser registers the initial state
+        void messageEl.offsetHeight;
+        
+        // Remove new-message class to trigger CSS transition (height + opacity)
+        // The message will smoothly grow into existence
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                messageEl.classList.remove('new-message');
+                
+                // Continuously scroll to bottom as the message expands
+                this._scrollDuringExpand(wrapper, scrollDuration);
+            });
+        });
+    }
+    
+    /**
+     * Keep scrolling to bottom during message expand animation
+     * @private
+     */
+    _scrollDuringExpand(wrapper, duration) {
+        const startTime = performance.now();
+        
+        const scrollStep = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            
+            // Keep scrolling to bottom as content grows
+            const targetScroll = wrapper.scrollHeight - wrapper.clientHeight;
+            
+            // Ease the scroll
+            const progress = Math.min(elapsed / duration, 1);
+            const easeInOutSine = -(Math.cos(Math.PI * progress) - 1) / 2;
+            
+            wrapper.scrollTop = targetScroll;
+            
+            if (progress < 1) {
+                requestAnimationFrame(scrollStep);
+            }
+        };
+        
+        requestAnimationFrame(scrollStep);
     }
     
     /**
@@ -233,18 +450,27 @@ class SpotlightView {
     }
     
     /**
-     * Clear all messages
+     * Clear all messages and reset stage
      */
     clearMessages() {
         this.elements.container.innerHTML = '';
+        
+        // Reset the stage box
+        if (this.elements.stageBox) {
+            this.elements.stageBox.innerHTML = '';
+            this.elements.stageBox.classList.add('hidden');
+            this.elements.stageBox.style.height = '';
+            this.isBoxVisible = false;
+        }
+        
         this.updateStagePosition();
     }
 
     /**
-     * Clear spotlight (no longer needed - stage and list are separate)
+     * Clear spotlight (hides the stage box)
      */
     clearSpotlight() {
-        // Stage and list are now separate, so this is handled by exitStageMessage
+        this.hideStageBox();
     }
     
     /**

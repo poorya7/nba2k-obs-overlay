@@ -210,106 +210,125 @@ class SpotlightController {
         // Calculate dynamic duration based on message length
         const messageDuration = this._calculateMessageDuration(messageText);
         
-        // Show the stage message
+        // Show the stage message (just enters, no exit handling here)
         this._showMessage(serverMsg);
         
         // Clear any existing timeout
         this.stateManager.clearActiveTimeout();
         
-        // Wait for stage duration, then move to list
+        // Wait for stage duration, then transition to next
         const stageTimeoutId = setTimeout(() => {
-            // Move stage message to list
-            this._moveToList(serverMsg);
-            
-            // Wait a bit for list animation, then process next
+            // Transition: exit current content + add to list + enter next (if any)
+            this._transitionToNext(serverMsg, messageDuration);
+        }, messageDuration);
+
+        this.stateManager.setActiveTimeout(stageTimeoutId);
+    }
+    
+    /**
+     * Transition from current message to next
+     * - Exits current content from stage
+     * - Adds current message to list (timed to feel like it's moving from stage to list)
+     * - Overlaps next message entry with current exit (no empty box)
+     */
+    _transitionToNext(currentServerMsg, currentDuration) {
+        // Check if there's a next message BEFORE starting exit
+        const hasNextMessage = this.stateManager.getQueueLength() > 0;
+        
+        // Start exit animation
+        this.view.exitStageContent(null, () => {
+            // Exit animation done
+            if (!hasNextMessage) {
+                // No next message - cleanup and start spotlight timeout
+                this.stateManager.setActiveTimeout(null);
+                this.stateManager.setIsProcessing(false);
+                this.stateManager.setLock(false);
+                this._startSpotlightTimeout(currentDuration);
+            }
+            // If there was a next message, it's already being shown (started below)
+        });
+        
+        // Add current message to list as exit animation is finishing
+        // Exit animation is 700ms, start list appearance at ~350ms
+        setTimeout(() => {
+            this._addToList(currentServerMsg);
+        }, 350);
+        
+        // If there's a next message, start showing it while current is exiting
+        // This creates overlap - no empty box period
+        if (hasNextMessage) {
+            // Small delay so exit animation has started, then show next
             setTimeout(() => {
                 this.stateManager.setActiveTimeout(null);
                 this.stateManager.setIsProcessing(false);
                 this.stateManager.setLock(false);
-
-                // Process next if queue has more
-                if (this.stateManager.getQueueLength() > 0 && !this.stateManager.getIsScheduled()) {
-                    this.stateManager.setIsScheduled(true);
-                    setTimeout(() => this._processQueue(), 0);
-                } else {
-                    // No more messages in queue - start spotlight timeout (total time - message duration)
-                    this._startSpotlightTimeout(messageDuration);
-                }
-            }, 500); // Small delay for list entry animation
-        }, messageDuration);
-
-        this.stateManager.setActiveTimeout(timeoutId);
+                this.stateManager.setIsScheduled(true);
+                this._processQueue();
+            }, 250); // Start next message 250ms into the 700ms exit
+        }
     }
     
     /**
-     * Show a single message (two-stage: stage first, then list)
+     * Show a single message (just enters stage, no exit handling)
      */
     _showMessage(serverMsg) {
         // Format the message
         const formattedMsg = this.dataFormatter.formatMessage(serverMsg, this.stateManager);
         
-        // Create stage message (separate element)
-        const stageEl = this.view.createStageMessage(formattedMsg);
+        // Create stage content element
+        const contentEl = this.view.createStageContent(formattedMsg);
         
-        // Wait for profile pic to load before showing stage message
-        const profilePic = stageEl.querySelector('.profile-pic');
+        // Wait for profile pic to load before showing
+        const profilePic = contentEl.querySelector('.profile-pic');
         
-        const showStage = () => {
-            // Show stage message (enters with animation)
-            this.view.showStageMessage(stageEl);
+        const showContent = () => {
+            // Just show content (exit is handled by _transitionToNext)
+            this.view.showStageContent(contentEl);
         };
         
-        // Wait for avatar image to load, or start immediately if already loaded or no image
+        // Wait for avatar image to load, or start immediately if no image
         if (!profilePic || !profilePic.style.backgroundImage || profilePic.style.backgroundImage === 'none') {
-            // No profile pic, start immediately
-            showStage();
+            showContent();
         } else {
-            // Give browser one frame to start loading the image, then check
             requestAnimationFrame(() => {
-                // For background-image, we can't check complete, so just wait a bit
-                let stageShown = false;
+                let shown = false;
                 const safeShow = () => {
-                    if (!stageShown) {
-                        stageShown = true;
-                        showStage();
+                    if (!shown) {
+                        shown = true;
+                        showContent();
                     }
                 };
-                // Wait a bit for image to start loading, then show
                 setTimeout(safeShow, 300);
-                // Fallback timeout
                 setTimeout(safeShow, 1000);
             });
         }
     }
     
     /**
-     * Move message from stage to list (called after stage duration)
+     * Add message to list (helper)
      */
-    _moveToList(serverMsg) {
+    _addToList(serverMsg) {
         // Format the message
         const formattedMsg = this.dataFormatter.formatMessage(serverMsg, this.stateManager);
         
-        // Get current stage message
-        const stageEl = this.view.getStage().querySelector('.chat-stage-message');
+        // Create list element
+        const listEl = this.view.createListMessage(formattedMsg);
         
-        // Exit stage message (animate out)
-        this.view.exitStageMessage(stageEl, () => {
-            // After stage exits, add to list
-            const listEl = this.view.createListMessage(formattedMsg);
-            this.view.appendMessage(listEl);
-            
-            // Animate list entry in
-            this.view.fadeInMessage(listEl);
-            
-            // Smooth scroll
-            this.view.smoothScrollToBottom(this.config.scrollDuration);
-            
-            // Remove old messages
-            this.view.removeOldMessages(this.config.maxMessages);
-            
-            // Update stage position to follow messages
-            this.view.updateStagePosition();
-        });
+        // Add with coordinated smooth scroll + fade (no jump)
+        this.view.addMessageWithSmoothScroll(listEl, this.config.scrollDuration);
+        
+        // Remove old messages
+        this.view.removeOldMessages(this.config.maxMessages);
+        
+        // Update stage position to follow messages
+        this.view.updateStagePosition();
+    }
+    
+    /**
+     * @deprecated Use _addToList instead
+     */
+    _moveToList(serverMsg) {
+        this._addToList(serverMsg);
     }
     
     // ========================================
@@ -337,13 +356,10 @@ class SpotlightController {
     }
 
     /**
-     * Clear spotlight (exit stage message)
+     * Clear spotlight (hide the stage box)
      */
     _clearSpotlight() {
-        const stageEl = this.view.getStage().querySelector('.chat-stage-message');
-        if (stageEl) {
-            this.view.exitStageMessage(stageEl);
-        }
+        this.view.hideStageBox();
     }
 
     // ========================================
