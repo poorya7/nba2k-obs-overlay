@@ -207,10 +207,18 @@ class SpotlightView {
      * @param {HTMLElement} messageEl - Message element
      */
     appendMessage(messageEl) {
+        // Save current scroll position BEFORE adding message
+        const wrapper = this.elements.wrapper;
+        const scrollBefore = wrapper.scrollTop;
+        
+        // Add the message
         this.elements.container.appendChild(messageEl);
         
-        // Force reflow to ensure DOM is updated before any subsequent operations
+        // Force reflow to ensure DOM is updated
         void messageEl.offsetHeight;
+        
+        // Restore scroll position to prevent browser auto-jump
+        wrapper.scrollTop = scrollBefore;
     }
     
     /**
@@ -303,10 +311,10 @@ class SpotlightView {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
             
-            // Ease-out quad (gentler than cubic)
-            const easeOut = 1 - Math.pow(1 - progress, 2);
+            // Ease-in-out sine - very smooth and gentle, no sudden movements
+            const easeInOutSine = -(Math.cos(Math.PI * progress) - 1) / 2;
             
-            element.scrollTop = startScroll + (distance * easeOut);
+            element.scrollTop = startScroll + (distance * easeInOutSine);
             
             if (progress < 1) {
                 requestAnimationFrame(animate);
