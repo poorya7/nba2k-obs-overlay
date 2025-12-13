@@ -219,7 +219,8 @@ class SpotlightView {
         this.updateStagePosition();
         
         // Now make visible and trigger animation
-        requestAnimationFrame(() => {
+        // Use setTimeout instead of RAF for OBS browser source compatibility
+        setTimeout(() => {
             contentEl.style.visibility = '';
             contentEl.style.opacity = '';
             contentEl.classList.add('content-enter');
@@ -229,7 +230,7 @@ class SpotlightView {
                 const animDuration = 900;
                 setTimeout(callback, animDuration);
             }
-        });
+        }, 0);
     }
     
     /**
@@ -419,45 +420,48 @@ class SpotlightView {
         
         // Remove new-message class to trigger CSS transition (height + opacity)
         // The message will smoothly grow into existence
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                messageEl.classList.remove('new-message');
-                
-                // Continuously scroll to bottom as the message expands
-                this._scrollDuringExpand(wrapper, scrollDuration);
-            });
-        });
+        // Use setTimeout instead of RAF for OBS browser source compatibility
+        setTimeout(() => {
+            messageEl.classList.remove('new-message');
+            
+            // Continuously scroll to bottom as the message expands
+            this._scrollDuringExpand(wrapper, scrollDuration);
+        }, 0);
     }
     
     /**
      * Keep scrolling to bottom during message expand animation
      * Also updates stage position continuously as content grows
+     * Uses setInterval instead of RAF for OBS browser source compatibility
      * @private
      */
     _scrollDuringExpand(wrapper, duration) {
         const startTime = performance.now();
+        const startScroll = wrapper.scrollTop;
+        const intervalMs = 16; // ~60fps
         
-        const scrollStep = (currentTime) => {
-            const elapsed = currentTime - startTime;
+        const intervalId = setInterval(() => {
+            const elapsed = performance.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
             
             // Keep scrolling to bottom as content grows
             const targetScroll = wrapper.scrollHeight - wrapper.clientHeight;
             
-            // Ease the scroll
-            const progress = Math.min(elapsed / duration, 1);
+            // Calculate distance from start to current target
+            const distance = targetScroll - startScroll;
+            
+            // Ease the scroll - interpolate from start to target
             const easeInOutSine = -(Math.cos(Math.PI * progress) - 1) / 2;
             
-            wrapper.scrollTop = targetScroll;
+            wrapper.scrollTop = startScroll + (distance * easeInOutSine);
             
             // Update stage position as content grows
             this.updateStagePosition();
             
-            if (progress < 1) {
-                requestAnimationFrame(scrollStep);
+            if (progress >= 1) {
+                clearInterval(intervalId);
             }
-        };
-        
-        requestAnimationFrame(scrollStep);
+        }, intervalMs);
     }
     
     /**
@@ -511,13 +515,11 @@ class SpotlightView {
         // Force reflow to ensure initial state is applied
         void messageEl.offsetHeight;
         
-        // Use double requestAnimationFrame for smooth animation start
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                // Remove new-message class to trigger animation
-                messageEl.classList.remove('new-message');
-            });
-        });
+        // Use setTimeout instead of RAF for OBS browser source compatibility
+        setTimeout(() => {
+            // Remove new-message class to trigger animation
+            messageEl.classList.remove('new-message');
+        }, 0);
     }
     
     /**
@@ -527,13 +529,11 @@ class SpotlightView {
     smoothScrollToBottom(duration) {
         const wrapper = this.elements.wrapper;
         
-        // Use double requestAnimationFrame to ensure DOM is fully updated
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                const targetScroll = wrapper.scrollHeight - wrapper.clientHeight;
-                this._smoothScrollTo(wrapper, targetScroll, duration);
-            });
-        });
+        // Use setTimeout instead of RAF for OBS browser source compatibility
+        setTimeout(() => {
+            const targetScroll = wrapper.scrollHeight - wrapper.clientHeight;
+            this._smoothScrollTo(wrapper, targetScroll, duration);
+        }, 0);
     }
     
     // ========================================
@@ -542,6 +542,7 @@ class SpotlightView {
     
     /**
      * Smooth scroll animation - SLOW and gentle for ASMR
+     * Uses setInterval instead of RAF for OBS browser source compatibility
      * @param {HTMLElement} element - Element to scroll
      * @param {number} targetScroll - Target scroll position
      * @param {number} duration - Animation duration
@@ -554,9 +555,10 @@ class SpotlightView {
         if (Math.abs(distance) < 1) return;
         
         const startTime = performance.now();
+        const intervalMs = 16; // ~60fps
         
-        const animate = (currentTime) => {
-            const elapsed = currentTime - startTime;
+        const intervalId = setInterval(() => {
+            const elapsed = performance.now() - startTime;
             const progress = Math.min(elapsed / duration, 1);
             
             // Ease-in-out sine - very smooth and gentle, no sudden movements
@@ -564,12 +566,10 @@ class SpotlightView {
             
             element.scrollTop = startScroll + (distance * easeInOutSine);
             
-            if (progress < 1) {
-                requestAnimationFrame(animate);
+            if (progress >= 1) {
+                clearInterval(intervalId);
             }
-        };
-        
-        requestAnimationFrame(animate);
+        }, intervalMs);
     }
 }
 

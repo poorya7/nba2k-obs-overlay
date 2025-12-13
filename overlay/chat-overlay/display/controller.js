@@ -290,7 +290,8 @@ class SpotlightController {
         if (!profilePic || !profilePic.style.backgroundImage || profilePic.style.backgroundImage === 'none') {
             showContent();
         } else {
-            requestAnimationFrame(() => {
+            // Use setTimeout instead of RAF for OBS browser source compatibility
+            setTimeout(() => {
                 let shown = false;
                 const safeShow = () => {
                     if (!shown) {
@@ -300,7 +301,7 @@ class SpotlightController {
                 };
                 setTimeout(safeShow, 300);
                 setTimeout(safeShow, 1000);
-            });
+            }, 0);
         }
     }
     
