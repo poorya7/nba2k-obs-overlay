@@ -10,7 +10,7 @@
 <body>
 
     <!-- CHAT STYLE 13: Spotlight -->
-    <div class="chat-overlay chat-style-13 active anim-style-1" id="chat-13">
+    <div class="chat-overlay chat-style-13 active" id="chat-13">
         <!-- Chat list -->
         <div class="chat-messages-wrapper">
             <div class="chat-messages">
@@ -22,12 +22,6 @@
         <div class="chat-stage" id="chat-stage">
             <!-- Stage message appears here temporarily -->
         </div>
-    </div>
-
-    <!-- Animation Style Navigation -->
-    <div class="animation-nav">
-        <button class="animation-nav-btn active" data-style="1" title="Style 1: Slide">1</button>
-        <button class="animation-nav-btn" data-style="3" title="Style 3: Blur Fade">2</button>
     </div>
 
     <!-- Load modules in dependency order -->
@@ -58,56 +52,6 @@
         // Set chat list height to 630px
         const chatOverlay = document.getElementById('chat-13');
         chatOverlay.style.setProperty('--chat-list-height', '630px');
-
-        // Animation style navigation
-        let currentAnimStyle = 1;
-        const animNavBtns = document.querySelectorAll('.animation-nav-btn');
-        const chatOverlayEl = document.getElementById('chat-13');
-
-        // Available styles: 1 and 3
-        const availableStyles = [1, 3];
-        
-        function setAnimationStyle(styleNum) {
-            currentAnimStyle = styleNum;
-            
-            // Remove all animation classes
-            availableStyles.forEach(s => {
-                chatOverlayEl.classList.remove(`anim-style-${s}`);
-            });
-            
-            // Add new animation class
-            chatOverlayEl.classList.add(`anim-style-${styleNum}`);
-            
-            // Update button states
-            animNavBtns.forEach(btn => {
-                btn.classList.toggle('active', parseInt(btn.dataset.style) === styleNum);
-            });
-            
-            // Save to localStorage
-            localStorage.setItem('chatAnimationStyle', styleNum);
-        }
-
-        // Button clicks
-        animNavBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                setAnimationStyle(parseInt(btn.dataset.style));
-            });
-        });
-
-        // Keyboard navigation (left/right arrows)
-        document.addEventListener('keydown', (e) => {
-            const currentIndex = availableStyles.indexOf(currentAnimStyle);
-            if (e.key === 'ArrowLeft') {
-                const newIndex = currentIndex > 0 ? currentIndex - 1 : availableStyles.length - 1;
-                setAnimationStyle(availableStyles[newIndex]);
-            } else if (e.key === 'ArrowRight') {
-                const newIndex = currentIndex < availableStyles.length - 1 ? currentIndex + 1 : 0;
-                setAnimationStyle(availableStyles[newIndex]);
-            }
-        });
-
-        // Always start on style 1
-        setAnimationStyle(1);
     </script>
 
 </body>

@@ -189,11 +189,8 @@ class SpotlightView {
         const box = this.elements.stageBox;
         if (!box) return;
         
-        // Clear any existing content (exit should have already happened)
-        const existingContent = box.querySelector('.stage-content');
-        if (existingContent) {
-            existingContent.remove();
-        }
+        // Don't remove existing content - let it finish its exit animation
+        // Both contents can coexist briefly (old fading out, new fading in)
         
         // Show the box if hidden
         if (!this.isBoxVisible) {
@@ -201,10 +198,17 @@ class SpotlightView {
             this.isBoxVisible = true;
         }
         
-        // Add new content
+        // Remove animation class temporarily - we'll add it after layout
+        contentEl.classList.remove('content-enter');
+        
+        // Make invisible but layoutable (not display:none)
+        contentEl.style.visibility = 'hidden';
+        contentEl.style.opacity = '0';
+        
+        // Add to DOM for layout calculation
         box.appendChild(contentEl);
         
-        // Force reflow to get proper height
+        // Force reflow - let browser fully layout text wrapping etc
         void contentEl.offsetHeight;
         
         // Measure and set height for smooth transitions
@@ -214,11 +218,18 @@ class SpotlightView {
         // Update stage position
         this.updateStagePosition();
         
-        // Callback after animation completes
-        if (callback) {
-            const animDuration = 900; // Match CSS animation duration
-            setTimeout(callback, animDuration);
-        }
+        // Now make visible and trigger animation
+        requestAnimationFrame(() => {
+            contentEl.style.visibility = '';
+            contentEl.style.opacity = '';
+            contentEl.classList.add('content-enter');
+            
+            // Callback after animation completes
+            if (callback) {
+                const animDuration = 900;
+                setTimeout(callback, animDuration);
+            }
+        });
     }
     
     /**
@@ -246,6 +257,13 @@ class SpotlightView {
             if (callback) callback();
             return;
         }
+        
+        // Make exiting content absolutely positioned so it doesn't affect layout
+        // This allows new content to enter without being pushed down
+        content.style.position = 'absolute';
+        content.style.top = '0';
+        content.style.left = '0';
+        content.style.right = '0';
         
         // Animate content out
         content.classList.remove('content-enter');
@@ -413,6 +431,7 @@ class SpotlightView {
     
     /**
      * Keep scrolling to bottom during message expand animation
+     * Also updates stage position continuously as content grows
      * @private
      */
     _scrollDuringExpand(wrapper, duration) {
@@ -429,6 +448,9 @@ class SpotlightView {
             const easeInOutSine = -(Math.cos(Math.PI * progress) - 1) / 2;
             
             wrapper.scrollTop = targetScroll;
+            
+            // Update stage position as content grows
+            this.updateStagePosition();
             
             if (progress < 1) {
                 requestAnimationFrame(scrollStep);

@@ -330,89 +330,17 @@ body {
 }
 
 /* ========================================
-   ANIMATION STYLE NAVIGATION
+   ANIMATIONS: Content fades with blur; List fades in with blur
    ======================================== */
-.animation-nav {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    display: flex;
-    gap: 8px;
-    z-index: 10000;
-    pointer-events: auto;
-}
-
-.animation-nav-btn {
-    width: 40px;
-    height: 40px;
-    background: rgba(10, 20, 40, 0.95);
-    border: 1px solid rgba(59, 130, 246, 0.4);
-    border-radius: 6px;
-    color: #93c5fd;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.animation-nav-btn:hover {
-    background: rgba(59, 130, 246, 0.2);
-    border-color: rgba(59, 130, 246, 0.8);
-    transform: scale(1.1);
-}
-
-.animation-nav-btn.active {
-    background: rgba(59, 130, 246, 0.3);
-    border-color: rgba(59, 130, 246, 0.8);
-    color: #60a5fa;
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-}
-
-/* ========================================
-   ANIMATION STYLE 1: Content slides in from right, exits left; List fades up from bottom
-   ======================================== */
-.anim-style-1 .stage-content.content-enter {
-    animation: content-slide-in-right 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.anim-style-1 .stage-content.content-exit {
-    animation: content-slide-out-left 0.6s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
-}
-
-.anim-style-1 .chat-message.new-message {
-    animation: list-fade-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-@keyframes content-slide-in-right {
-    from { opacity: 0; transform: translateX(80px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes content-slide-out-left {
-    from { opacity: 1; transform: translateX(0); }
-    to { opacity: 0; transform: translateX(-80px); }
-}
-
-@keyframes list-fade-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 0.4; transform: translateY(0); }
-}
-
-/* ========================================
-   ANIMATION STYLE 3: Content fades with blur; List fades in with blur
-   ======================================== */
-.anim-style-3 .stage-content.content-enter {
+.stage-content.content-enter {
     animation: content-blur-in 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.anim-style-3 .stage-content.content-exit {
+.stage-content.content-exit {
     animation: content-blur-out 0.6s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
 }
 
-.anim-style-3 .chat-message.new-message {
+.chat-message.new-message {
     animation: list-fade-blur 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 

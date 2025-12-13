@@ -264,7 +264,7 @@ class SpotlightController {
                 this.stateManager.setLock(false);
                 this.stateManager.setIsScheduled(true);
                 this._processQueue();
-            }, 250); // Start next message 250ms into the 700ms exit
+            }, 10); // Start next message 10ms into the 700ms exit
         }
     }
     
@@ -315,13 +315,14 @@ class SpotlightController {
         const listEl = this.view.createListMessage(formattedMsg);
         
         // Add with coordinated smooth scroll + fade (no jump)
+        // This also updates stage position continuously during expand
         this.view.addMessageWithSmoothScroll(listEl, this.config.scrollDuration);
         
         // Remove old messages
         this.view.removeOldMessages(this.config.maxMessages);
         
-        // Update stage position to follow messages
-        this.view.updateStagePosition();
+        // Note: stage position is updated continuously in addMessageWithSmoothScroll
+        // so we don't call updateStagePosition() here
     }
     
     /**
