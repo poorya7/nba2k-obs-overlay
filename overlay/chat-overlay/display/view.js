@@ -14,7 +14,8 @@ class SpotlightView {
         // Cache DOM elements
         this.elements = {
             wrapper: null,
-            container: null
+            container: null,
+            stage: null
         };
     }
     
@@ -25,6 +26,7 @@ class SpotlightView {
     init(styleNum) {
         this.elements.wrapper = document.querySelector(`#chat-${styleNum} .chat-messages-wrapper`);
         this.elements.container = document.querySelector(`#chat-${styleNum} .chat-messages`);
+        this.elements.stage = document.querySelector(`#chat-${styleNum} .chat-stage`);
         
         if (!this.elements.wrapper) {
             throw new Error(`SpotlightView: #chat-${styleNum} .chat-messages-wrapper not found`);
@@ -32,6 +34,20 @@ class SpotlightView {
         if (!this.elements.container) {
             throw new Error(`SpotlightView: #chat-${styleNum} .chat-messages not found`);
         }
+        if (!this.elements.stage) {
+            throw new Error(`SpotlightView: #chat-${styleNum} .chat-stage not found`);
+        }
+        
+        // Initialize stage position
+        this.updateStagePosition();
+    }
+    
+    /**
+     * Get stage element
+     * @returns {HTMLElement}
+     */
+    getStage() {
+        return this.elements.stage;
     }
     
     /**
@@ -51,34 +67,67 @@ class SpotlightView {
     }
     
     /**
-     * Create message element from formatted data
+     * Update stage position to appear right after the last message
+     * Called after messages are added/removed
+     */
+    updateStagePosition() {
+        const wrapper = this.elements.wrapper;
+        const container = this.elements.container;
+        const stage = this.elements.stage;
+        
+        if (!wrapper || !container || !stage) return;
+        
+        // Get actual content height (messages)
+        const contentHeight = container.scrollHeight;
+        
+        // Get wrapper height
+        const wrapperHeight = wrapper.clientHeight;
+        
+        // Stage should appear at min(contentHeight, wrapperHeight)
+        const stageTop = Math.min(contentHeight, wrapperHeight);
+        
+        // Apply as margin-top (offset from where flexbox would place it)
+        // Since stage is after wrapper in flexbox, and wrapper has fixed height,
+        // we need negative margin to pull it up when content is less than wrapper height
+        const pullUp = wrapperHeight - stageTop;
+        stage.style.marginTop = pullUp > 0 ? `-${pullUp}px` : '0px';
+    }
+    
+    /**
+     * Create stage message element (separate from list)
      * @param {Object} formattedMsg - Formatted message from data formatter
-     * @param {boolean} isNewest - Whether this will be the newest message (gets profile pic)
      * @returns {HTMLElement}
      */
-    createMessageElement(formattedMsg, isNewest = true) {
+    createStageMessage(formattedMsg) {
         const div = document.createElement('div');
-        div.className = 'chat-message new-message';
+        div.className = 'chat-stage-message stage-enter';
 
-        // Add spotlight class to newest message
-        if (isNewest) {
-            div.classList.add('spotlight');
-        }
-
-        // Include profile picture ONLY for newest message
-        // Flat structure: profile-pic, username, text as siblings (no wrapper)
-        // This allows text to wrap around the floated profile pic using shape-outside
+        // Include profile picture
         let avatarHtml = '';
-        if (isNewest && formattedMsg.avatar) {
+        if (formattedMsg.avatar) {
             const avatarUrl = formattedMsg.avatar.trim();
             if (avatarUrl !== '') {
                 const proxyUrl = this._getProxyUrl(avatarUrl);
-                avatarHtml = `<div class="profile-pic" style="background-image: url('${this._escapeHtml(proxyUrl)}'); background-size: cover; background-position: center;"></div>`;
+                avatarHtml = `<div class="profile-pic" style="background-image: url('${this._escapeHtml(proxyUrl)}');"></div>`;
             }
         }
 
-        // Flat structure - username and text flow naturally around floated profile pic
         div.innerHTML = `${avatarHtml}<span class="chat-username username-${formattedMsg.color}">${formattedMsg.wrappedUsername}</span> <span class="chat-text">${formattedMsg.wrappedText}</span>`;
+
+        return div;
+    }
+    
+    /**
+     * Create list message element (separate from stage)
+     * @param {Object} formattedMsg - Formatted message from data formatter
+     * @returns {HTMLElement}
+     */
+    createListMessage(formattedMsg) {
+        const div = document.createElement('div');
+        div.className = 'chat-message new-message';
+
+        // No profile pic in list
+        div.innerHTML = `<span class="chat-username username-${formattedMsg.color}">${formattedMsg.wrappedUsername}</span> <span class="chat-text">${formattedMsg.wrappedText}</span>`;
 
         return div;
     }
@@ -106,7 +155,55 @@ class SpotlightView {
     }
     
     /**
-     * Append message to container
+     * Show stage message (separate from list)
+     * @param {HTMLElement} stageEl - Stage message element
+     */
+    showStageMessage(stageEl) {
+        // Clear any existing stage message
+        this.clearStage();
+        
+        this.elements.stage.appendChild(stageEl);
+        
+        // Force reflow
+        void stageEl.offsetHeight;
+        
+        // Update stage position to follow messages
+        this.updateStagePosition();
+    }
+    
+    /**
+     * Exit stage message (animate out)
+     * @param {HTMLElement} stageEl - Stage message element
+     * @param {Function} callback - Called when exit animation completes
+     */
+    exitStageMessage(stageEl, callback) {
+        if (!stageEl || !stageEl.parentNode) {
+            if (callback) callback();
+            return;
+        }
+        
+        stageEl.classList.remove('stage-enter');
+        stageEl.classList.add('stage-exit');
+        
+        // Remove after animation
+        const duration = 1000; // Max animation duration
+        setTimeout(() => {
+            if (stageEl.parentNode) {
+                stageEl.remove();
+            }
+            if (callback) callback();
+        }, duration);
+    }
+    
+    /**
+     * Clear stage (remove all stage messages)
+     */
+    clearStage() {
+        this.elements.stage.innerHTML = '';
+    }
+    
+    /**
+     * Append message to list container
      * @param {HTMLElement} messageEl - Message element
      */
     appendMessage(messageEl) {
@@ -118,7 +215,6 @@ class SpotlightView {
     
     /**
      * Remove oldest message if over limit
-     * Also removes spotlight class and profile pic from messages that are no longer newest
      * @param {number} maxMessages - Maximum messages to keep
      */
     removeOldMessages(maxMessages) {
@@ -126,28 +222,6 @@ class SpotlightView {
         if (messages.length > maxMessages) {
             messages[0].remove();
         }
-
-        // Remove spotlight class and profile pics from all messages except the newest
-        // This ensures only the newest message has spotlight styling and profile pic
-        // Use requestAnimationFrame to ensure DOM is fully updated
-        requestAnimationFrame(() => {
-            const currentMessages = this.elements.container.querySelectorAll('.chat-message');
-            if (currentMessages.length > 0) {
-                const lastIndex = currentMessages.length - 1;
-
-                currentMessages.forEach((msg, index) => {
-                    // Keep spotlight class and profile pic only on the last message (newest)
-                    if (index !== lastIndex) {
-                        // Not the last message - remove spotlight class and profile pic
-                        msg.classList.remove('spotlight');
-                        const profilePic = msg.querySelector('.profile-pic');
-                        if (profilePic) {
-                            profilePic.remove();
-                        }
-                    }
-                });
-            }
-        });
     }
     
     /**
@@ -155,31 +229,14 @@ class SpotlightView {
      */
     clearMessages() {
         this.elements.container.innerHTML = '';
+        this.updateStagePosition();
     }
 
     /**
-     * Clear spotlight (remove spotlight class and profile pic from last message)
+     * Clear spotlight (no longer needed - stage and list are separate)
      */
     clearSpotlight() {
-        const messages = this.elements.container.querySelectorAll('.chat-message');
-        if (messages.length > 0) {
-            const lastMessage = messages[messages.length - 1];
-
-            // Remove spotlight class (triggers CSS transition to list mode)
-            lastMessage.classList.remove('spotlight');
-
-            // Remove inline font-size styles added by message-box-styles.js
-            const username = lastMessage.querySelector('.chat-username');
-            const text = lastMessage.querySelector('.chat-text');
-            if (username) username.style.fontSize = '';
-            if (text) text.style.fontSize = '';
-
-            // Remove profile pic
-            const profilePic = lastMessage.querySelector('.profile-pic');
-            if (profilePic) {
-                profilePic.remove();
-            }
-        }
+        // Stage and list are now separate, so this is handled by exitStageMessage
     }
     
     /**
@@ -191,16 +248,19 @@ class SpotlightView {
     }
     
     /**
-     * Trigger fade-in animation for message
+     * Trigger fade-in animation for list message
      * @param {HTMLElement} messageEl - Message element
      */
     fadeInMessage(messageEl) {
-        // Force reflow
+        // Force reflow to ensure initial state is applied
         void messageEl.offsetHeight;
         
-        // Fade in by removing new-message class
+        // Use double requestAnimationFrame for smooth animation start
         requestAnimationFrame(() => {
-            messageEl.classList.remove('new-message');
+            requestAnimationFrame(() => {
+                // Remove new-message class to trigger animation
+                messageEl.classList.remove('new-message');
+            });
         });
     }
     

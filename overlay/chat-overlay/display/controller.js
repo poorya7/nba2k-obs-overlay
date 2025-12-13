@@ -210,103 +210,106 @@ class SpotlightController {
         // Calculate dynamic duration based on message length
         const messageDuration = this._calculateMessageDuration(messageText);
         
-        // Show the message
+        // Show the stage message
         this._showMessage(serverMsg);
         
         // Clear any existing timeout
         this.stateManager.clearActiveTimeout();
         
-        // Wait before showing next message (dynamic duration based on text length)
-        const timeoutId = setTimeout(() => {
-            this.stateManager.setActiveTimeout(null);
-            this.stateManager.setIsProcessing(false);
-            this.stateManager.setLock(false);
+        // Wait for stage duration, then move to list
+        const stageTimeoutId = setTimeout(() => {
+            // Move stage message to list
+            this._moveToList(serverMsg);
+            
+            // Wait a bit for list animation, then process next
+            setTimeout(() => {
+                this.stateManager.setActiveTimeout(null);
+                this.stateManager.setIsProcessing(false);
+                this.stateManager.setLock(false);
 
-            // Process next if queue has more
-            if (this.stateManager.getQueueLength() > 0 && !this.stateManager.getIsScheduled()) {
-                this.stateManager.setIsScheduled(true);
-                setTimeout(() => this._processQueue(), 0);
-            } else {
-                // No more messages in queue - start spotlight timeout (total time - message duration)
-                this._startSpotlightTimeout(messageDuration);
-            }
+                // Process next if queue has more
+                if (this.stateManager.getQueueLength() > 0 && !this.stateManager.getIsScheduled()) {
+                    this.stateManager.setIsScheduled(true);
+                    setTimeout(() => this._processQueue(), 0);
+                } else {
+                    // No more messages in queue - start spotlight timeout (total time - message duration)
+                    this._startSpotlightTimeout(messageDuration);
+                }
+            }, 500); // Small delay for list entry animation
         }, messageDuration);
 
         this.stateManager.setActiveTimeout(timeoutId);
     }
     
     /**
-     * Show a single message
+     * Show a single message (two-stage: stage first, then list)
      */
     _showMessage(serverMsg) {
         // Format the message
         const formattedMsg = this.dataFormatter.formatMessage(serverMsg, this.stateManager);
         
-        // Create and append element (newest message gets profile pic)
-        const messageEl = this.view.createMessageElement(formattedMsg, true);
+        // Create stage message (separate element)
+        const stageEl = this.view.createStageMessage(formattedMsg);
         
-        this.view.appendMessage(messageEl);
+        // Wait for profile pic to load before showing stage message
+        const profilePic = stageEl.querySelector('.profile-pic');
         
-        // Wait for profile pic to load before showing message (prevents layout shifts and ensures pic is visible)
-        // Same logic as old chat overlay
-        const profilePic = messageEl.querySelector('.profile-pic');
+        const showStage = () => {
+            // Show stage message (enters with animation)
+            this.view.showStageMessage(stageEl);
+        };
         
-        const showMessage = () => {
-            // Ensure profile pic is added if missing (fallback)
-            const lastMessage = this.view.getContainer().querySelector('.chat-message:last-child');
-            if (lastMessage === messageEl && formattedMsg.avatar && formattedMsg.avatar.trim() !== '') {
-                const existingPic = lastMessage.querySelector('.profile-pic');
-                if (!existingPic) {
-                    const newPic = document.createElement('img');
-                    newPic.className = 'profile-pic';
-                    // Use proxy URL to bypass CORS
-                    const proxyUrl = `http://localhost:3000/api/image-proxy?url=${encodeURIComponent(formattedMsg.avatar)}`;
-                    newPic.src = proxyUrl;
-                    newPic.alt = '';
-                    newPic.onerror = function() { this.style.display = 'none'; };
-                    lastMessage.insertBefore(newPic, lastMessage.firstChild);
-                }
-            }
+        // Wait for avatar image to load, or start immediately if already loaded or no image
+        if (!profilePic || !profilePic.style.backgroundImage || profilePic.style.backgroundImage === 'none') {
+            // No profile pic, start immediately
+            showStage();
+        } else {
+            // Give browser one frame to start loading the image, then check
+            requestAnimationFrame(() => {
+                // For background-image, we can't check complete, so just wait a bit
+                let stageShown = false;
+                const safeShow = () => {
+                    if (!stageShown) {
+                        stageShown = true;
+                        showStage();
+                    }
+                };
+                // Wait a bit for image to start loading, then show
+                setTimeout(safeShow, 300);
+                // Fallback timeout
+                setTimeout(safeShow, 1000);
+            });
+        }
+    }
+    
+    /**
+     * Move message from stage to list (called after stage duration)
+     */
+    _moveToList(serverMsg) {
+        // Format the message
+        const formattedMsg = this.dataFormatter.formatMessage(serverMsg, this.stateManager);
+        
+        // Get current stage message
+        const stageEl = this.view.getStage().querySelector('.chat-stage-message');
+        
+        // Exit stage message (animate out)
+        this.view.exitStageMessage(stageEl, () => {
+            // After stage exits, add to list
+            const listEl = this.view.createListMessage(formattedMsg);
+            this.view.appendMessage(listEl);
             
-            // Fade in
-            this.view.fadeInMessage(messageEl);
+            // Animate list entry in
+            this.view.fadeInMessage(listEl);
             
             // Smooth scroll
             this.view.smoothScrollToBottom(this.config.scrollDuration);
             
-            // Remove old messages (and their profile pics)
+            // Remove old messages
             this.view.removeOldMessages(this.config.maxMessages);
-        };
-        
-        // Wait for avatar image to load, or start immediately if already loaded or no image
-        // Same logic as old chat overlay - but give browser a frame to start loading
-        if (!profilePic || !profilePic.src || profilePic.src.trim() === '') {
-            // No profile pic or empty src, start immediately
-            showMessage();
-        } else {
-            // Give browser one frame to start loading the image, then check
-            requestAnimationFrame(() => {
-                if (profilePic.complete && profilePic.naturalHeight !== 0) {
-                    // Image already loaded (cached or loaded very quickly)
-                    showMessage();
-                } else {
-                    // Wait for image to load (with timeout fallback to prevent infinite waiting)
-                    let messageShown = false;
-                    const safeShow = () => {
-                        // Only show once (prevent race conditions)
-                        if (!messageShown) {
-                            messageShown = true;
-                            showMessage();
-                        }
-                    };
-                    profilePic.addEventListener('load', safeShow, { once: true });
-                    profilePic.addEventListener('error', safeShow, { once: true }); // Show even if image fails to load
-                    // Fallback timeout: show message after 1000ms max wait (increased from 500ms)
-                    // This gives images more time to load, especially on first load (not cached)
-                    setTimeout(safeShow, 1000);
-                }
-            });
-        }
+            
+            // Update stage position to follow messages
+            this.view.updateStagePosition();
+        });
     }
     
     // ========================================
@@ -334,10 +337,13 @@ class SpotlightController {
     }
 
     /**
-     * Clear spotlight (remove profile pic from last message)
+     * Clear spotlight (exit stage message)
      */
     _clearSpotlight() {
-        this.view.clearSpotlight();
+        const stageEl = this.view.getStage().querySelector('.chat-stage-message');
+        if (stageEl) {
+            this.view.exitStageMessage(stageEl);
+        }
     }
 
     // ========================================

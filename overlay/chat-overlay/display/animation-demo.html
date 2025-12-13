@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Demo - Stage to Chatlist Transitions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a14;
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .nav-title {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 600px;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            background: rgba(20, 20, 40, 0.8);
+            color: #60a5fa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.8);
+        }
+
+        .nav-btn.active {
+            background: rgba(59, 130, 246, 0.4);
+            border-color: #60a5fa;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .animation-name {
+            margin-top: 12px;
+            font-size: 18px;
+            color: #60a5fa;
+        }
+
+        .hint {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        /* Demo Area */
+        .demo-container {
+            margin-top: 140px;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+        }
+
+        .demo-section {
+            text-align: center;
+        }
+
+        .demo-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Chat List Area */
+        .chatlist-area {
+            width: 281px;
+            height: 400px;
+            background: rgba(10, 10, 20, 0.5);
+            border-radius: 12px;
+            padding: 10px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            /* NO flexbox - we control scroll manually */
+            /* Hide scrollbar */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        .chatlist-area::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .chatlist-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .chatlist-msg {
+            font-size: 14px;
+            padding: 4px 12px;
+            background: rgba(20, 20, 30, 0.6);
+            border-radius: 8px;
+            opacity: 0.4;
+        }
+
+        .chatlist-msg .username {
+            color: #60a5fa;
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        .chatlist-msg .text {
+            color: #e2e8f0;
+        }
+
+        /* New chatlist item (animated entry) */
+        .chatlist-msg.new-entry {
+            opacity: 0;
+        }
+
+        /* Stage Area */
+        .stage-area {
+            width: 350px;
+            min-height: 120px;
+            position: relative;
+        }
+
+        .stage-box {
+            background: rgba(10, 20, 40, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.55);
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+            border-radius: 8px;
+            padding: 18px 27px;
+            position: relative;
+            overflow: hidden;
+            /* Smooth height transition when content changes */
+            transition: height 0.4s ease-out;
+        }
+
+        .stage-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .stage-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            flex-shrink: 0;
+        }
+
+        .stage-text-area {
+            flex: 1;
+        }
+
+        .stage-username {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .stage-text {
+            color: #e2e8f0;
+            font-size: 22px;
+            line-height: 1.5;
+        }
+
+        /* Play button */
+        .play-btn {
+            margin-top: 20px;
+            padding: 12px 32px;
+            background: rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.6);
+            color: #60a5fa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .play-btn:hover {
+            background: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* ========================================
+           ANIMATION 1: Gentle Float Up
+           Stage: floats UP and out / enters from BOTTOM
+           Chatlist: enters from BOTTOM (continuation of upward motion)
+           ======================================== */
+        .anim-1 .stage-content.exit {
+            animation: float-up-exit 0.6s ease-out forwards;
+        }
+        .anim-1 .stage-content.enter {
+            animation: stage-float-up-enter 0.6s ease-out forwards;
+        }
+        .chatlist-area.anim-1 .chatlist-msg.new-entry.enter {
+            animation: float-up-enter 0.6s ease-out forwards;
+        }
+        @keyframes float-up-exit {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-30px); opacity: 0; }
+        }
+        @keyframes stage-float-up-enter {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes float-up-enter {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 2: Soft Dissolve & Materialize
+           Stage: blurs and dissolves / materializes from blur
+           Chatlist: materializes from blur (same blur effect connects them)
+           ======================================== */
+        .anim-2 .stage-content.exit {
+            animation: dissolve-exit 0.7s ease-out forwards;
+        }
+        .anim-2 .stage-content.enter {
+            animation: stage-materialize-enter 0.7s ease-out forwards;
+        }
+        .chatlist-area.anim-2 .chatlist-msg.new-entry.enter {
+            animation: materialize-enter 0.7s ease-out forwards;
+        }
+        @keyframes dissolve-exit {
+            0% { filter: blur(0px); opacity: 1; }
+            100% { filter: blur(8px); opacity: 0; }
+        }
+        @keyframes stage-materialize-enter {
+            0% { filter: blur(8px); opacity: 0; }
+            100% { filter: blur(0px); opacity: 1; }
+        }
+        @keyframes materialize-enter {
+            0% { filter: blur(8px); opacity: 0; }
+            100% { filter: blur(0px); opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 3: Slide Left Pass
+           Stage: slides LEFT and out / enters from RIGHT
+           Chatlist: enters from RIGHT (like passing through)
+           ======================================== */
+        .anim-3 .stage-content.exit {
+            animation: slide-left-exit 0.5s ease-in-out forwards;
+        }
+        .anim-3 .stage-content.enter {
+            animation: stage-slide-left-enter 0.5s ease-in-out forwards;
+        }
+        .chatlist-area.anim-3 .chatlist-msg.new-entry.enter {
+            animation: slide-left-enter 0.5s ease-in-out forwards;
+        }
+        @keyframes slide-left-exit {
+            0% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(-50px); opacity: 0; }
+        }
+        @keyframes stage-slide-left-enter {
+            0% { transform: translateX(50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slide-left-enter {
+            0% { transform: translateX(30px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 4: Scale Shrink Journey
+           Stage: shrinks down / grows from small
+           Chatlist: grows from tiny (like it shrunk and regrew small)
+           ======================================== */
+        .anim-4 .stage-content.exit {
+            animation: scale-shrink-exit 0.6s ease-in-out forwards;
+            transform-origin: center center;
+        }
+        .anim-4 .stage-content.enter {
+            animation: stage-scale-enter 0.6s ease-out forwards;
+            transform-origin: center center;
+        }
+        .chatlist-area.anim-4 .chatlist-msg.new-entry.enter {
+            animation: scale-shrink-enter 0.6s ease-out forwards;
+            transform-origin: center center;
+        }
+        @keyframes scale-shrink-exit {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.4); opacity: 0; }
+        }
+        @keyframes stage-scale-enter {
+            0% { transform: scale(0.4); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes scale-shrink-enter {
+            0% { transform: scale(0.4); opacity: 0; }
+            100% { transform: scale(1); opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 5: Ink Fade (Smooth crossfade)
+           Stage: fades out / fades in smoothly
+           Chatlist: fades in smoothly (synchronized timing)
+           ======================================== */
+        .anim-5 .stage-content.exit {
+            animation: ink-fade-exit 0.8s ease-in-out forwards;
+        }
+        .anim-5 .stage-content.enter {
+            animation: stage-ink-fade-enter 0.8s ease-in-out forwards;
+        }
+        .chatlist-area.anim-5 .chatlist-msg.new-entry.enter {
+            animation: ink-fade-enter 0.8s ease-in-out forwards;
+        }
+        @keyframes ink-fade-exit {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        @keyframes stage-ink-fade-enter {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes ink-fade-enter {
+            0% { opacity: 0; }
+            100% { opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 6: Gentle Drop
+           Stage: sinks DOWN and out / enters from TOP
+           Chatlist: drops in from TOP (continuous downward flow)
+           ======================================== */
+        .anim-6 .stage-content.exit {
+            animation: gentle-drop-exit 0.5s ease-in forwards;
+        }
+        .anim-6 .stage-content.enter {
+            animation: stage-gentle-drop-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .chatlist-area.anim-6 .chatlist-msg.new-entry.enter {
+            animation: gentle-drop-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes gentle-drop-exit {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(25px); opacity: 0; }
+        }
+        @keyframes stage-gentle-drop-enter {
+            0% { transform: translateY(-25px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes gentle-drop-enter {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 7: Whisper Away (Right drift)
+           Stage: drifts RIGHT with blur / enters from LEFT
+           Chatlist: drifts in from LEFT (like wind blowing through)
+           ======================================== */
+        .anim-7 .stage-content.exit {
+            animation: whisper-exit 0.7s ease-out forwards;
+        }
+        .anim-7 .stage-content.enter {
+            animation: stage-whisper-enter 0.7s ease-out forwards;
+        }
+        .chatlist-area.anim-7 .chatlist-msg.new-entry.enter {
+            animation: whisper-enter 0.7s ease-out forwards;
+        }
+        @keyframes whisper-exit {
+            0% { transform: translateX(0); filter: blur(0px); opacity: 1; }
+            100% { transform: translateX(40px); filter: blur(4px); opacity: 0; }
+        }
+        @keyframes stage-whisper-enter {
+            0% { transform: translateX(-40px); filter: blur(4px); opacity: 0; }
+            100% { transform: translateX(0); filter: blur(0px); opacity: 1; }
+        }
+        @keyframes whisper-enter {
+            0% { transform: translateX(-25px); filter: blur(4px); opacity: 0; }
+            100% { transform: translateX(0); filter: blur(0px); opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 8: Pulse Out / Pulse In
+           Stage: pulses bigger then fades / pulses in from small
+           Chatlist: pulses in from small (heartbeat rhythm)
+           ======================================== */
+        .anim-8 .stage-content.exit {
+            animation: pulse-out-exit 0.6s ease-out forwards;
+        }
+        .anim-8 .stage-content.enter {
+            animation: stage-pulse-enter 0.6s ease-out forwards;
+        }
+        .chatlist-area.anim-8 .chatlist-msg.new-entry.enter {
+            animation: pulse-in-enter 0.6s ease-out forwards;
+        }
+        @keyframes pulse-out-exit {
+            0% { transform: scale(1); opacity: 1; }
+            40% { transform: scale(1.08); opacity: 0.7; }
+            100% { transform: scale(0.9); opacity: 0; }
+        }
+        @keyframes stage-pulse-enter {
+            0% { transform: scale(0.85); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes pulse-in-enter {
+            0% { transform: scale(0.85); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 9: Slide Down & Rise
+           Stage: slides DOWN and out / enters from TOP
+           Chatlist: rises UP from below (elevator effect)
+           ======================================== */
+        .anim-9 .stage-content.exit {
+            animation: slidedown-exit 0.55s ease-in forwards;
+        }
+        .anim-9 .stage-content.enter {
+            animation: stage-rise-enter 0.55s ease-out forwards;
+        }
+        .chatlist-area.anim-9 .chatlist-msg.new-entry.enter {
+            animation: rise-enter 0.55s ease-out forwards;
+        }
+        @keyframes slidedown-exit {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(30px); opacity: 0; }
+        }
+        @keyframes stage-rise-enter {
+            0% { transform: translateY(-30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes rise-enter {
+            0% { transform: translateY(15px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0.4; }
+        }
+
+        /* ========================================
+           ANIMATION 10: Letter Scatter & Gather
+           Stage: expands and scatters / gathers from scattered
+           Chatlist: gathers from scattered state (energy disperses and reforms)
+           ======================================== */
+        .anim-10 .stage-content.exit {
+            animation: scatter-exit 0.7s ease-out forwards;
+        }
+        .anim-10 .stage-content.enter {
+            animation: stage-gather-enter 0.7s ease-out forwards;
+        }
+        .chatlist-area.anim-10 .chatlist-msg.new-entry.enter {
+            animation: gather-enter 0.7s ease-out forwards;
+        }
+        @keyframes scatter-exit {
+            0% {
+                transform: scale(1);
+                filter: blur(0px);
+                opacity: 1;
+                letter-spacing: 0;
+            }
+            100% {
+                transform: scale(1.15);
+                filter: blur(6px);
+                opacity: 0;
+                letter-spacing: 4px;
+            }
+        }
+        @keyframes stage-gather-enter {
+            0% {
+                transform: scale(1.15);
+                filter: blur(6px);
+                opacity: 0;
+                letter-spacing: 4px;
+            }
+            100% {
+                transform: scale(1);
+                filter: blur(0px);
+                opacity: 1;
+                letter-spacing: 0;
+            }
+        }
+        @keyframes gather-enter {
+            0% {
+                transform: scale(1.1);
+                filter: blur(5px);
+                opacity: 0;
+                letter-spacing: 2px;
+            }
+            100% {
+                transform: scale(1);
+                filter: blur(0px);
+                opacity: 0.4;
+                letter-spacing: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="nav-container">
+        <div class="nav-title">← → Arrow Keys or Click to Switch</div>
+        <div class="nav-buttons">
+            <button class="nav-btn active" data-anim="1">1</button>
+            <button class="nav-btn" data-anim="2">2</button>
+            <button class="nav-btn" data-anim="3">3</button>
+            <button class="nav-btn" data-anim="4">4</button>
+            <button class="nav-btn" data-anim="5">5</button>
+            <button class="nav-btn" data-anim="6">6</button>
+            <button class="nav-btn" data-anim="7">7</button>
+            <button class="nav-btn" data-anim="8">8</button>
+            <button class="nav-btn" data-anim="9">9</button>
+            <button class="nav-btn" data-anim="10">10</button>
+        </div>
+        <div class="animation-name" id="animName">1. Gentle Float Up ☁️</div>
+        <div class="hint">Press SPACE or click Play to preview</div>
+    </div>
+
+    <!-- Demo Area -->
+    <div class="demo-container">
+        <!-- Chat List -->
+        <div class="demo-section">
+            <div class="demo-label">Chat List</div>
+            <div class="chatlist-area anim-1" id="chatlistArea">
+                <div class="chatlist-messages" id="chatlist">
+                    <div class="chatlist-msg">
+                        <span class="username">@KidnPlay-jx6zo:</span>
+                        <span class="text">ALRIGHT STOP, COLLABORATE EN LISTEN ... ICE IS BACK WITH A BRAND NEW INVENTION</span>
+                    </div>
+                    <div class="chatlist-msg">
+                        <span class="username">@maddiepeace999:</span>
+                        <span class="text">TEMU THINK FOR THE COMMON PEOPLE RESPECT</span>
+                    </div>
+                    <div class="chatlist-msg">
+                        <span class="username">@danilo_mercado:</span>
+                        <span class="text">Hi Kristy M</span>
+                    </div>
+                    <div class="chatlist-msg">
+                        <span class="username">@ColdNegative1000:</span>
+                        <span class="text">lol</span>
+                    </div>
+                    <div class="chatlist-msg">
+                        <span class="username">@maddiepeace999:</span>
+                        <span class="text">SEEN</span>
+                    </div>
+                    <div class="chatlist-msg">
+                        <span class="username">@KidnPlay-jx6zo:</span>
+                        <span class="text">TEMU OBAMA</span>
+                    </div>
+                    <div class="chatlist-msg">
+                        <span class="username">@annabeaulne2541:</span>
+                        <span class="text">@bookiesosa@Anna I'm a GOAT for Loonie LEFTISTS We MEN Can have Babies goated 🐐🐐🐐</span>
+                    </div>
+                    <!-- New entry will be added here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage -->
+        <div class="demo-section">
+            <div class="demo-label">Stage (Spotlight)</div>
+            <div class="stage-area anim-1" id="stageArea">
+                <div class="stage-box">
+                    <div class="stage-content" id="stageContent">
+                        <div class="stage-avatar"></div>
+                        <div class="stage-text-area">
+                            <div class="stage-username">@Caveman2577:</div>
+                            <div class="stage-text">Trump was photograph with many women he ran beauty pageants</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="play-btn" id="playBtn">▶ Play Transition</button>
+        </div>
+    </div>
+
+    <script>
+        const animNames = [
+            '1. Gentle Float Up ☁️',
+            '2. Soft Dissolve & Materialize ✨',
+            '3. Slide Left Pass ←',
+            '4. Scale Shrink Journey 🔍',
+            '5. Ink Fade 🖋️',
+            '6. Gentle Drop ⬇️',
+            '7. Whisper Away 💨',
+            '8. Pulse Out / Pulse In 💓',
+            '9. Slide Down & Rise 🛗',
+            '10. Letter Scatter & Gather 🔤'
+        ];
+
+        let currentAnim = 1;
+        let isAnimating = false;
+        let messageIndex = 0;
+
+        // Sample messages from your screenshots
+        const sampleMessages = [
+            { user: '@Caveman2577', text: 'Trump was photograph with many women he ran beauty pageants' },
+            { user: '@kunaikat2232', text: 'damn has detroit always looks that awful?' },
+            { user: '@KidnPlay-jx6zo', text: 'ICE ICE BABY ... HEROIC WORK' },
+            { user: '@joseg4249', text: 'Are donuts for breakfast healthy?' },
+            { user: '@lucasrem', text: 'Rebekhah did say that before Trump did say Palm Springs Pics.' },
+            { user: '@ColdNegative1000', text: 'whos my next victim btw' },
+            { user: '@kunaikat2232', text: 'detroit looks like a dam hellhole' },
+            { user: '@TG-GODZILLA7', text: 'JONTY BHAI AAPKI PANOTI KA TOH KOI TKR NI HAI 🤣🤣🤣😂😂😂' },
+            { user: '@gauravbhardwaj4886', text: 'tg' },
+            { user: '@Sarthaks01', text: 'OYEE, Sid Bhai 😂' },
+        ];
+
+        const stageArea = document.getElementById('stageArea');
+        const stageContent = document.getElementById('stageContent');
+        const stageBox = document.querySelector('.stage-box');
+        const chatlistArea = document.getElementById('chatlistArea');
+        const chatlist = document.getElementById('chatlist');
+        const animName = document.getElementById('animName');
+        const playBtn = document.getElementById('playBtn');
+        const navBtns = document.querySelectorAll('.nav-btn');
+
+        function setAnimation(num) {
+            currentAnim = num;
+
+            // Update stage area class
+            stageArea.className = `stage-area anim-${num}`;
+
+            // Update chatlist area class too!
+            chatlistArea.className = `chatlist-area anim-${num}`;
+
+            // Update nav buttons
+            navBtns.forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.anim) === num);
+            });
+
+            // Update name display
+            animName.textContent = animNames[num - 1];
+        }
+
+        // Smooth scroll function (ASMR-friendly)
+        function smoothScrollToBottom(element, duration = 600) {
+            const targetScroll = element.scrollHeight - element.clientHeight;
+            const startScroll = element.scrollTop;
+            const distance = targetScroll - startScroll;
+
+            if (Math.abs(distance) < 1) return;
+
+            const startTime = performance.now();
+
+            function animate(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Ease-out quad for gentle deceleration
+                const easeOut = 1 - Math.pow(1 - progress, 2);
+
+                element.scrollTop = startScroll + (distance * easeOut);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function playTransition() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            // Reset any existing animations
+            stageContent.classList.remove('exit');
+            const existingNew = chatlist.querySelector('.new-entry');
+            if (existingNew) existingNew.remove();
+
+            // Get current stage message BEFORE it exits
+            const currentUser = stageContent.querySelector('.stage-username').textContent;
+            const currentText = stageContent.querySelector('.stage-text').textContent;
+
+            // Start stage exit
+            stageContent.classList.add('exit');
+
+            // Update stage content with NEXT message while it's invisible (during exit animation)
+            // This way when exit animation ends, new content is already there
+            setTimeout(() => {
+                // Capture current height before content change
+                const oldHeight = stageBox.offsetHeight;
+                stageBox.style.height = oldHeight + 'px';
+
+                messageIndex = (messageIndex + 1) % sampleMessages.length;
+                const nextMsg = sampleMessages[messageIndex];
+                stageContent.querySelector('.stage-username').textContent = nextMsg.user + ':';
+                stageContent.querySelector('.stage-text').textContent = nextMsg.text;
+
+                // Get new natural height
+                stageBox.style.height = 'auto';
+                const newHeight = stageBox.offsetHeight;
+
+                // Set back to old height and animate to new
+                stageBox.style.height = oldHeight + 'px';
+                void stageBox.offsetHeight; // Force reflow
+                stageBox.style.height = newHeight + 'px';
+
+                // Remove fixed height after transition
+                setTimeout(() => {
+                    stageBox.style.height = 'auto';
+                }, 400);
+
+                // Remove exit class and add enter class for entrance animation
+                stageContent.classList.remove('exit');
+                stageContent.classList.add('enter');
+
+                // Remove enter class after animation completes
+                setTimeout(() => {
+                    stageContent.classList.remove('enter');
+                }, 800);
+            }, 500); // Swap content near end of exit animation
+
+            // Delay chatlist entry - gives "travel time" feeling
+            setTimeout(() => {
+                // Create and append new chatlist entry WHEN it's time to animate in
+                // Use the SAME message that was in stage (so it looks like it traveled)
+                const newEntry = document.createElement('div');
+                newEntry.className = 'chatlist-msg new-entry';
+                newEntry.innerHTML = `<span class="username">${currentUser}</span><span class="text">${currentText}</span>`;
+                chatlist.appendChild(newEntry);
+
+                // Force reflow
+                void newEntry.offsetHeight;
+
+                // Smooth scroll to show new entry
+                smoothScrollToBottom(chatlistArea, 500);
+
+                // Start enter animation
+                newEntry.classList.add('enter');
+
+                // Reset after animation
+                setTimeout(() => {
+                    newEntry.classList.remove('new-entry', 'enter');
+                    isAnimating = false;
+                }, 900);
+            }, 300); // 300ms delay after stage exit starts
+        }
+
+        // Click handlers
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setAnimation(parseInt(btn.dataset.anim));
+            });
+        });
+
+        playBtn.addEventListener('click', playTransition);
+
+        // Keyboard handlers
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                const newAnim = currentAnim > 1 ? currentAnim - 1 : 10;
+                setAnimation(newAnim);
+            } else if (e.key === 'ArrowRight') {
+                const newAnim = currentAnim < 10 ? currentAnim + 1 : 1;
+                setAnimation(newAnim);
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                playTransition();
+            }
+        });
+
+        // Initialize: scroll chatlist to bottom on load
+        chatlistArea.scrollTop = chatlistArea.scrollHeight;
+    </script>
+</body>
+</html>
