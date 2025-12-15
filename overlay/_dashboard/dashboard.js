@@ -154,7 +154,6 @@ function showQuarterSection() {
  */
 function hideQuarterSection() {
   document.getElementById('quarterSection').style.display = 'none';
-  document.getElementById('socialsSection').style.display = 'none';
   // Clear button states when hiding
   document.querySelectorAll('.quarter-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById('doneBtn').classList.remove('active');
@@ -169,12 +168,9 @@ async function loadQuarterState() {
     currentQuarter = data.current;
     updateQuarterUI();
     
-    // Show socials section if quarter is active
+    // Start timer if quarter is active
     if (currentQuarter && currentQuarter !== 'done') {
-      document.getElementById('socialsSection').style.display = 'block';
       startTimer();
-    } else {
-      document.getElementById('socialsSection').style.display = 'none';
     }
   }
 }
@@ -194,8 +190,6 @@ async function handleQuarterClick(quarter) {
     currentQuarter = null;
     await api.setQuarter(null);
     stopTimer();
-    // Hide socials section when quarter is cleared
-    document.getElementById('socialsSection').style.display = 'none';
   } else {
     // Switching quarters - this resets everything
     // The overlay will detect the quarter change and:
@@ -205,9 +199,6 @@ async function handleQuarterClick(quarter) {
     currentQuarter = quarter;
     await api.setQuarter(quarter);
     startTimer();
-    
-    // Show socials section when quarter is selected
-    document.getElementById('socialsSection').style.display = 'block';
     
     // If in sim mode, set simulation state to 'live' with this quarter
     const simRadio = document.getElementById('simRadio');
@@ -253,15 +244,11 @@ async function handleGameDone() {
   if (currentQuarter === 'done') {
     currentQuarter = null;
     await api.setQuarter(null);
-    // Hide socials section when cleared
-    document.getElementById('socialsSection').style.display = 'none';
   } else {
     currentQuarter = 'done';
     currentSimState = null; // Clear sim state
     await api.setQuarter(null); // Send null to server (no active quarter)
     stopTimer();
-    // Hide socials section when Done is clicked
-    document.getElementById('socialsSection').style.display = 'none';
   }
   updateQuarterUI();
 }
@@ -444,8 +431,6 @@ async function handleModeChange() {
   currentSimState = null;
   await api.setQuarter(null);
   stopTimer();
-  // Hide socials section when mode changes
-  document.getElementById('socialsSection').style.display = 'none';
   
   // Reset MVP button when switching to live mode
   if (!isSimMode) {

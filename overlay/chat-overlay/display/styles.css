@@ -9,6 +9,10 @@
     box-sizing: border-box;
 }
 
+html {
+    opacity: 1 !important;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     width: 1920px;
@@ -16,6 +20,7 @@ body {
     background: transparent;
     position: relative;
     overflow: hidden;
+    opacity: 1 !important;
 }
 
 /* ========================================
@@ -31,6 +36,7 @@ body {
     display: none;
     box-sizing: border-box;
     overflow: visible; /* Allow last message to overflow */
+    opacity: 1 !important;
 }
 
 .chat-overlay.active {
@@ -268,13 +274,14 @@ body {
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+    opacity: 1;
     /* Smooth size transitions */
     transition: height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Hidden state for the box (when no message) */
 .chat-stage-message.hidden {
-    opacity: 0;
+    opacity: 0 !important;
     min-height: 0;
     height: 0;
     padding: 0;
