@@ -70,7 +70,7 @@ body {
     font-size: 14px;
     padding: 4px 12px;
     margin-bottom: 1px;
-    background: rgba(20, 20, 30, 0.6);
+    background: rgba(20, 20, 30, 0.9); /* More opaque for better visibility in OBS */
     border-radius: 8px;
     opacity: 0.4;
     transition: font-size 0.4s ease, padding 0.4s ease, opacity 0.4s ease, background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
@@ -85,7 +85,7 @@ body {
 /* Spotlight message: Match game overlay style */
 .chat-style-13 .chat-message.spotlight {
     opacity: 1;
-    background: rgba(10, 20, 40, 0.95);
+    background: #0a1428; /* Solid hex color for better OBS compatibility */
     border: 1px solid rgba(59, 130, 246, 0.55);
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
     font-size: 22px;
@@ -265,7 +265,7 @@ body {
 .chat-stage-message {
     font-size: 22px;
     line-height: 1.5;
-    background: rgba(10, 20, 40, 0.95);
+    background: #0a1428; /* Solid hex color for better OBS compatibility */
     border: 1px solid rgba(59, 130, 246, 0.55);
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
     border-radius: 8px;

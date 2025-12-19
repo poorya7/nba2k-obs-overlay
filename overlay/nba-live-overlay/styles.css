@@ -13,10 +13,12 @@ body {
     height: 100vh;
     position: relative;
     pointer-events: auto !important;
+    background: transparent; /* Transparent background for OBS - let only the overlay boxes show */
 }
 
 html {
     pointer-events: auto !important;
+    background: transparent; /* Transparent background for OBS */
 }
 
 #gameplay-video {
@@ -65,8 +67,8 @@ html {
 .other-games-box {
     position: fixed;
     z-index: 10;
-    background: rgba(10, 20, 40, 0.95);
-    backdrop-filter: blur(10px);
+    background: #0a1428; /* Solid hex color instead of rgba for better OBS compatibility */
+    /* backdrop-filter: blur(10px); */ /* Removed - can cause transparency issues in OBS */
     border-radius: 16px;
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
     display: none; /* Hidden by default, shown by JavaScript */
@@ -765,7 +767,7 @@ html {
     left: 220px;
     z-index: 999999 !important;
     background: rgba(10, 20, 40, 0.98);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */ /* Removed - can cause transparency issues in OBS */
     padding: 15px 20px;
     border-radius: 12px;
     border: 2px solid rgba(59, 130, 246, 0.8);
