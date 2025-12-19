@@ -11,33 +11,51 @@
     <!-- Current Game Box (top-anchored, grows from bottom for MVP) -->
     <div class="current-game-box" id="currentGameBox">
         <div class="current-game-content" id="currentGameContent">
-            <div class="live-indicator">
-                <div class="live-dot"></div>
-                <span class="live-text">Live</span>
-                <span class="nba-label">NBA</span>
-            </div>
+            <div class="game-status" data-status>3rd QTR - 4:15</div>
             
             <div class="teams">
                 <!-- Home Team -->
                 <div class="team" data-team="home">
-                    <div class="team-left">
-                        <img class="team-logo" data-logo="home" src="" alt="Home Team">
-                        <div class="team-abbr" data-abbr="home">---</div>
-                    </div>
+                    <img class="team-logo" data-logo="home" src="" alt="Home Team">
+                    <div class="team-name" data-abbr="home">---</div>
                     <div class="score" data-score="home">0</div>
                 </div>
                 
                 <!-- Away Team -->
                 <div class="team" data-team="away">
-                    <div class="team-left">
-                        <img class="team-logo" data-logo="away" src="" alt="Away Team">
-                        <div class="team-abbr" data-abbr="away">---</div>
-                    </div>
+                    <img class="team-logo" data-logo="away" src="" alt="Away Team">
+                    <div class="team-name" data-abbr="away">---</div>
                     <div class="score" data-score="away">0</div>
                 </div>
             </div>
             
-            <div class="game-status" data-status>Q1 · 12:00</div>
+            <div class="team-stats">
+                <div class="stats-row">
+                    <div class="stat-label">FGM/FGA</div>
+                    <div class="stat-value">28/47</div>
+                    <div class="stat-value">32/63</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-label">REB/OFF</div>
+                    <div class="stat-value">19/12</div>
+                    <div class="stat-value">18/9</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-label">AST/TO</div>
+                    <div class="stat-value">26/10</div>
+                    <div class="stat-value">32/11</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-label">3-PT</div>
+                    <div class="stat-value">9/28 (32.1%)</div>
+                    <div class="stat-value">6/24 (25.0%)</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-label">FT</div>
+                    <div class="stat-value">7/13 (53.8%)</div>
+                    <div class="stat-value">13/14 (92.9%)</div>
+                </div>
+            </div>
 
             <!-- MVP Player Section -->
             <div class="mvp-section">

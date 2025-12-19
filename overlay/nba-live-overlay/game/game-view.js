@@ -29,7 +29,6 @@ class GameView {
             homeScore: document.querySelector('[data-score="home"]'),
             awayScore: document.querySelector('[data-score="away"]'),
             gameStatus: document.querySelector('[data-status]'),
-            liveIndicator: document.querySelector('.live-indicator'),
             teamsContainer: document.querySelector('.teams'),
             currentGameBox: document.getElementById('currentGameBox'),
             currentGameContent: document.getElementById('currentGameContent')
@@ -187,6 +186,7 @@ class GameView {
         const abbrElement = this.elements[`${team}Abbr`];
         const logoElement = this.elements[`${team}Logo`];
 
+        // Update team name (works with both .team-name and .team-abbr for backwards compatibility)
         if (abbrElement) abbrElement.textContent = abbr;
         if (logoElement) {
             logoElement.src = logoUrl;
@@ -297,7 +297,7 @@ class GameView {
      */
     updateGameStatus(quarter, time) {
         if (this.elements.gameStatus) {
-            this.elements.gameStatus.textContent = `${quarter} · ${time}`;
+            this.elements.gameStatus.textContent = `${quarter} - ${time}`;
         }
     }
 
@@ -339,7 +339,7 @@ class GameView {
     }
 
     updateAll(gameData) {
-        const { home, away, quarter, time } = gameData;
+        const { home, away, quarter, time, teamStats } = gameData;
 
         if (home) {
             if (home.abbr !== undefined && home.logoUrl !== undefined) {
@@ -361,6 +361,11 @@ class GameView {
 
         if (quarter !== undefined && time !== undefined) {
             this.updateGameStatus(quarter, time);
+        }
+
+        // Update team stats if available
+        if (teamStats) {
+            this.updateTeamStats(teamStats);
         }
     }
 
@@ -393,10 +398,7 @@ class GameView {
         if (halftimeBanner) halftimeBanner.remove();
         if (finalBanner) finalBanner.remove();
 
-        // Remove game status
-        if (this.elements.gameStatus) {
-            this.elements.gameStatus.remove();
-        }
+        // Don't remove game status - it's now permanent in HTML, just update it
     }
 
     /**
@@ -407,36 +409,21 @@ class GameView {
         this.currentState = 'pregame';
         this.clearStateElements();
 
-        // Update live indicator
-        const liveText = this.elements.liveIndicator.querySelector('.live-text');
-        if (liveText) liveText.textContent = 'Upcoming';
+        // Update game status to show countdown
+        if (this.elements.gameStatus) {
+            this.elements.gameStatus.textContent = `Game Starts In: ${data.countdown || '00:00:00'}`;
+        }
 
         // Hide teams container and scores
         if (this.elements.teamsContainer) {
             this.elements.teamsContainer.classList.add('hidden');
         }
 
-        // Create matchup preview
-        const matchupHTML = `
-            <div class="matchup-preview">
-                <img class="preview-logo" src="${data.homeTeam.logoUrl}" alt="${data.homeTeam.abbr}">
-                <span class="vs-text">vs</span>
-                <img class="preview-logo" src="${data.awayTeam.logoUrl}" alt="${data.awayTeam.abbr}">
-            </div>
-        `;
-
-        // Create countdown
-        const countdownHTML = `
-            <div class="countdown-container">
-                <div class="countdown-label">Game Starts In</div>
-                <div class="countdown-time">${data.countdown || '00:00:00'}</div>
-            </div>
-        `;
-
-        // Insert after live indicator
-        this.elements.liveIndicator.insertAdjacentHTML('afterend', matchupHTML);
-        const matchupElement = this.elements.currentGameContent.querySelector('.matchup-preview');
-        matchupElement.insertAdjacentHTML('afterend', countdownHTML);
+        // Hide team stats
+        const teamStats = this.elements.currentGameContent.querySelector('.team-stats');
+        if (teamStats) {
+            teamStats.style.display = 'none';
+        }
     }
 
     /**
@@ -447,22 +434,29 @@ class GameView {
         this.currentState = 'live';
         this.clearStateElements();
 
-        // Update live indicator
-        const liveText = this.elements.liveIndicator.querySelector('.live-text');
-        if (liveText) liveText.textContent = 'Live';
-
         // Show teams container
         if (this.elements.teamsContainer) {
             this.elements.teamsContainer.classList.remove('hidden');
         }
 
+        // Show team stats
+        const teamStats = this.elements.currentGameContent.querySelector('.team-stats');
+        if (teamStats) {
+            teamStats.style.display = 'block';
+        }
+
         // Update game data
         this.updateAll(data);
 
-        // Add game status back
-        const statusHTML = `<div class="game-status" data-status>${data.quarter} · ${data.time}</div>`;
-        this.elements.teamsContainer.insertAdjacentHTML('afterend', statusHTML);
-        this.elements.gameStatus = document.querySelector('[data-status]');
+        // Update game status
+        if (this.elements.gameStatus) {
+            this.elements.gameStatus.textContent = `${data.quarter} - ${data.time}`;
+        }
+
+        // Update team stats if available
+        if (data.teamStats) {
+            this.updateTeamStats(data.teamStats);
+        }
     }
 
     /**
@@ -473,13 +467,15 @@ class GameView {
         this.currentState = 'halftime';
         this.clearStateElements();
 
-        // Update live indicator
-        const liveText = this.elements.liveIndicator.querySelector('.live-text');
-        if (liveText) liveText.textContent = 'Live';
-
         // Show teams container
         if (this.elements.teamsContainer) {
             this.elements.teamsContainer.classList.remove('hidden');
+        }
+
+        // Show team stats
+        const teamStats = this.elements.currentGameContent.querySelector('.team-stats');
+        if (teamStats) {
+            teamStats.style.display = 'block';
         }
 
         // Update teams and scores
@@ -488,13 +484,15 @@ class GameView {
         this.updateScore('home', data.home.score);
         this.updateScore('away', data.away.score);
 
-        // Add halftime banner
-        const bannerHTML = `
-            <div class="halftime-banner">
-                <div class="halftime-text">Halftime</div>
-            </div>
-        `;
-        this.elements.teamsContainer.insertAdjacentHTML('afterend', bannerHTML);
+        // Update game status
+        if (this.elements.gameStatus) {
+            this.elements.gameStatus.textContent = 'Halftime';
+        }
+
+        // Update team stats if available
+        if (data.teamStats) {
+            this.updateTeamStats(data.teamStats);
+        }
     }
 
     /**
@@ -505,13 +503,15 @@ class GameView {
         this.currentState = 'final';
         this.clearStateElements();
 
-        // Update live indicator (keep as "Live")
-        const liveText = this.elements.liveIndicator.querySelector('.live-text');
-        if (liveText) liveText.textContent = 'Live';
-
         // Show teams container
         if (this.elements.teamsContainer) {
             this.elements.teamsContainer.classList.remove('hidden');
+        }
+
+        // Show team stats
+        const teamStats = this.elements.currentGameContent.querySelector('.team-stats');
+        if (teamStats) {
+            teamStats.style.display = 'block';
         }
 
         // Update teams and scores
@@ -520,13 +520,80 @@ class GameView {
         this.updateScore('home', data.home.score);
         this.updateScore('away', data.away.score);
 
-        // Add final banner
-        const bannerHTML = `
-            <div class="final-banner">
-                <div class="final-text">Final</div>
-            </div>
-        `;
-        this.elements.teamsContainer.insertAdjacentHTML('afterend', bannerHTML);
+        // Update game status
+        if (this.elements.gameStatus) {
+            this.elements.gameStatus.textContent = 'Final';
+        }
+
+        // Update team stats if available
+        if (data.teamStats) {
+            this.updateTeamStats(data.teamStats);
+        }
+    }
+
+    /**
+     * Update team statistics display
+     * @param {Object} teamStats - { home: {...}, away: {...} }
+     */
+    updateTeamStats(teamStats) {
+        if (!teamStats || !teamStats.home || !teamStats.away) {
+            return;
+        }
+
+        const statsContainer = this.elements.currentGameContent.querySelector('.team-stats');
+        if (!statsContainer) {
+            return;
+        }
+
+        const statsRows = statsContainer.querySelectorAll('.stats-row');
+        if (statsRows.length < 5) {
+            return;
+        }
+
+        // Helper to format percentage
+        const formatPercent = (pct) => {
+            return pct ? `(${pct}%)` : '';
+        };
+
+        // Row 0: FGM/FGA
+        const fgRow = statsRows[0];
+        const fgValues = fgRow.querySelectorAll('.stat-value');
+        if (fgValues.length >= 2) {
+            fgValues[0].textContent = `${teamStats.home.fgm}/${teamStats.home.fga}`;
+            fgValues[1].textContent = `${teamStats.away.fgm}/${teamStats.away.fga}`;
+        }
+
+        // Row 1: REB/OFF
+        const rebRow = statsRows[1];
+        const rebValues = rebRow.querySelectorAll('.stat-value');
+        if (rebValues.length >= 2) {
+            rebValues[0].textContent = `${teamStats.home.reb}/${teamStats.home.offReb}`;
+            rebValues[1].textContent = `${teamStats.away.reb}/${teamStats.away.offReb}`;
+        }
+
+        // Row 2: AST/TO
+        const astRow = statsRows[2];
+        const astValues = astRow.querySelectorAll('.stat-value');
+        if (astValues.length >= 2) {
+            astValues[0].textContent = `${teamStats.home.ast}/${teamStats.home.to}`;
+            astValues[1].textContent = `${teamStats.away.ast}/${teamStats.away.to}`;
+        }
+
+        // Row 3: 3-PT
+        const threePtRow = statsRows[3];
+        const threePtValues = threePtRow.querySelectorAll('.stat-value');
+        if (threePtValues.length >= 2) {
+            threePtValues[0].textContent = `${teamStats.home.threePtMade}/${teamStats.home.threePtAttempted} ${formatPercent(teamStats.home.threePtPct)}`;
+            threePtValues[1].textContent = `${teamStats.away.threePtMade}/${teamStats.away.threePtAttempted} ${formatPercent(teamStats.away.threePtPct)}`;
+        }
+
+        // Row 4: FT
+        const ftRow = statsRows[4];
+        const ftValues = ftRow.querySelectorAll('.stat-value');
+        if (ftValues.length >= 2) {
+            ftValues[0].textContent = `${teamStats.home.ftMade}/${teamStats.home.ftAttempted} ${formatPercent(teamStats.home.ftPct)}`;
+            ftValues[1].textContent = `${teamStats.away.ftMade}/${teamStats.away.ftAttempted} ${formatPercent(teamStats.away.ftPct)}`;
+        }
     }
 
     /**

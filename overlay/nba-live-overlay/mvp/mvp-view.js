@@ -24,9 +24,10 @@ const MVP_ANIMATION_TIMING = {
     BOX_SHRINK_DURATION: 500,
     
     // Layout constants
-    MVP_SECTION_HEIGHT: 290,
-    MVP_SECTION_PADDING_TOP: 11,
-    MVP_SECTION_MARGIN_TOP: 6
+    MVP_SECTION_HEIGHT: 140,
+    MVP_SECTION_PADDING_TOP: 4,
+    MVP_SECTION_PADDING_BOTTOM: 4,
+    MVP_SECTION_MARGIN_TOP: 4
 };
 
 class MvpView {
@@ -69,6 +70,7 @@ class MvpView {
         
         section.style.height = '0px';
         section.style.paddingTop = '0px';
+        section.style.paddingBottom = '0px';
         section.style.marginTop = '0px';
         section.style.borderTop = 'none';
         content.style.opacity = '0';
@@ -101,9 +103,10 @@ class MvpView {
         const timing = MVP_ANIMATION_TIMING;
 
         // Step 1: Expand box
-        section.style.transition = `height ${timing.BOX_EXPAND_DURATION}ms ease-out, padding-top ${timing.BOX_EXPAND_DURATION}ms ease-out, margin-top ${timing.BOX_EXPAND_DURATION}ms ease-out`;
+        section.style.transition = `height ${timing.BOX_EXPAND_DURATION}ms ease-out, padding-top ${timing.BOX_EXPAND_DURATION}ms ease-out, padding-bottom ${timing.BOX_EXPAND_DURATION}ms ease-out, margin-top ${timing.BOX_EXPAND_DURATION}ms ease-out`;
         section.style.height = `${timing.MVP_SECTION_HEIGHT}px`;
         section.style.paddingTop = `${timing.MVP_SECTION_PADDING_TOP}px`;
+        section.style.paddingBottom = `${timing.MVP_SECTION_PADDING_BOTTOM}px`;
         section.style.marginTop = `${timing.MVP_SECTION_MARGIN_TOP}px`;
         section.style.borderTop = '1px solid rgba(59, 130, 246, 0.3)';
 
@@ -142,9 +145,10 @@ class MvpView {
 
         // Step 3: Collapse box (after delay)
         setTimeout(() => {
-            section.style.transition = `height ${timing.BOX_SHRINK_DURATION}ms ease-out, padding-top ${timing.BOX_SHRINK_DURATION}ms ease-out, margin-top ${timing.BOX_SHRINK_DURATION}ms ease-out`;
+            section.style.transition = `height ${timing.BOX_SHRINK_DURATION}ms ease-out, padding-top ${timing.BOX_SHRINK_DURATION}ms ease-out, padding-bottom ${timing.BOX_SHRINK_DURATION}ms ease-out, margin-top ${timing.BOX_SHRINK_DURATION}ms ease-out`;
             section.style.height = '0px';
             section.style.paddingTop = '0px';
+            section.style.paddingBottom = '0px';
             section.style.marginTop = '0px';
             section.style.borderTop = 'none';
         }, timing.BOX_SHRINK_DELAY);

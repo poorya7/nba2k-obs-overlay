@@ -212,17 +212,18 @@ class AppController {
             // Quarter active - show overlay
 
             // Step 4: Check if we should show other games
+            // DISABLED: Other games switching is disabled - always show current game overlay
             // In simulation mode: Only show during active live play (not pregame/halftime/final)
             // In live mode: Quarter tracking naturally prevents showing during breaks
-            let canShowOtherGames = true;
-            if (isSimMode && simData.state && simData.state !== 'live') {
-                canShowOtherGames = false; // Don't show during pregame/halftime/final
-            }
-            
-            if (canShowOtherGames && this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier, this.stateManager.getVirtualTimeOffset())) {
-                await this.modeCoordinator.showOtherGamesMode(selectedGameId);
-                return; // Other games is showing, don't update current game
-            }
+            // let canShowOtherGames = true;
+            // if (isSimMode && simData.state && simData.state !== 'live') {
+            //     canShowOtherGames = false; // Don't show during pregame/halftime/final
+            // }
+            // 
+            // if (canShowOtherGames && this.stateManager.shouldShowOtherGames(quarterData, timeMultiplier, this.stateManager.getVirtualTimeOffset())) {
+            //     await this.modeCoordinator.showOtherGamesMode(selectedGameId);
+            //     return; // Other games is showing, don't update current game
+            // }
 
             // Step 5: Ensure we're in current game mode
             if (this.stateManager.getMode() !== 'CURRENT_GAME') {
@@ -236,6 +237,14 @@ class AppController {
                 game = this.simulationManager.generateGameData(simData.state, timeMultiplier);
             } else {
                 game = await this.nbaApi.getGameById(selectedGameId);
+                
+                // Fetch team stats from boxscore API
+                if (game) {
+                    const teamStats = await this.nbaApi.getTeamStatsForGame(selectedGameId);
+                    if (teamStats) {
+                        game.teamStats = teamStats;
+                    }
+                }
             }
 
             if (!game) {

@@ -397,6 +397,176 @@ function getLeadingPlayer(boxscoreData) {
 }
 
 /**
+ * Parse team statistics from boxscore data
+ * @param {Object} boxscoreData - Boxscore data from ESPN
+ * @returns {Object|null} Team stats object with home and away stats or null
+ */
+function parseTeamStats(boxscoreData) {
+  if (!boxscoreData || !boxscoreData.boxscore) {
+    console.warn('parseTeamStats: No boxscore data');
+    return null;
+  }
+
+  // ESPN API structure: boxscore.boxscore.teams contains team stats
+  // Check both boxscore.teams and boxscore.boxscore.teams
+  const innerBoxscore = boxscoreData.boxscore.boxscore;
+  let teams = (innerBoxscore && innerBoxscore.teams) || boxscoreData.boxscore.teams;
+
+  if (!teams || !Array.isArray(teams) || teams.length < 2) {
+    console.warn('parseTeamStats: teams array not found or invalid', {
+      hasInnerBoxscore: !!innerBoxscore,
+      hasBoxscoreTeams: !!boxscoreData.boxscore.teams,
+      hasPlayers: !!boxscoreData.boxscore.players
+    });
+    return null;
+  }
+
+  // Find home and away teams - homeAway is at root level of team object, not inside t.team
+  const homeTeam = teams.find(t => t.homeAway === 'home');
+  const awayTeam = teams.find(t => t.homeAway === 'away');
+
+  if (!homeTeam || !awayTeam) {
+    console.warn('parseTeamStats: home or away team not found', {
+      teamsLength: teams.length,
+      teams: teams.map((t, idx) => ({
+        index: idx,
+        homeAway: t.homeAway || null,
+        abbreviation: t.team ? t.team.abbreviation : null
+      }))
+    });
+    return null;
+  }
+
+  // Team statistics are directly in the statistics array - each element is {name, displayValue}
+  const homeStatsArray = homeTeam.statistics;
+  const awayStatsArray = awayTeam.statistics;
+
+  if (!homeStatsArray || !Array.isArray(homeStatsArray) || homeStatsArray.length === 0 ||
+      !awayStatsArray || !Array.isArray(awayStatsArray) || awayStatsArray.length === 0) {
+    console.warn('parseTeamStats: team statistics arrays not found');
+    return null;
+  }
+
+  // Helper to find stat value by name in the statistics array
+  const findStat = (statsArray, statName) => {
+    if (!statsArray || !Array.isArray(statsArray)) return null;
+    const stat = statsArray.find(s => s && s.name === statName);
+    return stat ? stat.displayValue : null;
+  };
+
+  // Helper to parse "made-attempted" format (e.g., "28-47")
+  const parseMadeAttempted = (value) => {
+    if (!value) return { made: 0, attempted: 0 };
+    if (typeof value === 'string' && value.includes('-')) {
+      const parts = value.split('-');
+      return {
+        made: parseInt(parts[0]) || 0,
+        attempted: parseInt(parts[1]) || 0
+      };
+    }
+    return { made: 0, attempted: 0 };
+  };
+
+  // Helper to calculate percentage
+  const calculatePercentage = (made, attempted) => {
+    if (!attempted || attempted === 0) return '0.0';
+    return ((made / attempted) * 100).toFixed(1);
+  };
+
+  // Parse home team stats
+  const homeFgStr = findStat(homeStatsArray, 'fieldGoalsMade-fieldGoalsAttempted') || '';
+  const homeFg = parseMadeAttempted(homeFgStr);
+  
+  const home3ptStr = findStat(homeStatsArray, 'threePointFieldGoalsMade-threePointFieldGoalsAttempted') || '';
+  const home3pt = parseMadeAttempted(home3ptStr);
+  
+  const homeFtStr = findStat(homeStatsArray, 'freeThrowsMade-freeThrowsAttempted') || '';
+  const homeFt = parseMadeAttempted(homeFtStr);
+  
+  const homeReb = findStat(homeStatsArray, 'totalRebounds') || '0';
+  const homeOffReb = findStat(homeStatsArray, 'offensiveRebounds') || '0';
+  const homeAst = findStat(homeStatsArray, 'assists') || '0';
+  const homeTo = findStat(homeStatsArray, 'turnovers') || '0';
+
+  // Parse away team stats
+  const awayFgStr = findStat(awayStatsArray, 'fieldGoalsMade-fieldGoalsAttempted') || '';
+  const awayFg = parseMadeAttempted(awayFgStr);
+  
+  const away3ptStr = findStat(awayStatsArray, 'threePointFieldGoalsMade-threePointFieldGoalsAttempted') || '';
+  const away3pt = parseMadeAttempted(away3ptStr);
+  
+  const awayFtStr = findStat(awayStatsArray, 'freeThrowsMade-freeThrowsAttempted') || '';
+  const awayFt = parseMadeAttempted(awayFtStr);
+  
+  const awayReb = findStat(awayStatsArray, 'totalRebounds') || '0';
+  const awayOffReb = findStat(awayStatsArray, 'offensiveRebounds') || '0';
+  const awayAst = findStat(awayStatsArray, 'assists') || '0';
+  const awayTo = findStat(awayStatsArray, 'turnovers') || '0';
+
+  return {
+    home: {
+      fgm: homeFg.made,
+      fga: homeFg.attempted,
+      fgPct: calculatePercentage(homeFg.made, homeFg.attempted),
+      reb: parseInt(homeReb) || 0,
+      offReb: parseInt(homeOffReb) || 0,
+      ast: parseInt(homeAst) || 0,
+      to: parseInt(homeTo) || 0,
+      threePtMade: home3pt.made,
+      threePtAttempted: home3pt.attempted,
+      threePtPct: calculatePercentage(home3pt.made, home3pt.attempted),
+      ftMade: homeFt.made,
+      ftAttempted: homeFt.attempted,
+      ftPct: calculatePercentage(homeFt.made, homeFt.attempted)
+    },
+    away: {
+      fgm: awayFg.made,
+      fga: awayFg.attempted,
+      fgPct: calculatePercentage(awayFg.made, awayFg.attempted),
+      reb: parseInt(awayReb) || 0,
+      offReb: parseInt(awayOffReb) || 0,
+      ast: parseInt(awayAst) || 0,
+      to: parseInt(awayTo) || 0,
+      threePtMade: away3pt.made,
+      threePtAttempted: away3pt.attempted,
+      threePtPct: calculatePercentage(away3pt.made, away3pt.attempted),
+      ftMade: awayFt.made,
+      ftAttempted: awayFt.attempted,
+      ftPct: calculatePercentage(awayFt.made, awayFt.attempted)
+    }
+  };
+}
+
+/**
+ * Get team statistics for a game (fetches boxscore and parses team stats)
+ * @param {string} gameId - ESPN game ID
+ * @returns {Promise<Object|null>} Team stats data or null
+ */
+async function getTeamStatsForGame(gameId) {
+  try {
+    const boxscore = await fetchGameBoxscore(gameId);
+    if (!boxscore) {
+      console.warn('getTeamStatsForGame: No boxscore data returned');
+      return null;
+    }
+    
+    // Log structure for debugging (only in dev)
+    if (typeof window !== 'undefined' && window.location && window.location.hostname === 'localhost') {
+    // Remove verbose logging in production
+    }
+    
+    const teamStats = parseTeamStats(boxscore);
+    if (!teamStats) {
+      console.warn('getTeamStatsForGame: parseTeamStats returned null for gameId', gameId);
+    }
+    return teamStats;
+  } catch (error) {
+    console.error('Error getting team stats for game', gameId, ':', error);
+    return null;
+  }
+}
+
+/**
  * Get MVP player for a game (fetches boxscore and finds leading player)
  * @param {string} gameId - ESPN game ID
  * @returns {Promise<Object|null>} MVP player data or null
@@ -421,7 +591,8 @@ if (typeof window !== 'undefined') {
     getTodaysGames: getTodaysGamesParsed,
     getGameById,
     formatGameTime,
-    getMVPForGame
+    getMVPForGame,
+    getTeamStatsForGame
   };
 }
 

@@ -43,7 +43,8 @@ class GameDataFormatter {
                 logoUrl: game.awayTeam.logo,
                 score: parseInt(game.awayTeam.score) || 0,
                 animate: scoreChanges.awayChanged // Add animation flag
-            }
+            },
+            teamStats: game.teamStats || null // Include team stats if available
         };
 
         // State-specific formatting
