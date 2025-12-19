@@ -585,6 +585,48 @@ async function getMVPForGame(gameId) {
   }
 }
 
+/**
+ * Get play-by-play data for a game
+ * @param {string} gameId - ESPN game ID
+ * @returns {Promise<Array|null>} Array of recent plays or null
+ */
+async function getPlayByPlay(gameId) {
+  try {
+    const summary = await fetchGameBoxscore(gameId);
+    if (!summary || !summary.commentary || !summary.commentary.plays) {
+      return null;
+    }
+    
+    // Get the plays array
+    const plays = summary.commentary.plays;
+    
+    // Return the most recent plays (last 10-20 for live updates)
+    // Plays are typically in chronological order
+    const recentPlays = plays.slice(-20).reverse(); // Get last 20, reverse so newest is first
+    
+    // Parse plays into a cleaner format
+    return recentPlays.map(play => ({
+      id: play.id,
+      text: play.text || play.shortText || '',
+      shortText: play.shortText || '',
+      period: play.period?.number || 0,
+      clock: play.clock?.displayValue || '',
+      homeScore: play.scoringPlay ? (play.homeScore || 0) : null,
+      awayScore: play.scoringPlay ? (play.awayScore || 0) : null,
+      isScoringPlay: play.scoringPlay || false,
+      team: play.team ? {
+        id: play.team.id,
+        abbreviation: play.team.abbreviation,
+        name: play.team.displayName
+      } : null,
+      participants: play.participants || []
+    }));
+  } catch (error) {
+    console.error('Error getting play-by-play for game', gameId, ':', error);
+    return null;
+  }
+}
+
 // Export functions
 if (typeof window !== 'undefined') {
   window.NBAApi = {
@@ -592,7 +634,8 @@ if (typeof window !== 'undefined') {
     getGameById,
     formatGameTime,
     getMVPForGame,
-    getTeamStatsForGame
+    getTeamStatsForGame,
+    getPlayByPlay
   };
 }
 

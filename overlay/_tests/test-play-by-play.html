@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play-by-Play Design Preview - Press F11 for Fullscreen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .preview-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+        }
+
+        /* Video background */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Overlay iframes - positioned absolutely to match OBS layout */
+        .overlay-frame {
+            position: absolute;
+            border: none;
+            background: transparent;
+            pointer-events: none; /* Allow clicking through for testing */
+        }
+        
+        /* Override for interactive frames */
+        .overlay-frame.game-stats-frame,
+        .overlay-frame.chat-overlay-frame {
+            pointer-events: auto !important;
+        }
+
+        /* Title overlay - top left */
+        .title-overlay-frame {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 10;
+        }
+
+        /* Game stats overlay - left side, vertically centered */
+        .game-stats-frame {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            pointer-events: auto !important; /* Enable interactions for controls */
+        }
+        
+        #game-stats-frame {
+            pointer-events: auto !important;
+        }
+
+        /* Socials overlay - bottom right */
+        .socials-overlay-frame {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 150px;
+            z-index: 15;
+        }
+
+        /* Chat overlay - clean version */
+        .chat-overlay-frame {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1920px;
+            height: 1080px;
+            z-index: 25;
+            border: none;
+            background: transparent;
+            pointer-events: auto; /* Enable controls interaction */
+        }
+
+        /* Play-by-Play Overlay Container */
+        .pbp-container {
+            position: absolute;
+            z-index: 30;
+            pointer-events: auto;
+        }
+
+        /* Hide all play-by-play designs by default */
+        .pbp-design {
+            display: none;
+        }
+
+        .pbp-design.active {
+            display: block;
+        }
+
+        /* Design 1: Top Center Banner */
+        #pbp-1 {
+            top: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+        }
+
+        #pbp-1 .pbp-box {
+            background: rgba(10, 20, 40, 0.95);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            border-radius: 12px;
+            padding: 15px 20px;
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+        }
+
+        #pbp-1 .pbp-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #pbp-1 .pbp-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-1 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-1 .pbp-time {
+            font-size: 20px;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        #pbp-1 .pbp-text {
+            font-size: 36px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #pbp-1 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        #pbp-1 .pbp-action {
+            color: #fbbf24;
+        }
+
+        /* Design 2: Top Right Corner */
+        #pbp-2 {
+            top: 150px;
+            right: 30px;
+            width: 400px;
+        }
+
+        #pbp-2 .pbp-box {
+            background: linear-gradient(90deg, transparent, rgba(10, 20, 40, 0.95) 20%);
+            border-left: 4px solid #60a5fa;
+            padding: 20px 30px;
+            border-radius: 0 12px 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #pbp-2 .pbp-photo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-2 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-2 .pbp-time {
+            font-size: 24px;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        #pbp-2 .pbp-text {
+            font-size: 32px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #pbp-2 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        /* Design 3: Bottom Left Vertical Stack */
+        #pbp-3 {
+            bottom: 200px;
+            left: 30px;
+            width: 350px;
+        }
+
+        #pbp-3 .pbp-box {
+            background: rgba(10, 20, 40, 0.95);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #pbp-3 .pbp-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-3 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-3 .pbp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #pbp-3 .pbp-player {
+            font-size: 32px;
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        #pbp-3 .pbp-time {
+            font-size: 24px;
+            color: #93c5fd;
+            font-weight: 600;
+        }
+
+        #pbp-3 .pbp-text {
+            font-size: 28px;
+            color: #fff;
+        }
+
+        #pbp-3 .pbp-action {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        /* Design 4: Center Right Sidebar */
+        #pbp-4 {
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            width: 320px;
+        }
+
+        #pbp-4 .pbp-box {
+            background: rgba(10, 20, 40, 0.95);
+            border-left: 5px solid #60a5fa;
+            padding: 20px 25px;
+            margin-bottom: 12px;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #pbp-4 .pbp-photo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-4 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-4 .pbp-time {
+            font-size: 22px;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        #pbp-4 .pbp-text {
+            font-size: 30px;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        #pbp-4 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        #pbp-4 .pbp-score {
+            color: #fbbf24;
+            font-weight: 700;
+            margin-left: 12px;
+        }
+
+        /* Design 5: Top Center with Icon */
+        #pbp-5 {
+            top: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 550px;
+        }
+
+        #pbp-5 .pbp-box {
+            background: rgba(10, 20, 40, 0.95);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            border-radius: 12px;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+        }
+
+        #pbp-5 .pbp-photo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-5 .pbp-icon {
+            font-size: 48px;
+            color: #60a5fa;
+        }
+
+        #pbp-5 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-5 .pbp-time {
+            font-size: 24px;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        #pbp-5 .pbp-text {
+            font-size: 34px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #pbp-5 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        /* Design 6: Bottom Center Banner */
+        #pbp-6 {
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+        }
+
+        #pbp-6 .pbp-box {
+            background: linear-gradient(135deg, rgba(10, 20, 40, 0.95), rgba(30, 40, 60, 0.95));
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            border-radius: 16px;
+            padding: 25px 35px;
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+        }
+
+        #pbp-6 .pbp-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        #pbp-6 .pbp-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-6 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-6 .pbp-time {
+            font-size: 24px;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        #pbp-6 .pbp-text {
+            font-size: 38px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #pbp-6 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        #pbp-6 .pbp-score {
+            font-size: 48px;
+            color: #fbbf24;
+            font-weight: 800;
+        }
+
+        /* Design 7: Top Left Corner Compact */
+        #pbp-7 {
+            top: 250px;
+            left: 30px;
+            width: 380px;
+        }
+
+        #pbp-7 .pbp-box {
+            background: rgba(10, 20, 40, 0.95);
+            border-left: 5px solid #fbbf24;
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #pbp-7 .pbp-photo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-7 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-7 .pbp-header {
+            font-size: 22px;
+            color: #93c5fd;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        #pbp-7 .pbp-time {
+            font-size: 24px;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        #pbp-7 .pbp-text {
+            font-size: 30px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #pbp-7 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        /* Design 8: Floating Card Top Right */
+        #pbp-8 {
+            top: 200px;
+            right: 50px;
+            width: 420px;
+        }
+
+        #pbp-8 .pbp-box {
+            background: rgba(10, 20, 40, 0.95);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            border-radius: 12px;
+            padding: 25px 30px;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #pbp-8 .pbp-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
+        }
+
+        #pbp-8 .pbp-photo {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-8 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-8 .pbp-time {
+            font-size: 24px;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        #pbp-8 .pbp-text {
+            font-size: 32px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #pbp-8 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        /* Design 9: Center Horizontal Bar */
+        #pbp-9 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+        }
+
+        #pbp-9 .pbp-box {
+            background: rgba(10, 20, 40, 0.95);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            border-radius: 12px;
+            padding: 30px 40px;
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        #pbp-9 .pbp-photo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-9 .pbp-time {
+            font-size: 28px;
+            color: #93c5fd;
+            font-weight: 600;
+        }
+
+        #pbp-9 .pbp-text {
+            font-size: 40px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #pbp-9 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+            font-size: 44px;
+        }
+
+        #pbp-9 .pbp-separator {
+            color: #93c5fd;
+            font-size: 36px;
+        }
+
+        #pbp-9 .pbp-score {
+            color: #fbbf24;
+            font-weight: 800;
+            font-size: 48px;
+        }
+
+        /* Design 10: Bottom Right Stack */
+        #pbp-10 {
+            bottom: 200px;
+            right: 30px;
+            width: 400px;
+        }
+
+        #pbp-10 .pbp-box {
+            background: rgba(10, 20, 40, 0.95);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        #pbp-10 .pbp-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        #pbp-10 .pbp-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            flex: 1;
+        }
+
+        #pbp-10 .pbp-badge {
+            background: rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.6);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 22px;
+            color: #60a5fa;
+            font-weight: 700;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        #pbp-10 .pbp-content {
+            flex: 1;
+        }
+
+        #pbp-10 .pbp-time {
+            font-size: 26px;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        #pbp-10 .pbp-text {
+            font-size: 30px;
+            color: #fff;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        #pbp-10 .pbp-player {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        #pbp-10 .pbp-meta {
+            font-size: 24px;
+            color: #93c5fd;
+            margin-top: 8px;
+        }
+
+        /* Navigation Instructions */
+        .nav-instructions {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 20, 40, 0.9);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            border-radius: 8px;
+            padding: 10px 20px;
+            z-index: 1000;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .nav-instructions .current-design {
+            color: #60a5fa;
+            font-weight: 700;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <!-- Video Background -->
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="../game.mp4" type="video/mp4">
+            Your browser does not support video.
+        </video>
+
+        <!-- Title Overlay (top left) -->
+        <iframe 
+            class="overlay-frame title-overlay-frame" 
+            src="../title-overlay/index.html"
+            id="title-frame">
+        </iframe>
+
+        <!-- Game Stats Overlay (left side) -->
+        <iframe 
+            class="overlay-frame game-stats-frame" 
+            src="../nba-live-overlay2/index.html"
+            id="game-stats-frame">
+        </iframe>
+
+        <!-- Socials Overlay (bottom right) -->
+        <iframe 
+            class="overlay-frame socials-overlay-frame" 
+            src="../socials-overlay/index.html"
+            id="socials-frame">
+        </iframe>
+
+        <!-- Chat Overlay -->
+        <iframe 
+            class="overlay-frame chat-overlay-frame" 
+            src="../chat-overlay/display/index.html"
+            id="chat-frame">
+        </iframe>
+
+        <!-- Play-by-Play Designs -->
+        <div class="pbp-container pbp-design active" id="pbp-1">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-content">
+                    <div class="pbp-time">Q4 11:18</div>
+                    <div class="pbp-text">
+                        <span class="pbp-player">Luka Doncic</span> <span class="pbp-action">scored 3 points via 3-point jump shot</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-2">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-content">
+                    <div class="pbp-time">Q4 11:18</div>
+                    <div class="pbp-text">
+                        <span class="pbp-player">Luka Doncic</span> made 3-point jump shot
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-3">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-content">
+                    <div class="pbp-header">
+                        <span class="pbp-player">Luka Doncic</span>
+                        <span class="pbp-time">Q4 11:18</span>
+                    </div>
+                    <div class="pbp-text">
+                        <span class="pbp-action">3-point jump shot</span> - 3 PTS
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-4">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-content">
+                    <div class="pbp-time">Q4 11:18</div>
+                    <div class="pbp-text">
+                        <span class="pbp-player">Luka Doncic</span> <span class="pbp-action">3-point jump shot</span> <span class="pbp-score">+3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-5">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-icon">⚡</div>
+                <div class="pbp-content">
+                    <div class="pbp-time">Q4 11:18</div>
+                    <div class="pbp-text">
+                        <span class="pbp-player">Luka Doncic</span> <span class="pbp-action">scored 3 points</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-6">
+            <div class="pbp-box">
+                <div class="pbp-left">
+                    <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                    <div class="pbp-content">
+                        <div class="pbp-time">Q4 11:18</div>
+                        <div class="pbp-text">
+                            <span class="pbp-player">Luka Doncic</span> <span class="pbp-action">3-point jump shot</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pbp-score">108-104</div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-7">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-content">
+                    <div class="pbp-header">LIVE PLAY</div>
+                    <div class="pbp-time">Q4 11:18</div>
+                    <div class="pbp-text">
+                        <span class="pbp-player">Luka Doncic</span> scored 3 points via 3-point jump shot
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-8">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-content">
+                    <div class="pbp-time">Q4 - 11:18 remaining</div>
+                    <div class="pbp-text">
+                        <span class="pbp-player">Luka Doncic</span> <span class="pbp-action">made 3-point jump shot</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-9">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-time">Q4 11:18</div>
+                <div class="pbp-player">Luka Doncic</div>
+                <div class="pbp-separator">•</div>
+                <div class="pbp-text">3-point jump shot</div>
+                <div class="pbp-separator">•</div>
+                <div class="pbp-score">+3</div>
+            </div>
+        </div>
+
+        <div class="pbp-container pbp-design" id="pbp-10">
+            <div class="pbp-box">
+                <img class="pbp-photo" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Luka Doncic">
+                <div class="pbp-main">
+                    <div class="pbp-badge">SCORE</div>
+                    <div class="pbp-content">
+                        <div class="pbp-time">Q4 11:18</div>
+                        <div class="pbp-text">
+                            <span class="pbp-player">Luka Doncic</span> <span class="pbp-action">made 3-point jump shot</span>
+                        </div>
+                        <div class="pbp-meta">LAL 104 - UTAH 108</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Instructions -->
+        <div class="nav-instructions">
+            Use <span style="color: #60a5fa;">←</span> and <span style="color: #60a5fa;">→</span> arrow keys to navigate • Current: <span class="current-design" id="currentDesignNum">1</span> of 10
+        </div>
+    </div>
+
+    <script>
+        let currentDesign = 1;
+        const totalDesigns = 10;
+
+        function showDesign(num) {
+            // Hide all designs
+            document.querySelectorAll('.pbp-design').forEach(design => {
+                design.classList.remove('active');
+            });
+
+            // Show selected design
+            const selectedDesign = document.getElementById(`pbp-${num}`);
+            if (selectedDesign) {
+                selectedDesign.classList.add('active');
+                document.getElementById('currentDesignNum').textContent = num;
+            }
+        }
+
+        // Arrow key navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                currentDesign = currentDesign > 1 ? currentDesign - 1 : totalDesigns;
+                showDesign(currentDesign);
+            } else if (e.key === 'ArrowRight') {
+                currentDesign = currentDesign < totalDesigns ? currentDesign + 1 : 1;
+                showDesign(currentDesign);
+            }
+        });
+
+        // Initialize with design 1
+        showDesign(1);
+    </script>
+</body>
+</html>
+

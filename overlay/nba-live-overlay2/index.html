@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/overlay/nba-live-overlay/">
+    <title>NBA Game Stats Overlay</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Current Game Box (top-anchored, grows from bottom for MVP) -->
+    <div class="current-game-box" id="currentGameBox">
+        <div class="current-game-content" id="currentGameContent">
+            <div class="game-status" data-status>3rd QTR - 4:15</div>
+            
+            <div class="teams">
+                <!-- Home Team -->
+                <div class="team" data-team="home">
+                    <img class="team-logo" data-logo="home" src="" alt="Home Team">
+                    <div class="team-name" data-abbr="home">---</div>
+                    <div class="score" data-score="home">0</div>
+                </div>
+                
+                <!-- Away Team -->
+                <div class="team" data-team="away">
+                    <img class="team-logo" data-logo="away" src="" alt="Away Team">
+                    <div class="team-name" data-abbr="away">---</div>
+                    <div class="score" data-score="away">0</div>
+                </div>
+            </div>
+            
+            <div class="team-stats">
+                <div class="stats-row">
+                    <div class="stat-label">FGM/FGA</div>
+                    <div class="stat-value">28/47</div>
+                    <div class="stat-value">32/63</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-label">REB/OFF</div>
+                    <div class="stat-value">19/12</div>
+                    <div class="stat-value">18/9</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-label">AST/TO</div>
+                    <div class="stat-value">26/10</div>
+                    <div class="stat-value">32/11</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-label">3-PT</div>
+                    <div class="stat-value">9/28 (32.1%)</div>
+                    <div class="stat-value">6/24 (25.0%)</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-label">FT</div>
+                    <div class="stat-value">7/13 (53.8%)</div>
+                    <div class="stat-value">13/14 (92.9%)</div>
+                </div>
+            </div>
+
+            <!-- MVP Player Section -->
+            <div class="mvp-section">
+                <div class="mvp-content">
+                    <div class="photo-container">
+                        <img class="player-pic" src="" alt="MVP Player">
+                        <img class="player-team-logo" src="" alt="Team">
+                    </div>
+                    <div class="player-info">
+                        <div class="mvp-header">
+                            <span class="mvp-label">⭐ MVP</span>
+                            <span class="player-name">---</span>
+                        </div>
+                        <div class="player-stats">
+                            <div class="stat-item">
+                                <div class="stat-value" data-stat="pts">0</div>
+                                <div class="stat-label">PTS</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" data-stat="reb">0</div>
+                                <div class="stat-label">REB</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" data-stat="ast">0</div>
+                                <div class="stat-label">AST</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Games Box (center-anchored, grows from both sides) -->
+    <div class="other-games-box" id="otherGamesBox" style="display: none;">
+        <div class="other-games-content" id="otherGamesContent">
+            <div id="games-container">
+                <!-- Games will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- NBA API utilities -->
+    <script src="../_shared/config.js"></script>
+    <script src="../_shared/nbaApi.js"></script>
+    <script src="../_shared/apiClient.js"></script>
+    
+    <!-- Utilities -->
+    <script src="utils/game-utils.js"></script>
+    <script src="utils/state/game-state-manager.js"></script>
+    <script src="utils/state/timing-manager.js"></script>
+    <script src="utils/state/mode-manager.js"></script>
+    <script src="utils/state/overlay-state-manager.js"></script>
+    <script src="utils/state-manager.js"></script>
+    <script src="utils/simulation-manager.js"></script>
+    <script src="utils/game-data-formatter.js"></script>
+    <script src="utils/transition-animator.js"></script>
+    <script src="utils/unified-box-animator.js"></script>
+    
+    <!-- Game feature -->
+    <script src="game/game-view.js"></script>
+    
+    <!-- Other games feature -->
+    <script src="other-games/other-games-view.js"></script>
+    <script src="other-games/other-games-controller.js"></script>
+    <script src="other-games/other-games-container-view.js"></script>
+    
+    <!-- MVP feature -->
+    <script src="mvp/mvp-view.js"></script>
+    <script src="mvp/mvp-controller.js"></script>
+    <script src="mvp/mvp-integration.js"></script>
+    
+    <!-- Main controllers -->
+    <script src="mode-coordinator.js"></script>
+    <script src="app-controller.js"></script>
+    
+    <script>
+        // ==================== CLEAN INITIALIZATION ====================
+        // All business logic extracted into modular classes
+        
+        // Initialize dependencies
+        const api = new ApiClient();
+        const nbaApi = window.NBAApi;
+        
+        // Initialize unified box animator
+        const unifiedBoxAnimator = new UnifiedBoxAnimator();
+        unifiedBoxAnimator.init(document.getElementById('otherGamesBox'));
+        
+        const gameView = new GameView(unifiedBoxAnimator);
+        const mvpView = new MvpView();
+        const otherGamesView = new OtherGamesView();
+        const otherGamesContainerView = new OtherGamesContainerView();
+        
+        // Initialize core managers
+        const stateManager = new StateManager();
+        const simulationManager = new SimulationManager();
+        const gameDataFormatter = new GameDataFormatter(stateManager);
+        
+        // Initialize MVP controller with state manager (for mode checking)
+        const mvpController = new MvpController(mvpView, stateManager);
+        const mvpIntegration = new MvpIntegration();
+        
+        // Initialize mode coordinator
+        const modeCoordinator = new ModeCoordinator({
+            api,
+            nbaApi,
+            gameView,
+            mvpView,
+            otherGamesView,
+            otherGamesContainerView,
+            stateManager,
+            simulationManager,
+            gameDataFormatter,
+            unifiedBoxAnimator
+        });
+        
+        // Initialize main app controller with all dependencies
+        const appController = new AppController({
+            api,
+            nbaApi,
+            gameView,
+            mvpView,
+            mvpController,
+            mvpIntegration,
+            otherGamesView,
+            stateManager,
+            simulationManager,
+            gameDataFormatter,
+            modeCoordinator
+        });
+        
+        // Start the overlay when DOM is ready
+        window.addEventListener('DOMContentLoaded', () => {
+            appController.start();
+        });
+        
+        // Cleanup timers when page unloads (OBS hides source, browser navigates away, etc.)
+        window.addEventListener('beforeunload', () => {
+            appController.stop();
+        });
+        
+        // Expose for debugging/testing
+        window.appController = appController;
+        window.gameView = gameView;
+        
+        /* OLD CODE REMOVED - Now in modular classes:
+         * - generateSimulationData() → SimulationManager
+         * - resetAndHideOverlay() → AppController
+         * - shouldShowOverlayBasedOnQuarter() → AppController
+         * - updateFromAPI() → AppController
+         * - detectStateAndUpdate() → AppController
+         * - formatGameDataForView() → AppController
+         * - checkSimulatedMVP() → AppController
+         * - All state variables → StateManager
+         */
+    </script>
+
+</body>
+</html>
