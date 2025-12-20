@@ -320,9 +320,9 @@ class GameView {
      * @param {string} countdownText - Formatted countdown string (e.g., "02:15:34")
      */
     updateCountdown(countdownText) {
-        const countdownElement = this.elements.currentGameContent.querySelector('.countdown-time');
-        if (countdownElement) {
-            countdownElement.textContent = countdownText;
+        // Update countdown in game status only (scores stay as 0)
+        if (this.elements.gameStatus) {
+            this.elements.gameStatus.textContent = `Game Starts In: ${countdownText}`;
         }
     }
 
@@ -409,14 +409,31 @@ class GameView {
         this.currentState = 'pregame';
         this.clearStateElements();
 
-        // Update game status to show countdown
-        if (this.elements.gameStatus) {
-            this.elements.gameStatus.textContent = `Game Starts In: ${data.countdown || '00:00:00'}`;
+        // Show teams container (same layout as live game)
+        if (this.elements.teamsContainer) {
+            this.elements.teamsContainer.classList.remove('hidden');
         }
 
-        // Hide teams container and scores
-        if (this.elements.teamsContainer) {
-            this.elements.teamsContainer.classList.add('hidden');
+        // Update teams with logos and abbreviations
+        if (data.homeTeam) {
+            this.updateTeam('home', data.homeTeam.abbr, data.homeTeam.logoUrl);
+        }
+        if (data.awayTeam) {
+            this.updateTeam('away', data.awayTeam.abbr, data.awayTeam.logoUrl);
+        }
+
+        // Show 0 for scores (not countdown - countdown goes in status only)
+        if (this.elements.homeScore) {
+            this.elements.homeScore.textContent = '0';
+        }
+        if (this.elements.awayScore) {
+            this.elements.awayScore.textContent = '0';
+        }
+
+        // Update game status to show countdown
+        const countdownText = data.countdown || '00:00:00';
+        if (this.elements.gameStatus) {
+            this.elements.gameStatus.textContent = `Game Starts In: ${countdownText}`;
         }
 
         // Hide team stats
