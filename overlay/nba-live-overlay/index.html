@@ -191,16 +191,16 @@
             const text = actionText.toLowerCase();
             const isTimeout = text.includes('timeout');
             
-            // Determine icon based on play text
+            // Determine icon based on play text (no icon for timeouts)
             let icon = '⚡'; // default
-            if (text.includes('3-point') || text.includes('three') || text.includes('3pt')) {
+            if (isTimeout) {
+                icon = ''; // No icon for timeouts
+            } else if (text.includes('3-point') || text.includes('three') || text.includes('3pt')) {
                 icon = '🔥';
             } else if (text.includes('dunk') || text.includes('slam')) {
                 icon = '💥';
             } else if (text.includes('free throw') || text.includes('foul')) {
                 icon = '🎯';
-            } else if (isTimeout) {
-                icon = '⏸️'; // pause icon for timeout
             }
             
             // Get team logo for timeouts
@@ -312,8 +312,128 @@
             }
         }
 
+        // Store current audio to manage playback
+        let currentPbpAudio = null;
+
+        // Function to enhance play-by-play text for energetic, enthusiastic commentator-style TTS
+        // The text is formatted to sound like an excited sports commentator while staying accurate
+        function enhanceTextForCommentator(playerName, actionText) {
+            const action = actionText.toLowerCase();
+            const playerUpper = playerName.toUpperCase();
+            
+            // Detect play types and enhance with energetic, enthusiastic commentator style
+            // Text formatted to naturally sound like an excited sports commentator
+            if (action.includes('3-point') || action.includes('three') || action.includes('3pt')) {
+                // Three-pointer - very exciting! Sound energetic and enthusiastic!
+                const variations = [
+                    `${playerUpper}... FOR THREE... BANG!!! HE HITS IT!!!`,
+                    `OH!! ${playerUpper} DRAINS THE THREE-POINTER!!! WOW!!!`,
+                    `${playerUpper} — THREE POINTER — YES!!! WHAT A SHOT!!!`
+                ];
+                return variations[Math.floor(Math.random() * variations.length)];
+            } else if (action.includes('dunk') || action.includes('slam')) {
+                // Dunk - very exciting! Sound energetic and enthusiastic!
+                const variations = [
+                    `${playerUpper}... WITH THE DUNK!!! INCREDIBLE!!!`,
+                    `OH!! ${playerUpper} THROWS IT DOWN!!! WHAT A SLAM!!!`,
+                    `${playerUpper} — SLAM DUNK — YES!!! UNBELIEVABLE!!!`
+                ];
+                return variations[Math.floor(Math.random() * variations.length)];
+            } else if (action.includes('layup') || action.includes('lay-up')) {
+                // Layup - exciting! Sound energetic!
+                const variations = [
+                    `${playerUpper}... WITH THE LAYUP!!! NICE!!!`,
+                    `${playerUpper} FINISHES AT THE RIM!!! GOOD!!!`,
+                    `${playerUpper} — LAYUP — YES!!!`
+                ];
+                return variations[Math.floor(Math.random() * variations.length)];
+            } else if (action.includes('free throw')) {
+                // Free throw - straightforward but energetic
+                const variations = [
+                    `${playerUpper}... AT THE LINE... AND IT'S GOOD!!!`,
+                    `${playerUpper} CONVERTS THE FREE THROW!!!`,
+                    `${playerUpper} — FREE THROW — GOOD!!!`
+                ];
+                return variations[Math.floor(Math.random() * variations.length)];
+            } else if (action.includes('timeout')) {
+                // Timeout - keep it simple but energetic
+                return `TIMEOUT!!! ${actionText.toUpperCase()}!!!`;
+            } else {
+                // Generic exciting enhancement - make it sound energetic and enthusiastic like a sports commentator
+                const variations = [
+                    `${playerUpper}... ${actionText.toUpperCase()}!!!`,
+                    `OH!! ${playerUpper} ${actionText.toUpperCase()}!!! WOW!!!`,
+                    `${playerUpper} — ${actionText.toUpperCase()}!!! YES!!!`
+                ];
+                return variations[Math.floor(Math.random() * variations.length)];
+            }
+        }
+
+        // Function to generate TTS audio for play-by-play text
+        async function generatePlayByPlayAudio(playText, enhance = false) {
+            try {
+                // Stop any currently playing audio
+                if (currentPbpAudio) {
+                    currentPbpAudio.pause();
+                    currentPbpAudio = null;
+                }
+
+                const requestBody = {
+                    text: playText, // Original play-by-play text
+                    voice: 'alloy',
+                    model: 'tts-1',
+                    speed: 1.0,
+                    enhance: enhance // If true, server will use AI to enhance it
+                };
+                
+                console.log('🔊 Sending to /api/text-to-speech:');
+                console.log('Request body:', JSON.stringify(requestBody, null, 2));
+                console.log('Enhance flag:', enhance);
+                console.log('Server will:', enhance ? 'use AI Chat API to enhance text first' : 'use rule-based enhancement');
+
+                const response = await fetch('http://localhost:3000/api/text-to-speech', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    console.error('❌ TTS API error:', response.status, response.statusText);
+                    const errorText = await response.text().catch(() => '');
+                    console.error('Error details:', errorText);
+                    return null;
+                }
+
+                // Get enhanced text from response headers if available
+                const enhancedTextHeader = response.headers.get('X-Enhanced-Text');
+                const originalTextHeader = response.headers.get('X-Original-Text');
+                
+                if (enhance && originalTextHeader && enhancedTextHeader) {
+                    const originalText = atob(originalTextHeader);
+                    const enhancedText = atob(enhancedTextHeader);
+                    
+                    console.log('\n🔊 ===== TEXT ENHANCEMENT =====');
+                    console.log('ORIGINAL:', originalText);
+                    console.log('ENHANCED (sent to TTS):', enhancedText);
+                    console.log('==============================\n');
+                }
+
+                console.log('✅ TTS audio received successfully\n');
+                
+                // Get audio blob
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                return audioUrl;
+            } catch (error) {
+                console.error('Error generating play-by-play audio:', error);
+                return null;
+            }
+        }
+
         // Function to update play-by-play display with exit/enter animations
-        function updatePlayByPlay(play) {
+        async function updatePlayByPlay(play) {
             if (!play || !playByPlayBox) return;
             
             // Don't show play-by-play if MVP is visible
@@ -357,9 +477,15 @@
                 playByPlayBox.style.display = 'block';
             }
             
-            // Ensure photo container is visible (in case it was hidden during halftime/final)
             const pbpPhotoContainer = document.querySelector('.pbp-photo-container');
-            if (pbpPhotoContainer) {
+            
+            // For timeouts, ensure photo container is visible and set team logo immediately
+            if (play.isTimeout && play.teamLogo && pbpPhotoContainer) {
+                pbpPhotoContainer.style.display = '';
+                pbpPhoto.src = play.teamLogo;
+                pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
+            } else if (!play.isTimeout && pbpPhotoContainer) {
+                // For regular plays, ensure photo container is visible
                 pbpPhotoContainer.style.display = '';
             }
             
@@ -397,29 +523,78 @@
             // Force reflow
             void pbpPhoto.offsetWidth || pbpBox.offsetWidth;
             
+            // Generate TTS audio for the play text (start async, don't block animation)
+            // Create text: player name + action for display (what we show in overlay - unchanged)
+            const displayText = play.isTimeout 
+                ? play.action 
+                : `${play.playerName} ${play.action}`;
+            
+            // Use original play-by-play text (AI will enhance it on server)
+            const originalPlayText = play.isTimeout
+                ? play.action
+                : `${play.playerName} ${play.action}`;
+            
+            console.log('📝 ===== PLAY-BY-PLAY TTS REQUEST =====');
+            console.log('ORIGINAL TEXT:', originalPlayText);
+            console.log('Will send to server with enhance: true');
+            console.log('========================================\n');
+            
+            // Send original text to server with enhance flag - AI will make it energetic
+            const audioPromise = generatePlayByPlayAudio(originalPlayText, true);
+
             // Sequence: content exits (0-0.5s), then old pic fades out (0.5-0.8s), then new pic fades in (0.8-1.1s), then content enters (0.9-1.4s)
             // Update image source right when old pic finishes fading out, then trigger new pic fade in
-            setTimeout(() => {
+            setTimeout(async () => {
+                // Wait for audio to be ready
+                const audioUrl = await audioPromise;
                 // Update image source right as old picture finishes fading out (at 0.8s)
                 // Use team logo for timeouts, player photo otherwise
                 if (play.isTimeout && play.teamLogo) {
+                    // Show team logo for timeouts - make sure photo container is visible
+                    if (pbpPhotoContainer) {
+                        pbpPhotoContainer.style.display = '';
+                    }
                     pbpPhoto.src = play.teamLogo;
                     pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
                 } else {
+                    // Show player photo for regular plays
+                    if (pbpPhotoContainer) {
+                        pbpPhotoContainer.style.display = '';
+                    }
                     pbpPhoto.src = play.playerPhoto;
                     pbpPhoto.alt = play.playerName;
                 }
                 
                 // Update text content (will be hidden until CSS animation brings it in at 0.9s)
                 pbpTime.textContent = `Q${play.period} ${play.clock}`;
-                // For timeouts, don't show player name, show team name or timeout text
+                // For timeouts, don't show player name
                 if (play.isTimeout) {
                     pbpPlayer.textContent = ''; // No player name for timeouts
                 } else {
                     pbpPlayer.textContent = play.playerName;
                 }
                 pbpAction.textContent = play.action;
-                pbpIcon.textContent = play.icon;
+                // No icon for timeouts, show icon for other plays
+                pbpIcon.textContent = play.isTimeout ? '' : play.icon;
+                
+                // Play audio when content enters (at ~1.0s mark, after animation starts)
+                if (audioUrl) {
+                    setTimeout(() => {
+                        if (currentPbpAudio) {
+                            currentPbpAudio.pause();
+                        }
+                        currentPbpAudio = new Audio(audioUrl);
+                        currentPbpAudio.play().catch(err => {
+                            // Browser autoplay policy may block audio - silently fail
+                            // This is expected behavior if user hasn't interacted with page yet
+                            if (err.name === 'NotAllowedError' || err.name === 'NotSupportedError') {
+                                // Silently ignore - audio autoplay blocked by browser policy
+                            } else {
+                                console.error('Error playing play-by-play audio:', err);
+                            }
+                        });
+                    }, 200); // Small delay after content animation starts to sync with visual
+                }
                 
                 // Remove exiting, add entering (this triggers the new pic fade-in and content enter animations)
                 playByPlayBox.classList.remove('exiting');
@@ -518,7 +693,7 @@
                     const transformedPlay = transformPlayForDisplay(latestPlay);
                     if (transformedPlay && transformedPlay.action && (transformedPlay.isTimeout || (transformedPlay.playerName !== 'Player' && transformedPlay.action))) {
                         lastPlayId = latestPlay.id;
-                        updatePlayByPlay(transformedPlay);
+                        await updatePlayByPlay(transformedPlay);
                     }
                 }
             } catch (error) {

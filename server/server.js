@@ -16,40 +16,82 @@ function makeTextEnergetic(text) {
   // Remove excessive punctuation first
   text = text.trim();
   
-  // If text doesn't end with punctuation, add exclamation
-  if (!/[.!?]/.test(text.slice(-1))) {
-    text += '!';
-  } else if (text.slice(-1) === '.') {
-    // Replace trailing period with exclamation for more energy
-    text = text.slice(0, -1) + '!';
+  // Extract player name - typically at the start, capitalized words
+  // Pattern: "FirstName LastName action description"
+  const playerNameMatch = text.match(/^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/);
+  
+  if (playerNameMatch) {
+    const playerName = playerNameMatch[1].trim();
+    const playerNameUpper = playerName.toUpperCase();
+    let restOfText = text.substring(playerNameMatch[0].length).trim();
+    
+    // Remove player name from action text if it appears there (handles shortened versions)
+    // Check for full name, first name only, or last name only
+    const nameParts = playerName.split(/\s+/);
+    const firstName = nameParts[0];
+    const lastName = nameParts[nameParts.length - 1];
+    
+    // Remove full name if it appears
+    restOfText = restOfText.replace(new RegExp(`\\b${playerName}\\b`, 'gi'), '').trim();
+    // Remove first name if it appears (but not if it's part of another word)
+    restOfText = restOfText.replace(new RegExp(`\\b${firstName}\\b`, 'gi'), '').trim();
+    // Remove last name if it appears alone
+    if (lastName && lastName !== firstName) {
+      restOfText = restOfText.replace(new RegExp(`\\b${lastName}\\b`, 'gi'), '').trim();
+    }
+    
+    // Clean up extra spaces
+    restOfText = restOfText.replace(/\s+/g, ' ').trim();
+    
+    // Check for three-pointer patterns
+    if (restOfText.match(/three|3-?pointer|3-?pt|three-?point/i)) {
+      // Style: "LUKA DONCIC... FOR THREE... BANG!!!"
+      // Extract opponent if present (e.g., "over Player Name" or "on Player Name")
+      const opponentMatch = restOfText.match(/(?:over|on)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
+      if (opponentMatch) {
+        const opponent = opponentMatch[1].toUpperCase();
+        return `${playerNameUpper}... FOR THREE... BANG!!! HE HITS IT OVER ${opponent}!!!`;
+      }
+      return `${playerNameUpper}... FOR THREE... BANG!!!`;
+    }
+    
+    // Check for scoring plays (makes, scores, drains, hits)
+    if (restOfText.match(/makes|scores|drains|hits/i)) {
+      // Style: "OH!! LUKA DONCIC DRAINS THE THREE-POINTER!!! WOW!!!"
+      const actionVerb = restOfText.match(/(makes|scores|drains|hits)/i)?.[0].toUpperCase();
+      const actionDescription = restOfText.replace(/^(makes|scores|drains|hits)\s+/i, '').toUpperCase().replace(/\.$/, '');
+      const opponentMatch = restOfText.match(/(?:over|on)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
+      
+      if (opponentMatch) {
+        const opponent = opponentMatch[1].toUpperCase();
+        return `OH!! ${playerNameUpper} ${actionVerb} ${actionDescription} ON ${opponent}!!! WOW!!!`;
+      }
+      return `OH!! ${playerNameUpper} ${actionVerb} ${actionDescription}!!! WOW!!!`;
+    }
+    
+    // Check for plays with opponent mentioned
+    const opponentMatch = restOfText.match(/(?:over|on)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
+    if (opponentMatch) {
+      // Style: "DONCIC — THREE POINTER — YES!!! RIGHT ON LEBRON JAMES!!!"
+      const opponent = opponentMatch[1].toUpperCase();
+      const actionPart = restOfText.replace(/\s*(?:over|on)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*/i, '').toUpperCase().replace(/\.$/, '');
+      return `${playerNameUpper} — ${actionPart} — YES!!! RIGHT ON ${opponent}!!!`;
+    }
+    
+    // Default: capitalize player name and action, add enthusiasm
+    const actionUpper = restOfText.toUpperCase().replace(/\.$/, '');
+    return `${playerNameUpper}... ${actionUpper}!!!`;
   }
   
-  // Add emphasis to key action words and numbers
-  const energeticWords = [
-    /\b(score|point|points|goal|basket|shot|win|winning|winner|champion|championship|victory|victorious)\b/gi,
-    /\b(\d+)\b/g, // Numbers
-    /\b(amazing|incredible|unbelievable|fantastic|spectacular|stunning|epic)\b/gi
-  ];
-  
-  energeticWords.forEach(pattern => {
-    text = text.replace(pattern, (match) => {
-      // Capitalize key words for emphasis
-      if (match.match(/^(score|point|goal|basket|shot|win|champion|victory|amazing|incredible|unbelievable|fantastic|spectacular|stunning|epic)$/i)) {
-        return match.toUpperCase();
-      }
-      return match;
-    });
-  });
-  
-  // Add energy to common phrases
-  text = text.replace(/\b(and it's|here we go|what a|that's a)\b/gi, (match) => {
-    return match.toUpperCase();
-  });
-  
-  // Ensure question words get emphasis
-  text = text.replace(/\b(what|who|when|where|how|why)\b/gi, (match) => {
-    return match.toUpperCase();
-  });
+  // Fallback: uppercase and add exclamation
+  text = text.toUpperCase();
+  if (!/[.!?]/.test(text.slice(-1))) {
+    text += '!!!';
+  } else if (text.slice(-1) === '.') {
+    text = text.slice(0, -1) + '!!!';
+  } else {
+    text += '!!';
+  }
   
   return text;
 }
@@ -346,11 +388,108 @@ function handlePostChatRefresh(req, res) {
   sendJson(res, 200, { success: true, message: 'Chat refresh triggered', refreshTrigger: state.getChatRefreshTrigger() });
 }
 
+// Helper function to enhance text using OpenAI Chat API as energetic sports commentator
+// Returns: { enhancedText, systemPrompt, userPrompt }
+async function enhanceTextWithAI(originalText) {
+  return new Promise((resolve, reject) => {
+    const systemPrompt = 'You are an EXTREMELY energetic and enthusiastic NBA sports commentator calling a LIVE game. You get VERY EXCITED about plays but keep your commentary SHORT and PUNCHY. Add just a few dramatic filler words like "OH!", "BANG!", "WOW!", "YES!" (don\'t overdo it). Use ALL CAPS for player names for emphasis. Sound like you\'re announcing a fast-paced, exciting basketball game live. Keep it BRIEF - roughly the same length as the original text, just add enthusiasm. Stay 100% accurate - only add excitement and emphasis, never false information.';
+    
+    const userPrompt = `Rewrite this NBA play-by-play as an EXTREMELY enthusiastic live sports commentator would announce it:
+
+"${originalText}"
+
+Requirements:
+- Add dramatic filler words: "OH!", "BANG!", "WOW!", "YES!", "INCREDIBLE!", "UNBELIEVABLE!"
+- Use ALL CAPS for player names for emphasis
+- Add pauses with ellipses (...) for dramatic effect
+- Make it sound FAST-PACED and EXCITING like live commentary
+- Use multiple exclamation marks for big plays
+- Sound like you're watching an amazing play happen RIGHT NOW
+- Keep it ACCURATE - don't add false information
+
+Respond with ONLY the enhanced commentary text, nothing else.`;
+
+    const requestData = JSON.stringify({
+      model: 'gpt-4o-mini', // Using mini for speed and cost
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt
+        },
+        {
+          role: 'user',
+          content: userPrompt
+        }
+      ],
+      max_tokens: 100,  // Reduced to keep responses shorter
+      temperature: 0.9  // Higher temperature for more creativity and excitement
+    });
+
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/chat/completions',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(requestData)
+      }
+    };
+
+    const apiReq = https.request(options, (apiRes) => {
+      let responseBody = '';
+      
+      apiRes.on('data', (chunk) => {
+        responseBody += chunk;
+      });
+      
+      apiRes.on('end', () => {
+        if (apiRes.statusCode !== 200) {
+          // Fallback to original text if enhancement fails
+          resolve({
+            enhancedText: originalText,
+            systemPrompt: systemPrompt,
+            userPrompt: userPrompt
+          });
+          return;
+        }
+        
+        try {
+          const chatData = JSON.parse(responseBody);
+          const enhancedText = chatData.choices?.[0]?.message?.content?.trim() || originalText;
+          resolve({
+            enhancedText: enhancedText,
+            systemPrompt: systemPrompt,
+            userPrompt: userPrompt
+          });
+        } catch (e) {
+          resolve({
+            enhancedText: originalText,
+            systemPrompt: systemPrompt,
+            userPrompt: userPrompt
+          });
+        }
+      });
+    });
+    
+      apiReq.on('error', (error) => {
+        resolve({
+          enhancedText: originalText,
+          systemPrompt: systemPrompt,
+          userPrompt: userPrompt
+        });
+      });
+    
+    apiReq.write(requestData);
+    apiReq.end();
+  });
+}
+
 // POST /api/text-to-speech - Convert text to speech using OpenAI TTS
 async function handlePostTextToSpeech(req, res) {
   try {
     const data = await parseJsonBody(req);
-    let { text, voice = 'alloy', model = 'tts-1', speed = 1.0 } = data;
+    let { text, voice = 'alloy', model = 'tts-1', speed = 1.0, enhance = false } = data;
     
     if (!text || text.trim().length === 0) {
       const headers = {
@@ -362,11 +501,18 @@ async function handlePostTextToSpeech(req, res) {
       return;
     }
     
-    // Make text sound energetic and enthusiastic like sports announcers
-    // Add emphasis to key words, ensure exclamation points, and add energy
-    text = makeTextEnergetic(text);
+    // Store original text for logging
+    const originalTextForLog = text;
+    let enhancedTextForLog = null;
     
-    // Prepare OpenAI TTS API request
+    // Use rule-based enhancement (following the examples: ALL CAPS player names, BANG!!!, OH!!, etc.)
+    if (enhance) {
+      enhancedTextForLog = makeTextEnergetic(text);
+      text = enhancedTextForLog;
+    } else {
+      // Simple enhancement
+      text = makeTextEnergetic(text);
+    }
     // Speed must be between 0.25 and 4.0
     const speedValue = Math.max(0.25, Math.min(4.0, parseFloat(speed) || 1.0));
     
@@ -415,16 +561,22 @@ async function handlePostTextToSpeech(req, res) {
         return;
       }
       
-      // Stream audio response
+      // Stream audio response with enhanced text in headers for client logging
       const headers = {
         'Content-Type': 'audio/mpeg',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Expose-Headers': 'X-Enhanced-Text, X-Original-Text'
       };
+      
+      // Add original and enhanced text to headers for client logging
+      if (enhance && enhancedTextForLog) {
+        headers['X-Enhanced-Text'] = Buffer.from(enhancedTextForLog).toString('base64');
+        headers['X-Original-Text'] = Buffer.from(originalTextForLog).toString('base64');
+      }
+      
       res.writeHead(200, headers);
       
       apiRes.pipe(res);
-      
-      console.log('🔊 TTS generated (energetic):', text.substring(0, 50) + '...');
     });
     
     apiReq.on('error', (error) => {
