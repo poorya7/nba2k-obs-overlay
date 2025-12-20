@@ -180,11 +180,50 @@
             }
             
             // Remove player name from action text (since we display it separately)
+            // This handles full names, shortened names, and variations
             let actionText = playText;
             if (playerName && playerName !== 'Player' && actionText) {
-                // Remove player name from the beginning of the text
-                const nameRegex = new RegExp(`^${playerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s+`, 'i');
-                actionText = actionText.replace(nameRegex, '').trim();
+                // Helper function to remove player name variations from text
+                function removePlayerNameFromText(text, fullName) {
+                    let cleanedText = text;
+                    
+                    // Escape special regex characters in the full name
+                    const escapedFullName = fullName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const nameParts = fullName.trim().split(/\s+/);
+                    const firstName = nameParts[0];
+                    const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
+                    
+                    // Patterns to try (in order of specificity):
+                    // 1. Full name anywhere in text (word boundaries)
+                    cleanedText = cleanedText.replace(new RegExp(`\\b${escapedFullName}\\b`, 'gi'), '').trim();
+                    
+                    // 2. First initial + last name (e.g., "L. Doncic" for "Luka Doncic")
+                    if (lastName && firstName.length > 0) {
+                        const firstInitial = firstName.charAt(0);
+                        const initialLastNamePattern = `${firstInitial}\\.?\\s+${lastName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`;
+                        cleanedText = cleanedText.replace(new RegExp(`\\b${initialLastNamePattern}\\b`, 'gi'), '').trim();
+                    }
+                    
+                    // 3. Last name only (if it's unique enough - at least 3 chars)
+                    if (lastName && lastName.length >= 3) {
+                        const escapedLastName = lastName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        cleanedText = cleanedText.replace(new RegExp(`\\b${escapedLastName}\\b`, 'gi'), '').trim();
+                    }
+                    
+                    // 4. First name only (if it's unique enough - at least 3 chars and not common words)
+                    if (firstName && firstName.length >= 3 && 
+                        !['The', 'And', 'For', 'With', 'From', 'Over', 'On'].includes(firstName)) {
+                        const escapedFirstName = firstName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        cleanedText = cleanedText.replace(new RegExp(`\\b${escapedFirstName}\\b`, 'gi'), '').trim();
+                    }
+                    
+                    // Clean up multiple spaces and trim
+                    cleanedText = cleanedText.replace(/\s+/g, ' ').trim();
+                    
+                    return cleanedText;
+                }
+                
+                actionText = removePlayerNameFromText(playText, playerName);
             }
             
             // Check if this is a timeout

@@ -408,22 +408,31 @@ function handlePostChatRefresh(req, res) {
 // Returns: { enhancedText, systemPrompt, userPrompt }
 async function enhanceTextWithAI(originalText) {
   return new Promise((resolve, reject) => {
-    const systemPrompt = 'You are an EXTREMELY energetic and enthusiastic NBA sports commentator calling a LIVE game. You get VERY EXCITED about plays but keep your commentary SHORT and PUNCHY. Add just a few dramatic filler words like "OH!", "BANG!", "WOW!", "YES!" (don\'t overdo it). Use ALL CAPS for player names for emphasis. Sound like you\'re announcing a fast-paced, exciting basketball game live. Keep it BRIEF - roughly the same length as the original text, just add enthusiasm. Stay 100% accurate - only add excitement and emphasis, never false information.';
+    const systemPrompt = 'You are an EXTREMELY energetic and enthusiastic NBA sports commentator calling a LIVE game in real-time. You understand what happened in the play-by-play text and rephrase it naturally as if you\'re watching it happen RIGHT NOW. Make it sound conversational and exciting, not robotic. Use words like "just", "now", "immediately" to convey immediacy. Use ALL CAPS for player names for emphasis. Keep it SHORT and PUNCHY - roughly the same length as the original. Stay 100% accurate - only rephrase and add natural excitement, never false information.';
     
-    const userPrompt = `Rewrite this NBA play-by-play as an EXTREMELY enthusiastic live sports commentator would announce it:
+    const userPrompt = `This is NBA play-by-play text that needs to be understood and rephrased naturally for live commentary:
 
 "${originalText}"
 
-Requirements:
-- Add dramatic filler words: "OH!", "BANG!", "WOW!", "YES!", "INCREDIBLE!", "UNBELIEVABLE!"
-- Use ALL CAPS for player names for emphasis
-- Add pauses with ellipses (...) for dramatic effect
-- Make it sound FAST-PACED and EXCITING like live commentary
-- Use multiple exclamation marks for big plays
-- Sound like you're watching an amazing play happen RIGHT NOW
-- Keep it ACCURATE - don't add false information
+Your task:
+1. FIRST, understand what actually happened in the play
+2. THEN, rephrase it naturally as if you're calling it live RIGHT NOW
+3. Make it sound conversational and exciting, not like reading text verbatim
 
-Respond with ONLY the enhanced commentary text, nothing else.`;
+Examples of what to do:
+- "Julius Randle lost ball turnover (Alex Caruso steals)" → "ALEX CARUSO just stole the ball from JULIUS RANDLE!"
+- "Luka Doncic makes 3-point shot" → "LUKA DONCIC... FOR THREE... BANG! HE HITS IT!"
+- "LeBron James makes dunk" → "LEBRON JAMES just threw it down with an incredible dunk!"
+
+Guidelines:
+- Understand the action first, then say what happened naturally
+- Use words like "just", "now", "immediately" for immediacy
+- Use ALL CAPS for player names
+- Add natural excitement but keep it brief (1-2 sentences max)
+- Sound like you're watching it happen live, not reading text
+- Make it conversational, not robotic
+
+Respond with ONLY the rephrased commentary text, nothing else.`;
 
     const requestData = JSON.stringify({
       model: 'gpt-4o-mini', // Using mini for speed and cost
@@ -521,12 +530,20 @@ async function handlePostTextToSpeech(req, res) {
     const originalTextForLog = text;
     let enhancedTextForLog = null;
     
-    // Use rule-based enhancement (following the examples: ALL CAPS player names, BANG!!!, OH!!, etc.)
+    // Use AI enhancement to understand and rephrase naturally when enhance flag is true
     if (enhance) {
-      enhancedTextForLog = makeTextEnergetic(text);
-      text = enhancedTextForLog;
+      try {
+        const aiResult = await enhanceTextWithAI(text);
+        enhancedTextForLog = aiResult.enhancedText;
+        text = enhancedTextForLog;
+      } catch (error) {
+        // Fallback to rule-based enhancement if AI fails
+        console.error('❌ AI enhancement failed, using rule-based:', error.message);
+        enhancedTextForLog = makeTextEnergetic(text);
+        text = enhancedTextForLog;
+      }
     } else {
-      // Simple enhancement
+      // Simple rule-based enhancement
       text = makeTextEnergetic(text);
     }
     // Speed must be between 0.25 and 4.0
