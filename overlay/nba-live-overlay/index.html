@@ -479,14 +479,16 @@
             
             const pbpPhotoContainer = document.querySelector('.pbp-photo-container');
             
-            // For timeouts, ensure photo container is visible and set team logo immediately
+            // For timeouts, remove border and show team logo
             if (play.isTimeout && play.teamLogo && pbpPhotoContainer) {
                 pbpPhotoContainer.style.display = '';
+                pbpPhotoContainer.style.border = 'none'; // Remove circular border for timeouts
                 pbpPhoto.src = play.teamLogo;
                 pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
             } else if (!play.isTimeout && pbpPhotoContainer) {
-                // For regular plays, ensure photo container is visible
+                // For regular plays, ensure photo container is visible and has border
                 pbpPhotoContainer.style.display = '';
+                pbpPhotoContainer.style.border = ''; // Restore border for regular plays
             }
             
             const pbpBox = document.getElementById('pbpBoxContent');
@@ -550,16 +552,18 @@
                 // Update image source right as old picture finishes fading out (at 0.8s)
                 // Use team logo for timeouts, player photo otherwise
                 if (play.isTimeout && play.teamLogo) {
-                    // Show team logo for timeouts - make sure photo container is visible
+                    // Show team logo for timeouts - remove border
                     if (pbpPhotoContainer) {
                         pbpPhotoContainer.style.display = '';
+                        pbpPhotoContainer.style.border = 'none'; // Remove circular border for timeouts
                     }
                     pbpPhoto.src = play.teamLogo;
                     pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
                 } else {
-                    // Show player photo for regular plays
+                    // Show player photo for regular plays - restore border
                     if (pbpPhotoContainer) {
                         pbpPhotoContainer.style.display = '';
+                        pbpPhotoContainer.style.border = ''; // Restore border for regular plays
                     }
                     pbpPhoto.src = play.playerPhoto;
                     pbpPhoto.alt = play.playerName;
