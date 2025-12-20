@@ -89,6 +89,213 @@
         </div>
     </div>
 
+    <!-- Play-by-Play Box (right under game box) -->
+    <div class="play-by-play-box anim-21" id="playByPlayBox">
+        <div class="pbp-box" id="pbpBoxContent">
+            <div class="pbp-photo-container">
+                <img class="pbp-photo" id="pbpPhoto" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Player">
+            </div>
+            <div class="pbp-icon" id="pbpIcon">⚡</div>
+            <div class="pbp-content">
+                <div class="pbp-time" id="pbpTime">Q4 11:18</div>
+                <div class="pbp-text" id="pbpText">
+                    <span class="pbp-player" id="pbpPlayer">Luka Doncic</span> <span class="pbp-action" id="pbpAction">scored 3 points</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Hardcoded play-by-play test examples
+        const playByPlayExamples = [
+            {
+                period: 4,
+                clock: "11:18",
+                playerName: "Luka Doncic",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/4066648.png",
+                action: "scored 3 points via 3-point jump shot",
+                icon: "⚡"
+            },
+            {
+                period: 4,
+                clock: "10:45",
+                playerName: "LeBron James",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/1966.png",
+                action: "made slam dunk - 2 PTS",
+                icon: "💥"
+            },
+            {
+                period: 3,
+                clock: "7:32",
+                playerName: "Stephen Curry",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3975.png",
+                action: "scored 3 points from beyond the arc",
+                icon: "🔥"
+            },
+            {
+                period: 2,
+                clock: "5:15",
+                playerName: "Giannis Antetokounmpo",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3136776.png",
+                action: "made free throw - 1 PT",
+                icon: "🎯"
+            },
+            {
+                period: 1,
+                clock: "9:28",
+                playerName: "Jayson Tatum",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/4066261.png",
+                action: "scored 2 points via layup",
+                icon: "⚡"
+            },
+            {
+                period: 4,
+                clock: "3:42",
+                playerName: "Nikola Jokic",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3112335.png",
+                action: "made 3-point jump shot - 3 PTS",
+                icon: "🔥"
+            },
+            {
+                period: 3,
+                clock: "8:55",
+                playerName: "Kevin Durant",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3202.png",
+                action: "scored 2 points via fadeaway jumper",
+                icon: "💥"
+            },
+            {
+                period: 2,
+                clock: "2:18",
+                playerName: "Joel Embiid",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3136775.png",
+                action: "made free throw - 1 PT",
+                icon: "🎯"
+            },
+            {
+                period: 1,
+                clock: "6:44",
+                playerName: "Devin Booker",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3136773.png",
+                action: "scored 3 points via step-back three",
+                icon: "⚡"
+            },
+            {
+                period: 4,
+                clock: "1:25",
+                playerName: "Damian Lillard",
+                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/6606.png",
+                action: "made deep 3-pointer - 3 PTS",
+                icon: "🔥"
+            }
+        ];
+
+        let currentPlayIndex = 0;
+        const pbpPhoto = document.getElementById('pbpPhoto');
+        const pbpTime = document.getElementById('pbpTime');
+        const pbpPlayer = document.getElementById('pbpPlayer');
+        const pbpAction = document.getElementById('pbpAction');
+        const pbpIcon = document.getElementById('pbpIcon');
+
+        // Function to update play-by-play display with exit/enter animations
+        function updatePlayByPlay(play) {
+            if (!play) return;
+            
+            const pbpBox = document.getElementById('pbpBoxContent');
+            
+            // Remove animation state classes
+            playByPlayBox.classList.remove('exiting', 'entering');
+            
+            // Reset styles for content animations
+            const photoImg = pbpPhoto;
+            photoImg.style.transform = '';
+            photoImg.style.opacity = '';
+            photoImg.style.filter = '';
+            photoImg.style.animation = '';
+            photoImg.style.clipPath = '';
+            
+            const pbpContent = document.querySelector('.pbp-content');
+            if (pbpContent) {
+                pbpContent.style.transform = '';
+                pbpContent.style.opacity = '';
+                pbpContent.style.filter = '';
+                pbpContent.style.animation = '';
+                pbpContent.style.clipPath = '';
+            }
+            
+            pbpIcon.style.transform = '';
+            pbpIcon.style.opacity = '';
+            pbpIcon.style.filter = '';
+            pbpIcon.style.animation = '';
+            pbpIcon.style.clipPath = '';
+            
+            // Add exit animation class
+            playByPlayBox.classList.add('anim-21', 'exiting');
+            
+            // Force reflow
+            void pbpPhoto.offsetWidth || pbpBox.offsetWidth;
+            
+            // Sequence: content exits (0-0.5s), then old pic fades out (0.5-0.8s), then new pic fades in (0.8-1.1s), then content enters (0.9-1.4s)
+            // Update image source right when old pic finishes fading out, then trigger new pic fade in
+            setTimeout(() => {
+                // Update image source right as old picture finishes fading out (at 0.8s)
+                pbpPhoto.src = play.playerPhoto;
+                pbpPhoto.alt = play.playerName;
+                
+                // Update text content (will be hidden until CSS animation brings it in at 0.9s)
+                pbpTime.textContent = `Q${play.period} ${play.clock}`;
+                pbpPlayer.textContent = play.playerName;
+                pbpAction.textContent = play.action;
+                pbpIcon.textContent = play.icon;
+                
+                // Remove exiting, add entering (this triggers the new pic fade-in and content enter animations)
+                playByPlayBox.classList.remove('exiting');
+                playByPlayBox.classList.add('entering');
+                
+                // Reset and force reflow for enter animation
+                void pbpPhoto.offsetWidth || pbpBox.offsetWidth;
+                
+                // After all enter animations complete, clean up
+                setTimeout(() => {
+                    playByPlayBox.classList.remove('entering');
+                    
+                    // Reset all inline styles after animation
+                    photoImg.style.opacity = '';
+                    photoImg.style.clipPath = '';
+                    photoImg.style.filter = '';
+                    if (pbpContent) {
+                        pbpContent.style.opacity = '';
+                        pbpContent.style.clipPath = '';
+                        pbpContent.style.filter = '';
+                    }
+                    pbpIcon.style.opacity = '';
+                    pbpIcon.style.clipPath = '';
+                    pbpIcon.style.filter = '';
+                }, 700); // Max animation duration (0.1s delay + 0.5s animation + 0.1s buffer)
+            }, 800); // Wait for content exit (0.5s) + old pic fade out (0.3s) = 0.8s
+        }
+
+        // Cycle through examples every 3 seconds for testing
+        function cyclePlayByPlayExamples() {
+            updatePlayByPlay(playByPlayExamples[currentPlayIndex]);
+            currentPlayIndex = (currentPlayIndex + 1) % playByPlayExamples.length;
+        }
+
+        // Start cycling when DOM is ready
+        window.addEventListener('DOMContentLoaded', () => {
+            // Show first example immediately
+            updatePlayByPlay(playByPlayExamples[0]);
+            
+            // Cycle through examples every 3 seconds
+            setInterval(cyclePlayByPlayExamples, 3000);
+        });
+
+        // Expose function for manual control
+        window.updatePlayByPlay = updatePlayByPlay;
+        window.playByPlayExamples = playByPlayExamples;
+    </script>
+
+
     <!-- Other Games Box (center-anchored, grows from both sides) -->
     <div class="other-games-box" id="otherGamesBox" style="display: none;">
         <div class="other-games-content" id="otherGamesContent">

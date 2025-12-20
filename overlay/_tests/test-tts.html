@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Text-to-Speech Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .text-input, .select-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            background: white;
+        }
+
+        .text-input:focus, .select-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .select-input {
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .speed-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+            margin: 10px 0;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .speed-slider::-webkit-slider-thumb:hover {
+            background: #764ba2;
+        }
+
+        .speed-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        .speed-slider::-moz-range-thumb:hover {
+            background: #764ba2;
+        }
+
+        #speed-value {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .speed-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
+        .audio-container {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .audio-container.hidden {
+            display: none;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .status.loading {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .placeholder-text {
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            padding: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔊 OpenAI TTS Test</h1>
+        <p class="subtitle">Convert text to speech using OpenAI's Text-to-Speech API</p>
+
+        <form id="tts-form">
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    id="text-input" 
+                    placeholder="Type something and press Enter or click the button..."
+                    required
+                    autofocus
+                    class="text-input"
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="voice-select">Voice</label>
+                <select id="voice-select" class="select-input">
+                    <option value="alloy">Alloy (Neutral, American)</option>
+                    <option value="echo">Echo (Male, American)</option>
+                    <option value="fable">Fable (British)</option>
+                    <option value="onyx">Onyx (Male, Deep)</option>
+                    <option value="nova">Nova (Female, Bright)</option>
+                    <option value="shimmer">Shimmer (Female, Soft)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="style-select">Style</label>
+                <select id="style-select" class="select-input">
+                    <option value="normal">Normal</option>
+                    <option value="slow">Slow / ASMR</option>
+                    <option value="fast">Fast</option>
+                    <option value="dramatic">Dramatic</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="speed-slider">
+                    Speed: <span id="speed-value">1.0x</span>
+                </label>
+                <input 
+                    type="range" 
+                    id="speed-slider" 
+                    min="0.25" 
+                    max="4.0" 
+                    step="0.05" 
+                    value="1.0"
+                    class="speed-slider"
+                />
+                <div class="speed-labels">
+                    <span>0.25x (Very Slow)</span>
+                    <span>1.0x (Normal)</span>
+                    <span>4.0x (Very Fast)</span>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-primary" id="generate-btn">
+                    Read It
+                </button>
+            </div>
+        </form>
+
+        <div id="status"></div>
+
+        <div class="audio-container hidden" id="audio-container"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('tts-form');
+        const textInput = document.getElementById('text-input');
+        const voiceSelect = document.getElementById('voice-select');
+        const styleSelect = document.getElementById('style-select');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValue = document.getElementById('speed-value');
+        const generateBtn = document.getElementById('generate-btn');
+        const statusDiv = document.getElementById('status');
+        const audioContainer = document.getElementById('audio-container');
+        
+        let currentAudio = null;
+
+        // Speed presets for styles
+        const styleSpeeds = {
+            'normal': 1.0,
+            'slow': 0.5,
+            'fast': 1.5,
+            'dramatic': 0.75
+        };
+
+        // Update speed display
+        speedSlider.addEventListener('input', (e) => {
+            const speed = parseFloat(e.target.value);
+            speedValue.textContent = speed.toFixed(2) + 'x';
+        });
+
+        // Update speed when style changes
+        styleSelect.addEventListener('change', (e) => {
+            const speed = styleSpeeds[e.target.value];
+            speedSlider.value = speed;
+            speedValue.textContent = speed.toFixed(2) + 'x';
+        });
+
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+
+        function hideStatus() {
+            statusDiv.style.display = 'none';
+        }
+
+        function setLoading(loading) {
+            generateBtn.disabled = loading;
+            textInput.disabled = loading;
+            if (loading) {
+                generateBtn.textContent = 'Reading...';
+            } else {
+                generateBtn.textContent = 'Read It';
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const text = textInput.value.trim();
+            if (!text) {
+                showStatus('Please enter some text', 'error');
+                return;
+            }
+
+            // Stop any currently playing audio
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+
+            setLoading(true);
+            showStatus('Generating audio...', 'loading');
+            audioContainer.classList.add('hidden');
+
+            try {
+                const response = await fetch('http://localhost:3000/api/text-to-speech', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        voice: voiceSelect.value,
+                        model: 'tts-1', // Default model (fast)
+                        speed: parseFloat(speedSlider.value)
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ error: response.statusText }));
+                    throw new Error(error.error || `HTTP ${response.status}`);
+                }
+
+                // Get audio blob
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                // Create audio element
+                audioContainer.innerHTML = `
+                    <p style="color: #333; font-weight: 600; margin-bottom: 10px;">Generated Audio:</p>
+                    <audio controls autoplay>
+                        <source src="${audioUrl}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                `;
+                audioContainer.classList.remove('hidden');
+
+                // Store reference to audio element
+                currentAudio = audioContainer.querySelector('audio');
+                currentAudio.addEventListener('ended', () => {
+                    setLoading(false);
+                    textInput.focus(); // Refocus for next input
+                });
+
+                showStatus('Playing audio...', 'success');
+                setTimeout(hideStatus, 1500);
+
+            } catch (error) {
+                console.error('TTS Error:', error);
+                showStatus(`Error: ${error.message}`, 'error');
+                audioContainer.classList.add('hidden');
+                textInput.focus(); // Refocus on error
+            } finally {
+                setLoading(false);
+            }
+        });
+        
+        // Focus input on page load
+        textInput.focus();
+    </script>
+</body>
+</html>

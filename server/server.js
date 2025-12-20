@@ -5,6 +5,54 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
+const openaiConfig = require('../overlay/nba-live-overlay/config/openai.config.js');
+
+/**
+ * Transform text to sound energetic and enthusiastic like sports announcers
+ * @param {string} text - Original text
+ * @returns {string} - Energetic version of text
+ */
+function makeTextEnergetic(text) {
+  // Remove excessive punctuation first
+  text = text.trim();
+  
+  // If text doesn't end with punctuation, add exclamation
+  if (!/[.!?]/.test(text.slice(-1))) {
+    text += '!';
+  } else if (text.slice(-1) === '.') {
+    // Replace trailing period with exclamation for more energy
+    text = text.slice(0, -1) + '!';
+  }
+  
+  // Add emphasis to key action words and numbers
+  const energeticWords = [
+    /\b(score|point|points|goal|basket|shot|win|winning|winner|champion|championship|victory|victorious)\b/gi,
+    /\b(\d+)\b/g, // Numbers
+    /\b(amazing|incredible|unbelievable|fantastic|spectacular|stunning|epic)\b/gi
+  ];
+  
+  energeticWords.forEach(pattern => {
+    text = text.replace(pattern, (match) => {
+      // Capitalize key words for emphasis
+      if (match.match(/^(score|point|goal|basket|shot|win|champion|victory|amazing|incredible|unbelievable|fantastic|spectacular|stunning|epic)$/i)) {
+        return match.toUpperCase();
+      }
+      return match;
+    });
+  });
+  
+  // Add energy to common phrases
+  text = text.replace(/\b(and it's|here we go|what a|that's a)\b/gi, (match) => {
+    return match.toUpperCase();
+  });
+  
+  // Ensure question words get emphasis
+  text = text.replace(/\b(what|who|when|where|how|why)\b/gi, (match) => {
+    return match.toUpperCase();
+  });
+  
+  return text;
+}
 
 const PORT = 3000;
 
@@ -298,6 +346,111 @@ function handlePostChatRefresh(req, res) {
   sendJson(res, 200, { success: true, message: 'Chat refresh triggered', refreshTrigger: state.getChatRefreshTrigger() });
 }
 
+// POST /api/text-to-speech - Convert text to speech using OpenAI TTS
+async function handlePostTextToSpeech(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    let { text, voice = 'alloy', model = 'tts-1', speed = 1.0 } = data;
+    
+    if (!text || text.trim().length === 0) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Missing required field: text' }));
+      return;
+    }
+    
+    // Make text sound energetic and enthusiastic like sports announcers
+    // Add emphasis to key words, ensure exclamation points, and add energy
+    text = makeTextEnergetic(text);
+    
+    // Prepare OpenAI TTS API request
+    // Speed must be between 0.25 and 4.0
+    const speedValue = Math.max(0.25, Math.min(4.0, parseFloat(speed) || 1.0));
+    
+    const requestData = JSON.stringify({
+      model: model,
+      input: text,
+      voice: voice, // alloy, echo, fable, onyx, nova, shimmer
+      speed: speedValue
+    });
+    
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/audio/speech',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(requestData)
+      }
+    };
+    
+    // Make request to OpenAI API
+    const apiReq = https.request(options, (apiRes) => {
+      if (apiRes.statusCode !== 200) {
+        let errorBody = '';
+        apiRes.on('data', (chunk) => { errorBody += chunk; });
+        apiRes.on('end', () => {
+          try {
+            const errorData = JSON.parse(errorBody);
+            console.error('❌ OpenAI TTS error:', apiRes.statusCode, errorData);
+            const headers = {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            };
+            res.writeHead(apiRes.statusCode, headers);
+            res.end(JSON.stringify({ error: `OpenAI API error: ${errorData.error?.message || apiRes.statusMessage}` }));
+          } catch (e) {
+            const headers = {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            };
+            res.writeHead(apiRes.statusCode, headers);
+            res.end(JSON.stringify({ error: `OpenAI API error: ${apiRes.statusMessage}` }));
+          }
+        });
+        return;
+      }
+      
+      // Stream audio response
+      const headers = {
+        'Content-Type': 'audio/mpeg',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(200, headers);
+      
+      apiRes.pipe(res);
+      
+      console.log('🔊 TTS generated (energetic):', text.substring(0, 50) + '...');
+    });
+    
+    apiReq.on('error', (error) => {
+      console.error('❌ TTS request error:', error.message);
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ error: error.message }));
+    });
+    
+    apiReq.write(requestData);
+    apiReq.end();
+    
+  } catch (error) {
+    console.error('❌ TTS error:', error.message);
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    };
+    res.writeHead(500, headers);
+    res.end(JSON.stringify({ error: error.message }));
+  }
+}
+
 // GET /api/image-proxy?url=... - Proxy images to bypass CORS
 function handleGetImageProxy(req, res) {
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
@@ -389,6 +542,7 @@ const API_ROUTES = {
   'POST /api/chat': handlePostChat,
   'DELETE /api/chat': handleDeleteChat,
   'POST /api/chat/refresh': handlePostChatRefresh,
+  'POST /api/text-to-speech': handlePostTextToSpeech,
   'GET /api/image-proxy': handleGetImageProxy
 };
 
@@ -404,6 +558,11 @@ async function routeApiRequest(req, res) {
   const normalizedUrl = urlWithoutQuery.endsWith('/') && urlWithoutQuery.length > 1
     ? urlWithoutQuery.slice(0, -1)
     : urlWithoutQuery;
+  
+  // Only process API routes (routes starting with /api)
+  if (!normalizedUrl.startsWith('/api')) {
+    return false;
+  }
   
   // Handle CORS preflight (OPTIONS requests)
   if (req.method === 'OPTIONS') {
@@ -432,7 +591,15 @@ async function routeApiRequest(req, res) {
     return true;
   }
   
-  return false;
+  // If it's an API route but no handler found, return 404 with CORS
+  console.log('❌ API route not found:', routeKey);
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  };
+  res.writeHead(404, headers);
+  res.end(JSON.stringify({ error: 'API route not found' }));
+  return true;
 }
 
 // ==================== HTTP SERVER ====================
@@ -473,6 +640,10 @@ const server = http.createServer(async (req, res) => {
     filePath = './overlay/chat-overlay/chat-test.html';
   } else if (filePath === './test' || filePath === './test/') {
     filePath = './overlay/_tests/index.html';
+  } else if (filePath === './test-tts' || filePath === './test-tts/') {
+    filePath = './overlay/_tests/test-tts.html';
+  } else if (filePath === './test-pbp-animations' || filePath === './test-pbp-animations/') {
+    filePath = './overlay/_tests/test-pbp-animations.html';
   } else if (filePath === './design-test' || filePath === './design-test/') {
     filePath = './overlay/design-test/index.html';
   } else if (filePath === './overlay/design-test' || filePath === './overlay/design-test/') {
@@ -524,6 +695,8 @@ server.listen(PORT, () => {
   console.log('🎨 Color Overlay (OBS): http://localhost:' + PORT + '/overlay/color');
     console.log('🧪 Chat Test Page: http://localhost:' + PORT + '/chat-test');
     console.log('🎨 Design Tester: http://localhost:' + PORT + '/design-test');
+    console.log('🔊 TTS Test Page: http://localhost:' + PORT + '/test-tts');
+    console.log('🎬 PBP Animations Test: http://localhost:' + PORT + '/test-pbp-animations');
   console.log('');
   console.log('Press Ctrl+C to stop the server');
 });
