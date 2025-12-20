@@ -314,6 +314,149 @@
 
         // Store current audio to manage playback
         let currentPbpAudio = null;
+        let currentAnalysisAudio = null; // For timeout/halftime/dead-air analysis
+        let analysisAudioUrl = null; // Cache the audio blob URL
+        let analysisLastPosition = 0; // Track playback position for resuming
+        let analysisTimestamp = null; // Track when analysis was generated
+        let deadAirTimer = null; // Timer for dead air detection
+        let lastPlayTimestamp = Date.now(); // Track when last play occurred
+
+        // Function to request game analysis audio during timeout/halftime/dead-air
+        async function requestGameAnalysisAudio(gameId, forceRegenerate = false) {
+            // Save current playback position if audio is playing
+            if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
+                analysisLastPosition = currentAnalysisAudio.currentTime;
+                currentAnalysisAudio.pause();
+            }
+            
+            // Check if we should use cached audio (less than 10 minutes old, not forcing regenerate)
+            const TEN_MINUTES = 10 * 60 * 1000;
+            const useCached = !forceRegenerate && analysisAudioUrl && analysisTimestamp && 
+                             (Date.now() - analysisTimestamp) < TEN_MINUTES;
+            
+            if (useCached) {
+                // Use cached audio, resume from last position
+                if (!currentAnalysisAudio || currentAnalysisAudio.src !== analysisAudioUrl) {
+                    if (currentAnalysisAudio) {
+                        currentAnalysisAudio.pause();
+                        const oldUrl = currentAnalysisAudio.src;
+                        if (oldUrl.startsWith('blob:')) {
+                            URL.revokeObjectURL(oldUrl);
+                        }
+                    }
+                    currentAnalysisAudio = new Audio(analysisAudioUrl);
+                }
+                currentAnalysisAudio.currentTime = analysisLastPosition;
+                currentAnalysisAudio.play().catch(() => {
+                    // Ignore autoplay restrictions
+                });
+                return;
+            }
+            
+            // Generate new analysis audio
+            const homeTeam = (window.gameView?.elements?.homeAbbr?.textContent || 
+                             document.querySelector('[data-abbr="home"]')?.textContent || 
+                             'Home Team').trim();
+            const awayTeam = (window.gameView?.elements?.awayAbbr?.textContent || 
+                             document.querySelector('[data-abbr="away"]')?.textContent || 
+                             'Away Team').trim();
+            const homeScore = window.gameView?.elements?.homeScore?.textContent?.trim() || '0';
+            const awayScore = window.gameView?.elements?.awayScore?.textContent?.trim() || '0';
+            const currentScore = `${homeTeam} ${homeScore} - ${awayScore} ${awayTeam}`;
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/game-analysis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gameId: gameId,
+                        homeTeam: homeTeam,
+                        awayTeam: awayTeam,
+                        currentScore: currentScore,
+                        forceRegenerate: forceRegenerate
+                    })
+                });
+                
+                if (!response.ok) {
+                    return;
+                }
+                
+                // Check if server says to use cache
+                const contentType = response.headers.get('content-type');
+                if (contentType === 'application/json') {
+                    const cacheInfo = await response.json();
+                    if (cacheInfo.cached) {
+                        // Server says use cache - should have been handled above, but handle gracefully
+                        return;
+                    }
+                    return;
+                }
+                
+                // Get audio blob, cache it, and play it
+                const audioBlob = await response.blob();
+                
+                // Clean up old audio URL if exists
+                if (analysisAudioUrl && analysisAudioUrl.startsWith('blob:')) {
+                    URL.revokeObjectURL(analysisAudioUrl);
+                }
+                
+                analysisAudioUrl = URL.createObjectURL(audioBlob);
+                const generatedAt = response.headers.get('X-Generated-At');
+                analysisTimestamp = generatedAt ? parseInt(generatedAt) : Date.now();
+                analysisLastPosition = 0; // Reset position for new audio
+                
+                // Clean up old audio object if exists
+                if (currentAnalysisAudio) {
+                    currentAnalysisAudio.pause();
+                    const oldUrl = currentAnalysisAudio.src;
+                    if (oldUrl.startsWith('blob:') && oldUrl !== analysisAudioUrl) {
+                        URL.revokeObjectURL(oldUrl);
+                    }
+                }
+                
+                currentAnalysisAudio = new Audio(analysisAudioUrl);
+                currentAnalysisAudio.play().catch(() => {
+                    // Ignore autoplay restrictions
+                });
+            } catch (error) {
+                // Silently handle errors
+            }
+        }
+        
+        // Function to handle dead air detection (no play-by-play for 8 seconds)
+        function handleDeadAir(gameId) {
+            // Clear existing timer
+            if (deadAirTimer) {
+                clearTimeout(deadAirTimer);
+                deadAirTimer = null;
+            }
+            
+            // Set new timer for 8 seconds
+            deadAirTimer = setTimeout(() => {
+                // Check if 10 minutes have passed since last analysis generation
+                const TEN_MINUTES = 10 * 60 * 1000;
+                const shouldRegenerate = !analysisTimestamp || (Date.now() - analysisTimestamp) >= TEN_MINUTES;
+                
+                // Request analysis audio (will use cache if recent, or regenerate if old)
+                requestGameAnalysisAudio(gameId, shouldRegenerate);
+                deadAirTimer = null;
+            }, 8000); // 8 seconds
+        }
+        
+        // Function to stop dead air analysis when new play comes in
+        function stopDeadAirAnalysis() {
+            // Clear dead air timer
+            if (deadAirTimer) {
+                clearTimeout(deadAirTimer);
+                deadAirTimer = null;
+            }
+            
+            // Stop analysis audio (but save position for resuming)
+            if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
+                analysisLastPosition = currentAnalysisAudio.currentTime;
+                currentAnalysisAudio.pause();
+            }
+        }
 
         // Function to enhance play-by-play text for energetic, enthusiastic commentator-style TTS
         // The text is formatted to sound like an excited sports commentator while staying accurate
@@ -386,10 +529,6 @@
                     enhance: enhance // If true, server will use AI to enhance it
                 };
                 
-                console.log('🔊 Sending to /api/text-to-speech:');
-                console.log('Request body:', JSON.stringify(requestBody, null, 2));
-                console.log('Enhance flag:', enhance);
-                console.log('Server will:', enhance ? 'use AI Chat API to enhance text first' : 'use rule-based enhancement');
 
                 const response = await fetch('http://localhost:3000/api/text-to-speech', {
                     method: 'POST',
@@ -400,34 +539,15 @@
                 });
 
                 if (!response.ok) {
-                    console.error('❌ TTS API error:', response.status, response.statusText);
-                    const errorText = await response.text().catch(() => '');
-                    console.error('Error details:', errorText);
                     return null;
                 }
 
-                // Get enhanced text from response headers if available
-                const enhancedTextHeader = response.headers.get('X-Enhanced-Text');
-                const originalTextHeader = response.headers.get('X-Original-Text');
-                
-                if (enhance && originalTextHeader && enhancedTextHeader) {
-                    const originalText = atob(originalTextHeader);
-                    const enhancedText = atob(enhancedTextHeader);
-                    
-                    console.log('\n🔊 ===== TEXT ENHANCEMENT =====');
-                    console.log('ORIGINAL:', originalText);
-                    console.log('ENHANCED (sent to TTS):', enhancedText);
-                    console.log('==============================\n');
-                }
-
-                console.log('✅ TTS audio received successfully\n');
                 
                 // Get audio blob
                 const audioBlob = await response.blob();
                 const audioUrl = URL.createObjectURL(audioBlob);
                 return audioUrl;
             } catch (error) {
-                console.error('Error generating play-by-play audio:', error);
                 return null;
             }
         }
@@ -485,10 +605,20 @@
                 pbpPhotoContainer.style.border = 'none'; // Remove circular border for timeouts
                 pbpPhoto.src = play.teamLogo;
                 pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
+                
+                // Request game analysis audio for timeout (always regenerate for timeout)
+                // Get gameId from current game view or state
+                const currentGameId = window.gameView?.gameId || window.appController?.selectedGameId;
+                if (currentGameId) {
+                    requestGameAnalysisAudio(currentGameId, true);
+                }
             } else if (!play.isTimeout && pbpPhotoContainer) {
                 // For regular plays, ensure photo container is visible and has border
                 pbpPhotoContainer.style.display = '';
                 pbpPhotoContainer.style.border = ''; // Restore border for regular plays
+                
+                // Stop dead air analysis (but save position for resuming)
+                stopDeadAirAnalysis();
             }
             
             const pbpBox = document.getElementById('pbpBoxContent');
@@ -536,10 +666,6 @@
                 ? play.action
                 : `${play.playerName} ${play.action}`;
             
-            console.log('📝 ===== PLAY-BY-PLAY TTS REQUEST =====');
-            console.log('ORIGINAL TEXT:', originalPlayText);
-            console.log('Will send to server with enhance: true');
-            console.log('========================================\n');
             
             // Send original text to server with enhance flag - AI will make it energetic
             const audioPromise = generatePlayByPlayAudio(originalPlayText, true);
@@ -588,14 +714,8 @@
                             currentPbpAudio.pause();
                         }
                         currentPbpAudio = new Audio(audioUrl);
-                        currentPbpAudio.play().catch(err => {
-                            // Browser autoplay policy may block audio - silently fail
-                            // This is expected behavior if user hasn't interacted with page yet
-                            if (err.name === 'NotAllowedError' || err.name === 'NotSupportedError') {
-                                // Silently ignore - audio autoplay blocked by browser policy
-                            } else {
-                                console.error('Error playing play-by-play audio:', err);
-                            }
+                        currentPbpAudio.play().catch(() => {
+                            // Ignore autoplay restrictions
                         });
                     }, 200); // Small delay after content animation starts to sync with visual
                 }
@@ -658,6 +778,9 @@
                     // Hide photo container to avoid empty frame
                     if (pbpPhotoContainer) pbpPhotoContainer.style.display = 'none';
                     if (pbpPhoto) pbpPhoto.src = '';
+                    
+                    // Request game analysis audio for halftime (always regenerate for halftime)
+                    requestGameAnalysisAudio(gameId, true);
                 } else if (gameState === 'final') {
                     // Show final status
                     playByPlayBox.style.display = 'block';
@@ -672,6 +795,12 @@
                     // Pregame - hide play-by-play
                     playByPlayBox.style.display = 'none';
                 }
+                
+                // Stop dead air analysis if game is not in timeout/halftime
+                if (gameState !== 'halftime') {
+                    stopDeadAirAnalysis();
+                }
+                
                 return; // Don't fetch plays during halftime/final/pregame
             }
             
@@ -697,11 +826,46 @@
                     const transformedPlay = transformPlayForDisplay(latestPlay);
                     if (transformedPlay && transformedPlay.action && (transformedPlay.isTimeout || (transformedPlay.playerName !== 'Player' && transformedPlay.action))) {
                         lastPlayId = latestPlay.id;
+                        lastPlayTimestamp = Date.now(); // Update last play timestamp
+                        
+                        // Stop dead air analysis when new play comes in
+                        stopDeadAirAnalysis();
+                        
+                        // Send play-by-play data to server for storage
+                        try {
+                            await fetch('http://localhost:3000/api/play-by-play', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    gameId: gameId,
+                                    play: {
+                                        period: transformedPlay.period,
+                                        clock: transformedPlay.clock,
+                                        playerName: transformedPlay.playerName,
+                                        action: transformedPlay.action,
+                                        homeScore: transformedPlay.homeScore,
+                                        awayScore: transformedPlay.awayScore,
+                                        isTimeout: transformedPlay.isTimeout
+                                    }
+                                })
+                            });
+                        } catch (error) {
+                            // Silently handle errors
+                        }
+                        
                         await updatePlayByPlay(transformedPlay);
+                    } else {
+                        // No new play - check for dead air
+                        if (!transformedPlay?.isTimeout) {
+                            handleDeadAir(gameId);
+                        }
                     }
+                } else {
+                    // No new play detected - check for dead air
+                    handleDeadAir(gameId);
                 }
             } catch (error) {
-                console.error('Error fetching play-by-play:', error);
+                // Silently handle errors
             }
         }
         

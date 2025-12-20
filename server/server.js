@@ -26,21 +26,35 @@ function makeTextEnergetic(text) {
     let restOfText = text.substring(playerNameMatch[0].length).trim();
     
     // Remove player name from action text if it appears there (handles shortened versions)
-    // Check for full name, first name only, or last name only
+    // Escape special regex characters in player name
+    const escapedPlayerName = playerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const nameParts = playerName.split(/\s+/);
     const firstName = nameParts[0];
-    const lastName = nameParts[nameParts.length - 1];
+    const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
     
-    // Remove full name if it appears
-    restOfText = restOfText.replace(new RegExp(`\\b${playerName}\\b`, 'gi'), '').trim();
-    // Remove first name if it appears (but not if it's part of another word)
-    restOfText = restOfText.replace(new RegExp(`\\b${firstName}\\b`, 'gi'), '').trim();
-    // Remove last name if it appears alone
-    if (lastName && lastName !== firstName) {
-      restOfText = restOfText.replace(new RegExp(`\\b${lastName}\\b`, 'gi'), '').trim();
+    // Remove full player name if it appears at the start (most common case)
+    restOfText = restOfText.replace(new RegExp(`^${escapedPlayerName}\\s+`, 'i'), '').trim();
+    
+    // Also remove full player name if it appears anywhere else (case insensitive, word boundary)
+    restOfText = restOfText.replace(new RegExp(`\\b${escapedPlayerName}\\b`, 'gi'), '').trim();
+    
+    // Remove first name if it appears at the start
+    if (firstName) {
+      const escapedFirstName = firstName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      restOfText = restOfText.replace(new RegExp(`^${escapedFirstName}\\s+`, 'i'), '').trim();
+      // Also remove if it appears elsewhere (word boundary)
+      restOfText = restOfText.replace(new RegExp(`\\b${escapedFirstName}\\b`, 'gi'), '').trim();
     }
     
-    // Clean up extra spaces
+    // Remove last name if it appears alone and is different from first name
+    if (lastName && lastName !== firstName) {
+      const escapedLastName = lastName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      restOfText = restOfText.replace(new RegExp(`^${escapedLastName}\\s+`, 'i'), '').trim();
+      // Also remove if it appears elsewhere (word boundary)
+      restOfText = restOfText.replace(new RegExp(`\\b${escapedLastName}\\b`, 'gi'), '').trim();
+    }
+    
+    // Clean up extra spaces (multiple spaces, leading/trailing)
     restOfText = restOfText.replace(/\s+/g, ' ').trim();
     
     // Check for three-pointer patterns
@@ -119,6 +133,8 @@ class StateStore {
     this.maxChatMessages = 200;  // Keep last 200 messages
     this.chatRefreshTrigger = null;  // Timestamp to trigger chat overlay refresh
     this.chatClearTimestamp = null;  // Timestamp when chat was last cleared (for extension to reset tracking)
+    this.playByPlayData = {};  // Store play-by-play data per game: { gameId: [{period, clock, playerName, action, homeScore, awayScore, ...}, ...] }
+    this.gameAnalysisTimestamps = {};  // Track when analysis was last generated per game: { gameId: timestamp }
   }
 
   // Game selection
@@ -603,6 +619,276 @@ async function handlePostTextToSpeech(req, res) {
   }
 }
 
+// POST /api/play-by-play - Store play-by-play data in memory
+async function handlePostPlayByPlay(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    const { gameId, play } = data;
+    
+    if (!gameId || !play) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Missing required fields: gameId, play' }));
+      return;
+    }
+    
+    // Initialize array for this game if it doesn't exist
+    if (!state.playByPlayData[gameId]) {
+      state.playByPlayData[gameId] = [];
+    }
+    
+    // Add the play to the array (keep all plays from start of game)
+    state.playByPlayData[gameId].push(play);
+    
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    };
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ success: true, totalPlays: state.playByPlayData[gameId].length }));
+  } catch (error) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    };
+    res.writeHead(500, headers);
+    res.end(JSON.stringify({ error: error.message }));
+  }
+}
+
+// Helper function to generate game analysis using OpenAI Chat API
+async function generateGameAnalysis(plays, homeTeam, awayTeam, currentScore) {
+  return new Promise((resolve, reject) => {
+    const systemPrompt = 'You are a professional NBA game analyst. You analyze basketball games based on play-by-play data. Provide insightful, engaging commentary about how the game has been going, key moments, standout performances, and overall game flow. Sound like an experienced analyst discussing the game naturally.';
+    
+    // Format plays for analysis
+    let playsText = plays.map((play, index) => {
+      let playDesc = '';
+      if (play.playerName && play.playerName !== 'Player') {
+        playDesc += `${play.playerName} `;
+      }
+      playDesc += play.action || '';
+      if (play.period) {
+        playDesc += ` (Q${play.period} ${play.clock || ''})`;
+      }
+      return `${index + 1}. ${playDesc}`;
+    }).join('\n');
+    
+    const userPrompt = `Based on the following play-by-play data from an NBA game between ${homeTeam || 'Home Team'} and ${awayTeam || 'Away Team'}, provide a professional game analysis. 
+
+Current Score: ${currentScore || 'N/A'}
+
+Play-by-Play:
+${playsText}
+
+Provide a natural, conversational analysis of how the game has been going so far. Discuss key plays, standout performances, game flow, and overall observations. Keep it engaging and professional.`;
+
+    const requestData = JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt
+        },
+        {
+          role: 'user',
+          content: userPrompt
+        }
+      ],
+      max_tokens: 500,
+      temperature: 0.7
+    });
+
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/chat/completions',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(requestData)
+      }
+    };
+
+    const apiReq = https.request(options, (apiRes) => {
+      let responseBody = '';
+      
+      apiRes.on('data', (chunk) => {
+        responseBody += chunk;
+      });
+      
+      apiRes.on('end', () => {
+        if (apiRes.statusCode !== 200) {
+          resolve(null); // Return null on error
+          return;
+        }
+        
+        try {
+          const chatData = JSON.parse(responseBody);
+          const analysisText = chatData.choices?.[0]?.message?.content?.trim() || null;
+          resolve(analysisText);
+        } catch (e) {
+          resolve(null);
+        }
+      });
+    });
+    
+    apiReq.on('error', (error) => {
+      resolve(null); // Return null on error
+    });
+    
+    apiReq.write(requestData);
+    apiReq.end();
+  });
+}
+
+// POST /api/game-analysis - Generate analysis audio for timeout/halftime/dead-air
+async function handlePostGameAnalysis(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    const { gameId, homeTeam, awayTeam, currentScore, forceRegenerate = false } = data;
+    
+    if (!gameId) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Missing required field: gameId' }));
+      return;
+    }
+    
+    // Track when analysis was generated (for client-side caching decisions)
+    const now = Date.now();
+    if (!forceRegenerate) {
+      const lastTimestamp = state.gameAnalysisTimestamps[gameId];
+      const TEN_MINUTES = 10 * 60 * 1000; // 10 minutes in milliseconds
+      
+      // Return timestamp info so client can decide to use cache
+      if (lastTimestamp && (now - lastTimestamp) < TEN_MINUTES) {
+        const headers = {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'X-Last-Generated': lastTimestamp.toString()
+        };
+        res.writeHead(200, headers);
+        res.end(JSON.stringify({ 
+          cached: true,
+          timestamp: lastTimestamp,
+          message: 'Analysis was generated recently, use cached audio'
+        }));
+        return;
+      }
+    }
+    
+    // Update timestamp
+    state.gameAnalysisTimestamps[gameId] = now;
+    
+    // Get all plays for this game
+    const plays = state.playByPlayData[gameId] || [];
+    
+    if (plays.length === 0) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'No play-by-play data available for this game' }));
+      return;
+    }
+    
+    // Generate analysis text using OpenAI Chat API
+    const analysisText = await generateGameAnalysis(plays, homeTeam, awayTeam, currentScore);
+    
+    if (!analysisText) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ error: 'Failed to generate analysis' }));
+      return;
+    }
+    
+    // Convert analysis text to speech using OpenAI TTS API with 'onyx' voice
+    const requestData = JSON.stringify({
+      model: 'tts-1',
+      input: analysisText,
+      voice: 'onyx', // Male voice as requested
+      speed: 1.0
+    });
+    
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/audio/speech',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(requestData)
+      }
+    };
+    
+    // Make request to OpenAI TTS API
+    const apiReq = https.request(options, (apiRes) => {
+      if (apiRes.statusCode !== 200) {
+        let errorBody = '';
+        apiRes.on('data', (chunk) => { errorBody += chunk; });
+        apiRes.on('end', () => {
+          try {
+            const errorData = JSON.parse(errorBody);
+            const headers = {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            };
+            res.writeHead(apiRes.statusCode, headers);
+            res.end(JSON.stringify({ error: `OpenAI API error: ${errorData.error?.message || apiRes.statusMessage}` }));
+          } catch (e) {
+            const headers = {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            };
+            res.writeHead(apiRes.statusCode, headers);
+            res.end(JSON.stringify({ error: `OpenAI API error: ${apiRes.statusMessage}` }));
+          }
+        });
+        return;
+      }
+      
+      // Stream audio response (client will cache the blob)
+      const headers = {
+        'Content-Type': 'audio/mpeg',
+        'Access-Control-Allow-Origin': '*',
+        'X-Generated-At': now.toString()
+      };
+      res.writeHead(200, headers);
+      apiRes.pipe(res);
+    });
+    
+    apiReq.on('error', (error) => {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ error: error.message }));
+    });
+    
+    apiReq.write(requestData);
+    apiReq.end();
+  } catch (error) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    };
+    res.writeHead(500, headers);
+    res.end(JSON.stringify({ error: error.message }));
+  }
+}
+
 // GET /api/image-proxy?url=... - Proxy images to bypass CORS
 function handleGetImageProxy(req, res) {
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
@@ -695,6 +981,8 @@ const API_ROUTES = {
   'DELETE /api/chat': handleDeleteChat,
   'POST /api/chat/refresh': handlePostChatRefresh,
   'POST /api/text-to-speech': handlePostTextToSpeech,
+  'POST /api/play-by-play': handlePostPlayByPlay,
+  'POST /api/game-analysis': handlePostGameAnalysis,
   'GET /api/image-proxy': handleGetImageProxy
 };
 
