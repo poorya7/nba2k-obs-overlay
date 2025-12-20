@@ -301,7 +301,6 @@ async function fetchGameBoxscore(gameId) {
     const response = await fetch(summaryUrl);
     
     if (!response.ok) {
-      console.warn('ESPN summary API request failed:', response.status);
       return null;
     }
     
@@ -403,7 +402,6 @@ function getLeadingPlayer(boxscoreData) {
  */
 function parseTeamStats(boxscoreData) {
   if (!boxscoreData || !boxscoreData.boxscore) {
-    console.warn('parseTeamStats: No boxscore data');
     return null;
   }
 
@@ -413,11 +411,6 @@ function parseTeamStats(boxscoreData) {
   let teams = (innerBoxscore && innerBoxscore.teams) || boxscoreData.boxscore.teams;
 
   if (!teams || !Array.isArray(teams) || teams.length < 2) {
-    console.warn('parseTeamStats: teams array not found or invalid', {
-      hasInnerBoxscore: !!innerBoxscore,
-      hasBoxscoreTeams: !!boxscoreData.boxscore.teams,
-      hasPlayers: !!boxscoreData.boxscore.players
-    });
     return null;
   }
 
@@ -426,14 +419,6 @@ function parseTeamStats(boxscoreData) {
   const awayTeam = teams.find(t => t.homeAway === 'away');
 
   if (!homeTeam || !awayTeam) {
-    console.warn('parseTeamStats: home or away team not found', {
-      teamsLength: teams.length,
-      teams: teams.map((t, idx) => ({
-        index: idx,
-        homeAway: t.homeAway || null,
-        abbreviation: t.team ? t.team.abbreviation : null
-      }))
-    });
     return null;
   }
 
@@ -443,7 +428,6 @@ function parseTeamStats(boxscoreData) {
 
   if (!homeStatsArray || !Array.isArray(homeStatsArray) || homeStatsArray.length === 0 ||
       !awayStatsArray || !Array.isArray(awayStatsArray) || awayStatsArray.length === 0) {
-    console.warn('parseTeamStats: team statistics arrays not found');
     return null;
   }
 
@@ -546,7 +530,6 @@ async function getTeamStatsForGame(gameId) {
   try {
     const boxscore = await fetchGameBoxscore(gameId);
     if (!boxscore) {
-      console.warn('getTeamStatsForGame: No boxscore data returned');
       return null;
     }
     
@@ -556,9 +539,6 @@ async function getTeamStatsForGame(gameId) {
     }
     
     const teamStats = parseTeamStats(boxscore);
-    if (!teamStats) {
-      console.warn('getTeamStatsForGame: parseTeamStats returned null for gameId', gameId);
-    }
     return teamStats;
   } catch (error) {
     console.error('Error getting team stats for game', gameId, ':', error);
@@ -593,34 +573,63 @@ async function getMVPForGame(gameId) {
 async function getPlayByPlay(gameId) {
   try {
     const summary = await fetchGameBoxscore(gameId);
-    if (!summary || !summary.commentary || !summary.commentary.plays) {
+    if (!summary) {
       return null;
     }
     
-    // Get the plays array
-    const plays = summary.commentary.plays;
+    // Try different possible locations for play-by-play data
+    let plays = null;
+    
+    if (summary.commentary && summary.commentary.plays) {
+      plays = summary.commentary.plays;
+    } else if (summary.plays) {
+      plays = summary.plays;
+    } else if (summary.commentary && summary.commentary.items) {
+      // Sometimes it's in commentary.items
+      plays = summary.commentary.items.filter(item => item.type === 'play' || item.play);
+    }
+    
+    if (!plays || !Array.isArray(plays) || plays.length === 0) {
+      return null;
+    }
     
     // Return the most recent plays (last 10-20 for live updates)
     // Plays are typically in chronological order
     const recentPlays = plays.slice(-20).reverse(); // Get last 20, reverse so newest is first
     
     // Parse plays into a cleaner format
-    return recentPlays.map(play => ({
-      id: play.id,
-      text: play.text || play.shortText || '',
-      shortText: play.shortText || '',
-      period: play.period?.number || 0,
-      clock: play.clock?.displayValue || '',
-      homeScore: play.scoringPlay ? (play.homeScore || 0) : null,
-      awayScore: play.scoringPlay ? (play.awayScore || 0) : null,
-      isScoringPlay: play.scoringPlay || false,
-      team: play.team ? {
-        id: play.team.id,
-        abbreviation: play.team.abbreviation,
-        name: play.team.displayName
-      } : null,
-      participants: play.participants || []
-    }));
+    const parsedPlays = recentPlays.map(play => {
+      // Handle different possible structures - participants may only have athlete.id
+      let participants = [];
+      if (play.participants && Array.isArray(play.participants)) {
+        participants = play.participants.map(p => ({
+          athlete: p.athlete || p // athlete might just be {id: "..."}
+        }));
+      } else if (play.athletes) {
+        participants = play.athletes;
+      } else if (play.athlete) {
+        participants = [play.athlete];
+      }
+      
+      return {
+        id: play.id,
+        text: play.text || play.shortText || play.description || '',
+        shortText: play.shortText || '',
+        period: play.period?.number || play.period || 0,
+        clock: play.clock?.displayValue || play.clock || play.time || '',
+        homeScore: play.homeScore !== undefined ? play.homeScore : (play.scoringPlay ? (play.homeScore || 0) : null),
+        awayScore: play.awayScore !== undefined ? play.awayScore : (play.scoringPlay ? (play.awayScore || 0) : null),
+        isScoringPlay: play.scoringPlay || false,
+        team: play.team ? {
+          id: play.team.id,
+          abbreviation: play.team.abbreviation,
+          name: play.team.displayName
+        } : null,
+        participants: participants
+      };
+    });
+    
+    return parsedPlays;
   } catch (error) {
     console.error('Error getting play-by-play for game', gameId, ':', error);
     return null;

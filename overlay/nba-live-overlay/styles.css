@@ -104,7 +104,7 @@ html {
     top: 738px;
     left: 30px;
     width: 502px;
-    display: block; /* Visible by default */
+    display: none; /* Hidden by default, shown when play-by-play data arrives */
     pointer-events: none; /* Allow clicking through */
 }
 

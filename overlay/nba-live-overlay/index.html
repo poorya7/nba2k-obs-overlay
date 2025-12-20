@@ -89,117 +89,279 @@
         </div>
     </div>
 
-    <!-- Play-by-Play Box (right under game box) -->
-    <div class="play-by-play-box anim-21" id="playByPlayBox">
+    <!-- Play-by-Play Box (right under game box) - Hidden by default, shown when data arrives -->
+    <div class="play-by-play-box anim-21" id="playByPlayBox" style="display: none;">
         <div class="pbp-box" id="pbpBoxContent">
             <div class="pbp-photo-container">
-                <img class="pbp-photo" id="pbpPhoto" src="https://a.espncdn.com/i/headshots/nba/players/full/4066648.png" alt="Player">
+                <img class="pbp-photo" id="pbpPhoto" src="" alt="Player">
             </div>
-            <div class="pbp-icon" id="pbpIcon">⚡</div>
+            <div class="pbp-icon" id="pbpIcon"></div>
             <div class="pbp-content">
-                <div class="pbp-time" id="pbpTime">Q4 11:18</div>
+                <div class="pbp-time" id="pbpTime"></div>
                 <div class="pbp-text" id="pbpText">
-                    <span class="pbp-player" id="pbpPlayer">Luka Doncic</span> <span class="pbp-action" id="pbpAction">scored 3 points</span>
+                    <span class="pbp-player" id="pbpPlayer"></span> <span class="pbp-action" id="pbpAction"></span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Hardcoded play-by-play test examples
-        const playByPlayExamples = [
-            {
-                period: 4,
-                clock: "11:18",
-                playerName: "Luka Doncic",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/4066648.png",
-                action: "scored 3 points via 3-point jump shot",
-                icon: "⚡"
-            },
-            {
-                period: 4,
-                clock: "10:45",
-                playerName: "LeBron James",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/1966.png",
-                action: "made slam dunk - 2 PTS",
-                icon: "💥"
-            },
-            {
-                period: 3,
-                clock: "7:32",
-                playerName: "Stephen Curry",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3975.png",
-                action: "scored 3 points from beyond the arc",
-                icon: "🔥"
-            },
-            {
-                period: 2,
-                clock: "5:15",
-                playerName: "Giannis Antetokounmpo",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3136776.png",
-                action: "made free throw - 1 PT",
-                icon: "🎯"
-            },
-            {
-                period: 1,
-                clock: "9:28",
-                playerName: "Jayson Tatum",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/4066261.png",
-                action: "scored 2 points via layup",
-                icon: "⚡"
-            },
-            {
-                period: 4,
-                clock: "3:42",
-                playerName: "Nikola Jokic",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3112335.png",
-                action: "made 3-point jump shot - 3 PTS",
-                icon: "🔥"
-            },
-            {
-                period: 3,
-                clock: "8:55",
-                playerName: "Kevin Durant",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3202.png",
-                action: "scored 2 points via fadeaway jumper",
-                icon: "💥"
-            },
-            {
-                period: 2,
-                clock: "2:18",
-                playerName: "Joel Embiid",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3136775.png",
-                action: "made free throw - 1 PT",
-                icon: "🎯"
-            },
-            {
-                period: 1,
-                clock: "6:44",
-                playerName: "Devin Booker",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/3136773.png",
-                action: "scored 3 points via step-back three",
-                icon: "⚡"
-            },
-            {
-                period: 4,
-                clock: "1:25",
-                playerName: "Damian Lillard",
-                playerPhoto: "https://a.espncdn.com/i/headshots/nba/players/full/6606.png",
-                action: "made deep 3-pointer - 3 PTS",
-                icon: "🔥"
-            }
-        ];
+        // NBA team name to abbreviation mapping (common patterns for timeout detection)
+        const TEAM_NAME_TO_ABBR = {
+            'SPURS': ['SA', 'SAS'],
+            'LAKERS': ['LAL', 'LA'],
+            'WARRIORS': ['GS', 'GSW'],
+            'CELTICS': ['BOS'],
+            'HEAT': ['MIA'],
+            'NUGGETS': ['DEN'],
+            'BUCKS': ['MIL'],
+            'SIXERS': ['PHI'],
+            'SUNS': ['PHX', 'PHO'],
+            'CLIPPERS': ['LAC', 'LA'],
+            'MAVERICKS': ['DAL'],
+            'GRIZZLIES': ['MEM'],
+            'KINGS': ['SAC'],
+            'TIMBERWOLVES': ['MIN'],
+            'THUNDER': ['OKC'],
+            'TRAIL BLAZERS': ['POR'],
+            'JAZZ': ['UTA'],
+            'ROCKETS': ['HOU'],
+            'PELICANS': ['NO', 'NOP'],
+            'HORNETS': ['CHA'],
+            'BULLS': ['CHI'],
+            'CAVALIERS': ['CLE'],
+            'PISTONS': ['DET'],
+            'PACERS': ['IND'],
+            'KNICKS': ['NYK', 'NY'],
+            'MAGIC': ['ORL'],
+            '76ERS': ['PHI'],
+            'RAPTORS': ['TOR'],
+            'WIZARDS': ['WAS', 'WSH'],
+            'HAWKS': ['ATL'],
+            'NETS': ['BKN', 'BRO'],
+            'HORNETS': ['CHA']
+        };
 
-        let currentPlayIndex = 0;
+        // Transform API play data to display format
+        function transformPlayForDisplay(apiPlay) {
+            if (!apiPlay) return null;
+            
+            // Get first participant (usually the main player)
+            const participant = apiPlay.participants && apiPlay.participants.length > 0 ? apiPlay.participants[0] : null;
+            const athlete = participant?.athlete || participant;
+            
+            // Extract player name from text if athlete object only has ID
+            // Example: "Myron Gardner makes running layup" -> "Myron Gardner"
+            let playerName = athlete?.displayName || athlete?.shortName || athlete?.fullName;
+            const playerId = athlete?.id;
+            
+            // Extract player name from text if not available in athlete object
+            let extractedPlayerName = null;
+            const playText = apiPlay.text || apiPlay.shortText || '';
+            if (playText) {
+                // Try to extract player name from start of text (e.g., "Myron Gardner makes...")
+                const textMatch = playText.match(/^([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z]\.?)?)/);
+                if (textMatch) {
+                    extractedPlayerName = textMatch[1].trim();
+                }
+            }
+            
+            // Use extracted name if we don't have one from athlete object
+            if (!playerName) {
+                playerName = extractedPlayerName || 'Player';
+            }
+            
+            // Get player photo - try multiple possible paths
+            let playerPhoto = 'https://a.espncdn.com/i/headshots/nba/players/full/0.png'; // fallback
+            if (athlete?.headshot?.href) {
+                playerPhoto = athlete.headshot.href;
+            } else if (playerId) {
+                playerPhoto = `https://a.espncdn.com/i/headshots/nba/players/full/${playerId}.png`;
+            }
+            
+            // Remove player name from action text (since we display it separately)
+            let actionText = playText;
+            if (playerName && playerName !== 'Player' && actionText) {
+                // Remove player name from the beginning of the text
+                const nameRegex = new RegExp(`^${playerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s+`, 'i');
+                actionText = actionText.replace(nameRegex, '').trim();
+            }
+            
+            // Check if this is a timeout
+            const text = actionText.toLowerCase();
+            const isTimeout = text.includes('timeout');
+            
+            // Determine icon based on play text
+            let icon = '⚡'; // default
+            if (text.includes('3-point') || text.includes('three') || text.includes('3pt')) {
+                icon = '🔥';
+            } else if (text.includes('dunk') || text.includes('slam')) {
+                icon = '💥';
+            } else if (text.includes('free throw') || text.includes('foul')) {
+                icon = '🎯';
+            } else if (isTimeout) {
+                icon = '⏸️'; // pause icon for timeout
+            }
+            
+            // Get team logo for timeouts
+            let teamLogo = null;
+            let timeoutTeam = null; // 'home' or 'away'
+            if (isTimeout && window.gameView && window.gameView.elements) {
+                // Get team abbreviations from game view
+                const homeAbbr = (window.gameView.elements.homeAbbr?.textContent || '').trim().toUpperCase();
+                const awayAbbr = (window.gameView.elements.awayAbbr?.textContent || '').trim().toUpperCase();
+                
+                // Convert play text to uppercase for comparison
+                const upperPlayText = playText.toUpperCase();
+                
+                // Method 1: Check team abbreviation from API play data
+                let matchedTeam = null;
+                if (apiPlay.team && apiPlay.team.abbreviation) {
+                    const teamAbbr = (apiPlay.team.abbreviation || '').trim().toUpperCase();
+                    if (teamAbbr === homeAbbr) {
+                        matchedTeam = 'home';
+                    } else if (teamAbbr === awayAbbr) {
+                        matchedTeam = 'away';
+                    }
+                }
+                
+                // Method 2: Extract from timeout text (e.g., "Spurs timeout", "Lakers Full Timeout")
+                // Try to find team name before "timeout" keyword
+                if (!matchedTeam && playText) {
+                    // Match pattern like "Spurs timeout" or "Lakers Full Timeout"
+                    const timeoutMatch = playText.match(/^([A-Z][a-z]+(?:[\s-][A-Z][a-z]+)*)\s+(?:Full\s+)?[Tt]imeout/i);
+                    if (timeoutMatch) {
+                        const teamNameFromText = timeoutMatch[1].trim().toUpperCase();
+                        // Get possible abbreviations for this team name
+                        const possibleAbbrs = TEAM_NAME_TO_ABBR[teamNameFromText] || [];
+                        
+                        // Check if home or away abbreviation is in the possible abbreviations list
+                        if (homeAbbr && possibleAbbrs.includes(homeAbbr)) {
+                            matchedTeam = 'home';
+                        } else if (awayAbbr && possibleAbbrs.includes(awayAbbr)) {
+                            matchedTeam = 'away';
+                        }
+                        // Also check if abbreviation appears directly in the text
+                        else if (homeAbbr && upperPlayText.includes(homeAbbr)) {
+                            matchedTeam = 'home';
+                        } else if (awayAbbr && upperPlayText.includes(awayAbbr)) {
+                            matchedTeam = 'away';
+                        }
+                    }
+                }
+                
+                // Method 3: Fallback - check if timeout text contains team abbreviation anywhere
+                if (!matchedTeam) {
+                    if (homeAbbr && upperPlayText.includes(homeAbbr)) {
+                        matchedTeam = 'home';
+                    } else if (awayAbbr && upperPlayText.includes(awayAbbr)) {
+                        matchedTeam = 'away';
+                    }
+                }
+                
+                // Get logo for matched team (ensure src is not empty)
+                if (matchedTeam === 'home') {
+                    const logoEl = window.gameView.elements.homeLogo;
+                    if (logoEl && logoEl.src && logoEl.src.trim() !== '' && !logoEl.src.endsWith('/')) {
+                        teamLogo = logoEl.src;
+                        timeoutTeam = 'home';
+                    }
+                } else if (matchedTeam === 'away') {
+                    const logoEl = window.gameView.elements.awayLogo;
+                    if (logoEl && logoEl.src && logoEl.src.trim() !== '' && !logoEl.src.endsWith('/')) {
+                        teamLogo = logoEl.src;
+                        timeoutTeam = 'away';
+                    }
+                }
+            }
+            
+            return {
+                id: apiPlay.id,
+                period: apiPlay.period || 0,
+                clock: apiPlay.clock || '',
+                playerName: playerName,
+                playerPhoto: playerPhoto,
+                action: actionText,
+                icon: icon,
+                homeScore: apiPlay.homeScore !== undefined && apiPlay.homeScore !== null ? parseInt(apiPlay.homeScore) : null,
+                awayScore: apiPlay.awayScore !== undefined && apiPlay.awayScore !== null ? parseInt(apiPlay.awayScore) : null,
+                isScoringPlay: apiPlay.isScoringPlay || false,
+                isTimeout: isTimeout,
+                teamLogo: teamLogo,
+                timeoutTeam: timeoutTeam
+            };
+        }
+
         const pbpPhoto = document.getElementById('pbpPhoto');
         const pbpTime = document.getElementById('pbpTime');
         const pbpPlayer = document.getElementById('pbpPlayer');
         const pbpAction = document.getElementById('pbpAction');
         const pbpIcon = document.getElementById('pbpIcon');
+        const playByPlayBox = document.getElementById('playByPlayBox');
+        
+        let lastPlayId = null; // Track last displayed play ID
+        let lastHomeScore = null; // Track last displayed home score
+        let lastAwayScore = null; // Track last displayed away score
+
+        // Helper function to convert period number to quarter format
+        function formatPeriodToQuarter(period) {
+            if (period <= 4) {
+                return `Q${period}`;
+            } else {
+                return 'OT';
+            }
+        }
 
         // Function to update play-by-play display with exit/enter animations
         function updatePlayByPlay(play) {
-            if (!play) return;
+            if (!play || !playByPlayBox) return;
+            
+            // Don't show play-by-play if MVP is visible
+            if (window.mvpView && window.mvpView.getVisibility && window.mvpView.getVisibility()) {
+                playByPlayBox.style.display = 'none';
+                return;
+            }
+            
+            // Update game overlay time from play-by-play data
+            if (play.period && play.clock && window.gameView) {
+                const quarter = formatPeriodToQuarter(play.period);
+                window.gameView.updateStatusText(quarter, play.clock);
+            }
+            
+            // Update scores from play-by-play data if scores are available
+            // Initialize last scores from current display if not set yet
+            if (window.gameView && lastHomeScore === null && window.gameView.elements && window.gameView.elements.homeScore) {
+                const currentHomeScore = parseInt(window.gameView.elements.homeScore.textContent) || 0;
+                const currentAwayScore = parseInt(window.gameView.elements.awayScore.textContent) || 0;
+                lastHomeScore = currentHomeScore;
+                lastAwayScore = currentAwayScore;
+            }
+            
+            // Update scores if play-by-play has score data and scores changed
+            if (window.gameView && play.homeScore !== null && play.awayScore !== null) {
+                const homeScoreChanged = play.homeScore !== lastHomeScore;
+                const awayScoreChanged = play.awayScore !== lastAwayScore;
+                
+                if (homeScoreChanged) {
+                    window.gameView.updateScore('home', play.homeScore, true); // animate score change
+                    lastHomeScore = play.homeScore;
+                }
+                if (awayScoreChanged) {
+                    window.gameView.updateScore('away', play.awayScore, true); // animate score change
+                    lastAwayScore = play.awayScore;
+                }
+            }
+            
+            // Show the box if it was hidden
+            if (playByPlayBox.style.display === 'none') {
+                playByPlayBox.style.display = 'block';
+            }
+            
+            // Ensure photo container is visible (in case it was hidden during halftime/final)
+            const pbpPhotoContainer = document.querySelector('.pbp-photo-container');
+            if (pbpPhotoContainer) {
+                pbpPhotoContainer.style.display = '';
+            }
             
             const pbpBox = document.getElementById('pbpBoxContent');
             
@@ -239,12 +401,23 @@
             // Update image source right when old pic finishes fading out, then trigger new pic fade in
             setTimeout(() => {
                 // Update image source right as old picture finishes fading out (at 0.8s)
-                pbpPhoto.src = play.playerPhoto;
-                pbpPhoto.alt = play.playerName;
+                // Use team logo for timeouts, player photo otherwise
+                if (play.isTimeout && play.teamLogo) {
+                    pbpPhoto.src = play.teamLogo;
+                    pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
+                } else {
+                    pbpPhoto.src = play.playerPhoto;
+                    pbpPhoto.alt = play.playerName;
+                }
                 
                 // Update text content (will be hidden until CSS animation brings it in at 0.9s)
                 pbpTime.textContent = `Q${play.period} ${play.clock}`;
-                pbpPlayer.textContent = play.playerName;
+                // For timeouts, don't show player name, show team name or timeout text
+                if (play.isTimeout) {
+                    pbpPlayer.textContent = ''; // No player name for timeouts
+                } else {
+                    pbpPlayer.textContent = play.playerName;
+                }
                 pbpAction.textContent = play.action;
                 pbpIcon.textContent = play.icon;
                 
@@ -275,24 +448,95 @@
             }, 800); // Wait for content exit (0.5s) + old pic fade out (0.3s) = 0.8s
         }
 
-        // Cycle through examples every 3 seconds for testing
-        function cyclePlayByPlayExamples() {
-            updatePlayByPlay(playByPlayExamples[currentPlayIndex]);
-            currentPlayIndex = (currentPlayIndex + 1) % playByPlayExamples.length;
+        // Function to check and update play-by-play from API data
+        async function checkAndUpdatePlayByPlay(gameId, nbaApi, gameState) {
+            if (!gameId || !nbaApi) return;
+            
+            // If game is in halftime, final, or pregame, show status text instead of plays
+            if (gameState === 'halftime' || gameState === 'final' || gameState === 'pregame') {
+                if (!playByPlayBox) return;
+                
+                // Don't show if MVP is visible
+                if (window.mvpView && window.mvpView.getVisibility && window.mvpView.getVisibility()) {
+                    playByPlayBox.style.display = 'none';
+                    return;
+                }
+                
+                const pbpTime = document.getElementById('pbpTime');
+                const pbpPlayer = document.getElementById('pbpPlayer');
+                const pbpAction = document.getElementById('pbpAction');
+                const pbpIcon = document.getElementById('pbpIcon');
+                const pbpPhoto = document.getElementById('pbpPhoto');
+                const pbpPhotoContainer = document.querySelector('.pbp-photo-container');
+                
+                if (gameState === 'halftime') {
+                    // Show halftime status
+                    playByPlayBox.style.display = 'block';
+                    if (pbpTime) pbpTime.textContent = 'Halftime';
+                    if (pbpPlayer) pbpPlayer.textContent = '';
+                    if (pbpAction) pbpAction.textContent = '';
+                    if (pbpIcon) pbpIcon.textContent = ''; // Remove icon
+                    // Hide photo container to avoid empty frame
+                    if (pbpPhotoContainer) pbpPhotoContainer.style.display = 'none';
+                    if (pbpPhoto) pbpPhoto.src = '';
+                } else if (gameState === 'final') {
+                    // Show final status
+                    playByPlayBox.style.display = 'block';
+                    if (pbpTime) pbpTime.textContent = 'Final';
+                    if (pbpPlayer) pbpPlayer.textContent = '';
+                    if (pbpAction) pbpAction.textContent = '';
+                    if (pbpIcon) pbpIcon.textContent = ''; // Remove icon
+                    // Hide photo container to avoid empty frame
+                    if (pbpPhotoContainer) pbpPhotoContainer.style.display = 'none';
+                    if (pbpPhoto) pbpPhoto.src = '';
+                } else {
+                    // Pregame - hide play-by-play
+                    playByPlayBox.style.display = 'none';
+                }
+                return; // Don't fetch plays during halftime/final/pregame
+            }
+            
+            try {
+                const plays = await nbaApi.getPlayByPlay(gameId);
+                if (!plays || plays.length === 0) return;
+                
+                // Find the most recent play (include timeouts now, but skip other non-player events)
+                let latestPlay = null;
+                for (const play of plays) {
+                    const transformed = transformPlayForDisplay(play);
+                    // Include plays with players OR timeouts (but skip other empty events)
+                    if (transformed && transformed.action && (transformed.isTimeout || (transformed.playerName !== 'Player' && transformed.action))) {
+                        latestPlay = play;
+                        break;
+                    }
+                }
+                
+                if (!latestPlay || !latestPlay.id) return;
+                
+                // Only update if this is a new play
+                if (latestPlay.id !== lastPlayId) {
+                    const transformedPlay = transformPlayForDisplay(latestPlay);
+                    if (transformedPlay && transformedPlay.action && (transformedPlay.isTimeout || (transformedPlay.playerName !== 'Player' && transformedPlay.action))) {
+                        lastPlayId = latestPlay.id;
+                        updatePlayByPlay(transformedPlay);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching play-by-play:', error);
+            }
+        }
+        
+        // Function to reset play-by-play tracking (call when game changes)
+        function resetPlayByPlayTracking() {
+            lastPlayId = null;
+            lastHomeScore = null;
+            lastAwayScore = null;
         }
 
-        // Start cycling when DOM is ready
-        window.addEventListener('DOMContentLoaded', () => {
-            // Show first example immediately
-            updatePlayByPlay(playByPlayExamples[0]);
-            
-            // Cycle through examples every 3 seconds
-            setInterval(cyclePlayByPlayExamples, 3000);
-        });
-
-        // Expose function for manual control
+        // Expose functions for integration
         window.updatePlayByPlay = updatePlayByPlay;
-        window.playByPlayExamples = playByPlayExamples;
+        window.checkAndUpdatePlayByPlay = checkAndUpdatePlayByPlay;
+        window.resetPlayByPlayTracking = resetPlayByPlayTracking;
     </script>
 
 
@@ -353,6 +597,26 @@
         
         const gameView = new GameView(unifiedBoxAnimator);
         const mvpView = new MvpView();
+        
+        // Wrap MVP show/hide to also control play-by-play visibility
+        const originalMvpShow = mvpView.show.bind(mvpView);
+        const originalMvpHide = mvpView.hide.bind(mvpView);
+        const playByPlayBoxElement = document.getElementById('playByPlayBox');
+        
+        mvpView.show = function(playerData) {
+            originalMvpShow(playerData);
+            // Hide play-by-play when MVP shows
+            if (playByPlayBoxElement) {
+                playByPlayBoxElement.style.display = 'none';
+            }
+        };
+        
+        mvpView.hide = function() {
+            originalMvpHide();
+            // When MVP hides, play-by-play can show again
+            // It will be shown on the next updatePlayByPlay call if there's new data
+        };
+        
         const otherGamesView = new OtherGamesView();
         const otherGamesContainerView = new OtherGamesContainerView();
         
@@ -407,6 +671,7 @@
         // Expose for debugging/testing
         window.appController = appController;
         window.gameView = gameView;
+        window.mvpView = mvpView; // Expose MVP view for play-by-play visibility checks
         
         /* OLD CODE REMOVED - Now in modular classes:
          * - generateSimulationData() → SimulationManager

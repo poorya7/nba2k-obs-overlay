@@ -54,8 +54,8 @@ class AppController {
         this.modeCoordinator = dependencies.modeCoordinator;
 
         // Configuration
-        this.baseUpdateInterval = 3000; // 3 seconds base
-        this.updateInterval = 3000; // Current interval (adjusted for time multiplier)
+        this.baseUpdateInterval = 2000; // 2 seconds base
+        this.updateInterval = 2000; // Current interval (adjusted for time multiplier)
         this.simMVPCheckInterval = 1000; // 1 second
         
         // Timers
@@ -125,6 +125,11 @@ class AppController {
                 if (this.stateManager.hasGameIdChanged(selectedGameId)) {
                     this.modeCoordinator.cleanupOtherGamesMode();
                     this.stateManager.setGameId(selectedGameId);
+                    
+                    // Reset play-by-play tracking for new game
+                    if (typeof window.resetPlayByPlayTracking === 'function') {
+                        window.resetPlayByPlayTracking();
+                    }
                 }
 
                 // No game selected - hide overlay and reset
@@ -254,6 +259,14 @@ class AppController {
 
             // Step 7: Auto-detect state and update view
             this.detectStateAndUpdate(game, selectedGameId);
+            
+            // Step 8: Update play-by-play (only for real games, not sim mode)
+            if (!isSimMode && selectedGameId && selectedGameId !== 'sim-game') {
+                if (typeof window.checkAndUpdatePlayByPlay === 'function') {
+                    const currentGameState = this.stateManager.getGameState();
+                    window.checkAndUpdatePlayByPlay(selectedGameId, this.nbaApi, currentGameState);
+                }
+            }
 
         } catch (error) {
             // Controller error handling: gracefully degrade

@@ -10,7 +10,7 @@
 // MVP Display timing constants (matching real NBA broadcasts)
 const MVP_DISPLAY_TIMING = {
     // How long MVP stays visible
-    DISPLAY_DURATION: 17000, // 17 seconds
+    DISPLAY_DURATION: 20000, // 20 seconds
     
     // Delays before showing MVP (feels more natural)
     DELAY_BEFORE_SHOW: {
@@ -20,9 +20,8 @@ const MVP_DISPLAY_TIMING = {
         END_GAME: 5000         // 5 seconds after game ends
     },
     
-    // For halftime, show multiple times
-    HALFTIME_REPEAT_INTERVAL: 60000, // Show again every 1 minute during halftime
-    HALFTIME_MAX_SHOWS: 3,             // Show max 3 times during halftime
+    // For halftime, show continuously until halftime ends
+    HALFTIME_REPEAT_INTERVAL: 90000, // Show again every 90 seconds during halftime
     
     // For final, show multiple times
     FINAL_REPEAT_INTERVAL: 60000,    // Show again every 1 minute after game ends
@@ -124,27 +123,25 @@ class MvpController {
     }
 
     /**
-     * Schedule MVP for halftime (show multiple times)
+     * Schedule MVP for halftime (show continuously until halftime ends)
      * @param {Object} mvpPlayerData
      */
     scheduleHalftimeMvp(mvpPlayerData) {
         const timing = MVP_DISPLAY_TIMING;
         this.halftimeShowCount = 0;
 
-        // First show after 25 seconds
+        // First show after 10 seconds
         this.showTimer = setTimeout(() => {
             this.showMvpWithAutoHide(mvpPlayerData);
             this.halftimeShowCount++;
 
-            // Schedule repeat shows during halftime
-            if (this.halftimeShowCount < timing.HALFTIME_MAX_SHOWS) {
-                this.scheduleHalftimeRepeats(mvpPlayerData);
-            }
+            // Schedule repeat shows during halftime (will continue until game state changes)
+            this.scheduleHalftimeRepeats(mvpPlayerData);
         }, timing.DELAY_BEFORE_SHOW.HALFTIME);
     }
 
     /**
-     * Schedule repeat MVP displays during halftime
+     * Schedule repeat MVP displays during halftime (continues until halftime ends)
      * @param {Object} mvpPlayerData
      */
     scheduleHalftimeRepeats(mvpPlayerData) {
@@ -157,10 +154,8 @@ class MvpController {
                 this.showMvpWithAutoHide(mvpPlayerData);
                 this.halftimeShowCount++;
 
-                // Schedule another if under max
-                if (this.halftimeShowCount < timing.HALFTIME_MAX_SHOWS) {
-                    this.scheduleHalftimeRepeats(mvpPlayerData);
-                }
+                // Schedule another repeat (will stop when game state changes from halftime)
+                this.scheduleHalftimeRepeats(mvpPlayerData);
             }
         }, timing.HALFTIME_REPEAT_INTERVAL);
 
