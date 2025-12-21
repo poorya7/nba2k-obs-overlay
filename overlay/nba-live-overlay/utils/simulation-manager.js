@@ -256,7 +256,130 @@ class SimulationManager {
             state: 'live'
         };
         this.lastScoreUpdate = Date.now();
+        this.resetPlayByPlay();
     }
+
+    // ==================== PLAY-BY-PLAY SIMULATION ====================
+
+    /**
+     * Load play-by-play data from server JSON file
+     * @param {string} gameId - Game ID (used to find the JSON file)
+     * @returns {Promise<boolean>} True if loaded successfully
+     */
+    async loadPlayByPlayData(gameId = 'game-401810240') {
+        try {
+            const response = await fetch(`http://localhost:3000/server/data/play-by-play/${gameId}.json`);
+            if (!response.ok) {
+                console.warn('⚠️ Could not load play-by-play data:', response.status);
+                return false;
+            }
+            
+            const plays = await response.json();
+            
+            // Deduplicate plays based on period+clock+player+action
+            const seenKeys = new Set();
+            this.pbpPlays = plays.filter(play => {
+                const key = `${play.period}|${play.clock}|${play.playerName}|${play.action}`.toLowerCase();
+                if (seenKeys.has(key)) {
+                    return false; // Skip duplicate
+                }
+                seenKeys.add(key);
+                return true;
+            });
+            
+            this.pbpIndex = 0;
+            this.pbpLastPlayTime = Date.now();
+            console.log(`✅ Loaded ${this.pbpPlays.length} unique plays (from ${plays.length} total)`);
+            return true;
+        } catch (error) {
+            console.error('❌ Error loading play-by-play data:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Get the next play in sequence (if enough time has passed)
+     * Returns plays at ~3-5 second intervals to simulate real game pace
+     * @param {number} minIntervalMs - Minimum time between plays (default 3000ms)
+     * @returns {Object|null} Next play object or null if not ready/no more plays
+     */
+    getNextPlay(minIntervalMs = 3000) {
+        // No plays loaded
+        if (!this.pbpPlays || this.pbpPlays.length === 0) {
+            return null;
+        }
+        
+        // All plays exhausted - loop back to start
+        if (this.pbpIndex >= this.pbpPlays.length) {
+            this.pbpIndex = 0;
+        }
+        
+        // Check if enough time has passed since last play
+        const now = Date.now();
+        if (now - this.pbpLastPlayTime < minIntervalMs) {
+            return null; // Not time yet
+        }
+        
+        // Get next play and advance index
+        const play = this.pbpPlays[this.pbpIndex];
+        this.pbpIndex++;
+        this.pbpLastPlayTime = now;
+        
+        // Transform to match ESPN API format expected by processor
+        return {
+            id: `sim-${this.pbpIndex}`,
+            text: `${play.playerName} ${play.action}`,
+            shortText: play.action,
+            period: play.period,
+            clock: play.clock,
+            homeScore: play.homeScore,
+            awayScore: play.awayScore,
+            isScoringPlay: false,
+            team: null,
+            participants: [{
+                athlete: {
+                    displayName: play.playerName
+                }
+            }],
+            // Pass through original fields too
+            isTimeout: play.isTimeout || false,
+            playerName: play.playerName,
+            action: play.action
+        };
+    }
+
+    /**
+     * Reset play-by-play to start
+     */
+    resetPlayByPlay() {
+        this.pbpPlays = [];
+        this.pbpIndex = 0;
+        this.pbpLastPlayTime = 0;
+    }
+
+    /**
+     * Check if play-by-play data is loaded
+     * @returns {boolean}
+     */
+    hasPlayByPlayData() {
+        return this.pbpPlays && this.pbpPlays.length > 0;
+    }
+
+    /**
+     * Get play-by-play progress info
+     * @returns {Object} {current, total, percentComplete}
+     */
+    getPlayByPlayProgress() {
+        const total = this.pbpPlays?.length || 0;
+        const current = this.pbpIndex;
+        return {
+            current,
+            total,
+            percentComplete: total > 0 ? Math.round((current / total) * 100) : 0
+        };
+    }
+
+    // ==================== END PLAY-BY-PLAY SIMULATION ====================
 
     /**
      * Get simulated MVP data (hardcoded for testing)

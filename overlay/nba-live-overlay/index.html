@@ -105,249 +105,13 @@
         </div>
     </div>
 
+    <!-- Play-by-Play Processor Module -->
+    <script src="utils/play-by-play-processor.js"></script>
+    
     <script>
-        // NBA team name to abbreviation mapping (common patterns for timeout detection)
-        const TEAM_NAME_TO_ABBR = {
-            'SPURS': ['SA', 'SAS'],
-            'LAKERS': ['LAL', 'LA'],
-            'WARRIORS': ['GS', 'GSW'],
-            'CELTICS': ['BOS'],
-            'HEAT': ['MIA'],
-            'NUGGETS': ['DEN'],
-            'BUCKS': ['MIL'],
-            'SIXERS': ['PHI'],
-            'SUNS': ['PHX', 'PHO'],
-            'CLIPPERS': ['LAC', 'LA'],
-            'MAVERICKS': ['DAL'],
-            'GRIZZLIES': ['MEM'],
-            'KINGS': ['SAC'],
-            'TIMBERWOLVES': ['MIN'],
-            'THUNDER': ['OKC'],
-            'TRAIL BLAZERS': ['POR'],
-            'JAZZ': ['UTA'],
-            'ROCKETS': ['HOU'],
-            'PELICANS': ['NO', 'NOP'],
-            'HORNETS': ['CHA'],
-            'BULLS': ['CHI'],
-            'CAVALIERS': ['CLE'],
-            'PISTONS': ['DET'],
-            'PACERS': ['IND'],
-            'KNICKS': ['NYK', 'NY'],
-            'MAGIC': ['ORL'],
-            '76ERS': ['PHI'],
-            'RAPTORS': ['TOR'],
-            'WIZARDS': ['WAS', 'WSH'],
-            'HAWKS': ['ATL'],
-            'NETS': ['BKN', 'BRO'],
-            'HORNETS': ['CHA']
-        };
-
-        // Transform API play data to display format
-        function transformPlayForDisplay(apiPlay) {
-            if (!apiPlay) return null;
-            
-            // Get first participant (usually the main player)
-            const participant = apiPlay.participants && apiPlay.participants.length > 0 ? apiPlay.participants[0] : null;
-            const athlete = participant?.athlete || participant;
-            
-            // Extract player name from text if athlete object only has ID
-            // Example: "Myron Gardner makes running layup" -> "Myron Gardner"
-            let playerName = athlete?.displayName || athlete?.shortName || athlete?.fullName;
-            const playerId = athlete?.id;
-            
-            // Extract player name from text if not available in athlete object
-            let extractedPlayerName = null;
-            const playText = apiPlay.text || apiPlay.shortText || '';
-            if (playText) {
-                // Try to extract player name from start of text (e.g., "Myron Gardner makes...")
-                const textMatch = playText.match(/^([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z]\.?)?)/);
-                if (textMatch) {
-                    extractedPlayerName = textMatch[1].trim();
-                }
-            }
-            
-            // Use extracted name if we don't have one from athlete object
-            if (!playerName) {
-                playerName = extractedPlayerName || 'Player';
-            }
-            
-            // Get player photo - try multiple possible paths
-            let playerPhoto = 'https://a.espncdn.com/i/headshots/nba/players/full/0.png'; // fallback
-            if (athlete?.headshot?.href) {
-                playerPhoto = athlete.headshot.href;
-            } else if (playerId) {
-                playerPhoto = `https://a.espncdn.com/i/headshots/nba/players/full/${playerId}.png`;
-            }
-            
-            // Remove player name from action text (since we display it separately)
-            // This handles full names, shortened names, and variations
-            let actionText = playText;
-            if (playerName && playerName !== 'Player' && actionText) {
-                // Helper function to remove player name variations from text
-                function removePlayerNameFromText(text, fullName) {
-                    let cleanedText = text;
-                    
-                    // Escape special regex characters in the full name
-                    const escapedFullName = fullName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    const nameParts = fullName.trim().split(/\s+/);
-                    const firstName = nameParts[0];
-                    const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
-                    
-                    // Patterns to try (in order of specificity):
-                    // 1. Full name anywhere in text (word boundaries)
-                    cleanedText = cleanedText.replace(new RegExp(`\\b${escapedFullName}\\b`, 'gi'), '').trim();
-                    
-                    // 2. First initial + last name (e.g., "L. Doncic" for "Luka Doncic")
-                    if (lastName && firstName.length > 0) {
-                        const firstInitial = firstName.charAt(0);
-                        const initialLastNamePattern = `${firstInitial}\\.?\\s+${lastName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`;
-                        cleanedText = cleanedText.replace(new RegExp(`\\b${initialLastNamePattern}\\b`, 'gi'), '').trim();
-                    }
-                    
-                    // 3. Last name only (if it's unique enough - at least 3 chars)
-                    if (lastName && lastName.length >= 3) {
-                        const escapedLastName = lastName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                        cleanedText = cleanedText.replace(new RegExp(`\\b${escapedLastName}\\b`, 'gi'), '').trim();
-                    }
-                    
-                    // 4. First name only (if it's unique enough - at least 3 chars and not common words)
-                    if (firstName && firstName.length >= 3 && 
-                        !['The', 'And', 'For', 'With', 'From', 'Over', 'On'].includes(firstName)) {
-                        const escapedFirstName = firstName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                        cleanedText = cleanedText.replace(new RegExp(`\\b${escapedFirstName}\\b`, 'gi'), '').trim();
-                    }
-                    
-                    // Clean up multiple spaces and trim
-                    cleanedText = cleanedText.replace(/\s+/g, ' ').trim();
-                    
-                    return cleanedText;
-                }
-                
-                actionText = removePlayerNameFromText(playText, playerName);
-            }
-            
-            // Check if this is a timeout or other team event (not a player action)
-            const text = actionText.toLowerCase();
-            const isTimeout = text.includes('timeout');
-            const isTeamEvent = isTimeout || 
-                               text.includes('coach') || 
-                               text.includes('challenge') ||
-                               text.includes('coach\'s challenge') ||
-                               !playerName || playerName === 'Player';
-            
-            // Determine icon based on play text (no icon for team events like timeouts, coach's challenge)
-            let icon = '⚡'; // default
-            if (isTeamEvent) {
-                icon = ''; // No icon for team events
-            } else if (text.includes('3-point') || text.includes('three') || text.includes('3pt')) {
-                icon = '🔥';
-            } else if (text.includes('dunk') || text.includes('slam')) {
-                icon = '💥';
-            } else if (text.includes('free throw') || text.includes('foul')) {
-                icon = '🎯';
-            }
-            
-            // Get team logo for timeouts and other team events (coach's challenge, etc.)
-            let teamLogo = null;
-            let timeoutTeam = null; // 'home' or 'away'
-            if (isTeamEvent && window.gameView && window.gameView.elements) {
-                // Get team abbreviations from game view
-                const homeAbbr = (window.gameView.elements.homeAbbr?.textContent || '').trim().toUpperCase();
-                const awayAbbr = (window.gameView.elements.awayAbbr?.textContent || '').trim().toUpperCase();
-                
-                // Convert play text to uppercase for comparison
-                const upperPlayText = playText.toUpperCase();
-                
-                // Method 1: Check team abbreviation from API play data
-                let matchedTeam = null;
-                if (apiPlay.team && apiPlay.team.abbreviation) {
-                    const teamAbbr = (apiPlay.team.abbreviation || '').trim().toUpperCase();
-                    if (teamAbbr === homeAbbr) {
-                        matchedTeam = 'home';
-                    } else if (teamAbbr === awayAbbr) {
-                        matchedTeam = 'away';
-                    }
-                }
-                
-                // Method 2: Extract from timeout/team event text (e.g., "Spurs timeout", "Lakers Full Timeout", "[Timberwolves] COACH'S CHALLENGE")
-                // Try to find team name in brackets or before keywords
-                if (!matchedTeam && playText) {
-                    // Match pattern like "[Team] EVENT" or "Team timeout"
-                    const bracketMatch = playText.match(/\[([A-Z][a-z]+(?:[\s-][A-Z][a-z]+)*)\]/i);
-                    if (bracketMatch) {
-                        const teamNameFromText = bracketMatch[1].trim().toUpperCase();
-                        const possibleAbbrs = TEAM_NAME_TO_ABBR[teamNameFromText] || [];
-                        if (homeAbbr && possibleAbbrs.includes(homeAbbr)) {
-                            matchedTeam = 'home';
-                        } else if (awayAbbr && possibleAbbrs.includes(awayAbbr)) {
-                            matchedTeam = 'away';
-                        } else if (homeAbbr && upperPlayText.includes(homeAbbr)) {
-                            matchedTeam = 'home';
-                        } else if (awayAbbr && upperPlayText.includes(awayAbbr)) {
-                            matchedTeam = 'away';
-                        }
-                    }
-                    // Also try timeout pattern like "Spurs timeout" or "Lakers Full Timeout"
-                    if (!matchedTeam) {
-                        const timeoutMatch = playText.match(/^([A-Z][a-z]+(?:[\s-][A-Z][a-z]+)*)\s+(?:Full\s+)?[Tt]imeout/i);
-                        if (timeoutMatch) {
-                            const teamNameFromText = timeoutMatch[1].trim().toUpperCase();
-                            const possibleAbbrs = TEAM_NAME_TO_ABBR[teamNameFromText] || [];
-                            if (homeAbbr && possibleAbbrs.includes(homeAbbr)) {
-                                matchedTeam = 'home';
-                            } else if (awayAbbr && possibleAbbrs.includes(awayAbbr)) {
-                                matchedTeam = 'away';
-                            } else if (homeAbbr && upperPlayText.includes(homeAbbr)) {
-                                matchedTeam = 'home';
-                            } else if (awayAbbr && upperPlayText.includes(awayAbbr)) {
-                                matchedTeam = 'away';
-                            }
-                        }
-                    }
-                }
-                
-                // Method 3: Fallback - check if text contains team abbreviation anywhere
-                if (!matchedTeam) {
-                    if (homeAbbr && upperPlayText.includes(homeAbbr)) {
-                        matchedTeam = 'home';
-                    } else if (awayAbbr && upperPlayText.includes(awayAbbr)) {
-                        matchedTeam = 'away';
-                    }
-                }
-                
-                // Get logo for matched team (ensure src is not empty)
-                if (matchedTeam === 'home') {
-                    const logoEl = window.gameView.elements.homeLogo;
-                    if (logoEl && logoEl.src && logoEl.src.trim() !== '' && !logoEl.src.endsWith('/')) {
-                        teamLogo = logoEl.src;
-                        timeoutTeam = 'home';
-                    }
-                } else if (matchedTeam === 'away') {
-                    const logoEl = window.gameView.elements.awayLogo;
-                    if (logoEl && logoEl.src && logoEl.src.trim() !== '' && !logoEl.src.endsWith('/')) {
-                        teamLogo = logoEl.src;
-                        timeoutTeam = 'away';
-                    }
-                }
-            }
-            
-            return {
-                id: apiPlay.id,
-                period: apiPlay.period || 0,
-                clock: apiPlay.clock || '',
-                playerName: playerName,
-                playerPhoto: playerPhoto,
-                action: actionText,
-                icon: icon,
-                homeScore: apiPlay.homeScore !== undefined && apiPlay.homeScore !== null ? parseInt(apiPlay.homeScore) : null,
-                awayScore: apiPlay.awayScore !== undefined && apiPlay.awayScore !== null ? parseInt(apiPlay.awayScore) : null,
-                isScoringPlay: apiPlay.isScoringPlay || false,
-                isTimeout: isTimeout,
-                isTeamEvent: isTeamEvent,
-                teamLogo: teamLogo,
-                timeoutTeam: timeoutTeam
-            };
-        }
+        // Initialize play-by-play processor
+        const pbpProcessor = new PlayByPlayProcessor();
+        window.pbpProcessor = pbpProcessor; // Expose for app-controller.js
 
         const pbpPhoto = document.getElementById('pbpPhoto');
         const pbpTime = document.getElementById('pbpTime');
@@ -356,19 +120,11 @@
         const pbpIcon = document.getElementById('pbpIcon');
         const playByPlayBox = document.getElementById('playByPlayBox');
         
-        let lastPlayId = null; // Track last displayed play ID
-        let lastHomeScore = null; // Track last displayed home score
-        let lastAwayScore = null; // Track last displayed away score
         let lastTimeoutAnalysisPlayId = null; // Track last timeout play we requested analysis for
-
-        // Helper function to convert period number to quarter format
-        function formatPeriodToQuarter(period) {
-            if (period <= 4) {
-                return `Q${period}`;
-            } else {
-                return 'OT';
-            }
-        }
+        
+        // Score tracking for display animations (separate from processor's dedup tracking)
+        let lastHomeScore = null;
+        let lastAwayScore = null;
 
         // Store current audio to manage playback
         let currentPbpAudio = null;
@@ -657,7 +413,13 @@
             }
         }
 
+        // Helper for async delay
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
         // Function to update play-by-play display with exit/enter animations
+        // IMPORTANT: Waits for TTS BEFORE starting animations (no empty frame!)
         async function updatePlayByPlay(play) {
             if (!play || !playByPlayBox) return;
             
@@ -669,12 +431,11 @@
             
             // Update game overlay time from play-by-play data
             if (play.period && play.clock && window.gameView) {
-                const quarter = formatPeriodToQuarter(play.period);
+                const quarter = pbpProcessor.formatPeriodToQuarter(play.period);
                 window.gameView.updateStatusText(quarter, play.clock);
             }
             
             // Update scores from play-by-play data if scores are available
-            // Initialize last scores from current display if not set yet
             if (window.gameView && lastHomeScore === null && window.gameView.elements && window.gameView.elements.homeScore) {
                 const currentHomeScore = parseInt(window.gameView.elements.homeScore.textContent) || 0;
                 const currentAwayScore = parseInt(window.gameView.elements.awayScore.textContent) || 0;
@@ -682,40 +443,34 @@
                 lastAwayScore = currentAwayScore;
             }
             
-            // Update scores if play-by-play has score data and scores changed
             if (window.gameView && play.homeScore !== null && play.awayScore !== null) {
                 const homeScoreChanged = play.homeScore !== lastHomeScore;
                 const awayScoreChanged = play.awayScore !== lastAwayScore;
                 
                 if (homeScoreChanged) {
-                    window.gameView.updateScore('home', play.homeScore, true); // animate score change
+                    window.gameView.updateScore('home', play.homeScore, true);
                     lastHomeScore = play.homeScore;
                 }
                 if (awayScoreChanged) {
-                    window.gameView.updateScore('away', play.awayScore, true); // animate score change
+                    window.gameView.updateScore('away', play.awayScore, true);
                     lastAwayScore = play.awayScore;
                 }
             }
             
-            // Show the box if it was hidden
-            if (playByPlayBox.style.display === 'none') {
-                playByPlayBox.style.display = 'block';
-            }
-            
+            // Determine what image to use
             const pbpPhotoContainer = document.querySelector('.pbp-photo-container');
+            let imageToLoad = play.playerPhoto;
+            let isTeamLogo = false;
             
-            // For timeouts and team events, ALWAYS remove border and show team logo
-            if ((play.isTimeout || play.isTeamEvent) && pbpPhotoContainer) {
-                // ALWAYS get team logo from gameView for timeouts/team events
-                let logoToUse = play.teamLogo;
-                if (!logoToUse && window.gameView && window.gameView.elements) {
-                    // Try to determine team from action text or use home as default
+            if (play.isTimeout || play.isTeamEvent) {
+                isTeamLogo = true;
+                imageToLoad = play.teamLogo;
+                if (!imageToLoad && window.gameView && window.gameView.elements) {
                     const actionUpper = play.action.toUpperCase();
                     const homeAbbr = (window.gameView.elements.homeAbbr?.textContent || '').trim().toUpperCase();
                     const awayAbbr = (window.gameView.elements.awayAbbr?.textContent || '').trim().toUpperCase();
                     
-                    // Check if timeout/action text contains team abbreviation
-                    let useHome = true; // Default to home
+                    let useHome = true;
                     if (awayAbbr && actionUpper.includes(awayAbbr)) {
                         useHome = false;
                     } else if (homeAbbr && actionUpper.includes(homeAbbr)) {
@@ -726,52 +481,52 @@
                     
                     const logoEl = useHome ? window.gameView.elements.homeLogo : window.gameView.elements.awayLogo;
                     if (logoEl && logoEl.src && logoEl.src.trim() !== '' && !logoEl.src.endsWith('/')) {
-                        logoToUse = logoEl.src;
+                        imageToLoad = logoEl.src;
                     }
                 }
                 
-                // ALWAYS remove border for timeouts, even if logo lookup failed
-                pbpPhotoContainer.style.display = '';
-                pbpPhotoContainer.style.border = 'none'; // Remove circular border for team events
-                if (logoToUse) {
-                    pbpPhoto.src = logoToUse;
-                }
-                pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
-                
-                // Request LONG game analysis audio for timeout (wait 10 seconds to avoid overlapping with play-by-play)
-                // Only request once per timeout play
+                // Request analysis audio for timeout
                 if (lastTimeoutAnalysisPlayId !== play.id) {
                     lastTimeoutAnalysisPlayId = play.id;
                     const currentGameId = window.gameView?.gameId || window.appController?.selectedGameId;
                     if (currentGameId) {
                         setTimeout(() => {
-                            requestGameAnalysisAudio(currentGameId, true, false); // false = long analysis
-                        }, 10000); // Wait 10 seconds before starting analysis
+                            requestGameAnalysisAudio(currentGameId, true, false);
+                        }, 10000);
                     }
                 }
-            } else if (!play.isTimeout && pbpPhotoContainer) {
-                // For regular plays, ensure photo container is visible and has border
-                pbpPhotoContainer.style.display = '';
-                pbpPhotoContainer.style.border = ''; // Restore border for regular plays
-                
-                // Stop dead air analysis (but save position for resuming)
+            } else {
                 stopDeadAirAnalysis();
             }
             
+            // Prepare TTS text
+            const originalPlayText = (play.isTimeout || play.isTeamEvent)
+                ? play.action
+                : `${play.playerName} ${play.action}`;
+            
+            // ========== WAIT FOR TTS FIRST (current play still visible) ==========
+            // Don't preload images (CORS issues) - browser handles them natively
+            const audioUrl = await generatePlayByPlayAudio(originalPlayText, true);
+            
+            // ========== NOW START ANIMATIONS (TTS is ready) ==========
+            
+            // Show the box if it was hidden
+            if (playByPlayBox.style.display === 'none') {
+                playByPlayBox.style.display = 'block';
+            }
+            
             const pbpBox = document.getElementById('pbpBoxContent');
-            
-            // Remove animation state classes
-            playByPlayBox.classList.remove('exiting', 'entering');
-            
-            // Reset styles for content animations
             const photoImg = pbpPhoto;
+            const pbpContent = document.querySelector('.pbp-content');
+            
+            // Remove animation state classes and reset styles
+            playByPlayBox.classList.remove('exiting', 'entering');
             photoImg.style.transform = '';
             photoImg.style.opacity = '';
             photoImg.style.filter = '';
             photoImg.style.animation = '';
             photoImg.style.clipPath = '';
             
-            const pbpContent = document.querySelector('.pbp-content');
             if (pbpContent) {
                 pbpContent.style.transform = '';
                 pbpContent.style.opacity = '';
@@ -786,139 +541,77 @@
             pbpIcon.style.animation = '';
             pbpIcon.style.clipPath = '';
             
-            // Add exit animation class
+            // Start exit animation
             playByPlayBox.classList.add('anim-21', 'exiting');
+            void pbpPhoto.offsetWidth; // Force reflow
             
-            // Force reflow
-            void pbpPhoto.offsetWidth || pbpBox.offsetWidth;
+            // Wait for exit animation (content exits 0-0.5s, pic fades 0.5-0.8s)
+            await delay(800);
             
-            // Generate TTS audio for the play text (start async, don't block animation)
-            // Create text: player name + action for display (what we show in overlay - unchanged)
-            const displayText = (play.isTimeout || play.isTeamEvent)
-                ? play.action 
-                : `${play.playerName} ${play.action}`;
-            
-            // Use original play-by-play text (AI will enhance it on server)
-            const originalPlayText = (play.isTimeout || play.isTeamEvent)
-                ? play.action
-                : `${play.playerName} ${play.action}`;
-            
-            
-            // Send original text to server with enhance flag - AI will make it energetic
-            const audioPromise = generatePlayByPlayAudio(originalPlayText, true);
-
-            // Sequence: content exits (0-0.5s), then old pic fades out (0.5-0.8s), then new pic fades in (0.8-1.1s), then content enters (0.9-1.4s)
-            // Update image source right when old pic finishes fading out, then trigger new pic fade in
-            setTimeout(async () => {
-                // Wait for audio to be ready
-                const audioUrl = await audioPromise;
-                // Update image source right as old picture finishes fading out (at 0.8s)
-                // Use team logo for team events, player photo otherwise
-                if (play.isTimeout || play.isTeamEvent) {
-                    // ALWAYS get team logo from gameView for timeouts/team events
-                    let logoToUse = play.teamLogo;
-                    if (!logoToUse && window.gameView && window.gameView.elements) {
-                        // Try to determine team from action text or use home as default
-                        const actionUpper = play.action.toUpperCase();
-                        const homeAbbr = (window.gameView.elements.homeAbbr?.textContent || '').trim().toUpperCase();
-                        const awayAbbr = (window.gameView.elements.awayAbbr?.textContent || '').trim().toUpperCase();
-                        
-                        // Check if timeout/action text contains team abbreviation
-                        let useHome = true; // Default to home
-                        if (awayAbbr && actionUpper.includes(awayAbbr)) {
-                            useHome = false;
-                        } else if (homeAbbr && actionUpper.includes(homeAbbr)) {
-                            useHome = true;
-                        } else if (play.timeoutTeam === 'away') {
-                            useHome = false;
-                        }
-                        
-                        const logoEl = useHome ? window.gameView.elements.homeLogo : window.gameView.elements.awayLogo;
-                        if (logoEl && logoEl.src && logoEl.src.trim() !== '' && !logoEl.src.endsWith('/')) {
-                            logoToUse = logoEl.src;
-                        }
-                    }
-                    
-                    // ALWAYS show team logo for timeouts - remove border
-                    if (pbpPhotoContainer) {
-                        pbpPhotoContainer.style.display = '';
-                        pbpPhotoContainer.style.border = 'none'; // Remove circular border for team events
-                    }
-                    if (logoToUse) {
-                        pbpPhoto.src = logoToUse;
-                    }
-                    pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
-                } else {
-                    // Show player photo for regular plays - restore border
-                    if (pbpPhotoContainer) {
-                        pbpPhotoContainer.style.display = '';
-                        pbpPhotoContainer.style.border = ''; // Restore border for regular plays
-                    }
-                    pbpPhoto.src = play.playerPhoto;
-                    pbpPhoto.alt = play.playerName;
+            // Update content (while still in "exiting" state, content is hidden)
+            if (isTeamLogo) {
+                if (pbpPhotoContainer) {
+                    pbpPhotoContainer.style.display = '';
+                    pbpPhotoContainer.style.border = 'none';
                 }
-                
-                // Update text content (will be hidden until CSS animation brings it in at 0.9s)
-                pbpTime.textContent = `Q${play.period} ${play.clock}`;
-                // For timeouts and team events, don't show player name
-                if (play.isTimeout || play.isTeamEvent) {
-                    pbpPlayer.textContent = ''; // No player name for team events
-                } else {
-                    pbpPlayer.textContent = play.playerName;
+                if (imageToLoad) {
+                    pbpPhoto.src = imageToLoad;
                 }
-                pbpAction.textContent = play.action;
-                // No icon for team events, show icon for player plays
-                pbpIcon.textContent = (play.isTimeout || play.isTeamEvent) ? '' : play.icon;
-                
-                // Play audio when content enters (at ~1.0s mark, after animation starts)
-                if (audioUrl) {
-                    setTimeout(() => {
-                        // Stop any currently playing play-by-play audio
-                        if (currentPbpAudio) {
-                            currentPbpAudio.pause();
-                            currentPbpAudio = null;
-                        }
-                        
-                // Stop analysis audio when play-by-play plays (mark as interrupted)
-                if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
-                    currentAnalysisAudio.pause();
-                    currentAnalysisAudio = null;
-                    analysisLastPosition = 0; // Reset position
-                    analysisInterrupted = true; // Mark as interrupted - don't resume this audio
+                pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
+            } else {
+                if (pbpPhotoContainer) {
+                    pbpPhotoContainer.style.display = '';
+                    pbpPhotoContainer.style.border = '';
                 }
-                        
-                        currentPbpAudio = new Audio(audioUrl);
-                        currentPbpAudio.play().catch(() => {
-                            // Ignore autoplay restrictions
-                        });
-                    }, 200); // Small delay after content animation starts to sync with visual
-                }
-                
-                // Remove exiting, add entering (this triggers the new pic fade-in and content enter animations)
-                playByPlayBox.classList.remove('exiting');
-                playByPlayBox.classList.add('entering');
-                
-                // Reset and force reflow for enter animation
-                void pbpPhoto.offsetWidth || pbpBox.offsetWidth;
-                
-                // After all enter animations complete, clean up
+                pbpPhoto.src = play.playerPhoto;
+                pbpPhoto.alt = play.playerName;
+            }
+            
+            pbpTime.textContent = `Q${play.period} ${play.clock}`;
+            pbpPlayer.textContent = (play.isTimeout || play.isTeamEvent) ? '' : play.playerName;
+            pbpAction.textContent = play.action;
+            pbpIcon.textContent = (play.isTimeout || play.isTeamEvent) ? '' : play.icon;
+            
+            // Start enter animation
+            playByPlayBox.classList.remove('exiting');
+            playByPlayBox.classList.add('entering');
+            void pbpPhoto.offsetWidth; // Force reflow
+            
+            // Play audio shortly after enter animation starts
+            if (audioUrl) {
                 setTimeout(() => {
-                    playByPlayBox.classList.remove('entering');
-                    
-                    // Reset all inline styles after animation
-                    photoImg.style.opacity = '';
-                    photoImg.style.clipPath = '';
-                    photoImg.style.filter = '';
-                    if (pbpContent) {
-                        pbpContent.style.opacity = '';
-                        pbpContent.style.clipPath = '';
-                        pbpContent.style.filter = '';
+                    if (currentPbpAudio) {
+                        currentPbpAudio.pause();
+                        currentPbpAudio = null;
                     }
-                    pbpIcon.style.opacity = '';
-                    pbpIcon.style.clipPath = '';
-                    pbpIcon.style.filter = '';
-                }, 700); // Max animation duration (0.1s delay + 0.5s animation + 0.1s buffer)
-            }, 800); // Wait for content exit (0.5s) + old pic fade out (0.3s) = 0.8s
+                    
+                    if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
+                        currentAnalysisAudio.pause();
+                        currentAnalysisAudio = null;
+                        analysisLastPosition = 0;
+                        analysisInterrupted = true;
+                    }
+                    
+                    currentPbpAudio = new Audio(audioUrl);
+                    currentPbpAudio.play().catch(() => {});
+                }, 200);
+            }
+            
+            // Clean up after enter animation completes
+            await delay(700);
+            playByPlayBox.classList.remove('entering');
+            
+            photoImg.style.opacity = '';
+            photoImg.style.clipPath = '';
+            photoImg.style.filter = '';
+            if (pbpContent) {
+                pbpContent.style.opacity = '';
+                pbpContent.style.clipPath = '';
+                pbpContent.style.filter = '';
+            }
+            pbpIcon.style.opacity = '';
+            pbpIcon.style.clipPath = '';
+            pbpIcon.style.filter = '';
         }
 
         // Function to check and update play-by-play from API data
@@ -992,72 +685,55 @@
                     return;
                 }
                 
-                // Find the most recent play (include timeouts now, but skip other non-player events)
-                let latestPlay = null;
-                for (const play of plays) {
-                    const transformed = transformPlayForDisplay(play);
-                    // Include plays with players OR timeouts (but skip other empty events)
-                    if (transformed && transformed.action && (transformed.isTimeout || (transformed.playerName !== 'Player' && transformed.action))) {
-                        latestPlay = play;
-                        break;
-                    }
-                }
+                // Build team context from gameView for logo resolution
+                const teamContext = {
+                    homeAbbr: (window.gameView?.elements?.homeAbbr?.textContent || '').trim(),
+                    awayAbbr: (window.gameView?.elements?.awayAbbr?.textContent || '').trim(),
+                    homeLogo: window.gameView?.elements?.homeLogo?.src || '',
+                    awayLogo: window.gameView?.elements?.awayLogo?.src || ''
+                };
                 
-                if (!latestPlay || !latestPlay.id) {
-                    // No valid play found - check for dead air
-                    console.log('📭 No valid play found (no id), checking for dead air...');
+                // Use processor to find first valid, non-duplicate play
+                const transformedPlay = pbpProcessor.findNewPlay(plays, teamContext);
+                
+                if (!transformedPlay) {
+                    // No valid new play found - check for dead air
+                    console.log('📭 No valid new play found, checking for dead air...');
                     handleDeadAir(gameId);
                     return;
                 }
                 
-                // Only update if this is a new play
-                if (latestPlay.id !== lastPlayId) {
-                    const transformedPlay = transformPlayForDisplay(latestPlay);
-                    if (transformedPlay && transformedPlay.action && (transformedPlay.isTimeout || (transformedPlay.playerName !== 'Player' && transformedPlay.action))) {
-                        lastPlayId = latestPlay.id;
-                        lastPlayTimestamp = Date.now(); // Update last play timestamp
-                        
-                        // Stop dead air analysis when new play comes in
-                        stopDeadAirAnalysis();
-                        
-                        // Reset timeout analysis tracking if this is not a timeout
-                        if (!transformedPlay.isTimeout) {
-                            lastTimeoutAnalysisPlayId = null;
-                        }
-                        
-                        // Send play-by-play data to server for storage
-                        try {
-                            await fetch('http://localhost:3000/api/play-by-play', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    gameId: gameId,
-                                    play: {
-                                        period: transformedPlay.period,
-                                        clock: transformedPlay.clock,
-                                        playerName: transformedPlay.playerName,
-                                        action: transformedPlay.action,
-                                        homeScore: transformedPlay.homeScore,
-                                        awayScore: transformedPlay.awayScore,
-                                        isTimeout: transformedPlay.isTimeout
-                                    }
-                                })
-                            });
-                        } catch (error) {
-                            // Silently handle errors
-                        }
-                        
-                        await updatePlayByPlay(transformedPlay);
-                    } else {
-                        // No new play - check for dead air
-                        if (!transformedPlay?.isTimeout) {
-                            handleDeadAir(gameId);
-                        }
-                    }
-                } else {
-                    // No new play detected - check for dead air
-                    handleDeadAir(gameId);
+                // New play found! Stop dead air analysis
+                stopDeadAirAnalysis();
+                
+                // Reset timeout analysis tracking if this is not a timeout
+                if (!transformedPlay.isTimeout) {
+                    lastTimeoutAnalysisPlayId = null;
                 }
+                
+                // Send play-by-play data to server for storage
+                try {
+                    await fetch('http://localhost:3000/api/play-by-play', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            gameId: gameId,
+                            play: {
+                                period: transformedPlay.period,
+                                clock: transformedPlay.clock,
+                                playerName: transformedPlay.playerName,
+                                action: transformedPlay.action,
+                                homeScore: transformedPlay.homeScore,
+                                awayScore: transformedPlay.awayScore,
+                                isTimeout: transformedPlay.isTimeout
+                            }
+                        })
+                    });
+                } catch (error) {
+                    // Silently handle errors
+                }
+                
+                await updatePlayByPlay(transformedPlay);
             } catch (error) {
                 // Silently handle errors
             }
@@ -1065,10 +741,10 @@
         
         // Function to reset play-by-play tracking (call when game changes)
         function resetPlayByPlayTracking() {
-            lastPlayId = null;
-            lastHomeScore = null;
-            lastAwayScore = null;
+            pbpProcessor.reset();
             lastTimeoutAnalysisPlayId = null; // Reset timeout analysis tracking
+            lastHomeScore = null; // Reset display score tracking
+            lastAwayScore = null;
         }
 
         // Expose functions for integration

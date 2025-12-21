@@ -143,6 +143,11 @@ class AppController {
                 selectedGameId = 'sim-game';
                 if (this.stateManager.hasGameIdChanged(selectedGameId)) {
                     this.stateManager.setGameId(selectedGameId);
+                    
+                    // Reset play-by-play tracking when switching to sim mode
+                    if (typeof window.resetPlayByPlayTracking === 'function') {
+                        window.resetPlayByPlayTracking();
+                    }
                 }
             }
 
@@ -260,8 +265,12 @@ class AppController {
             // Step 7: Auto-detect state and update view
             this.detectStateAndUpdate(game, selectedGameId);
             
-            // Step 8: Update play-by-play (only for real games, not sim mode)
-            if (!isSimMode && selectedGameId && selectedGameId !== 'sim-game') {
+            // Step 8: Update play-by-play
+            if (isSimMode) {
+                // Sim mode: use simulated play-by-play from JSON
+                await this.updateSimPlayByPlay(simData.state);
+            } else if (selectedGameId && selectedGameId !== 'sim-game') {
+                // Live mode: use ESPN API
                 if (typeof window.checkAndUpdatePlayByPlay === 'function') {
                     const currentGameState = this.stateManager.getGameState();
                     window.checkAndUpdatePlayByPlay(selectedGameId, this.nbaApi, currentGameState);
@@ -290,6 +299,57 @@ class AppController {
         this.modeCoordinator.cleanupOtherGamesMode();
         
         this.stateManager.reset();
+    }
+
+    /**
+     * Update play-by-play in simulation mode
+     * Uses pre-loaded JSON data from SimulationManager
+     * @param {string} gameState - Current game state ('pregame', 'live', 'halftime', 'final')
+     * @returns {Promise<void>}
+     */
+    async updateSimPlayByPlay(gameState) {
+        console.log('🎮 updateSimPlayByPlay called with gameState:', gameState);
+        
+        // Only show play-by-play during live game
+        if (gameState !== 'live' && gameState !== 'overtime') {
+            console.log('⏭️ Skipping - not live/overtime, state is:', gameState);
+            return;
+        }
+
+        // Load play-by-play data if not loaded yet
+        if (!this.simulationManager.hasPlayByPlayData()) {
+            console.log('📥 Loading play-by-play data...');
+            await this.simulationManager.loadPlayByPlayData();
+        }
+
+        // Get next play (returns null if not enough time has passed)
+        const rawPlay = this.simulationManager.getNextPlay(6000); // 6 second intervals
+        if (!rawPlay) {
+            console.log('⏳ No play ready yet (waiting for 3s interval)');
+            return; // No play ready yet
+        }
+        
+        console.log('🏀 Got raw play:', rawPlay.playerName, rawPlay.action);
+
+        // Build team context from gameView for logo resolution
+        const teamContext = {
+            homeAbbr: (window.gameView?.elements?.homeAbbr?.textContent || '').trim(),
+            awayAbbr: (window.gameView?.elements?.awayAbbr?.textContent || '').trim(),
+            homeLogo: window.gameView?.elements?.homeLogo?.src || '',
+            awayLogo: window.gameView?.elements?.awayLogo?.src || ''
+        };
+
+        // Process through the same processor as live mode
+        if (window.pbpProcessor && typeof window.updatePlayByPlay === 'function') {
+            const processedPlay = window.pbpProcessor.processPlay(rawPlay, teamContext);
+            console.log('🔄 Processed play:', processedPlay ? 'OK' : 'NULL (duplicate or invalid)');
+            if (processedPlay) {
+                console.log('✅ Showing play:', processedPlay.playerName, processedPlay.action);
+                await window.updatePlayByPlay(processedPlay);
+            }
+        } else {
+            console.log('❌ Missing pbpProcessor or updatePlayByPlay function');
+        }
     }
 
     /**
