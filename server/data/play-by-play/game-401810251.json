@@ -1518,5 +1518,55 @@
     "homeScore": 26,
     "awayScore": 34,
     "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:59:14.649Z",
+    "period": 1,
+    "clock": "2:14",
+    "playerName": "Trae Young",
+    "action": "enters the game for Jalen Johnson",
+    "homeScore": 26,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:59:44.933Z",
+    "period": 1,
+    "clock": "2:02",
+    "playerName": "Trae Young",
+    "action": "misses shot",
+    "homeScore": 26,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:59:55.071Z",
+    "period": 1,
+    "clock": "2:02",
+    "playerName": "Trae Young",
+    "action": "misses 20-foot pullup jump shot",
+    "homeScore": 26,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:00:05.235Z",
+    "period": 1,
+    "clock": "1:57",
+    "playerName": "Onyeka Okongwu",
+    "action": "misses 24-foot three point jumper",
+    "homeScore": 26,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:00:15.691Z",
+    "period": 1,
+    "clock": "1:50",
+    "playerName": "Zach Collins",
+    "action": "offensive foul turnover",
+    "homeScore": 29,
+    "awayScore": 34,
+    "isTimeout": false
   }
 ]

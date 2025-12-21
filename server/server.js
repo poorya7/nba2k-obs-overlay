@@ -266,7 +266,6 @@ async function handlePostSelectedGame(req, res) {
   try {
     const data = await parseJsonBody(req);
     state.setGameId(data.gameId);
-    console.log('✅ Game selected:', data.gameId);
     sendJson(res, 200, { success: true });
   } catch (error) {
     sendJson(res, 400, { error: error.message });
@@ -283,7 +282,6 @@ async function handlePostSelectedStyle(req, res) {
   try {
     const data = await parseJsonBody(req);
     state.setStyle(data.style);
-    console.log('🎨 Style changed:', data.style);
     sendJson(res, 200, { success: true });
   } catch (error) {
     sendJson(res, 400, { error: error.message });
@@ -300,8 +298,6 @@ async function handlePostSimulation(req, res) {
   try {
     const data = await parseJsonBody(req);
     state.setSimulation(data);
-    const sim = state.getSimulation();
-    console.log('🎮 Simulation:', sim.enabled ? 'ON' : 'OFF', '| State:', sim.state);
     sendJson(res, 200, { success: true });
   } catch (error) {
     sendJson(res, 400, { error: error.message });
@@ -321,11 +317,9 @@ async function handlePostQuarter(req, res) {
     if (data.quarter === null || data.quarter === '') {
       // Clear quarter (game done)
       state.clearQuarter();
-      console.log('🏁 Quarter cleared');
     } else {
       // Start new quarter
       state.setQuarter(data.quarter);
-      console.log('🏀 Quarter started:', data.quarter);
     }
     
     sendJson(res, 200, { success: true, quarter: state.getQuarter() });
@@ -344,7 +338,6 @@ async function handlePostSocialsEnabled(req, res) {
   try {
     const data = await parseJsonBody(req);
     state.setSocialsEnabled(data.enabled === true);
-    console.log('📱 Socials overlay:', data.enabled ? 'ENABLED' : 'DISABLED');
     sendJson(res, 200, { success: true });
   } catch (error) {
     sendJson(res, 400, { error: error.message });
@@ -362,21 +355,12 @@ async function handlePostChat(req, res) {
     
     // Only validate username and content - ID is optional (extension handles duplicates)
     if (!message.username || (!hasText && !hasTextHtml)) {
-      console.log('❌ Chat rejected - missing fields:', {
-        hasUsername: !!message.username,
-        hasText: hasText,
-        hasTextHtml: hasTextHtml,
-        textLength: message.text?.length || 0,
-        textHtmlLength: message.textHtml?.length || 0,
-        username: message.username
-      });
       sendJson(res, 400, { error: 'Missing required fields: username, text/textHtml' });
       return;
     }
     
     // Add message to storage
     state.addChatMessage(message);
-    console.log('💬 Chat received:', message.username, '-', (message.text || message.textHtml).substring(0, 50), `[ID: ${message.id}]`);
     
     sendJson(res, 200, { 
       success: true, 
@@ -400,14 +384,12 @@ function handleGetChat(req, res) {
 function handleDeleteChat(req, res) {
   state.clearChatMessages();
   state.triggerChatRefresh(); // Trigger refresh after clearing
-  console.log('🗑️ Chat messages cleared');
   sendJson(res, 200, { success: true, message: 'Chat messages cleared' });
 }
 
 // POST /api/chat/refresh - Trigger chat overlay refresh
 function handlePostChatRefresh(req, res) {
   state.triggerChatRefresh();
-  console.log('🔄 Chat refresh triggered');
   sendJson(res, 200, { success: true, message: 'Chat refresh triggered', refreshTrigger: state.getChatRefreshTrigger() });
 }
 
@@ -722,8 +704,6 @@ async function handlePostPlayByPlay(req, res) {
       console.error('❌ Error writing play-by-play file:', e.message);
     }
     
-    console.log(`📝 Stored play-by-play for game ${gameId}, total plays: ${state.playByPlayData[gameId].length}`);
-    
     const headers = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*'
@@ -846,8 +826,6 @@ async function handlePostGameAnalysis(req, res) {
     const data = await parseJsonBody(req);
     const { gameId, homeTeam, awayTeam, currentScore, forceRegenerate = false, isShortAnalysis = false } = data;
     
-    console.log('🎤 Game analysis request:', { gameId, homeTeam, awayTeam, currentScore, forceRegenerate });
-    
     if (!gameId) {
       console.error('❌ Game analysis request missing gameId');
       const headers = {
@@ -870,7 +848,6 @@ async function handlePostGameAnalysis(req, res) {
     
     // Get all plays for this game
     const plays = state.playByPlayData[gameId] || [];
-    console.log(`📊 Found ${plays.length} plays for game ${gameId}`);
     
     if (plays.length === 0) {
       console.error(`❌ No play-by-play data for game ${gameId}`);
@@ -884,7 +861,6 @@ async function handlePostGameAnalysis(req, res) {
     }
     
     // Generate analysis text using OpenAI Chat API
-    console.log(`🤖 Generating ${isShortAnalysis ? 'SHORT' : 'LONG'} analysis text with OpenAI...`);
     let analysisText;
     try {
       analysisText = await generateGameAnalysis(plays, homeTeam, awayTeam, currentScore, isShortAnalysis);
@@ -910,15 +886,11 @@ async function handlePostGameAnalysis(req, res) {
       return;
     }
     
-    console.log('✅ Generated analysis text:', analysisText.substring(0, 100) + '...');
-    console.log('🎵 Converting to speech with Onyx voice...');
-    
     // Convert analysis text to speech using shared TTS function
     const extraHeaders = {
       'X-Generated-At': now.toString()
     };
     await callOpenAITTS(analysisText, 'onyx', 'tts-1', 1.0, res, extraHeaders);
-    console.log('✅ Streaming audio response to client');
   } catch (error) {
     console.error('❌ Game analysis handler error:', error);
     // Make sure we haven't already sent headers
@@ -1076,7 +1048,6 @@ async function routeApiRequest(req, res) {
   }
   
   // If it's an API route but no handler found, return 404 with CORS
-  console.log('❌ API route not found:', routeKey);
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*'
@@ -1089,8 +1060,6 @@ async function routeApiRequest(req, res) {
 // ==================== HTTP SERVER ====================
 
 const server = http.createServer(async (req, res) => {
-  console.log(`📡 ${req.method} ${req.url}`);
-
   // Try API routes first
   if (await routeApiRequest(req, res)) {
     return;
@@ -1140,23 +1109,17 @@ const server = http.createServer(async (req, res) => {
   const extname = String(path.extname(filePath)).toLowerCase();
   const contentType = MIME_TYPES[extname] || 'application/octet-stream';
 
-  // Debug: Log the resolved file path
-  console.log('   → Serving:', filePath);
-
   // Read and serve file
   fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
-        console.log('   ❌ File not found:', path.resolve(filePath));
         res.writeHead(404, { 'Content-Type': 'text/html' });
         res.end('<h1>404 - File Not Found</h1>', 'utf-8');
       } else {
-        console.log('   ❌ Error:', error);
         res.writeHead(500);
         res.end('Server Error: ' + error.code);
       }
     } else {
-      console.log('   ✅ Served successfully');
       const headers = { 'Content-Type': contentType };
       // Add CORS headers for local development
       headers['Access-Control-Allow-Origin'] = '*';
