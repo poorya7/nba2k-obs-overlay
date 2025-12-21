@@ -13,8 +13,9 @@ projectRoot = fso.GetParentFolderName(serverDir)
 
 ' Change to project root and run the server
 objShell.CurrentDirectory = projectRoot
-objShell.Run "cmd /c node server/server.js", 0, False
+objShell.Run "cmd /c node server/server.js", 1, False
 
+' 1 = Show window (changed from 0 for debugging)
 ' 0 = Hide window
 ' False = Don't wait for the script to finish
 

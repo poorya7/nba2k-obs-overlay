@@ -226,14 +226,19 @@
                 actionText = removePlayerNameFromText(playText, playerName);
             }
             
-            // Check if this is a timeout
+            // Check if this is a timeout or other team event (not a player action)
             const text = actionText.toLowerCase();
             const isTimeout = text.includes('timeout');
+            const isTeamEvent = isTimeout || 
+                               text.includes('coach') || 
+                               text.includes('challenge') ||
+                               text.includes('coach\'s challenge') ||
+                               !playerName || playerName === 'Player';
             
-            // Determine icon based on play text (no icon for timeouts)
+            // Determine icon based on play text (no icon for team events like timeouts, coach's challenge)
             let icon = '⚡'; // default
-            if (isTimeout) {
-                icon = ''; // No icon for timeouts
+            if (isTeamEvent) {
+                icon = ''; // No icon for team events
             } else if (text.includes('3-point') || text.includes('three') || text.includes('3pt')) {
                 icon = '🔥';
             } else if (text.includes('dunk') || text.includes('slam')) {
@@ -242,10 +247,10 @@
                 icon = '🎯';
             }
             
-            // Get team logo for timeouts
+            // Get team logo for timeouts and other team events (coach's challenge, etc.)
             let teamLogo = null;
             let timeoutTeam = null; // 'home' or 'away'
-            if (isTimeout && window.gameView && window.gameView.elements) {
+            if (isTeamEvent && window.gameView && window.gameView.elements) {
                 // Get team abbreviations from game view
                 const homeAbbr = (window.gameView.elements.homeAbbr?.textContent || '').trim().toUpperCase();
                 const awayAbbr = (window.gameView.elements.awayAbbr?.textContent || '').trim().toUpperCase();
@@ -264,32 +269,44 @@
                     }
                 }
                 
-                // Method 2: Extract from timeout text (e.g., "Spurs timeout", "Lakers Full Timeout")
-                // Try to find team name before "timeout" keyword
+                // Method 2: Extract from timeout/team event text (e.g., "Spurs timeout", "Lakers Full Timeout", "[Timberwolves] COACH'S CHALLENGE")
+                // Try to find team name in brackets or before keywords
                 if (!matchedTeam && playText) {
-                    // Match pattern like "Spurs timeout" or "Lakers Full Timeout"
-                    const timeoutMatch = playText.match(/^([A-Z][a-z]+(?:[\s-][A-Z][a-z]+)*)\s+(?:Full\s+)?[Tt]imeout/i);
-                    if (timeoutMatch) {
-                        const teamNameFromText = timeoutMatch[1].trim().toUpperCase();
-                        // Get possible abbreviations for this team name
+                    // Match pattern like "[Team] EVENT" or "Team timeout"
+                    const bracketMatch = playText.match(/\[([A-Z][a-z]+(?:[\s-][A-Z][a-z]+)*)\]/i);
+                    if (bracketMatch) {
+                        const teamNameFromText = bracketMatch[1].trim().toUpperCase();
                         const possibleAbbrs = TEAM_NAME_TO_ABBR[teamNameFromText] || [];
-                        
-                        // Check if home or away abbreviation is in the possible abbreviations list
                         if (homeAbbr && possibleAbbrs.includes(homeAbbr)) {
                             matchedTeam = 'home';
                         } else if (awayAbbr && possibleAbbrs.includes(awayAbbr)) {
                             matchedTeam = 'away';
-                        }
-                        // Also check if abbreviation appears directly in the text
-                        else if (homeAbbr && upperPlayText.includes(homeAbbr)) {
+                        } else if (homeAbbr && upperPlayText.includes(homeAbbr)) {
                             matchedTeam = 'home';
                         } else if (awayAbbr && upperPlayText.includes(awayAbbr)) {
                             matchedTeam = 'away';
                         }
                     }
+                    // Also try timeout pattern like "Spurs timeout" or "Lakers Full Timeout"
+                    if (!matchedTeam) {
+                        const timeoutMatch = playText.match(/^([A-Z][a-z]+(?:[\s-][A-Z][a-z]+)*)\s+(?:Full\s+)?[Tt]imeout/i);
+                        if (timeoutMatch) {
+                            const teamNameFromText = timeoutMatch[1].trim().toUpperCase();
+                            const possibleAbbrs = TEAM_NAME_TO_ABBR[teamNameFromText] || [];
+                            if (homeAbbr && possibleAbbrs.includes(homeAbbr)) {
+                                matchedTeam = 'home';
+                            } else if (awayAbbr && possibleAbbrs.includes(awayAbbr)) {
+                                matchedTeam = 'away';
+                            } else if (homeAbbr && upperPlayText.includes(homeAbbr)) {
+                                matchedTeam = 'home';
+                            } else if (awayAbbr && upperPlayText.includes(awayAbbr)) {
+                                matchedTeam = 'away';
+                            }
+                        }
+                    }
                 }
                 
-                // Method 3: Fallback - check if timeout text contains team abbreviation anywhere
+                // Method 3: Fallback - check if text contains team abbreviation anywhere
                 if (!matchedTeam) {
                     if (homeAbbr && upperPlayText.includes(homeAbbr)) {
                         matchedTeam = 'home';
@@ -326,6 +343,7 @@
                 awayScore: apiPlay.awayScore !== undefined && apiPlay.awayScore !== null ? parseInt(apiPlay.awayScore) : null,
                 isScoringPlay: apiPlay.isScoringPlay || false,
                 isTimeout: isTimeout,
+                isTeamEvent: isTeamEvent,
                 teamLogo: teamLogo,
                 timeoutTeam: timeoutTeam
             };
@@ -341,6 +359,7 @@
         let lastPlayId = null; // Track last displayed play ID
         let lastHomeScore = null; // Track last displayed home score
         let lastAwayScore = null; // Track last displayed away score
+        let lastTimeoutAnalysisPlayId = null; // Track last timeout play we requested analysis for
 
         // Helper function to convert period number to quarter format
         function formatPeriodToQuarter(period) {
@@ -357,11 +376,19 @@
         let analysisAudioUrl = null; // Cache the audio blob URL
         let analysisLastPosition = 0; // Track playback position for resuming
         let analysisTimestamp = null; // Track when analysis was generated
+        let analysisInterrupted = false; // Track if analysis was interrupted by play-by-play
         let deadAirTimer = null; // Timer for dead air detection
         let lastPlayTimestamp = Date.now(); // Track when last play occurred
 
         // Function to request game analysis audio during timeout/halftime/dead-air
-        async function requestGameAnalysisAudio(gameId, forceRegenerate = false) {
+        async function requestGameAnalysisAudio(gameId, forceRegenerate = false, isShortAnalysis = false) {
+            if (!gameId) {
+                console.error('❌ requestGameAnalysisAudio called without gameId');
+                return;
+            }
+            
+            console.log('🎤 requestGameAnalysisAudio called for gameId:', gameId, 'forceRegenerate:', forceRegenerate);
+            
             // Save current playback position if audio is playing
             if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
                 analysisLastPosition = currentAnalysisAudio.currentTime;
@@ -373,8 +400,9 @@
             const useCached = !forceRegenerate && analysisAudioUrl && analysisTimestamp && 
                              (Date.now() - analysisTimestamp) < TEN_MINUTES;
             
-            if (useCached) {
-                // Use cached audio, resume from last position
+            if (useCached && !analysisInterrupted) {
+                console.log('✅ Using cached analysis audio');
+                // Use cached audio, resume from last position (only if not interrupted)
                 if (!currentAnalysisAudio || currentAnalysisAudio.src !== analysisAudioUrl) {
                     if (currentAnalysisAudio) {
                         currentAnalysisAudio.pause();
@@ -386,11 +414,18 @@
                     currentAnalysisAudio = new Audio(analysisAudioUrl);
                 }
                 currentAnalysisAudio.currentTime = analysisLastPosition;
-                currentAnalysisAudio.play().catch(() => {
-                    // Ignore autoplay restrictions
+                currentAnalysisAudio.play().catch((error) => {
+                    console.error('❌ Failed to play cached analysis audio:', error);
                 });
+                analysisInterrupted = false; // Reset flag
                 return;
+            } else if (useCached && analysisInterrupted) {
+                // If interrupted, don't use cache - request fresh audio
+                console.log('🔄 Cached analysis was interrupted, requesting fresh audio');
+                analysisInterrupted = false; // Reset flag
             }
+            
+            console.log(`🔄 Requesting new ${isShortAnalysis ? 'SHORT' : 'LONG'} analysis audio from server...`);
             
             // Generate new analysis audio
             const homeTeam = (window.gameView?.elements?.homeAbbr?.textContent || 
@@ -403,6 +438,8 @@
             const awayScore = window.gameView?.elements?.awayScore?.textContent?.trim() || '0';
             const currentScore = `${homeTeam} ${homeScore} - ${awayScore} ${awayTeam}`;
             
+            console.log('📊 Analysis request data:', { gameId, homeTeam, awayTeam, currentScore, forceRegenerate, isShortAnalysis });
+            
             try {
                 const response = await fetch('http://localhost:3000/api/game-analysis', {
                     method: 'POST',
@@ -412,27 +449,26 @@
                         homeTeam: homeTeam,
                         awayTeam: awayTeam,
                         currentScore: currentScore,
-                        forceRegenerate: forceRegenerate
+                        forceRegenerate: forceRegenerate,
+                        isShortAnalysis: isShortAnalysis
                     })
                 });
                 
-                if (!response.ok) {
-                    return;
-                }
+                console.log('📡 Analysis API response status:', response.status, response.statusText);
                 
-                // Check if server says to use cache
-                const contentType = response.headers.get('content-type');
-                if (contentType === 'application/json') {
-                    const cacheInfo = await response.json();
-                    if (cacheInfo.cached) {
-                        // Server says use cache - should have been handled above, but handle gracefully
-                        return;
-                    }
+                if (!response.ok) {
+                    console.error('❌ Game analysis request failed:', response.status, response.statusText);
                     return;
                 }
                 
                 // Get audio blob, cache it, and play it
                 const audioBlob = await response.blob();
+                console.log('🎵 Received audio blob, size:', audioBlob.size, 'bytes');
+                
+                if (!audioBlob || audioBlob.size === 0) {
+                    console.error('❌ Game analysis audio blob is empty');
+                    return;
+                }
                 
                 // Clean up old audio URL if exists
                 if (analysisAudioUrl && analysisAudioUrl.startsWith('blob:')) {
@@ -443,42 +479,64 @@
                 const generatedAt = response.headers.get('X-Generated-At');
                 analysisTimestamp = generatedAt ? parseInt(generatedAt) : Date.now();
                 analysisLastPosition = 0; // Reset position for new audio
+                analysisInterrupted = false; // Reset interruption flag
+                
+                console.log('✅ Created audio URL, attempting to play...');
                 
                 // Clean up old audio object if exists
                 if (currentAnalysisAudio) {
                     currentAnalysisAudio.pause();
-                    const oldUrl = currentAnalysisAudio.src;
-                    if (oldUrl.startsWith('blob:') && oldUrl !== analysisAudioUrl) {
+                    currentAnalysisAudio = null; // Clear reference
+                    const oldUrl = currentAnalysisAudio?.src;
+                    if (oldUrl && oldUrl.startsWith('blob:') && oldUrl !== analysisAudioUrl) {
                         URL.revokeObjectURL(oldUrl);
                     }
                 }
                 
+                // Create new audio and play from start
                 currentAnalysisAudio = new Audio(analysisAudioUrl);
-                currentAnalysisAudio.play().catch(() => {
-                    // Ignore autoplay restrictions
+                currentAnalysisAudio.currentTime = 0; // Always start from beginning
+                currentAnalysisAudio.play().then(() => {
+                    console.log('✅ Game analysis audio is now playing from start');
+                }).catch((error) => {
+                    console.error('❌ Failed to play game analysis audio:', error);
                 });
             } catch (error) {
-                // Silently handle errors
+                console.error('❌ Error requesting game analysis audio:', error);
             }
         }
         
         // Function to handle dead air detection (no play-by-play for 8 seconds)
         function handleDeadAir(gameId) {
-            // Clear existing timer
-            if (deadAirTimer) {
-                clearTimeout(deadAirTimer);
-                deadAirTimer = null;
+            console.log('🔍 handleDeadAir called with gameId:', gameId);
+            if (!gameId) {
+                console.error('❌ handleDeadAir called without gameId');
+                return;
             }
+            
+            // Only start timer if we don't already have one running
+            if (deadAirTimer) {
+                console.log('⏱️ Dead air timer already running, not resetting');
+                // Timer already running, don't reset it
+                return;
+            }
+            
+            console.log('⏱️ Starting dead air timer (8s) for gameId:', gameId);
             
             // Set new timer for 8 seconds
             deadAirTimer = setTimeout(() => {
+                console.log('🔊 Dead air detected (8s), requesting game analysis for gameId:', gameId);
+                deadAirTimer = null; // Clear timer before making request
+                
                 // Check if 10 minutes have passed since last analysis generation
                 const TEN_MINUTES = 10 * 60 * 1000;
                 const shouldRegenerate = !analysisTimestamp || (Date.now() - analysisTimestamp) >= TEN_MINUTES;
+                console.log('📊 Analysis check - timestamp:', analysisTimestamp, 'shouldRegenerate:', shouldRegenerate);
                 
-                // Request analysis audio (will use cache if recent, or regenerate if old)
-                requestGameAnalysisAudio(gameId, shouldRegenerate);
-                deadAirTimer = null;
+                // Request SHORT analysis audio for dead air (will use cache if recent, or regenerate if old)
+                requestGameAnalysisAudio(gameId, shouldRegenerate, true).catch((error) => {
+                    console.error('❌ Error in requestGameAnalysisAudio:', error);
+                });
             }, 8000); // 8 seconds
         }
         
@@ -554,10 +612,18 @@
         // Function to generate TTS audio for play-by-play text
         async function generatePlayByPlayAudio(playText, enhance = false) {
             try {
-                // Stop any currently playing audio
+                // Stop any currently playing play-by-play audio
                 if (currentPbpAudio) {
                     currentPbpAudio.pause();
                     currentPbpAudio = null;
+                }
+                
+                // Stop analysis audio when play-by-play starts (mark as interrupted)
+                if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
+                    currentAnalysisAudio.pause();
+                    currentAnalysisAudio = null;
+                    analysisLastPosition = 0; // Reset position
+                    analysisInterrupted = true; // Mark as interrupted - don't resume this audio
                 }
 
                 const requestBody = {
@@ -638,18 +704,50 @@
             
             const pbpPhotoContainer = document.querySelector('.pbp-photo-container');
             
-            // For timeouts, remove border and show team logo
-            if (play.isTimeout && play.teamLogo && pbpPhotoContainer) {
+            // For timeouts and team events, ALWAYS remove border and show team logo
+            if ((play.isTimeout || play.isTeamEvent) && pbpPhotoContainer) {
+                // ALWAYS get team logo from gameView for timeouts/team events
+                let logoToUse = play.teamLogo;
+                if (!logoToUse && window.gameView && window.gameView.elements) {
+                    // Try to determine team from action text or use home as default
+                    const actionUpper = play.action.toUpperCase();
+                    const homeAbbr = (window.gameView.elements.homeAbbr?.textContent || '').trim().toUpperCase();
+                    const awayAbbr = (window.gameView.elements.awayAbbr?.textContent || '').trim().toUpperCase();
+                    
+                    // Check if timeout/action text contains team abbreviation
+                    let useHome = true; // Default to home
+                    if (awayAbbr && actionUpper.includes(awayAbbr)) {
+                        useHome = false;
+                    } else if (homeAbbr && actionUpper.includes(homeAbbr)) {
+                        useHome = true;
+                    } else if (play.timeoutTeam === 'away') {
+                        useHome = false;
+                    }
+                    
+                    const logoEl = useHome ? window.gameView.elements.homeLogo : window.gameView.elements.awayLogo;
+                    if (logoEl && logoEl.src && logoEl.src.trim() !== '' && !logoEl.src.endsWith('/')) {
+                        logoToUse = logoEl.src;
+                    }
+                }
+                
+                // ALWAYS remove border for timeouts, even if logo lookup failed
                 pbpPhotoContainer.style.display = '';
-                pbpPhotoContainer.style.border = 'none'; // Remove circular border for timeouts
-                pbpPhoto.src = play.teamLogo;
+                pbpPhotoContainer.style.border = 'none'; // Remove circular border for team events
+                if (logoToUse) {
+                    pbpPhoto.src = logoToUse;
+                }
                 pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
                 
-                // Request game analysis audio for timeout (always regenerate for timeout)
-                // Get gameId from current game view or state
-                const currentGameId = window.gameView?.gameId || window.appController?.selectedGameId;
-                if (currentGameId) {
-                    requestGameAnalysisAudio(currentGameId, true);
+                // Request LONG game analysis audio for timeout (wait 10 seconds to avoid overlapping with play-by-play)
+                // Only request once per timeout play
+                if (lastTimeoutAnalysisPlayId !== play.id) {
+                    lastTimeoutAnalysisPlayId = play.id;
+                    const currentGameId = window.gameView?.gameId || window.appController?.selectedGameId;
+                    if (currentGameId) {
+                        setTimeout(() => {
+                            requestGameAnalysisAudio(currentGameId, true, false); // false = long analysis
+                        }, 10000); // Wait 10 seconds before starting analysis
+                    }
                 }
             } else if (!play.isTimeout && pbpPhotoContainer) {
                 // For regular plays, ensure photo container is visible and has border
@@ -696,12 +794,12 @@
             
             // Generate TTS audio for the play text (start async, don't block animation)
             // Create text: player name + action for display (what we show in overlay - unchanged)
-            const displayText = play.isTimeout 
+            const displayText = (play.isTimeout || play.isTeamEvent)
                 ? play.action 
                 : `${play.playerName} ${play.action}`;
             
             // Use original play-by-play text (AI will enhance it on server)
-            const originalPlayText = play.isTimeout
+            const originalPlayText = (play.isTimeout || play.isTeamEvent)
                 ? play.action
                 : `${play.playerName} ${play.action}`;
             
@@ -715,14 +813,40 @@
                 // Wait for audio to be ready
                 const audioUrl = await audioPromise;
                 // Update image source right as old picture finishes fading out (at 0.8s)
-                // Use team logo for timeouts, player photo otherwise
-                if (play.isTimeout && play.teamLogo) {
-                    // Show team logo for timeouts - remove border
+                // Use team logo for team events, player photo otherwise
+                if (play.isTimeout || play.isTeamEvent) {
+                    // ALWAYS get team logo from gameView for timeouts/team events
+                    let logoToUse = play.teamLogo;
+                    if (!logoToUse && window.gameView && window.gameView.elements) {
+                        // Try to determine team from action text or use home as default
+                        const actionUpper = play.action.toUpperCase();
+                        const homeAbbr = (window.gameView.elements.homeAbbr?.textContent || '').trim().toUpperCase();
+                        const awayAbbr = (window.gameView.elements.awayAbbr?.textContent || '').trim().toUpperCase();
+                        
+                        // Check if timeout/action text contains team abbreviation
+                        let useHome = true; // Default to home
+                        if (awayAbbr && actionUpper.includes(awayAbbr)) {
+                            useHome = false;
+                        } else if (homeAbbr && actionUpper.includes(homeAbbr)) {
+                            useHome = true;
+                        } else if (play.timeoutTeam === 'away') {
+                            useHome = false;
+                        }
+                        
+                        const logoEl = useHome ? window.gameView.elements.homeLogo : window.gameView.elements.awayLogo;
+                        if (logoEl && logoEl.src && logoEl.src.trim() !== '' && !logoEl.src.endsWith('/')) {
+                            logoToUse = logoEl.src;
+                        }
+                    }
+                    
+                    // ALWAYS show team logo for timeouts - remove border
                     if (pbpPhotoContainer) {
                         pbpPhotoContainer.style.display = '';
-                        pbpPhotoContainer.style.border = 'none'; // Remove circular border for timeouts
+                        pbpPhotoContainer.style.border = 'none'; // Remove circular border for team events
                     }
-                    pbpPhoto.src = play.teamLogo;
+                    if (logoToUse) {
+                        pbpPhoto.src = logoToUse;
+                    }
                     pbpPhoto.alt = play.timeoutTeam === 'home' ? 'Home Team' : 'Away Team';
                 } else {
                     // Show player photo for regular plays - restore border
@@ -736,22 +860,33 @@
                 
                 // Update text content (will be hidden until CSS animation brings it in at 0.9s)
                 pbpTime.textContent = `Q${play.period} ${play.clock}`;
-                // For timeouts, don't show player name
-                if (play.isTimeout) {
-                    pbpPlayer.textContent = ''; // No player name for timeouts
+                // For timeouts and team events, don't show player name
+                if (play.isTimeout || play.isTeamEvent) {
+                    pbpPlayer.textContent = ''; // No player name for team events
                 } else {
                     pbpPlayer.textContent = play.playerName;
                 }
                 pbpAction.textContent = play.action;
-                // No icon for timeouts, show icon for other plays
-                pbpIcon.textContent = play.isTimeout ? '' : play.icon;
+                // No icon for team events, show icon for player plays
+                pbpIcon.textContent = (play.isTimeout || play.isTeamEvent) ? '' : play.icon;
                 
                 // Play audio when content enters (at ~1.0s mark, after animation starts)
                 if (audioUrl) {
                     setTimeout(() => {
+                        // Stop any currently playing play-by-play audio
                         if (currentPbpAudio) {
                             currentPbpAudio.pause();
+                            currentPbpAudio = null;
                         }
+                        
+                // Stop analysis audio when play-by-play plays (mark as interrupted)
+                if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
+                    currentAnalysisAudio.pause();
+                    currentAnalysisAudio = null;
+                    analysisLastPosition = 0; // Reset position
+                    analysisInterrupted = true; // Mark as interrupted - don't resume this audio
+                }
+                        
                         currentPbpAudio = new Audio(audioUrl);
                         currentPbpAudio.play().catch(() => {
                             // Ignore autoplay restrictions
@@ -788,7 +923,11 @@
 
         // Function to check and update play-by-play from API data
         async function checkAndUpdatePlayByPlay(gameId, nbaApi, gameState) {
-            if (!gameId || !nbaApi) return;
+            console.log('🔄 checkAndUpdatePlayByPlay called - gameId:', gameId, 'gameState:', gameState);
+            if (!gameId || !nbaApi) {
+                console.log('⚠️ checkAndUpdatePlayByPlay: Missing gameId or nbaApi, returning');
+                return;
+            }
             
             // If game is in halftime, final, or pregame, show status text instead of plays
             if (gameState === 'halftime' || gameState === 'final' || gameState === 'pregame') {
@@ -818,8 +957,10 @@
                     if (pbpPhotoContainer) pbpPhotoContainer.style.display = 'none';
                     if (pbpPhoto) pbpPhoto.src = '';
                     
-                    // Request game analysis audio for halftime (always regenerate for halftime)
-                    requestGameAnalysisAudio(gameId, true);
+                    // Request LONG game analysis audio for halftime (wait 10 seconds to avoid overlapping with play-by-play)
+                    setTimeout(() => {
+                        requestGameAnalysisAudio(gameId, true, false); // false = long analysis
+                    }, 10000); // Wait 10 seconds before starting analysis
                 } else if (gameState === 'final') {
                     // Show final status
                     playByPlayBox.style.display = 'block';
@@ -845,7 +986,11 @@
             
             try {
                 const plays = await nbaApi.getPlayByPlay(gameId);
-                if (!plays || plays.length === 0) return;
+                if (!plays || plays.length === 0) {
+                    console.log('📭 No plays found, checking for dead air...');
+                    handleDeadAir(gameId);
+                    return;
+                }
                 
                 // Find the most recent play (include timeouts now, but skip other non-player events)
                 let latestPlay = null;
@@ -858,7 +1003,12 @@
                     }
                 }
                 
-                if (!latestPlay || !latestPlay.id) return;
+                if (!latestPlay || !latestPlay.id) {
+                    // No valid play found - check for dead air
+                    console.log('📭 No valid play found (no id), checking for dead air...');
+                    handleDeadAir(gameId);
+                    return;
+                }
                 
                 // Only update if this is a new play
                 if (latestPlay.id !== lastPlayId) {
@@ -869,6 +1019,11 @@
                         
                         // Stop dead air analysis when new play comes in
                         stopDeadAirAnalysis();
+                        
+                        // Reset timeout analysis tracking if this is not a timeout
+                        if (!transformedPlay.isTimeout) {
+                            lastTimeoutAnalysisPlayId = null;
+                        }
                         
                         // Send play-by-play data to server for storage
                         try {
@@ -913,6 +1068,7 @@
             lastPlayId = null;
             lastHomeScore = null;
             lastAwayScore = null;
+            lastTimeoutAnalysisPlayId = null; // Reset timeout analysis tracking
         }
 
         // Expose functions for integration

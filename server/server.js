@@ -7,6 +7,13 @@ const path = require('path');
 const { URL } = require('url');
 const openaiConfig = require('../overlay/nba-live-overlay/config/openai.config.js');
 
+// Ensure data directory exists
+const DATA_DIR = path.join(__dirname, 'data');
+const PLAY_BY_PLAY_DIR = path.join(DATA_DIR, 'play-by-play');
+if (!fs.existsSync(PLAY_BY_PLAY_DIR)) {
+  fs.mkdirSync(PLAY_BY_PLAY_DIR, { recursive: true });
+}
+
 /**
  * Transform text to sound energetic and enthusiastic like sports announcers
  * @param {string} text - Original text
@@ -408,31 +415,32 @@ function handlePostChatRefresh(req, res) {
 // Returns: { enhancedText, systemPrompt, userPrompt }
 async function enhanceTextWithAI(originalText) {
   return new Promise((resolve, reject) => {
-    const systemPrompt = 'You are an EXTREMELY energetic and enthusiastic NBA sports commentator calling a LIVE game in real-time. You understand what happened in the play-by-play text and rephrase it naturally as if you\'re watching it happen RIGHT NOW. Make it sound conversational and exciting, not robotic. Use words like "just", "now", "immediately" to convey immediacy. Use ALL CAPS for player names for emphasis. Keep it SHORT and PUNCHY - roughly the same length as the original. Stay 100% accurate - only rephrase and add natural excitement, never false information.';
+    const systemPrompt = 'You are an EXTREMELY energetic and enthusiastic NBA sports commentator calling a LIVE game in real-time. The text you receive is already enhanced with excitement markers (BANG!!!, OH!!, exclamation marks, etc.) - YOUR JOB is to PRESERVE and ENHANCE that enthusiasm while making it sound natural. Keep ALL the excitement markers, exclamation marks, and emphasis. Add MORE enthusiasm if possible. Make it sound conversational and exciting - NEVER tone down the excitement. Use words like "just", "now", "immediately" to convey immediacy. Use ALL CAPS for player names. Keep it SHORT and PUNCHY. Stay 100% accurate - only rephrase to sound more natural while INCREASING enthusiasm, never decreasing it.';
     
-    const userPrompt = `This is NBA play-by-play text that needs to be understood and rephrased naturally for live commentary:
+    const userPrompt = `This NBA play-by-play text is already enhanced with excitement (BANG!!!, OH!!, exclamation marks). Your job is to make it sound MORE natural and conversational while KEEPING or INCREASING the enthusiasm:
 
 "${originalText}"
 
-Your task:
-1. FIRST, understand what actually happened in the play
-2. THEN, rephrase it naturally as if you're calling it live RIGHT NOW
-3. Make it sound conversational and exciting, not like reading text verbatim
+CRITICAL RULES:
+1. PRESERVE all excitement markers (BANG!!!, OH!!, exclamation marks, ALL CAPS player names)
+2. INCREASE enthusiasm where possible (don't tone it down!)
+3. Make it sound conversational and natural (like you're watching it live)
+4. Keep the same energy level or higher
 
-Examples of what to do:
-- "Julius Randle lost ball turnover (Alex Caruso steals)" → "ALEX CARUSO just stole the ball from JULIUS RANDLE!"
-- "Luka Doncic makes 3-point shot" → "LUKA DONCIC... FOR THREE... BANG! HE HITS IT!"
-- "LeBron James makes dunk" → "LEBRON JAMES just threw it down with an incredible dunk!"
+Examples:
+- "LUKA DONCIC... FOR THREE... BANG!!!" → "LUKA DONCIC... FOR THREE... BANG!!! HE HITS IT!!!"
+- "OH!! LEBRON JAMES DRAINS THE THREE-POINTER!!! WOW!!!" → "OH!! LEBRON JAMES just DRAINS that THREE-POINTER!!! WOW!!! INCREDIBLE!!!"
+- Keep the snappy, punchy style - don't make it wordy or subdued
 
 Guidelines:
-- Understand the action first, then say what happened naturally
-- Use words like "just", "now", "immediately" for immediacy
-- Use ALL CAPS for player names
-- Add natural excitement but keep it brief (1-2 sentences max)
-- Sound like you're watching it happen live, not reading text
-- Make it conversational, not robotic
+- Keep ALL exclamation marks and excitement words (BANG, OH, WOW, YES, etc.)
+- Use words like "just", "now" to make it sound immediate
+- Keep ALL CAPS for player names
+- Keep it brief and punchy (1-2 sentences max)
+- Sound like you're watching it happen live RIGHT NOW
+- NEVER remove excitement markers or make it less enthusiastic
 
-Respond with ONLY the rephrased commentary text, nothing else.`;
+Respond with ONLY the enhanced commentary text, nothing else.`;
 
     const requestData = JSON.stringify({
       model: 'gpt-4o-mini', // Using mini for speed and cost
@@ -510,6 +518,92 @@ Respond with ONLY the rephrased commentary text, nothing else.`;
   });
 }
 
+// Shared helper function to call OpenAI TTS API
+// Returns a Promise that resolves when the audio is piped to the response
+function callOpenAITTS(text, voice, model, speed, res, extraHeaders = {}) {
+  return new Promise((resolve, reject) => {
+    const requestData = JSON.stringify({
+      model: model,
+      input: text,
+      voice: voice,
+      speed: speed
+    });
+    
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/audio/speech',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(requestData)
+      }
+    };
+    
+    const apiReq = https.request(options, (apiRes) => {
+      if (apiRes.statusCode !== 200) {
+        let errorBody = '';
+        apiRes.on('data', (chunk) => { errorBody += chunk; });
+        apiRes.on('end', () => {
+          try {
+            const errorData = JSON.parse(errorBody);
+            console.error('❌ OpenAI TTS error:', apiRes.statusCode, errorData);
+            if (!res.headersSent) {
+              const headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                ...extraHeaders
+              };
+              res.writeHead(apiRes.statusCode, headers);
+              res.end(JSON.stringify({ error: `OpenAI API error: ${errorData.error?.message || apiRes.statusMessage}` }));
+            }
+            reject(new Error(`OpenAI API error: ${errorData.error?.message || apiRes.statusMessage}`));
+          } catch (e) {
+            if (!res.headersSent) {
+              const headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                ...extraHeaders
+              };
+              res.writeHead(apiRes.statusCode, headers);
+              res.end(JSON.stringify({ error: `OpenAI API error: ${apiRes.statusMessage}` }));
+            }
+            reject(new Error(`OpenAI API error: ${apiRes.statusMessage}`));
+          }
+        });
+        return;
+      }
+      
+      // Stream audio response
+      const headers = {
+        'Content-Type': 'audio/mpeg',
+        'Access-Control-Allow-Origin': '*',
+        ...extraHeaders
+      };
+      res.writeHead(200, headers);
+      apiRes.pipe(res);
+      apiRes.on('end', () => resolve());
+    });
+    
+    apiReq.on('error', (error) => {
+      console.error('❌ TTS request error:', error.message);
+      if (!res.headersSent) {
+        const headers = {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          ...extraHeaders
+        };
+        res.writeHead(500, headers);
+        res.end(JSON.stringify({ error: error.message }));
+      }
+      reject(error);
+    });
+    
+    apiReq.write(requestData);
+    apiReq.end();
+  });
+}
+
 // POST /api/text-to-speech - Convert text to speech using OpenAI TTS
 async function handlePostTextToSpeech(req, res) {
   try {
@@ -530,100 +624,38 @@ async function handlePostTextToSpeech(req, res) {
     const originalTextForLog = text;
     let enhancedTextForLog = null;
     
-    // Use AI enhancement to understand and rephrase naturally when enhance flag is true
+    // Step 1: Always apply rule-based enhancement first (adds excitement, emphasis, snappy patterns)
+    text = makeTextEnergetic(text);
+    
+    // Step 2: If enhance flag is true, also apply AI to make it sound more natural/conversational
     if (enhance) {
       try {
-        const aiResult = await enhanceTextWithAI(text);
+        const aiResult = await enhanceTextWithAI(text); // AI enhances the already-energetic text
         enhancedTextForLog = aiResult.enhancedText;
         text = enhancedTextForLog;
       } catch (error) {
-        // Fallback to rule-based enhancement if AI fails
-        console.error('❌ AI enhancement failed, using rule-based:', error.message);
-        enhancedTextForLog = makeTextEnergetic(text);
-        text = enhancedTextForLog;
+        // If AI fails, keep the rule-based enhanced text (don't lose the excitement)
+        console.error('❌ AI enhancement failed, keeping rule-based enhancement:', error.message);
+        enhancedTextForLog = text; // text already has rule-based enhancement
       }
     } else {
-      // Simple rule-based enhancement
-      text = makeTextEnergetic(text);
+      // Just rule-based enhancement (no AI)
+      enhancedTextForLog = text;
     }
     // Speed must be between 0.25 and 4.0
     const speedValue = Math.max(0.25, Math.min(4.0, parseFloat(speed) || 1.0));
     
-    const requestData = JSON.stringify({
-      model: model,
-      input: text,
-      voice: voice, // alloy, echo, fable, onyx, nova, shimmer
-      speed: speedValue
-    });
-    
-    const options = {
-      hostname: 'api.openai.com',
-      path: '/v1/audio/speech',
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(requestData)
-      }
+    // Prepare extra headers for enhanced text logging
+    const extraHeaders = {
+      'Access-Control-Expose-Headers': 'X-Enhanced-Text, X-Original-Text'
     };
+    if (enhance && enhancedTextForLog) {
+      extraHeaders['X-Enhanced-Text'] = Buffer.from(enhancedTextForLog).toString('base64');
+      extraHeaders['X-Original-Text'] = Buffer.from(originalTextForLog).toString('base64');
+    }
     
-    // Make request to OpenAI API
-    const apiReq = https.request(options, (apiRes) => {
-      if (apiRes.statusCode !== 200) {
-        let errorBody = '';
-        apiRes.on('data', (chunk) => { errorBody += chunk; });
-        apiRes.on('end', () => {
-          try {
-            const errorData = JSON.parse(errorBody);
-            console.error('❌ OpenAI TTS error:', apiRes.statusCode, errorData);
-            const headers = {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            };
-            res.writeHead(apiRes.statusCode, headers);
-            res.end(JSON.stringify({ error: `OpenAI API error: ${errorData.error?.message || apiRes.statusMessage}` }));
-          } catch (e) {
-            const headers = {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            };
-            res.writeHead(apiRes.statusCode, headers);
-            res.end(JSON.stringify({ error: `OpenAI API error: ${apiRes.statusMessage}` }));
-          }
-        });
-        return;
-      }
-      
-      // Stream audio response with enhanced text in headers for client logging
-      const headers = {
-        'Content-Type': 'audio/mpeg',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Expose-Headers': 'X-Enhanced-Text, X-Original-Text'
-      };
-      
-      // Add original and enhanced text to headers for client logging
-      if (enhance && enhancedTextForLog) {
-        headers['X-Enhanced-Text'] = Buffer.from(enhancedTextForLog).toString('base64');
-        headers['X-Original-Text'] = Buffer.from(originalTextForLog).toString('base64');
-      }
-      
-      res.writeHead(200, headers);
-      
-      apiRes.pipe(res);
-    });
-    
-    apiReq.on('error', (error) => {
-      console.error('❌ TTS request error:', error.message);
-      const headers = {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      };
-      res.writeHead(500, headers);
-      res.end(JSON.stringify({ error: error.message }));
-    });
-    
-    apiReq.write(requestData);
-    apiReq.end();
+    // Use shared TTS function
+    await callOpenAITTS(text, voice, model, speedValue, res, extraHeaders);
     
   } catch (error) {
     console.error('❌ TTS error:', error.message);
@@ -660,6 +692,38 @@ async function handlePostPlayByPlay(req, res) {
     // Add the play to the array (keep all plays from start of game)
     state.playByPlayData[gameId].push(play);
     
+    // Also save to file for later simulation/debugging
+    const playWithTimestamp = {
+      timestamp: new Date().toISOString(),
+      ...play
+    };
+    
+    const filePath = path.join(PLAY_BY_PLAY_DIR, `game-${gameId}.json`);
+    let playsFile = [];
+    
+    // Read existing plays if file exists
+    if (fs.existsSync(filePath)) {
+      try {
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        playsFile = JSON.parse(fileContent);
+      } catch (e) {
+        console.error('❌ Error reading play-by-play file:', e.message);
+        playsFile = [];
+      }
+    }
+    
+    // Append new play
+    playsFile.push(playWithTimestamp);
+    
+    // Write back to file
+    try {
+      fs.writeFileSync(filePath, JSON.stringify(playsFile, null, 2), 'utf8');
+    } catch (e) {
+      console.error('❌ Error writing play-by-play file:', e.message);
+    }
+    
+    console.log(`📝 Stored play-by-play for game ${gameId}, total plays: ${state.playByPlayData[gameId].length}`);
+    
     const headers = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*'
@@ -677,12 +741,17 @@ async function handlePostPlayByPlay(req, res) {
 }
 
 // Helper function to generate game analysis using OpenAI Chat API
-async function generateGameAnalysis(plays, homeTeam, awayTeam, currentScore) {
+async function generateGameAnalysis(plays, homeTeam, awayTeam, currentScore, isShortAnalysis = false) {
   return new Promise((resolve, reject) => {
-    const systemPrompt = 'You are a professional NBA game analyst. You analyze basketball games based on play-by-play data. Provide insightful, engaging commentary about how the game has been going, key moments, standout performances, and overall game flow. Sound like an experienced analyst discussing the game naturally.';
+    const systemPrompt = isShortAnalysis 
+      ? 'You are a professional NBA game analyst providing BRIEF, QUICK updates during dead air moments. Keep your analysis SHORT (30-50 words max, 3-6 seconds of speech). Focus only on the most recent key plays. Sound energetic and concise.'
+      : 'You are a professional NBA game analyst. You analyze basketball games based on play-by-play data. Provide insightful, engaging commentary about how the game has been going, key moments, standout performances, and overall game flow. Sound like an experienced analyst discussing the game naturally.';
+    
+    // For short analysis, only use last 20 plays
+    const playsToAnalyze = isShortAnalysis ? plays.slice(-20) : plays;
     
     // Format plays for analysis
-    let playsText = plays.map((play, index) => {
+    let playsText = playsToAnalyze.map((play, index) => {
       let playDesc = '';
       if (play.playerName && play.playerName !== 'Player') {
         playDesc += `${play.playerName} `;
@@ -694,7 +763,16 @@ async function generateGameAnalysis(plays, homeTeam, awayTeam, currentScore) {
       return `${index + 1}. ${playDesc}`;
     }).join('\n');
     
-    const userPrompt = `Based on the following play-by-play data from an NBA game between ${homeTeam || 'Home Team'} and ${awayTeam || 'Away Team'}, provide a professional game analysis. 
+    const userPrompt = isShortAnalysis
+      ? `Quick update during a brief pause in action. Based on the LAST 20 plays from an NBA game between ${homeTeam || 'Home Team'} and ${awayTeam || 'Away Team'}:
+
+Current Score: ${currentScore || 'N/A'}
+
+Recent Plays:
+${playsText}
+
+Provide a BRIEF, QUICK analysis (30-50 words max, 3-6 seconds when spoken). Focus only on the most recent key moments. Be concise and energetic.`
+      : `Based on the following play-by-play data from an NBA game between ${homeTeam || 'Home Team'} and ${awayTeam || 'Away Team'}, provide a professional game analysis. 
 
 Current Score: ${currentScore || 'N/A'}
 
@@ -715,7 +793,7 @@ Provide a natural, conversational analysis of how the game has been going so far
           content: userPrompt
         }
       ],
-      max_tokens: 500,
+      max_tokens: isShortAnalysis ? 100 : 500,  // Shorter response for quick updates
       temperature: 0.7
     });
 
@@ -766,9 +844,12 @@ Provide a natural, conversational analysis of how the game has been going so far
 async function handlePostGameAnalysis(req, res) {
   try {
     const data = await parseJsonBody(req);
-    const { gameId, homeTeam, awayTeam, currentScore, forceRegenerate = false } = data;
+    const { gameId, homeTeam, awayTeam, currentScore, forceRegenerate = false, isShortAnalysis = false } = data;
+    
+    console.log('🎤 Game analysis request:', { gameId, homeTeam, awayTeam, currentScore, forceRegenerate });
     
     if (!gameId) {
+      console.error('❌ Game analysis request missing gameId');
       const headers = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -780,34 +861,19 @@ async function handlePostGameAnalysis(req, res) {
     
     // Track when analysis was generated (for client-side caching decisions)
     const now = Date.now();
-    if (!forceRegenerate) {
-      const lastTimestamp = state.gameAnalysisTimestamps[gameId];
-      const TEN_MINUTES = 10 * 60 * 1000; // 10 minutes in milliseconds
-      
-      // Return timestamp info so client can decide to use cache
-      if (lastTimestamp && (now - lastTimestamp) < TEN_MINUTES) {
-        const headers = {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'X-Last-Generated': lastTimestamp.toString()
-        };
-        res.writeHead(200, headers);
-        res.end(JSON.stringify({ 
-          cached: true,
-          timestamp: lastTimestamp,
-          message: 'Analysis was generated recently, use cached audio'
-        }));
-        return;
-      }
-    }
+    
+    // Always generate and stream audio - let client handle caching on their end
+    // (Client checks if analysisAudioUrl exists and is recent before requesting)
     
     // Update timestamp
     state.gameAnalysisTimestamps[gameId] = now;
     
     // Get all plays for this game
     const plays = state.playByPlayData[gameId] || [];
+    console.log(`📊 Found ${plays.length} plays for game ${gameId}`);
     
     if (plays.length === 0) {
+      console.error(`❌ No play-by-play data for game ${gameId}`);
       const headers = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -818,9 +884,23 @@ async function handlePostGameAnalysis(req, res) {
     }
     
     // Generate analysis text using OpenAI Chat API
-    const analysisText = await generateGameAnalysis(plays, homeTeam, awayTeam, currentScore);
+    console.log(`🤖 Generating ${isShortAnalysis ? 'SHORT' : 'LONG'} analysis text with OpenAI...`);
+    let analysisText;
+    try {
+      analysisText = await generateGameAnalysis(plays, homeTeam, awayTeam, currentScore, isShortAnalysis);
+    } catch (genError) {
+      console.error('❌ Error generating analysis:', genError);
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ error: 'Failed to generate analysis: ' + genError.message }));
+      return;
+    }
     
     if (!analysisText) {
+      console.error('❌ Failed to generate analysis text (returned null/empty)');
       const headers = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -830,79 +910,26 @@ async function handlePostGameAnalysis(req, res) {
       return;
     }
     
-    // Convert analysis text to speech using OpenAI TTS API with 'onyx' voice
-    const requestData = JSON.stringify({
-      model: 'tts-1',
-      input: analysisText,
-      voice: 'onyx', // Male voice as requested
-      speed: 1.0
-    });
+    console.log('✅ Generated analysis text:', analysisText.substring(0, 100) + '...');
+    console.log('🎵 Converting to speech with Onyx voice...');
     
-    const options = {
-      hostname: 'api.openai.com',
-      path: '/v1/audio/speech',
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(requestData)
-      }
+    // Convert analysis text to speech using shared TTS function
+    const extraHeaders = {
+      'X-Generated-At': now.toString()
     };
-    
-    // Make request to OpenAI TTS API
-    const apiReq = https.request(options, (apiRes) => {
-      if (apiRes.statusCode !== 200) {
-        let errorBody = '';
-        apiRes.on('data', (chunk) => { errorBody += chunk; });
-        apiRes.on('end', () => {
-          try {
-            const errorData = JSON.parse(errorBody);
-            const headers = {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            };
-            res.writeHead(apiRes.statusCode, headers);
-            res.end(JSON.stringify({ error: `OpenAI API error: ${errorData.error?.message || apiRes.statusMessage}` }));
-          } catch (e) {
-            const headers = {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            };
-            res.writeHead(apiRes.statusCode, headers);
-            res.end(JSON.stringify({ error: `OpenAI API error: ${apiRes.statusMessage}` }));
-          }
-        });
-        return;
-      }
-      
-      // Stream audio response (client will cache the blob)
-      const headers = {
-        'Content-Type': 'audio/mpeg',
-        'Access-Control-Allow-Origin': '*',
-        'X-Generated-At': now.toString()
-      };
-      res.writeHead(200, headers);
-      apiRes.pipe(res);
-    });
-    
-    apiReq.on('error', (error) => {
+    await callOpenAITTS(analysisText, 'onyx', 'tts-1', 1.0, res, extraHeaders);
+    console.log('✅ Streaming audio response to client');
+  } catch (error) {
+    console.error('❌ Game analysis handler error:', error);
+    // Make sure we haven't already sent headers
+    if (!res.headersSent) {
       const headers = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
       };
       res.writeHead(500, headers);
-      res.end(JSON.stringify({ error: error.message }));
-    });
-    
-    apiReq.write(requestData);
-    apiReq.end();
-  } catch (error) {
-    const headers = {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    };
-    res.writeHead(500, headers);
-    res.end(JSON.stringify({ error: error.message }));
+      res.end(JSON.stringify({ error: error.message || 'Internal server error' }));
+    }
   }
 }
 
