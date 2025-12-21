@@ -308,28 +308,21 @@ class AppController {
      * @returns {Promise<void>}
      */
     async updateSimPlayByPlay(gameState) {
-        console.log('🎮 updateSimPlayByPlay called with gameState:', gameState);
-        
         // Only show play-by-play during live game
         if (gameState !== 'live' && gameState !== 'overtime') {
-            console.log('⏭️ Skipping - not live/overtime, state is:', gameState);
             return;
         }
 
         // Load play-by-play data if not loaded yet
         if (!this.simulationManager.hasPlayByPlayData()) {
-            console.log('📥 Loading play-by-play data...');
             await this.simulationManager.loadPlayByPlayData();
         }
 
         // Get next play (returns null if not enough time has passed)
         const rawPlay = this.simulationManager.getNextPlay(6000); // 6 second intervals
         if (!rawPlay) {
-            console.log('⏳ No play ready yet (waiting for 3s interval)');
             return; // No play ready yet
         }
-        
-        console.log('🏀 Got raw play:', rawPlay.playerName, rawPlay.action);
 
         // Build team context from gameView for logo resolution
         const teamContext = {
@@ -342,13 +335,9 @@ class AppController {
         // Process through the same processor as live mode
         if (window.pbpProcessor && typeof window.updatePlayByPlay === 'function') {
             const processedPlay = window.pbpProcessor.processPlay(rawPlay, teamContext);
-            console.log('🔄 Processed play:', processedPlay ? 'OK' : 'NULL (duplicate or invalid)');
             if (processedPlay) {
-                console.log('✅ Showing play:', processedPlay.playerName, processedPlay.action);
                 await window.updatePlayByPlay(processedPlay);
             }
-        } else {
-            console.log('❌ Missing pbpProcessor or updatePlayByPlay function');
         }
     }
 

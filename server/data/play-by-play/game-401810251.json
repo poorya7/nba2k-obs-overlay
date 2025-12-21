@@ -1448,5 +1448,75 @@
     "homeScore": 22,
     "awayScore": 25,
     "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:55:15.483Z",
+    "period": 1,
+    "clock": "3:37",
+    "playerName": "Kevin Huerter",
+    "action": "lost ball turnover (Mouhamed Gueye steals)",
+    "homeScore": 24,
+    "awayScore": 29,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:55:21.428Z",
+    "period": 1,
+    "clock": "3:11",
+    "playerName": "Jalen Johnson",
+    "action": "defensive rebound",
+    "homeScore": 26,
+    "awayScore": 29,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:55:31.761Z",
+    "period": 1,
+    "clock": "3:05",
+    "playerName": "Patrick Williams",
+    "action": "defensive rebound",
+    "homeScore": 26,
+    "awayScore": 29,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:55:52.063Z",
+    "period": 1,
+    "clock": "2:41",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker misses shot",
+    "homeScore": 26,
+    "awayScore": 32,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:56:00.183Z",
+    "period": 1,
+    "clock": "2:36",
+    "playerName": "Kevin Huerter",
+    "action": "makes 1-foot shot",
+    "homeScore": 26,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:56:20.504Z",
+    "period": 1,
+    "clock": "2:15",
+    "playerName": "Mouhamed Gueye",
+    "action": "misses 23-foot three point jumper",
+    "homeScore": 26,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:56:31.055Z",
+    "period": 1,
+    "clock": "2:14",
+    "playerName": "Bulls Full",
+    "action": "timeout",
+    "homeScore": 26,
+    "awayScore": 34,
+    "isTimeout": true
   }
 ]

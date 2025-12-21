@@ -289,7 +289,6 @@ class SimulationManager {
             
             this.pbpIndex = 0;
             this.pbpLastPlayTime = Date.now();
-            console.log(`✅ Loaded ${this.pbpPlays.length} unique plays (from ${plays.length} total)`);
             return true;
         } catch (error) {
             console.error('❌ Error loading play-by-play data:', error);
