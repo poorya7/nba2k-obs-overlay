@@ -1,0 +1,1452 @@
+[
+  {
+    "timestamp": "2025-12-21T20:44:43.349Z",
+    "period": 1,
+    "clock": "9:37",
+    "playerName": "Isaac Okoro",
+    "action": "shooting foul",
+    "homeScore": 7,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:44:45.153Z",
+    "period": 1,
+    "clock": "9:37",
+    "playerName": "Jalen Johnson",
+    "action": "makes 6-foot two point shot (Trae Young assists)",
+    "homeScore": 7,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:44:47.100Z",
+    "period": 1,
+    "clock": "9:37",
+    "playerName": "Isaac Okoro",
+    "action": "shooting foul",
+    "homeScore": 7,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:44:49.111Z",
+    "period": 1,
+    "clock": "9:37",
+    "playerName": "Jalen Johnson",
+    "action": "makes 6-foot two point shot (Trae Young assists)",
+    "homeScore": 7,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:44:51.279Z",
+    "period": 1,
+    "clock": "9:37",
+    "playerName": "Isaac Okoro",
+    "action": "shooting foul",
+    "homeScore": 7,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:44:53.418Z",
+    "period": 1,
+    "clock": "9:20",
+    "playerName": "Josh Giddey",
+    "action": "misses shot",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:44:55.310Z",
+    "period": 1,
+    "clock": "9:37",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 1 of 1",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:44:57.157Z",
+    "period": 1,
+    "clock": "9:20",
+    "playerName": "Josh Giddey",
+    "action": "misses shot",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:44:59.154Z",
+    "period": 1,
+    "clock": "9:37",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 1 of 1",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:01.297Z",
+    "period": 1,
+    "clock": "9:20",
+    "playerName": "Josh Giddey",
+    "action": "misses shot",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:03.299Z",
+    "period": 1,
+    "clock": "9:11",
+    "playerName": "Jalen Johnson",
+    "action": "misses shot",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:05.502Z",
+    "period": 1,
+    "clock": "9:11",
+    "playerName": "Jalen Johnson",
+    "action": "misses shot",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:07.352Z",
+    "period": 1,
+    "clock": "9:16",
+    "playerName": "Jalen Johnson",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:09.358Z",
+    "period": 1,
+    "clock": "9:11",
+    "playerName": "Jalen Johnson",
+    "action": "misses shot",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:11.668Z",
+    "period": 1,
+    "clock": "9:09",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:13.399Z",
+    "period": 1,
+    "clock": "9:11",
+    "playerName": "Jalen Johnson",
+    "action": "misses 24-foot three point pullup jump shot",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:15.502Z",
+    "period": 1,
+    "clock": "9:09",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:17.406Z",
+    "period": 1,
+    "clock": "9:11",
+    "playerName": "Jalen Johnson",
+    "action": "misses 24-foot three point pullup jump shot",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:19.444Z",
+    "period": 1,
+    "clock": "9:09",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:21.749Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:23.830Z",
+    "period": 1,
+    "clock": "9:09",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:25.970Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:27.887Z",
+    "period": 1,
+    "clock": "9:09",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:29.914Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:32.153Z",
+    "period": 1,
+    "clock": "9:09",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:34.035Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:36.112Z",
+    "period": 1,
+    "clock": "9:09",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:37.984Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:40.006Z",
+    "period": 1,
+    "clock": "9:09",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 8,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:42.463Z",
+    "period": 1,
+    "clock": "8:46",
+    "playerName": "Trae Young",
+    "action": "makes 14-foot pullup jump shot (Onyeka Okongwu assists)",
+    "homeScore": 10,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:44.156Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:46.100Z",
+    "period": 1,
+    "clock": "8:46",
+    "playerName": "Trae Young",
+    "action": "makes 14-foot pullup jump shot (Onyeka Okongwu assists)",
+    "homeScore": 10,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:48.059Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:50.077Z",
+    "period": 1,
+    "clock": "8:46",
+    "playerName": "Trae Young",
+    "action": "makes 14-foot pullup jump shot (Onyeka Okongwu assists)",
+    "homeScore": 10,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:52.239Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:54.224Z",
+    "period": 1,
+    "clock": "8:46",
+    "playerName": "Trae Young",
+    "action": "makes 14-foot pullup jump shot (Onyeka Okongwu assists)",
+    "homeScore": 10,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:56.156Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:45:58.136Z",
+    "period": 1,
+    "clock": "8:46",
+    "playerName": "Trae Young",
+    "action": "makes 14-foot pullup jump shot (Onyeka Okongwu assists)",
+    "homeScore": 10,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:00.108Z",
+    "period": 1,
+    "clock": "9:01",
+    "playerName": "Matas Buzelis",
+    "action": "makes driving layup",
+    "homeScore": 8,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:02.253Z",
+    "period": 1,
+    "clock": "8:46",
+    "playerName": "Trae Young",
+    "action": "makes 14-foot pullup jump shot (Onyeka Okongwu assists)",
+    "homeScore": 10,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:04.417Z",
+    "period": 1,
+    "clock": "8:13",
+    "playerName": "Josh Giddey",
+    "action": "defensive rebound",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:06.521Z",
+    "period": 1,
+    "clock": "8:16",
+    "playerName": "Onyeka Okongwu",
+    "action": "misses 10-foot floating jump shot",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:08.494Z",
+    "period": 1,
+    "clock": "8:13",
+    "playerName": "Josh Giddey",
+    "action": "defensive rebound",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:10.528Z",
+    "period": 1,
+    "clock": "8:16",
+    "playerName": "Onyeka Okongwu",
+    "action": "misses 10-foot floating jump shot",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:12.692Z",
+    "period": 1,
+    "clock": "8:03",
+    "playerName": "Isaac Okoro",
+    "action": "offensive rebound",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:14.699Z",
+    "period": 1,
+    "clock": "8:08",
+    "playerName": "Coby White",
+    "action": "misses 25-foot three point jumper",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:16.830Z",
+    "period": 1,
+    "clock": "8:03",
+    "playerName": "Isaac Okoro",
+    "action": "offensive rebound",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:18.800Z",
+    "period": 1,
+    "clock": "8:08",
+    "playerName": "Coby White",
+    "action": "misses 25-foot three point jumper",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:20.854Z",
+    "period": 1,
+    "clock": "8:03",
+    "playerName": "Isaac Okoro",
+    "action": "offensive rebound",
+    "homeScore": 10,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:22.980Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:24.980Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:27.651Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:29.659Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:31.701Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:33.980Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:35.915Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:37.822Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:39.873Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:41.918Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:44.186Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:46.047Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:48.014Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:50.037Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:52.087Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:54.319Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:46:56.463Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:46:58.376Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:00.452Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:02.479Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:04.751Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:06.600Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:08.654Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:10.759Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:12.787Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:15.078Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:16.891Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:18.839Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:20.863Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:22.895Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:25.249Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:27.083Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:29.040Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:31.033Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:33.304Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:35.315Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:37.419Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:39.284Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:41.332Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:43.384Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:45.627Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:47.806Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:49.840Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:51.870Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:54.209Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:47:56.120Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:47:58.070Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:00.102Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:02.139Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:04.289Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:06.326Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:08.245Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:10.309Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:12.323Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:14.383Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:17.644Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:19.418Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:21.457Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:23.517Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:25.603Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:27.792Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:29.686Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:31.721Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:33.942Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:36.214Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:38.215Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:40.108Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:42.113Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:44.149Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:46.278Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:48.550Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:50.351Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:52.382Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:54.416Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:48:56.560Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:48:58.785Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:49:00.840Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:49:02.879Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:49:04.920Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:49:07.031Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:49:09.224Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:49:13.829Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:49:15.933Z",
+    "period": 1,
+    "clock": "7:58",
+    "playerName": "Isaac Okoro",
+    "action": "makes 24-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:49:16.887Z",
+    "period": 1,
+    "clock": "7:57",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 10,
+    "awayScore": 21,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T20:49:37.140Z",
+    "period": 1,
+    "clock": "7:31",
+    "playerName": "Josh Giddey",
+    "action": "misses shot",
+    "homeScore": 13,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:49:47.077Z",
+    "period": 1,
+    "clock": "7:29",
+    "playerName": "Onyeka Okongwu",
+    "action": "defensive rebound",
+    "homeScore": 13,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:50:17.422Z",
+    "period": 1,
+    "clock": "7:19",
+    "playerName": "Onyeka Okongwu",
+    "action": "makes 10-foot two point shot (Jalen Johnson assists)",
+    "homeScore": 15,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:50:27.121Z",
+    "period": 1,
+    "clock": "6:57",
+    "playerName": "Josh Giddey",
+    "action": "makes 1-foot dunk (Nikola Vucevic assists)",
+    "homeScore": 15,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:50:47.273Z",
+    "period": 1,
+    "clock": "6:39",
+    "playerName": "Zaccharie Risacher",
+    "action": "makes driving layup (Trae Young assists)",
+    "homeScore": 17,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:51:07.484Z",
+    "period": 1,
+    "clock": "6:25",
+    "playerName": "Isaac Okoro",
+    "action": "makes 2-foot layup (Josh Giddey assists)",
+    "homeScore": 17,
+    "awayScore": 25,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:51:17.822Z",
+    "period": 1,
+    "clock": "5:52",
+    "playerName": "Coby White",
+    "action": "misses shot",
+    "homeScore": 19,
+    "awayScore": 25,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:51:28.045Z",
+    "period": 1,
+    "clock": "5:49",
+    "playerName": "Jalen Johnson",
+    "action": "defensive rebound",
+    "homeScore": 19,
+    "awayScore": 25,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:51:38.113Z",
+    "period": 1,
+    "clock": "5:43",
+    "playerName": "Zaccharie Risacher",
+    "action": "makes 23-foot three point jumper",
+    "homeScore": 22,
+    "awayScore": 25,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:52:09.186Z",
+    "period": 1,
+    "clock": "5:31",
+    "playerName": "Kevin Huerter",
+    "action": "enters the game for Nikola Vucevic",
+    "homeScore": 22,
+    "awayScore": 25,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:52:18.266Z",
+    "period": 1,
+    "clock": "5:31",
+    "playerName": "Zach Collins",
+    "action": "enters the game for Coby White",
+    "homeScore": 22,
+    "awayScore": 25,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T20:52:28.302Z",
+    "period": 1,
+    "clock": "5:14",
+    "playerName": "Kevin Huerter",
+    "action": "misses 26-foot three point pullup jump shot",
+    "homeScore": 22,
+    "awayScore": 25,
+    "isTimeout": false
+  }
+]
