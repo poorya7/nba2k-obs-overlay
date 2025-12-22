@@ -787,6 +787,10 @@ html {
 }
 
 .mvp-content .stat-label {
+    position: static; /* Reset from global absolute positioning */
+    transform: none;
+    background: transparent;
+    padding: 0;
     font-size: 14px;
     font-weight: 600;
     color: #60a5fa;

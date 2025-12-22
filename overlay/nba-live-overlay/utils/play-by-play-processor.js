@@ -88,6 +88,24 @@ class PlayByPlayProcessor {
     }
 
     /**
+     * Helper: Format clock to MM:SS format
+     * Uses shared convertToMMSS from nbaApi.js
+     * @param {string} clock - Clock value from API
+     * @returns {string} Formatted clock in MM:SS format
+     */
+    formatClock(clock) {
+        if (!clock) return '';
+        
+        // Use shared formatter from nbaApi.js
+        if (window.NBAApi && window.NBAApi.convertToMMSS) {
+            return window.NBAApi.convertToMMSS(String(clock).trim());
+        }
+        
+        // Fallback if NBAApi not loaded yet
+        return String(clock).trim();
+    }
+
+    /**
      * Helper: Remove player name variations from text
      * @param {string} text - Play text
      * @param {string} fullName - Player's full name
@@ -305,7 +323,7 @@ class PlayByPlayProcessor {
         return {
             id: apiPlay.id,
             period: apiPlay.period || 0,
-            clock: apiPlay.clock || '',
+            clock: this.formatClock(apiPlay.clock),
             playerName: playerName,
             playerPhoto: playerPhoto,
             action: actionText,

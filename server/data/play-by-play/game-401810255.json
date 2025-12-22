@@ -1768,5 +1768,105 @@
     "homeScore": 101,
     "awayScore": 94,
     "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:22:40.384Z",
+    "period": 4,
+    "clock": "50.4",
+    "playerName": "Myles Turner",
+    "action": "makes 24-foot three point jumper (Kyle Kuzma assists)",
+    "homeScore": 101,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:23:02.368Z",
+    "period": 4,
+    "clock": "50.4",
+    "playerName": "Myles Turner",
+    "action": "makes 24-foot three point jumper (Kyle Kuzma assists)",
+    "homeScore": 101,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:23:05.809Z",
+    "period": 4,
+    "clock": "50.4",
+    "playerName": "Myles Turner",
+    "action": "makes 24-foot three point jumper (Kyle Kuzma assists)",
+    "homeScore": 101,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:23:20.710Z",
+    "period": 4,
+    "clock": "35.2",
+    "playerName": "Kyle Kuzma",
+    "action": "personal foul",
+    "homeScore": 101,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:23:29.207Z",
+    "period": 4,
+    "clock": "21.8",
+    "playerName": "Anthony Edwards",
+    "action": "makes 2-foot two point shot (Donte DiVincenzo assists)",
+    "homeScore": 103,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:23:41.350Z",
+    "period": 4,
+    "clock": "0.5",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. offensive rebound",
+    "homeScore": 103,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:24:00.025Z",
+    "period": 4,
+    "clock": "0.5",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. makes 24-foot shot",
+    "homeScore": 103,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:24:11.046Z",
+    "period": 4,
+    "clock": "0.5",
+    "playerName": "Timberwolves Full",
+    "action": "timeout",
+    "homeScore": 103,
+    "awayScore": 100,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:24:35.524Z",
+    "period": 4,
+    "clock": "0:00",
+    "playerName": "Timberwolves Full",
+    "action": "timeout",
+    "homeScore": 103,
+    "awayScore": 100,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:25:22.604Z",
+    "period": 4,
+    "clock": "00:00",
+    "playerName": "Timberwolves Full",
+    "action": "timeout",
+    "homeScore": 103,
+    "awayScore": 100,
+    "isTimeout": true
   }
 ]

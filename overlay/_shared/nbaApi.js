@@ -644,7 +644,8 @@ if (typeof window !== 'undefined') {
     formatGameTime,
     getMVPForGame,
     getTeamStatsForGame,
-    getPlayByPlay
+    getPlayByPlay,
+    convertToMMSS // Export for play-by-play processor
   };
 }
 
