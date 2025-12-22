@@ -11,6 +11,18 @@
  *   }
  */
 
+// Fallback player photos for simulation mode (real ESPN headshots)
+// Used when player ID is not available in simulation data
+const FALLBACK_PLAYER_PHOTOS = [
+    'https://a.espncdn.com/i/headshots/nba/players/full/1966.png',    // LeBron James
+    'https://a.espncdn.com/i/headshots/nba/players/full/3975.png',    // Stephen Curry
+    'https://a.espncdn.com/i/headshots/nba/players/full/3202.png',    // Kevin Durant
+    'https://a.espncdn.com/i/headshots/nba/players/full/3945274.png', // Luka Doncic
+    'https://a.espncdn.com/i/headshots/nba/players/full/3032977.png', // Giannis Antetokounmpo
+    'https://a.espncdn.com/i/headshots/nba/players/full/4065648.png'  // Jayson Tatum
+];
+let fallbackPhotoIndex = 0;
+
 // NBA team name to abbreviation mapping (for timeout detection)
 const TEAM_NAME_TO_ABBR = {
     'SPURS': ['SA', 'SAS'],
@@ -190,11 +202,15 @@ class PlayByPlayProcessor {
         }
 
         // Get player photo - try multiple possible paths
-        let playerPhoto = 'https://a.espncdn.com/i/headshots/nba/players/full/0.png'; // fallback
+        let playerPhoto = null;
         if (athlete?.headshot?.href) {
             playerPhoto = athlete.headshot.href;
         } else if (playerId) {
             playerPhoto = `https://a.espncdn.com/i/headshots/nba/players/full/${playerId}.png`;
+        } else {
+            // Fallback: rotate through real player photos (for simulation mode)
+            playerPhoto = FALLBACK_PLAYER_PHOTOS[fallbackPhotoIndex % FALLBACK_PLAYER_PHOTOS.length];
+            fallbackPhotoIndex++;
         }
 
         // Remove player name from action text (since we display it separately)
