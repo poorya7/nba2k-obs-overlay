@@ -60,8 +60,14 @@ class GameDataFormatter {
 
                 // USES existing utility from game-utils.js
                 return {
-                    homeTeam: baseData.home,
-                    awayTeam: baseData.away,
+                    homeTeam: {
+                        ...baseData.home,
+                        record: game.homeTeam.record || ''
+                    },
+                    awayTeam: {
+                        ...baseData.away,
+                        record: game.awayTeam.record || ''
+                    },
                     countdown: GameUtils.formatCountdown(secondsUntilGame)
                 };
 

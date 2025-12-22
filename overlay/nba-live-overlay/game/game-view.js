@@ -345,9 +345,19 @@ class GameView {
      * @param {string} countdownText - Formatted countdown string (e.g., "02:15:34")
      */
     updateCountdown(countdownText) {
-        // Update countdown in game status only (scores stay as 0)
+        // Update countdown in game status with stacked layout
         if (this.elements.gameStatus) {
-            this.elements.gameStatus.textContent = `Game Starts In: ${countdownText}`;
+            // Check if countdown elements already exist, just update the time
+            const countdownTimeEl = this.elements.gameStatus.querySelector('.countdown-time');
+            if (countdownTimeEl) {
+                countdownTimeEl.textContent = countdownText;
+            } else {
+                // Create stacked layout
+                this.elements.gameStatus.innerHTML = `
+                    <div class="countdown-label">Game Starts In</div>
+                    <div class="countdown-time">${countdownText}</div>
+                `;
+            }
         }
     }
 
@@ -506,12 +516,23 @@ class GameView {
         if (halftimeBanner) halftimeBanner.remove();
         if (finalBanner) finalBanner.remove();
 
+        // Remove pregame-specific classes from scores
+        if (this.elements.homeScore) {
+            this.elements.homeScore.classList.remove('pregame-record');
+        }
+        if (this.elements.awayScore) {
+            this.elements.awayScore.classList.remove('pregame-record');
+        }
+
+        // Remove HOME indicator
+        this.removeHomeIndicator();
+
         // Don't remove game status - it's now permanent in HTML, just update it
     }
 
     /**
      * Show Pre-Game state
-     * @param {Object} data - {homeTeam: {abbr, logoUrl}, awayTeam: {abbr, logoUrl}, countdown: '02:15:34'}
+     * @param {Object} data - {homeTeam: {abbr, logoUrl, record}, awayTeam: {abbr, logoUrl, record}, countdown: '02:15:34'}
      */
     showPreGame(data) {
         this.currentState = 'pregame';
@@ -530,24 +551,59 @@ class GameView {
             this.updateTeam('away', data.awayTeam.abbr, data.awayTeam.logoUrl);
         }
 
-        // Show 0 for scores (not countdown - countdown goes in status only)
+        // Show records instead of scores for pregame
         if (this.elements.homeScore) {
-            this.elements.homeScore.textContent = '0';
+            this.elements.homeScore.textContent = data.homeTeam?.record || '';
+            this.elements.homeScore.classList.add('pregame-record');
         }
         if (this.elements.awayScore) {
-            this.elements.awayScore.textContent = '0';
+            this.elements.awayScore.textContent = data.awayTeam?.record || '';
+            this.elements.awayScore.classList.add('pregame-record');
         }
 
-        // Update game status to show countdown
+        // Add HOME indicator to home team (right side)
+        this.addHomeIndicator();
+
+        // Update game status with stacked countdown (label above, time below)
         const countdownText = data.countdown || '00:00:00';
         if (this.elements.gameStatus) {
-            this.elements.gameStatus.textContent = `Game Starts In: ${countdownText}`;
+            this.elements.gameStatus.innerHTML = `
+                <div class="countdown-label">Game Starts In</div>
+                <div class="countdown-time">${countdownText}</div>
+            `;
         }
 
         // Hide team stats
         const teamStats = this.elements.currentGameContent.querySelector('.team-stats');
         if (teamStats) {
             teamStats.style.display = 'none';
+        }
+    }
+
+    /**
+     * Add HOME indicator to home team section
+     */
+    addHomeIndicator() {
+        // Remove any existing home indicator
+        this.removeHomeIndicator();
+        
+        // Find home team container (second .team element)
+        const homeTeamEl = this.elements.teamsContainer?.querySelector('.team:last-child');
+        if (homeTeamEl) {
+            const homeLabel = document.createElement('div');
+            homeLabel.className = 'home-indicator';
+            homeLabel.textContent = 'HOME';
+            homeTeamEl.appendChild(homeLabel);
+        }
+    }
+
+    /**
+     * Remove HOME indicator (when switching to live state)
+     */
+    removeHomeIndicator() {
+        const existing = this.elements.teamsContainer?.querySelector('.home-indicator');
+        if (existing) {
+            existing.remove();
         }
     }
 
@@ -572,6 +628,9 @@ class GameView {
 
         // Update game data
         this.updateAll(data);
+
+        // Add HOME indicator to home team
+        this.addHomeIndicator();
 
         // Update game status
         if (this.elements.gameStatus) {
@@ -609,6 +668,9 @@ class GameView {
         this.updateScore('home', data.home.score);
         this.updateScore('away', data.away.score);
 
+        // Add HOME indicator to home team
+        this.addHomeIndicator();
+
         // Update game status
         if (this.elements.gameStatus) {
             this.elements.gameStatus.textContent = 'Halftime';
@@ -645,6 +707,9 @@ class GameView {
         this.updateScore('home', data.home.score);
         this.updateScore('away', data.away.score);
 
+        // Add HOME indicator to home team
+        this.addHomeIndicator();
+
         // Update game status
         if (this.elements.gameStatus) {
             this.elements.gameStatus.textContent = 'Final';
@@ -680,44 +745,44 @@ class GameView {
             return pct ? `(${pct}%)` : '';
         };
 
-        // Row 0: FGM/FGA
+        // Row 0: FGM/FGA (Away left, Home right)
         const fgRow = statsRows[0];
         const fgValues = fgRow.querySelectorAll('.stat-value');
         if (fgValues.length >= 2) {
-            fgValues[0].textContent = `${teamStats.home.fgm}/${teamStats.home.fga}`;
-            fgValues[1].textContent = `${teamStats.away.fgm}/${teamStats.away.fga}`;
+            fgValues[0].textContent = `${teamStats.away.fgm}/${teamStats.away.fga}`;
+            fgValues[1].textContent = `${teamStats.home.fgm}/${teamStats.home.fga}`;
         }
 
-        // Row 1: REB/OFF
+        // Row 1: REB/OFF (Away left, Home right)
         const rebRow = statsRows[1];
         const rebValues = rebRow.querySelectorAll('.stat-value');
         if (rebValues.length >= 2) {
-            rebValues[0].textContent = `${teamStats.home.reb}/${teamStats.home.offReb}`;
-            rebValues[1].textContent = `${teamStats.away.reb}/${teamStats.away.offReb}`;
+            rebValues[0].textContent = `${teamStats.away.reb}/${teamStats.away.offReb}`;
+            rebValues[1].textContent = `${teamStats.home.reb}/${teamStats.home.offReb}`;
         }
 
-        // Row 2: AST/TO
+        // Row 2: AST/TO (Away left, Home right)
         const astRow = statsRows[2];
         const astValues = astRow.querySelectorAll('.stat-value');
         if (astValues.length >= 2) {
-            astValues[0].textContent = `${teamStats.home.ast}/${teamStats.home.to}`;
-            astValues[1].textContent = `${teamStats.away.ast}/${teamStats.away.to}`;
+            astValues[0].textContent = `${teamStats.away.ast}/${teamStats.away.to}`;
+            astValues[1].textContent = `${teamStats.home.ast}/${teamStats.home.to}`;
         }
 
-        // Row 3: 3-PT
+        // Row 3: 3-PT (Away left, Home right)
         const threePtRow = statsRows[3];
         const threePtValues = threePtRow.querySelectorAll('.stat-value');
         if (threePtValues.length >= 2) {
-            threePtValues[0].textContent = `${teamStats.home.threePtMade}/${teamStats.home.threePtAttempted} ${formatPercent(teamStats.home.threePtPct)}`;
-            threePtValues[1].textContent = `${teamStats.away.threePtMade}/${teamStats.away.threePtAttempted} ${formatPercent(teamStats.away.threePtPct)}`;
+            threePtValues[0].textContent = `${teamStats.away.threePtMade}/${teamStats.away.threePtAttempted} ${formatPercent(teamStats.away.threePtPct)}`;
+            threePtValues[1].textContent = `${teamStats.home.threePtMade}/${teamStats.home.threePtAttempted} ${formatPercent(teamStats.home.threePtPct)}`;
         }
 
-        // Row 4: FT
+        // Row 4: FT (Away left, Home right)
         const ftRow = statsRows[4];
         const ftValues = ftRow.querySelectorAll('.stat-value');
         if (ftValues.length >= 2) {
-            ftValues[0].textContent = `${teamStats.home.ftMade}/${teamStats.home.ftAttempted} ${formatPercent(teamStats.home.ftPct)}`;
-            ftValues[1].textContent = `${teamStats.away.ftMade}/${teamStats.away.ftAttempted} ${formatPercent(teamStats.away.ftPct)}`;
+            ftValues[0].textContent = `${teamStats.away.ftMade}/${teamStats.away.ftAttempted} ${formatPercent(teamStats.away.ftPct)}`;
+            ftValues[1].textContent = `${teamStats.home.ftMade}/${teamStats.home.ftAttempted} ${formatPercent(teamStats.home.ftPct)}`;
         }
     }
 

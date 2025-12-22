@@ -1128,5 +1128,1315 @@
     "homeScore": 57,
     "awayScore": 68,
     "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:20:08.168Z",
+    "period": 2,
+    "clock": "00:00",
+    "playerName": "Reed Sheppard",
+    "action": "makes free throw 3 of 3",
+    "homeScore": 57,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:20:26.282Z",
+    "period": 3,
+    "clock": "12:00",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. enters the game for Clint Capela",
+    "homeScore": 57,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:20:55.260Z",
+    "period": 3,
+    "clock": "11:45",
+    "playerName": "Precious Achiuwa",
+    "action": "shooting foul",
+    "homeScore": 57,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:21:15.429Z",
+    "period": 3,
+    "clock": "11:41",
+    "playerName": "Maxime Raynaud",
+    "action": "defensive rebound",
+    "homeScore": 57,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:21:25.504Z",
+    "period": 3,
+    "clock": "11:32",
+    "playerName": "Maxime Raynaud",
+    "action": "offensive rebound",
+    "homeScore": 57,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:21:45.946Z",
+    "period": 3,
+    "clock": "11:13",
+    "playerName": "Josh Okogie",
+    "action": "misses shot",
+    "homeScore": 59,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:21:55.996Z",
+    "period": 3,
+    "clock": "11:09",
+    "playerName": "Russell Westbrook",
+    "action": "defensive rebound",
+    "homeScore": 59,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:22:26.262Z",
+    "period": 3,
+    "clock": "11:09",
+    "playerName": "Kevin Durant",
+    "action": "shooting foul",
+    "homeScore": 59,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:22:36.404Z",
+    "period": 3,
+    "clock": "11:09",
+    "playerName": "Precious Achiuwa",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 60,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:22:46.405Z",
+    "period": 3,
+    "clock": "11:01",
+    "playerName": "Amen Thompson",
+    "action": "defensive rebound",
+    "homeScore": 60,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:23:06.719Z",
+    "period": 3,
+    "clock": "11:01",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. defensive rebound",
+    "homeScore": 60,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:23:16.943Z",
+    "period": 3,
+    "clock": "10:45",
+    "playerName": "Alperen Sengun",
+    "action": "makes 14-foot floating jump shot (Kevin Durant assists)",
+    "homeScore": 60,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:23:47.444Z",
+    "period": 3,
+    "clock": "10:29",
+    "playerName": "Alperen Sengun",
+    "action": "shooting foul",
+    "homeScore": 60,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:24:07.700Z",
+    "period": 3,
+    "clock": "10:29",
+    "playerName": "Precious Achiuwa",
+    "action": "misses free throw 2 of 2",
+    "homeScore": 61,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:24:48.248Z",
+    "period": 3,
+    "clock": "10:09",
+    "playerName": "Keegan Murray",
+    "action": "defensive rebound",
+    "homeScore": 61,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:24:58.359Z",
+    "period": 3,
+    "clock": "10:01",
+    "playerName": "Josh Okogie",
+    "action": "defensive rebound",
+    "homeScore": 61,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:25:08.507Z",
+    "period": 3,
+    "clock": "09:53",
+    "playerName": "Amen Thompson",
+    "action": "offensive rebound",
+    "homeScore": 61,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:25:28.714Z",
+    "period": 3,
+    "clock": "09:42",
+    "playerName": "Kevin Durant",
+    "action": "makes 14-foot turnaround jump shot",
+    "homeScore": 61,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:25:59.142Z",
+    "period": 3,
+    "clock": "09:23",
+    "playerName": "Kevin Durant",
+    "action": "shooting foul",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:26:09.232Z",
+    "period": 3,
+    "clock": "09:20",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. defensive rebound",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:26:51.571Z",
+    "period": 3,
+    "clock": "09:10",
+    "playerName": "Maxime Raynaud",
+    "action": "personal foul",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:27:01.670Z",
+    "period": 3,
+    "clock": "09:02",
+    "playerName": "Maxime Raynaud",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:27:21.815Z",
+    "period": 3,
+    "clock": "08:33",
+    "playerName": "Russell Westbrook",
+    "action": "offensive rebound",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:29:12.925Z",
+    "period": 3,
+    "clock": "08:33",
+    "playerName": "Josh Okogie",
+    "action": "shooting foul",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:29:22.975Z",
+    "period": 3,
+    "clock": "08:33",
+    "playerName": "Precious Achiuwa",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:29:43.150Z",
+    "period": 3,
+    "clock": "08:28",
+    "playerName": "Amen Thompson",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:30:03.349Z",
+    "period": 3,
+    "clock": "08:14",
+    "playerName": "Russell Westbrook",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:30:13.478Z",
+    "period": 3,
+    "clock": "08:02",
+    "playerName": "Clint Capela",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:30:33.691Z",
+    "period": 3,
+    "clock": "07:55",
+    "playerName": "Dylan Cardwell",
+    "action": "enters the game for Precious Achiuwa",
+    "homeScore": 63,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:31:04.399Z",
+    "period": 3,
+    "clock": "07:29",
+    "playerName": "Keegan Murray",
+    "action": "makes 9-foot fade away jump shot (Russell Westbrook assists)",
+    "homeScore": 65,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:31:34.860Z",
+    "period": 3,
+    "clock": "07:15",
+    "playerName": "Amen Thompson",
+    "action": "makes 23-foot three point jumper (Clint Capela assists)",
+    "homeScore": 65,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:32:05.271Z",
+    "period": 3,
+    "clock": "06:31",
+    "playerName": "Josh Okogie",
+    "action": "offensive rebound",
+    "homeScore": 68,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:32:15.509Z",
+    "period": 3,
+    "clock": "06:31",
+    "playerName": "Kings Full",
+    "action": "timeout",
+    "homeScore": 68,
+    "awayScore": 78,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T04:35:17.131Z",
+    "period": 3,
+    "clock": "06:31",
+    "playerName": "Alperen Sengun",
+    "action": "enters the game for Clint Capela",
+    "homeScore": 68,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:35:57.433Z",
+    "period": 3,
+    "clock": "05:47",
+    "playerName": "Nique Clifford",
+    "action": "defensive rebound",
+    "homeScore": 70,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:36:17.589Z",
+    "period": 3,
+    "clock": "05:33",
+    "playerName": "Amen Thompson",
+    "action": "defensive rebound",
+    "homeScore": 70,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:36:27.760Z",
+    "period": 3,
+    "clock": "05:22",
+    "playerName": "Alperen Sengun",
+    "action": "bad pass turnover (Nique Clifford steals)",
+    "homeScore": 70,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:36:47.960Z",
+    "period": 3,
+    "clock": "04:59",
+    "playerName": "Alperen Sengun",
+    "action": "turnover Russell Westbrook",
+    "homeScore": 72,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:36:58.065Z",
+    "period": 3,
+    "clock": "04:55",
+    "playerName": "Russell Westbrook",
+    "action": "lost ball turnover (Alperen Sengun steals)",
+    "homeScore": 72,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:37:40.524Z",
+    "period": 3,
+    "clock": "04:45",
+    "playerName": "Reed Sheppard",
+    "action": "enters the game for Amen Thompson",
+    "homeScore": 72,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:37:50.630Z",
+    "period": 3,
+    "clock": "04:45",
+    "playerName": "Tari Eason",
+    "action": "enters the game for Jabari Smith Jr.",
+    "homeScore": 72,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:38:29.076Z",
+    "period": 3,
+    "clock": "04:15",
+    "playerName": "Tari Eason",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:38:49.352Z",
+    "period": 3,
+    "clock": "04:09",
+    "playerName": "Tari Eason",
+    "action": "makes running layup",
+    "homeScore": 72,
+    "awayScore": 80,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:38:59.602Z",
+    "period": 3,
+    "clock": "03:47",
+    "playerName": "Alperen Sengun",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 80,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:39:09.703Z",
+    "period": 3,
+    "clock": "03:42",
+    "playerName": "Tari Eason",
+    "action": "makes 5-foot driving dunk (Reed Sheppard assists)",
+    "homeScore": 72,
+    "awayScore": 82,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:39:31.915Z",
+    "period": 3,
+    "clock": "03:33",
+    "playerName": "Malik Monk",
+    "action": "makes driving layup",
+    "homeScore": 74,
+    "awayScore": 82,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:39:40.140Z",
+    "period": 3,
+    "clock": "03:11",
+    "playerName": "Alperen Sengun",
+    "action": "makes 7-foot hook shot",
+    "homeScore": 74,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:40:12.307Z",
+    "period": 3,
+    "clock": "03:02",
+    "playerName": "Dennis Schroder",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 74,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:40:32.684Z",
+    "period": 3,
+    "clock": "03:02",
+    "playerName": "Amen Thompson",
+    "action": "enters the game for Josh Okogie",
+    "homeScore": 74,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:40:52.959Z",
+    "period": 3,
+    "clock": "02:54",
+    "playerName": "Rockets Full",
+    "action": "timeout",
+    "homeScore": 75,
+    "awayScore": 84,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T04:44:06.691Z",
+    "period": 3,
+    "clock": "02:38",
+    "playerName": "Tari Eason",
+    "action": "makes 23-foot shot",
+    "homeScore": 75,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:44:37.011Z",
+    "period": 3,
+    "clock": "02:38",
+    "playerName": "Tari Eason",
+    "action": "makes 23-foot three point jumper (Alperen Sengun assists)",
+    "homeScore": 75,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:45:17.544Z",
+    "period": 3,
+    "clock": "02:20",
+    "playerName": "Dennis Schroder",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 76,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:45:47.980Z",
+    "period": 3,
+    "clock": "02:20",
+    "playerName": "Dennis Schroder",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 77,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:46:18.227Z",
+    "period": 3,
+    "clock": "02:16",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. out of bounds bad pass turnover",
+    "homeScore": 77,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:46:28.319Z",
+    "period": 3,
+    "clock": "02:03",
+    "playerName": "Malik Monk",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 77,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:46:58.629Z",
+    "period": 3,
+    "clock": "02:03",
+    "playerName": "Malik Monk",
+    "action": "misses free throw 2 of 2",
+    "homeScore": 77,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:47:08.700Z",
+    "period": 3,
+    "clock": "02:00",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. defensive rebound",
+    "homeScore": 77,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:47:18.772Z",
+    "period": 3,
+    "clock": "01:44",
+    "playerName": "Dylan Cardwell",
+    "action": "defensive rebound",
+    "homeScore": 77,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:47:28.938Z",
+    "period": 3,
+    "clock": "01:35",
+    "playerName": "Alperen Sengun",
+    "action": "defensive rebound",
+    "homeScore": 77,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:47:39.029Z",
+    "period": 3,
+    "clock": "01:24",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. misses shot",
+    "homeScore": 77,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:47:49.380Z",
+    "period": 3,
+    "clock": "01:15",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. makes 6-foot shot",
+    "homeScore": 77,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:47:59.540Z",
+    "period": 3,
+    "clock": "00:59",
+    "playerName": "Nique Clifford",
+    "action": "offensive rebound",
+    "homeScore": 77,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:48:29.937Z",
+    "period": 3,
+    "clock": "00:37",
+    "playerName": "Nique Clifford",
+    "action": "defensive rebound",
+    "homeScore": 77,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:49:00.335Z",
+    "period": 3,
+    "clock": "00:23",
+    "playerName": "Dylan Cardwell",
+    "action": "foul",
+    "homeScore": 80,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:49:10.286Z",
+    "period": 3,
+    "clock": "00:23",
+    "playerName": "Dylan Cardwell",
+    "action": "personal foul",
+    "homeScore": 82,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:49:30.656Z",
+    "period": 3,
+    "clock": "00:23",
+    "playerName": "Kevin Durant",
+    "action": "enters the game for Tari Eason",
+    "homeScore": 82,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:49:50.930Z",
+    "period": 3,
+    "clock": "00:01",
+    "playerName": "Amen Thompson",
+    "action": "offensive rebound",
+    "homeScore": 82,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:50:00.933Z",
+    "period": 3,
+    "clock": "00:01",
+    "playerName": "Amen Thompson",
+    "action": "makes 16-foot fade away jump shot",
+    "homeScore": 82,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:50:21.173Z",
+    "period": 3,
+    "clock": "00:00",
+    "playerName": "Dennis Schroder",
+    "action": "misses 36-foot three point jumper",
+    "homeScore": 82,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:52:42.633Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Maxime Raynaud",
+    "action": "enters the game for Keegan Murray",
+    "homeScore": 82,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:52:52.843Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Clint Capela",
+    "action": "enters the game for Alperen Sengun",
+    "homeScore": 82,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:53:13.134Z",
+    "period": 4,
+    "clock": "11:55",
+    "playerName": "Rockets Full",
+    "action": "timeout",
+    "homeScore": 82,
+    "awayScore": 91,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T04:55:47.114Z",
+    "period": 4,
+    "clock": "11:55",
+    "playerName": "Dennis Schroder",
+    "action": "out of bounds lost ball turnover",
+    "homeScore": 82,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:56:27.328Z",
+    "period": 4,
+    "clock": "11:55",
+    "playerName": "Keegan Murray",
+    "action": "enters the game for Malik Monk",
+    "homeScore": 82,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:56:37.459Z",
+    "period": 4,
+    "clock": "11:41",
+    "playerName": "Kevin Durant",
+    "action": "makes 24-foot three point jumper (Reed Sheppard assists)",
+    "homeScore": 82,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:56:57.684Z",
+    "period": 4,
+    "clock": "11:24",
+    "playerName": "Amen Thompson",
+    "action": "shooting foul",
+    "homeScore": 82,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:57:18.111Z",
+    "period": 4,
+    "clock": "11:24",
+    "playerName": "Nique Clifford",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 83,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:57:38.300Z",
+    "period": 4,
+    "clock": "11:24",
+    "playerName": "Nique Clifford",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 84,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T04:58:18.897Z",
+    "period": 4,
+    "clock": "11:09",
+    "playerName": "Kings Full",
+    "action": "timeout",
+    "homeScore": 84,
+    "awayScore": 94,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T05:00:20.326Z",
+    "period": 4,
+    "clock": "11:09",
+    "playerName": "Player",
+    "action": "(11:09) [Kings] COACH'S CHALLENGE (CALL OVERTURNED) [Kings] retain their timeout",
+    "homeScore": 84,
+    "awayScore": 94,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T05:00:50.598Z",
+    "period": 4,
+    "clock": "11:09",
+    "playerName": "Kevin Durant",
+    "action": "offensive foul turnover",
+    "homeScore": 84,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:01:41.032Z",
+    "period": 4,
+    "clock": "10:55",
+    "playerName": "Amen Thompson",
+    "action": "defensive rebound",
+    "homeScore": 84,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:02:11.279Z",
+    "period": 4,
+    "clock": "10:34",
+    "playerName": "Clint Capela",
+    "action": "defensive rebound",
+    "homeScore": 84,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:02:33.636Z",
+    "period": 4,
+    "clock": "10:21",
+    "playerName": "Reed Sheppard",
+    "action": "makes 23-foot three point jumper (Kevin Durant assists)",
+    "homeScore": 84,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:02:53.699Z",
+    "period": 4,
+    "clock": "10:13",
+    "playerName": "Amen Thompson",
+    "action": "shooting foul",
+    "homeScore": 84,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:03:14.051Z",
+    "period": 4,
+    "clock": "10:13",
+    "playerName": "Dennis Schroder",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 85,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:03:54.607Z",
+    "period": 4,
+    "clock": "10:13",
+    "playerName": "Dennis Schroder",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 86,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:04:04.751Z",
+    "period": 4,
+    "clock": "09:58",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. makes 29-foot three point jumper (Amen Thompson assists)",
+    "homeScore": 86,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:04:14.826Z",
+    "period": 4,
+    "clock": "09:42",
+    "playerName": "Maxime Raynaud",
+    "action": "makes layup (Dennis Schroder assists)",
+    "homeScore": 88,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:04:25.111Z",
+    "period": 4,
+    "clock": "09:37",
+    "playerName": "Clint Capela",
+    "action": "out of bounds bad pass turnover",
+    "homeScore": 88,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:04:35.221Z",
+    "period": 4,
+    "clock": "09:33",
+    "playerName": "Keegan Murray",
+    "action": "makes 14-foot jumper (Dennis Schroder assists)",
+    "homeScore": 90,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:04:55.435Z",
+    "period": 4,
+    "clock": "09:23",
+    "playerName": "Reed Sheppard",
+    "action": "lost ball turnover (Maxime Raynaud steals)",
+    "homeScore": 90,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:05:05.477Z",
+    "period": 4,
+    "clock": "09:17",
+    "playerName": "Rockets Full",
+    "action": "timeout",
+    "homeScore": 93,
+    "awayScore": 100,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T05:05:24.543Z",
+    "period": 4,
+    "clock": "09:17",
+    "playerName": "Rockets Full",
+    "action": "timeout",
+    "homeScore": 93,
+    "awayScore": 100,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T05:06:28.860Z",
+    "period": 4,
+    "clock": "09:17",
+    "playerName": "Precious Achiuwa",
+    "action": "enters the game for DeMar DeRozan",
+    "homeScore": 93,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:06:36.886Z",
+    "period": 4,
+    "clock": "09:17",
+    "playerName": "Josh Okogie",
+    "action": "enters the game for Amen Thompson",
+    "homeScore": 93,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:06:46.912Z",
+    "period": 4,
+    "clock": "09:17",
+    "playerName": "Alperen Sengun",
+    "action": "enters the game for Clint Capela",
+    "homeScore": 93,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:06:56.978Z",
+    "period": 4,
+    "clock": "08:58",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. misses 29-foot three point jumper",
+    "homeScore": 93,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:07:17.736Z",
+    "period": 4,
+    "clock": "08:57",
+    "playerName": "Alperen Sengun",
+    "action": "personal foul",
+    "homeScore": 93,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:07:27.825Z",
+    "period": 4,
+    "clock": "08:29",
+    "playerName": "Nique Clifford",
+    "action": "defensive rebound",
+    "homeScore": 95,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:07:58.497Z",
+    "period": 4,
+    "clock": "08:04",
+    "playerName": "Rockets Full",
+    "action": "timeout",
+    "homeScore": 98,
+    "awayScore": 100,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T05:08:52.928Z",
+    "period": 4,
+    "clock": "08:04",
+    "playerName": "Rockets Full",
+    "action": "timeout",
+    "homeScore": 98,
+    "awayScore": 100,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T05:10:02.508Z",
+    "period": 4,
+    "clock": "08:04",
+    "playerName": "Amen Thompson",
+    "action": "enters the game for Jabari Smith Jr.",
+    "homeScore": 98,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:10:11.630Z",
+    "period": 4,
+    "clock": "07:26",
+    "playerName": "Kevin Durant",
+    "action": "defensive rebound",
+    "homeScore": 98,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:10:46.949Z",
+    "period": 4,
+    "clock": "07:26",
+    "playerName": "Kevin Durant",
+    "action": "defensive rebound",
+    "homeScore": 98,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:10:50.970Z",
+    "period": 4,
+    "clock": "07:18",
+    "playerName": "Alperen Sengun",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 98,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:11:42.588Z",
+    "period": 4,
+    "clock": "07:18",
+    "playerName": "Alperen Sengun",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 98,
+    "awayScore": 103,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:12:02.811Z",
+    "period": 4,
+    "clock": "06:37",
+    "playerName": "Kevin Durant",
+    "action": "misses 17-foot fade away jump shot",
+    "homeScore": 101,
+    "awayScore": 103,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:12:12.924Z",
+    "period": 4,
+    "clock": "06:26",
+    "playerName": "Dennis Schroder",
+    "action": "misses shot",
+    "homeScore": 101,
+    "awayScore": 103,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:12:23.051Z",
+    "period": 4,
+    "clock": "06:25",
+    "playerName": "Nique Clifford",
+    "action": "foul",
+    "homeScore": 101,
+    "awayScore": 103,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:12:43.419Z",
+    "period": 4,
+    "clock": "06:25",
+    "playerName": "Nique Clifford",
+    "action": "personal foul",
+    "homeScore": 101,
+    "awayScore": 103,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:12:53.471Z",
+    "period": 4,
+    "clock": "06:02",
+    "playerName": "Amen Thompson",
+    "action": "makes 2-foot shot (Alperen Sengun assists)",
+    "homeScore": 101,
+    "awayScore": 105,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:12:54.242Z",
+    "period": 4,
+    "clock": "06:02",
+    "playerName": "Amen Thompson",
+    "action": "makes 2-foot shot (Alperen Sengun assists)",
+    "homeScore": 101,
+    "awayScore": 105,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:13:04.313Z",
+    "period": 4,
+    "clock": "06:02",
+    "playerName": "Amen Thompson",
+    "action": "makes 2-foot dunk (Alperen Sengun assists)",
+    "homeScore": 101,
+    "awayScore": 105,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:13:24.377Z",
+    "period": 4,
+    "clock": "05:27",
+    "playerName": "Maxime Raynaud",
+    "action": "defensive rebound",
+    "homeScore": 103,
+    "awayScore": 105,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:13:44.535Z",
+    "period": 4,
+    "clock": "05:02",
+    "playerName": "Amen Thompson",
+    "action": "defensive rebound",
+    "homeScore": 103,
+    "awayScore": 105,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:13:54.565Z",
+    "period": 4,
+    "clock": "04:49",
+    "playerName": "Dennis Schroder",
+    "action": "defensive rebound",
+    "homeScore": 103,
+    "awayScore": 105,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:14:14.727Z",
+    "period": 4,
+    "clock": "04:35",
+    "playerName": "Alperen Sengun",
+    "action": "makes 3-foot shot (Kevin Durant assists)",
+    "homeScore": 103,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:14:46.815Z",
+    "period": 4,
+    "clock": "04:35",
+    "playerName": "Maxime Raynaud",
+    "action": "shooting foul",
+    "homeScore": 103,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:15:04.965Z",
+    "period": 4,
+    "clock": "04:35",
+    "playerName": "Alperen Sengun",
+    "action": "makes free throw 1 of 1",
+    "homeScore": 103,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:15:26.982Z",
+    "period": 4,
+    "clock": "04:21",
+    "playerName": "Jabari Smith J",
+    "action": "Smith Jr. defensive rebound",
+    "homeScore": 103,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:16:06.651Z",
+    "period": 4,
+    "clock": "03:54",
+    "playerName": "Nique Clifford",
+    "action": "defensive rebound",
+    "homeScore": 103,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:16:37.138Z",
+    "period": 4,
+    "clock": "03:47",
+    "playerName": "Maxime Raynaud",
+    "action": "makes 7-foot floating jump shot (DeMar DeRozan assists)",
+    "homeScore": 105,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:16:47.244Z",
+    "period": 4,
+    "clock": "03:23",
+    "playerName": "Kings Full",
+    "action": "timeout",
+    "homeScore": 105,
+    "awayScore": 108,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T05:19:10.894Z",
+    "period": 4,
+    "clock": "03:23",
+    "playerName": "Josh Okogie",
+    "action": "enters the game for Reed Sheppard",
+    "homeScore": 105,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:19:20.940Z",
+    "period": 4,
+    "clock": "03:12",
+    "playerName": "Russell Westbrook",
+    "action": "enters the game for Nique Clifford",
+    "homeScore": 105,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:19:31.165Z",
+    "period": 4,
+    "clock": "03:12",
+    "playerName": "Russell Westbrook",
+    "action": "enters the game for Nique Clifford",
+    "homeScore": 105,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:19:41.106Z",
+    "period": 4,
+    "clock": "03:04",
+    "playerName": "Russell Westbrook",
+    "action": "makes 13-foot pullup jump shot",
+    "homeScore": 107,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:20:01.233Z",
+    "period": 4,
+    "clock": "02:47",
+    "playerName": "Kevin Durant",
+    "action": "makes 14-foot pullup jump shot",
+    "homeScore": 107,
+    "awayScore": 110,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T05:20:11.285Z",
+    "period": 4,
+    "clock": "02:36",
+    "playerName": "Kings Full",
+    "action": "timeout",
+    "homeScore": 107,
+    "awayScore": 110,
+    "isTimeout": true
   }
 ]

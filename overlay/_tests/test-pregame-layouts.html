@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregame Layout Options - Pick Your Favorite!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 30px;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            color: #60a5fa;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #93c5fd;
+            margin-bottom: 40px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .option-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .option-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-label span {
+            background: rgba(251, 191, 36, 0.2);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .option-description {
+            font-size: 12px;
+            color: #93c5fd;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* ========== SHARED BOX STYLES (matching production) ========== */
+        .pregame-box {
+            width: 700px;
+            background: #0a1428;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            padding: 20px 0;
+            margin: 0 auto;
+        }
+
+        .teams {
+            display: flex;
+            justify-content: center;
+            gap: 268px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .team {
+            flex: 0 0 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .team-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+            object-fit: contain;
+        }
+
+        .team-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        /* Center status area */
+        .game-status {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* ========== OPTION A STYLES ========== */
+        .option-a .team-record {
+            font-size: 24px;
+            font-weight: 600;
+            color: #93c5fd;
+            margin-bottom: 8px;
+        }
+
+        .option-a .home-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #fbbf24;
+            letter-spacing: 1px;
+            background: rgba(251, 191, 36, 0.15);
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        .option-a .countdown-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: #93c5fd;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .option-a .countdown-time {
+            font-size: 28px;
+            font-weight: 700;
+            color: #86efac;
+            text-shadow: 0 0 20px rgba(134, 239, 172, 0.5);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ========== OPTION B STYLES ========== */
+        .option-b .team-record-large {
+            font-size: 42px;
+            font-weight: 800;
+            color: #60a5fa;
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+            margin-bottom: 5px;
+        }
+
+        .option-b .team.home {
+            border-bottom: 3px solid #fbbf24;
+            padding-bottom: 5px;
+        }
+
+        .option-b .countdown-compact {
+            font-size: 24px;
+            font-weight: 600;
+            color: #86efac;
+        }
+
+        .option-b .countdown-compact .label {
+            color: #93c5fd;
+            font-weight: 500;
+        }
+
+        /* ========== OPTION C STYLES ========== */
+        .option-c .team-record {
+            font-size: 20px;
+            font-weight: 600;
+            color: #93c5fd;
+        }
+
+        .option-c .vs-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-c .vs-text {
+            font-size: 32px;
+            font-weight: 800;
+            color: #60a5fa;
+            text-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+        }
+
+        .option-c .countdown-small {
+            font-size: 16px;
+            font-weight: 600;
+            color: #86efac;
+        }
+
+        .option-c .team.home .team-name {
+            color: #fbbf24;
+        }
+
+        /* ========== OPTION D STYLES ========== */
+        .option-d .team-record-prominent {
+            font-size: 32px;
+            font-weight: 700;
+            color: #bfdbfe;
+            margin-bottom: 5px;
+        }
+
+        .option-d .start-time-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .option-d .start-time {
+            font-size: 28px;
+            font-weight: 700;
+            color: #86efac;
+        }
+
+        .option-d .timezone {
+            font-size: 12px;
+            color: #93c5fd;
+            font-weight: 500;
+        }
+
+        .option-d .home-badge {
+            font-size: 10px;
+            font-weight: 600;
+            color: #0a1428;
+            background: #fbbf24;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-top: 6px;
+        }
+
+        /* Timer display */
+        .timer-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(10, 20, 40, 0.95);
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 2px solid rgba(59, 130, 246, 0.6);
+            font-size: 14px;
+            color: #93c5fd;
+        }
+
+        .timer-display strong {
+            color: #86efac;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏀 Pregame Layout Options</h1>
+    <p class="subtitle">Pick your favorite design! All use same 700px width and 80px logos as production.</p>
+
+    <div class="timer-display">
+        Countdown: <strong id="globalTimer">10:16:27</strong>
+    </div>
+
+    <div class="options-grid">
+        <!-- OPTION A -->
+        <div class="option-container">
+            <div class="option-label">Option A <span>Records Under Abbr + Stacked Countdown</span></div>
+            <div class="option-description">
+                • Team abbreviation with record below<br>
+                • No scores shown<br>
+                • Countdown stacked vertically<br>
+                • Small "HOME" label on home team
+            </div>
+            <div class="pregame-box option-a">
+                <div class="teams">
+                    <div class="team away">
+                        <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" alt="BOS">
+                        <div class="team-name">BOS</div>
+                        <div class="team-record">23-10</div>
+                    </div>
+                    
+                    <div class="game-status">
+                        <div class="countdown-label">Game Starts In:</div>
+                        <div class="countdown-time" data-timer>10:16:27</div>
+                    </div>
+                    
+                    <div class="team home">
+                        <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/ind.png" alt="IND">
+                        <div class="team-name">IND</div>
+                        <div class="team-record">19-15</div>
+                        <div class="home-label">HOME</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION B -->
+        <div class="option-container">
+            <div class="option-label">Option B <span>Large Records + Border Indicator</span></div>
+            <div class="option-description">
+                • Records shown large (where scores normally are)<br>
+                • Compact countdown text<br>
+                • Home team has gold underline border
+            </div>
+            <div class="pregame-box option-b">
+                <div class="teams">
+                    <div class="team away">
+                        <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" alt="BOS">
+                        <div class="team-name">BOS</div>
+                        <div class="team-record-large">23-10</div>
+                    </div>
+                    
+                    <div class="game-status">
+                        <div class="countdown-compact">
+                            <span class="label">Starts In:</span> <span data-timer>10:16:27</span>
+                        </div>
+                    </div>
+                    
+                    <div class="team home">
+                        <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/ind.png" alt="IND">
+                        <div class="team-name">IND</div>
+                        <div class="team-record-large">19-15</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION C -->
+        <div class="option-container">
+            <div class="option-label">Option C <span>VS Center + Gold Home Name</span></div>
+            <div class="option-description">
+                • "VS" prominently in center<br>
+                • Countdown below VS<br>
+                • Home team name in gold color<br>
+                • Records under abbreviation
+            </div>
+            <div class="pregame-box option-c">
+                <div class="teams">
+                    <div class="team away">
+                        <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" alt="BOS">
+                        <div class="team-name">BOS</div>
+                        <div class="team-record">23-10</div>
+                    </div>
+                    
+                    <div class="game-status">
+                        <div class="vs-container">
+                            <div class="vs-text">VS</div>
+                            <div class="countdown-small" data-timer>10:16:27</div>
+                        </div>
+                    </div>
+                    
+                    <div class="team home">
+                        <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/ind.png" alt="IND">
+                        <div class="team-name">IND</div>
+                        <div class="team-record">19-15</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION D -->
+        <div class="option-container">
+            <div class="option-label">Option D <span>Minimal + Start Time</span></div>
+            <div class="option-description">
+                • Clean minimal look<br>
+                • Prominent records<br>
+                • Actual start time instead of countdown<br>
+                • Small gold "HOME" badge
+            </div>
+            <div class="pregame-box option-d">
+                <div class="teams">
+                    <div class="team away">
+                        <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/bos.png" alt="BOS">
+                        <div class="team-name">BOS</div>
+                        <div class="team-record-prominent">23-10</div>
+                    </div>
+                    
+                    <div class="game-status">
+                        <div class="start-time-container">
+                            <div class="start-time">7:00 PM</div>
+                            <div class="timezone">ET</div>
+                        </div>
+                    </div>
+                    
+                    <div class="team home">
+                        <img class="team-logo" src="https://a.espncdn.com/i/teamlogos/nba/500/ind.png" alt="IND">
+                        <div class="team-name">IND</div>
+                        <div class="team-record-prominent">19-15</div>
+                        <div class="home-badge">HOME</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Countdown timer simulation
+        let totalSeconds = 10 * 3600 + 16 * 60 + 27; // 10:16:27
+
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimers() {
+            if (totalSeconds > 0) {
+                totalSeconds--;
+            }
+            const formatted = formatTime(totalSeconds);
+            
+            // Update all timer elements
+            document.querySelectorAll('[data-timer]').forEach(el => {
+                el.textContent = formatted;
+            });
+            document.getElementById('globalTimer').textContent = formatted;
+        }
+
+        // Update every second
+        setInterval(updateTimers, 1000);
+    </script>
+</body>
+</html>

@@ -101,7 +101,7 @@ html {
 .play-by-play-box {
     position: fixed;
     z-index: 10;
-    top: 675px;
+    top: 700px;
     left: 30px;
     width: 700px; /* Match game overlay width */
     display: none; /* Hidden by default, shown when play-by-play data arrives */
@@ -568,6 +568,45 @@ html {
     transition: opacity 0.3s ease-out;
 }
 
+/* Pregame record display (replaces scores) */
+.score.pregame-record {
+    font-size: 24px;
+    font-weight: 600;
+    color: #93c5fd;
+    text-shadow: none;
+}
+
+/* HOME indicator for pregame */
+.home-indicator {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fbbf24;
+    letter-spacing: 1.5px;
+    background: rgba(251, 191, 36, 0.15);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-top: 8px;
+}
+
+/* Pregame countdown in game-status (stacked layout) */
+.game-status .countdown-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #93c5fd;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.game-status .countdown-time {
+    font-size: 28px;
+    font-weight: 700;
+    color: #86efac;
+    text-shadow: 0 0 20px rgba(134, 239, 172, 0.5);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Legacy countdown styles (for other uses) */
 .countdown-label {
     font-size: 13.3px;
     font-weight: 500;
@@ -1098,6 +1137,40 @@ html {
     color: #93c5fd;
     min-width: 45px;
     text-align: right;
+}
+
+/* ========================================
+   STAT COMPARISON STYLES
+   Magnitude-based visual indicators
+   ======================================== */
+
+/* Style 1: Split Bar - horizontal bar showing proportion */
+.stat-split-bar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 2px;
+    width: 120px;
+    height: 4px;
+    display: flex;
+    border-radius: 2px;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.stat-split-bar .split-left {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.stat-split-bar .split-right {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* Ensure stats row can contain absolute positioned elements */
+.stats-row {
+    position: relative;
 }
 
 
