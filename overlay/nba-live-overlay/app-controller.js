@@ -130,6 +130,9 @@ class AppController {
                     if (typeof window.resetPlayByPlayTracking === 'function') {
                         window.resetPlayByPlayTracking();
                     }
+                    
+                    // Reset time tracking to allow new game's time
+                    this.gameView.resetTimeTracking();
                 }
 
                 // No game selected - hide overlay and reset
@@ -148,6 +151,9 @@ class AppController {
                     if (typeof window.resetPlayByPlayTracking === 'function') {
                         window.resetPlayByPlayTracking();
                     }
+                    
+                    // Reset time tracking to allow sim game's time
+                    this.gameView.resetTimeTracking();
                 }
             }
 

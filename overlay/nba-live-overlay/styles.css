@@ -78,8 +78,8 @@ html {
 }
 
 .current-game-box {
-    padding: 25px;
-    width: 500px;
+    padding: 20px 0;
+    width: 640px;
 }
 
 .other-games-box {
@@ -101,9 +101,9 @@ html {
 .play-by-play-box {
     position: fixed;
     z-index: 10;
-    top: 738px;
+    top: 685px;
     left: 30px;
-    width: 502px;
+    width: 640px; /* Match game overlay width */
     display: none; /* Hidden by default, shown when play-by-play data arrives */
     pointer-events: none; /* Allow clicking through */
 }
@@ -195,8 +195,10 @@ html {
 }
 
 .play-by-play-box .pbp-icon {
-    font-size: 48px;
-    color: #60a5fa;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .play-by-play-box .pbp-content {
@@ -249,21 +251,36 @@ html {
 }
 
 .game-status {
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 700;
     color: #fbbf24;
     text-align: center;
-    padding: 12px;
-    background: rgba(59, 130, 246, 0.2);
-    border-radius: 8px;
-    margin-bottom: 20px;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    line-height: 1.2;
+    gap: 2px;
+}
+
+.game-status div {
+    display: block !important;
+    width: 100%;
+    white-space: nowrap;
 }
 
 .teams {
     display: flex;
-    gap: 25px;
-    margin-bottom: 25px;
-    transition: opacity 0.3s ease-in;
+    justify-content: center;
+    gap: 305px;
+    margin-bottom: 20px;
+    transition: opacity 0.3s ease-in, gap 0.3s ease-out;
+    align-items: center;
+    position: relative;
 }
 
 .teams.hidden {
@@ -271,10 +288,25 @@ html {
 }
 
 .team {
-    flex: 1;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
+}
+
+.team:first-child {
     align-items: center;
+}
+
+.team:last-child {
+    align-items: center;
+}
+
+.team:first-child {
+    align-items: center; /* Center align left team */
+}
+
+.team:last-child {
+    align-items: center; /* Center align right team */
 }
 
 .team-logo {
@@ -312,18 +344,19 @@ html {
 .team-stats {
     background: rgba(0, 0, 0, 0.5);
     border-radius: 8px;
-    padding: 15px;
+    padding: 15px 0;
     margin-top: 20px;
     display: block;
 }
 
 .stats-row {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 305px;
     padding: 8px 0;
     border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-    font-size: 13px;
+    font-size: 23px;
+    position: relative;
 }
 
 .stats-row:last-child {
@@ -331,14 +364,21 @@ html {
 }
 
 .stat-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-weight: 600;
     color: #93c5fd;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 0 12px;
+    z-index: 1;
 }
 
 .stat-value {
     font-weight: 700;
     color: #fff;
     text-align: center;
+    width: auto;
 }
 
 /* Score animations */
@@ -800,7 +840,7 @@ html {
 }
 
 .compact .teams {
-    gap: 5px;
+    gap: 5px !important; /* Override adjustable spacing for compact mode */
     margin: 0;
     margin-bottom: 8px !important;
 }
@@ -830,11 +870,7 @@ html {
 }
 
 .compact .game-status {
-    font-size: 16.5px;
-    margin-top: 8px;
-    height: auto;
-    min-height: 20px;
-    padding: 4px 0;
+    font-size: 14px;
 }
 
 /* Compact pregame styles */
@@ -973,5 +1009,65 @@ html {
     color: rgba(255, 255, 255, 0.7);
     text-align: center;
     margin-top: 5px;
+}
+
+/* Stats Font Slider Control */
+.slider-control-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999999;
+    background: rgba(10, 20, 40, 0.95);
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 2px solid rgba(59, 130, 246, 0.6);
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+    min-width: 180px;
+    pointer-events: auto;
+}
+
+.slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-input {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(59, 130, 246, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #60a5fa;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+}
+
+.slider-input::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #60a5fa;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.slider-value-display {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #93c5fd;
+    min-width: 45px;
+    text-align: right;
 }
 

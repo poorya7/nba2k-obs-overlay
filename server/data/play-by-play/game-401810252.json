@@ -1,0 +1,1732 @@
+[
+  {
+    "timestamp": "2025-12-22T00:40:06.162Z",
+    "period": 3,
+    "clock": "4:34",
+    "playerName": "Nets Full",
+    "action": "timeout",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T00:40:08.258Z",
+    "period": 3,
+    "clock": "4:34",
+    "playerName": "Nets Full",
+    "action": "timeout",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T00:41:39.821Z",
+    "period": 3,
+    "clock": "4:34",
+    "playerName": "Nolan Traore",
+    "action": "enters the game for Terance Mann",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:41:45.387Z",
+    "period": 3,
+    "clock": "4:34",
+    "playerName": "Nolan Traore",
+    "action": "enters the game for Terance Mann",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:41:52.382Z",
+    "period": 3,
+    "clock": "4:34",
+    "playerName": "Jamison Battle",
+    "action": "enters the game for Collin Murray-Boyles",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:42:00.592Z",
+    "period": 3,
+    "clock": "4:34",
+    "playerName": "Immanuel Quickley",
+    "action": "enters the game for Jamal Shead",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:42:10.822Z",
+    "period": 3,
+    "clock": "4:25",
+    "playerName": "Nolan Traore",
+    "action": "defensive rebound",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:42:21.223Z",
+    "period": 3,
+    "clock": "4:23",
+    "playerName": "Nolan Traore",
+    "action": "lost ball turnover (Ja'Kobe Walter steals)",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:42:23.356Z",
+    "period": 3,
+    "clock": "4:23",
+    "playerName": "Nolan Traore",
+    "action": "lost ball turnover (Ja'Kobe Walter steals)",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:42:23.599Z",
+    "period": 3,
+    "clock": "4:23",
+    "playerName": "Nolan Traore",
+    "action": "lost ball turnover (Ja'Kobe Walter steals)",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:42:42.065Z",
+    "period": 3,
+    "clock": "4:17",
+    "playerName": "Immanuel Quickley",
+    "action": "misses running layup",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:43:03.088Z",
+    "period": 3,
+    "clock": "4:17",
+    "playerName": "Immanuel Quickley",
+    "action": "misses running layup",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:43:11.245Z",
+    "period": 3,
+    "clock": "4:13",
+    "playerName": "Danny Wolf",
+    "action": "enters the game for Nic Claxton",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:43:23.290Z",
+    "period": 3,
+    "clock": "3:53",
+    "playerName": "Scottie Barnes",
+    "action": "defensive rebound",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:43:33.382Z",
+    "period": 3,
+    "clock": "3:48",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:43:52.487Z",
+    "period": 3,
+    "clock": "3:36",
+    "playerName": "Danny Wolf",
+    "action": "defensive rebound",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:44:23.078Z",
+    "period": 3,
+    "clock": "3:11",
+    "playerName": "Brandon Ingram",
+    "action": "defensive rebound",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:44:29.632Z",
+    "period": 3,
+    "clock": "3:11",
+    "playerName": "Brandon Ingram",
+    "action": "defensive rebound",
+    "homeScore": 62,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:44:33.689Z",
+    "period": 3,
+    "clock": "3:06",
+    "playerName": "Brandon Ingram",
+    "action": "makes 19-foot jumper",
+    "homeScore": 62,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:44:37.892Z",
+    "period": 3,
+    "clock": "3:06",
+    "playerName": "Brandon Ingram",
+    "action": "makes 19-foot jumper",
+    "homeScore": 62,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:44:43.977Z",
+    "period": 3,
+    "clock": "2:59",
+    "playerName": "Immanuel Quickley",
+    "action": "personal foul",
+    "homeScore": 62,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:45:03.071Z",
+    "period": 3,
+    "clock": "2:59",
+    "playerName": "Nolan Traore",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 63,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:45:14.101Z",
+    "period": 3,
+    "clock": "2:57",
+    "playerName": "Immanuel Quickley",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:45:32.413Z",
+    "period": 3,
+    "clock": "2:57",
+    "playerName": "Immanuel Quickley",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:45:47.514Z",
+    "period": 3,
+    "clock": "2:57",
+    "playerName": "Immanuel Quickley",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:46:03.784Z",
+    "period": 3,
+    "clock": "2:35",
+    "playerName": "Nolan Traore",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:46:04.308Z",
+    "period": 3,
+    "clock": "2:35",
+    "playerName": "Nolan Traore",
+    "action": "defensive rebound",
+    "homeScore": 63,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:46:44.602Z",
+    "period": 3,
+    "clock": "2:24",
+    "playerName": "Brandon Ingram",
+    "action": "shooting foul",
+    "homeScore": 63,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:46:55.326Z",
+    "period": 3,
+    "clock": "2:24",
+    "playerName": "Jamal Shead",
+    "action": "enters the game for Brandon Ingram",
+    "homeScore": 64,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:47:44.526Z",
+    "period": 3,
+    "clock": "2:07",
+    "playerName": "Immanuel Quickley",
+    "action": "makes 10-foot driving floating jump shot (Jamal Shead assists)",
+    "homeScore": 65,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:47:49.251Z",
+    "period": 3,
+    "clock": "2:07",
+    "playerName": "Immanuel Quickley",
+    "action": "makes 10-foot driving floating jump shot (Jamal Shead assists)",
+    "homeScore": 65,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:48:26.358Z",
+    "period": 3,
+    "clock": "1:47",
+    "playerName": "Ziaire Williams",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 66,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:48:28.058Z",
+    "period": 3,
+    "clock": "1:47",
+    "playerName": "Ziaire Williams",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 66,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:49:17.377Z",
+    "period": 3,
+    "clock": "1:47",
+    "playerName": "Ziaire Williams",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 67,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:49:47.115Z",
+    "period": 3,
+    "clock": "1:47",
+    "playerName": "Gradey Dick",
+    "action": "enters the game for Ja'Kobe Walter",
+    "homeScore": 67,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:50:15.876Z",
+    "period": 3,
+    "clock": "1:13",
+    "playerName": "Danny Wolf",
+    "action": "misses shot",
+    "homeScore": 67,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:50:28.178Z",
+    "period": 3,
+    "clock": "1:13",
+    "playerName": "Danny Wolf",
+    "action": "misses 13-foot two point shot",
+    "homeScore": 67,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:51:06.992Z",
+    "period": 3,
+    "clock": "1:03",
+    "playerName": "Scottie Barnes",
+    "action": "traveling turnover",
+    "homeScore": 67,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:51:08.436Z",
+    "period": 3,
+    "clock": "1:03",
+    "playerName": "Scottie Barnes",
+    "action": "traveling turnover",
+    "homeScore": 67,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:51:16.588Z",
+    "period": 3,
+    "clock": "1:03",
+    "playerName": "Scottie Barnes",
+    "action": "traveling turnover",
+    "homeScore": 67,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:51:47.400Z",
+    "period": 3,
+    "clock": "31.6",
+    "playerName": "Immanuel Quickley",
+    "action": "defensive rebound",
+    "homeScore": 67,
+    "awayScore": 59,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:52:07.537Z",
+    "period": 3,
+    "clock": "28.9",
+    "playerName": "Immanuel Quickley",
+    "action": "makes 25-foot running jump shot",
+    "homeScore": 67,
+    "awayScore": 62,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:52:24.113Z",
+    "period": 3,
+    "clock": "28.9",
+    "playerName": "Immanuel Quickley",
+    "action": "makes 25-foot running jump shot",
+    "homeScore": 67,
+    "awayScore": 62,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:52:28.281Z",
+    "period": 3,
+    "clock": "28.9",
+    "playerName": "Immanuel Quickley",
+    "action": "makes 25-foot running pullup jump shot",
+    "homeScore": 67,
+    "awayScore": 62,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:52:39.119Z",
+    "period": 3,
+    "clock": "12.2",
+    "playerName": "Tyrese Martin",
+    "action": "turnover",
+    "homeScore": 67,
+    "awayScore": 62,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:52:48.691Z",
+    "period": 3,
+    "clock": "0.0",
+    "playerName": "Nolan Traore",
+    "action": "misses shot",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:53:08.951Z",
+    "period": 3,
+    "clock": "0.6",
+    "playerName": "Nolan Traore",
+    "action": "misses heave jump shot",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:53:19.813Z",
+    "period": 3,
+    "clock": "0.6",
+    "playerName": "Nolan Traore",
+    "action": "misses heave jump shot",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:55:22.483Z",
+    "period": 3,
+    "clock": "0.6",
+    "playerName": "Nolan Traore",
+    "action": "misses heave jump shot",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:55:30.609Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Sandro Mamukelashvili",
+    "action": "enters the game for Scottie Barnes",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:55:40.739Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Collin Murray",
+    "action": "-Boyles enters the game for Jamal Shead",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:56:21.160Z",
+    "period": 4,
+    "clock": "11:36",
+    "playerName": "Collin Murray",
+    "action": "-Boyles defensive rebound",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:56:37.640Z",
+    "period": 4,
+    "clock": "11:36",
+    "playerName": "Collin Murray",
+    "action": "-Boyles defensive rebound",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:56:46.112Z",
+    "period": 4,
+    "clock": "11:36",
+    "playerName": "Collin Murray",
+    "action": "-Boyles defensive rebound",
+    "homeScore": 67,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:56:52.993Z",
+    "period": 4,
+    "clock": "10:57",
+    "playerName": "Sandro Mamukelashvili",
+    "action": "defensive rebound",
+    "homeScore": 67,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:57:03.145Z",
+    "period": 4,
+    "clock": "10:55",
+    "playerName": "Nets Full",
+    "action": "timeout",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T00:57:07.422Z",
+    "period": 4,
+    "clock": "10:55",
+    "playerName": "Nets Full",
+    "action": "timeout",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T00:57:23.733Z",
+    "period": 4,
+    "clock": "10:55",
+    "playerName": "Nets Full",
+    "action": "timeout",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T00:57:48.416Z",
+    "period": 4,
+    "clock": "10:55",
+    "playerName": "Nets Full",
+    "action": "timeout",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T00:59:24.314Z",
+    "period": 4,
+    "clock": "10:55",
+    "playerName": "Danny Wolf",
+    "action": "enters the game for Ziaire Williams",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T00:59:44.832Z",
+    "period": 4,
+    "clock": "10:55",
+    "playerName": "Terance Mann",
+    "action": "enters the game for Egor Demin",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:00:05.061Z",
+    "period": 4,
+    "clock": "10:55",
+    "playerName": "Terance Mann",
+    "action": "enters the game for Ziaire Williams",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:00:15.229Z",
+    "period": 4,
+    "clock": "10:37",
+    "playerName": "Sandro Mamukelashvili",
+    "action": "defensive rebound",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:00:23.672Z",
+    "period": 4,
+    "clock": "10:27",
+    "playerName": "Egor Demin",
+    "action": "defensive rebound",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:00:28.044Z",
+    "period": 4,
+    "clock": "10:27",
+    "playerName": "Egor Demin",
+    "action": "defensive rebound",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:00:31.035Z",
+    "period": 4,
+    "clock": "10:27",
+    "playerName": "Egor Demin",
+    "action": "defensive rebound",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:00:41.788Z",
+    "period": 4,
+    "clock": "10:27",
+    "playerName": "Egor Demin",
+    "action": "defensive rebound",
+    "homeScore": 67,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:00:46.102Z",
+    "period": 4,
+    "clock": "10:23",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. makes running layup (Egor Demin assists)",
+    "homeScore": 69,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:00:54.705Z",
+    "period": 4,
+    "clock": "10:10",
+    "playerName": "Immanuel Quickley",
+    "action": "makes layup",
+    "homeScore": 69,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:01:16.098Z",
+    "period": 4,
+    "clock": "9:55",
+    "playerName": "Egor Demin",
+    "action": "makes 26-foot three pointer (Terance Mann assists)",
+    "homeScore": 72,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:01:36.428Z",
+    "period": 4,
+    "clock": "9:37",
+    "playerName": "Jamison Battle",
+    "action": "makes 2-foot dunk (Collin Murray-Boyles assists)",
+    "homeScore": 72,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:01:46.836Z",
+    "period": 4,
+    "clock": "9:23",
+    "playerName": "Terance Mann",
+    "action": "makes 20-foot jumper",
+    "homeScore": 74,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:01:54.782Z",
+    "period": 4,
+    "clock": "9:08",
+    "playerName": "Egor Demin",
+    "action": "defensive rebound",
+    "homeScore": 74,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:02:04.871Z",
+    "period": 4,
+    "clock": "9:04",
+    "playerName": "Jamison Battle",
+    "action": "personal foul",
+    "homeScore": 74,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:02:27.158Z",
+    "period": 4,
+    "clock": "9:04",
+    "playerName": "Scottie Barnes",
+    "action": "enters the game for Collin Murray-Boyles",
+    "homeScore": 74,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:02:47.567Z",
+    "period": 4,
+    "clock": "8:41",
+    "playerName": "Jamison Battle",
+    "action": "offensive rebound",
+    "homeScore": 74,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:03:05.373Z",
+    "period": 4,
+    "clock": "8:38",
+    "playerName": "Noah Clowney",
+    "action": "makes running layup (Michael Porter Jr. assists)",
+    "homeScore": 76,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:03:15.697Z",
+    "period": 4,
+    "clock": "8:11",
+    "playerName": "Scottie Barnes",
+    "action": "offensive rebound",
+    "homeScore": 76,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:03:30.103Z",
+    "period": 4,
+    "clock": "8:06",
+    "playerName": "Nic Claxton",
+    "action": "defensive rebound",
+    "homeScore": 76,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:03:36.273Z",
+    "period": 4,
+    "clock": "7:54",
+    "playerName": "Raptors Full",
+    "action": "timeout",
+    "homeScore": 79,
+    "awayScore": 73,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:04:22.762Z",
+    "period": 4,
+    "clock": "7:54",
+    "playerName": "Raptors Full",
+    "action": "timeout",
+    "homeScore": 79,
+    "awayScore": 73,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:05:22.861Z",
+    "period": 4,
+    "clock": "7:54",
+    "playerName": "Raptors Full",
+    "action": "timeout",
+    "homeScore": 79,
+    "awayScore": 73,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:06:28.721Z",
+    "period": 4,
+    "clock": "7:54",
+    "playerName": "Jamal Shead",
+    "action": "enters the game for Sandro Mamukelashvili",
+    "homeScore": 79,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:06:29.056Z",
+    "period": 4,
+    "clock": "7:54",
+    "playerName": "Jamal Shead",
+    "action": "enters the game for Sandro Mamukelashvili",
+    "homeScore": 79,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:06:33.724Z",
+    "period": 4,
+    "clock": "7:54",
+    "playerName": "Jamal Shead",
+    "action": "enters the game for Sandro Mamukelashvili",
+    "homeScore": 79,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:06:59.836Z",
+    "period": 4,
+    "clock": "7:54",
+    "playerName": "Brandon Ingram",
+    "action": "enters the game for Jamison Battle",
+    "homeScore": 79,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:07:00.115Z",
+    "period": 4,
+    "clock": "7:54",
+    "playerName": "Brandon Ingram",
+    "action": "enters the game for Jamison Battle",
+    "homeScore": 79,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:07:19.352Z",
+    "period": 4,
+    "clock": "7:22",
+    "playerName": "Noah Clowney",
+    "action": "makes 25-foot shot",
+    "homeScore": 82,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:07:19.841Z",
+    "period": 4,
+    "clock": "7:22",
+    "playerName": "Noah Clowney",
+    "action": "makes 25-foot shot",
+    "homeScore": 82,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:07:59.746Z",
+    "period": 4,
+    "clock": "7:22",
+    "playerName": "Noah Clowney",
+    "action": "makes 25-foot three point jumper (Terance Mann assists)",
+    "homeScore": 82,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:08:00.671Z",
+    "period": 4,
+    "clock": "7:22",
+    "playerName": "Noah Clowney",
+    "action": "makes 25-foot three point jumper (Terance Mann assists)",
+    "homeScore": 82,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:08:19.874Z",
+    "period": 4,
+    "clock": "6:56",
+    "playerName": "Terance Mann",
+    "action": "shooting foul",
+    "homeScore": 82,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:08:20.862Z",
+    "period": 4,
+    "clock": "6:56",
+    "playerName": "Terance Mann",
+    "action": "shooting foul",
+    "homeScore": 82,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:08:31.295Z",
+    "period": 4,
+    "clock": "6:56",
+    "playerName": "Danny Wolf",
+    "action": "enters the game for Egor Demin",
+    "homeScore": 82,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:08:31.792Z",
+    "period": 4,
+    "clock": "6:56",
+    "playerName": "Danny Wolf",
+    "action": "enters the game for Egor Demin",
+    "homeScore": 82,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:08:41.495Z",
+    "period": 4,
+    "clock": "6:56",
+    "playerName": "Nolan Traore",
+    "action": "enters the game for Michael Porter Jr.",
+    "homeScore": 82,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:08:41.824Z",
+    "period": 4,
+    "clock": "6:56",
+    "playerName": "Nolan Traore",
+    "action": "enters the game for Michael Porter Jr.",
+    "homeScore": 82,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:01.691Z",
+    "period": 4,
+    "clock": "6:47",
+    "playerName": "Noah Clowney",
+    "action": "misses 29-foot three point jumper",
+    "homeScore": 82,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:01.973Z",
+    "period": 4,
+    "clock": "6:47",
+    "playerName": "Noah Clowney",
+    "action": "misses 29-foot three point jumper",
+    "homeScore": 82,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:20.534Z",
+    "period": 4,
+    "clock": "6:26",
+    "playerName": "Nic Claxton",
+    "action": "defensive rebound",
+    "homeScore": 82,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:22.065Z",
+    "period": 4,
+    "clock": "6:26",
+    "playerName": "Nic Claxton",
+    "action": "defensive rebound",
+    "homeScore": 82,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:22.280Z",
+    "period": 4,
+    "clock": "6:26",
+    "playerName": "Nic Claxton",
+    "action": "defensive rebound",
+    "homeScore": 82,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:29.671Z",
+    "period": 4,
+    "clock": "6:26",
+    "playerName": "Nic Claxton",
+    "action": "defensive rebound",
+    "homeScore": 82,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:50.256Z",
+    "period": 4,
+    "clock": "6:26",
+    "playerName": "Nic Claxton",
+    "action": "defensive rebound",
+    "homeScore": 82,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:52.121Z",
+    "period": 4,
+    "clock": "5:51",
+    "playerName": "Nolan Traore",
+    "action": "defensive rebound",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:09:53.437Z",
+    "period": 4,
+    "clock": "5:51",
+    "playerName": "Nolan Traore",
+    "action": "defensive rebound",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:10:11.715Z",
+    "period": 4,
+    "clock": "5:51",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. enters the game for Terance Mann",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:10:12.179Z",
+    "period": 4,
+    "clock": "5:51",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. enters the game for Terance Mann",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:10:52.419Z",
+    "period": 4,
+    "clock": "5:33",
+    "playerName": "Scottie Barnes",
+    "action": "blocks Nolan Traore 's 22-foot three point jumper",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:10:52.965Z",
+    "period": 4,
+    "clock": "5:33",
+    "playerName": "Scottie Barnes",
+    "action": "blocks Nolan Traore 's 22-foot three point jumper",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:11:07.531Z",
+    "period": 4,
+    "clock": "5:33",
+    "playerName": "Scottie Barnes",
+    "action": "blocks Nolan Traore 's 22-foot three point jumper",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:11:12.413Z",
+    "period": 4,
+    "clock": "5:25",
+    "playerName": "Noah Clowney",
+    "action": "offensive rebound",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:11:13.520Z",
+    "period": 4,
+    "clock": "5:25",
+    "playerName": "Noah Clowney",
+    "action": "offensive rebound",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:11:34.380Z",
+    "period": 4,
+    "clock": "5:25",
+    "playerName": "Noah Clowney",
+    "action": "offensive rebound",
+    "homeScore": 84,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:11:42.776Z",
+    "period": 4,
+    "clock": "4:51",
+    "playerName": "Nic Claxton",
+    "action": "defensive rebound",
+    "homeScore": 86,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:11:42.778Z",
+    "period": 4,
+    "clock": "4:51",
+    "playerName": "Nic Claxton",
+    "action": "defensive rebound",
+    "homeScore": 86,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:11:52.553Z",
+    "period": 4,
+    "clock": "4:42",
+    "playerName": "Raptors Full",
+    "action": "timeout",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:11:52.875Z",
+    "period": 4,
+    "clock": "4:42",
+    "playerName": "Raptors Full",
+    "action": "timeout",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:13:02.875Z",
+    "period": 4,
+    "clock": "4:42",
+    "playerName": "Raptors Full",
+    "action": "timeout",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:13:44.375Z",
+    "period": 4,
+    "clock": "4:42",
+    "playerName": "Jamison Battle",
+    "action": "enters the game for Ja'Kobe Walter",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:13:45.096Z",
+    "period": 4,
+    "clock": "4:42",
+    "playerName": "Jamison Battle",
+    "action": "enters the game for Ja'Kobe Walter",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:14:04.706Z",
+    "period": 4,
+    "clock": "4:42",
+    "playerName": "Ochai Agbaji",
+    "action": "enters the game for Jamal Shead",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:14:05.167Z",
+    "period": 4,
+    "clock": "4:42",
+    "playerName": "Ochai Agbaji",
+    "action": "enters the game for Jamal Shead",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:14:35.045Z",
+    "period": 4,
+    "clock": "4:27",
+    "playerName": "Nolan Traore",
+    "action": "shooting foul",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:14:35.348Z",
+    "period": 4,
+    "clock": "4:27",
+    "playerName": "Nolan Traore",
+    "action": "shooting foul",
+    "homeScore": 88,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:14:55.425Z",
+    "period": 4,
+    "clock": "4:27",
+    "playerName": "Immanuel Quickley",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 88,
+    "awayScore": 76,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:14:55.435Z",
+    "period": 4,
+    "clock": "4:27",
+    "playerName": "Immanuel Quickley",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 88,
+    "awayScore": 76,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:15:15.748Z",
+    "period": 4,
+    "clock": "4:27",
+    "playerName": "Immanuel Quickley",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 88,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:15:15.751Z",
+    "period": 4,
+    "clock": "4:27",
+    "playerName": "Immanuel Quickley",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 88,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:15:25.846Z",
+    "period": 4,
+    "clock": "4:05",
+    "playerName": "Egor Demin",
+    "action": "makes 23-foot three point jumper (Danny Wolf assists)",
+    "homeScore": 91,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:15:25.848Z",
+    "period": 4,
+    "clock": "4:05",
+    "playerName": "Egor Demin",
+    "action": "makes 23-foot three point jumper (Danny Wolf assists)",
+    "homeScore": 91,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:15:45.964Z",
+    "period": 4,
+    "clock": "3:52",
+    "playerName": "Brandon Ingram",
+    "action": "misses 27-foot three point jumper",
+    "homeScore": 91,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:15:46.112Z",
+    "period": 4,
+    "clock": "3:52",
+    "playerName": "Brandon Ingram",
+    "action": "misses 27-foot three point jumper",
+    "homeScore": 91,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:16:26.023Z",
+    "period": 4,
+    "clock": "3:17",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:16:26.767Z",
+    "period": 4,
+    "clock": "3:17",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:16:38.123Z",
+    "period": 4,
+    "clock": "3:19",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:16:38.831Z",
+    "period": 4,
+    "clock": "3:19",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:16:48.408Z",
+    "period": 4,
+    "clock": "3:03",
+    "playerName": "Nic Claxton",
+    "action": "offensive foul turnover",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:16:49.001Z",
+    "period": 4,
+    "clock": "3:03",
+    "playerName": "Nic Claxton",
+    "action": "offensive foul turnover",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:16:58.385Z",
+    "period": 4,
+    "clock": "3:03",
+    "playerName": "Noah Clowney",
+    "action": "enters the game for Danny Wolf",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:16:59.134Z",
+    "period": 4,
+    "clock": "3:03",
+    "playerName": "Noah Clowney",
+    "action": "enters the game for Danny Wolf",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:17:07.486Z",
+    "period": 4,
+    "clock": "3:03",
+    "playerName": "Sandro Mamukelashvili",
+    "action": "enters the game for Jamison Battle",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:17:08.209Z",
+    "period": 4,
+    "clock": "3:03",
+    "playerName": "Sandro Mamukelashvili",
+    "action": "enters the game for Jamison Battle",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:17:17.587Z",
+    "period": 4,
+    "clock": "2:40",
+    "playerName": "Brandon Ingram",
+    "action": "misses shot",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:17:18.280Z",
+    "period": 4,
+    "clock": "2:40",
+    "playerName": "Brandon Ingram",
+    "action": "misses shot",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:17:27.735Z",
+    "period": 4,
+    "clock": "2:36",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:17:28.373Z",
+    "period": 4,
+    "clock": "2:36",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:17:57.958Z",
+    "period": 4,
+    "clock": "2:40",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:17:58.696Z",
+    "period": 4,
+    "clock": "2:40",
+    "playerName": "Michael Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:18:08.059Z",
+    "period": 4,
+    "clock": "2:15",
+    "playerName": "Noah Clowney",
+    "action": "offensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:18:08.821Z",
+    "period": 4,
+    "clock": "2:15",
+    "playerName": "Noah Clowney",
+    "action": "offensive rebound",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:18:29.028Z",
+    "period": 4,
+    "clock": "2:05",
+    "playerName": "Raptors Full",
+    "action": "timeout",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:18:29.030Z",
+    "period": 4,
+    "clock": "2:05",
+    "playerName": "Raptors Full",
+    "action": "timeout",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:20:10.204Z",
+    "period": 4,
+    "clock": "2:05",
+    "playerName": "Collin Murray",
+    "action": "-Boyles enters the game for Ochai Agbaji",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:20:10.359Z",
+    "period": 4,
+    "clock": "2:05",
+    "playerName": "Collin Murray",
+    "action": "-Boyles enters the game for Ochai Agbaji",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:20:30.262Z",
+    "period": 4,
+    "clock": "2:05",
+    "playerName": "Garrett Temple",
+    "action": "enters the game for Sandro Mamukelashvili",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:20:30.690Z",
+    "period": 4,
+    "clock": "2:05",
+    "playerName": "Garrett Temple",
+    "action": "enters the game for Sandro Mamukelashvili",
+    "homeScore": 93,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:20:40.310Z",
+    "period": 4,
+    "clock": "1:53",
+    "playerName": "Collin Murray",
+    "action": "-Boyles makes 3-foot layup (Garrett Temple assists)",
+    "homeScore": 93,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:20:40.964Z",
+    "period": 4,
+    "clock": "1:53",
+    "playerName": "Collin Murray",
+    "action": "-Boyles makes 3-foot layup (Garrett Temple assists)",
+    "homeScore": 93,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:20:50.353Z",
+    "period": 4,
+    "clock": "1:35",
+    "playerName": "Jamison Battle",
+    "action": "defensive rebound",
+    "homeScore": 93,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:20:51.295Z",
+    "period": 4,
+    "clock": "1:35",
+    "playerName": "Jamison Battle",
+    "action": "defensive rebound",
+    "homeScore": 93,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:21:00.382Z",
+    "period": 4,
+    "clock": "1:23",
+    "playerName": "Egor Demin",
+    "action": "defensive rebound",
+    "homeScore": 93,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:21:01.504Z",
+    "period": 4,
+    "clock": "1:23",
+    "playerName": "Egor Demin",
+    "action": "defensive rebound",
+    "homeScore": 93,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:21:20.551Z",
+    "period": 4,
+    "clock": "1:03",
+    "playerName": "Jamison Battle",
+    "action": "defensive rebound",
+    "homeScore": 93,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:21:21.857Z",
+    "period": 4,
+    "clock": "1:03",
+    "playerName": "Jamison Battle",
+    "action": "defensive rebound",
+    "homeScore": 93,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:21:40.618Z",
+    "period": 4,
+    "clock": "1:02",
+    "playerName": "Collin Murray",
+    "action": "-Boyles makes running dunk (Jamison Battle assists)",
+    "homeScore": 93,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:21:41.121Z",
+    "period": 4,
+    "clock": "1:02",
+    "playerName": "Collin Murray",
+    "action": "-Boyles makes running dunk (Jamison Battle assists)",
+    "homeScore": 93,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:21:50.688Z",
+    "period": 4,
+    "clock": "45.5",
+    "playerName": "Noah Clowney",
+    "action": "makes 25-foot three point jumper (Michael Porter Jr. assists)",
+    "homeScore": 96,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:21:51.459Z",
+    "period": 4,
+    "clock": "45.5",
+    "playerName": "Noah Clowney",
+    "action": "makes 25-foot three point jumper (Michael Porter Jr. assists)",
+    "homeScore": 96,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:22:11.838Z",
+    "period": 4,
+    "clock": "41.5",
+    "playerName": "Danny Wolf",
+    "action": "enters the game for Michael Porter Jr.",
+    "homeScore": 96,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:22:12.799Z",
+    "period": 4,
+    "clock": "41.5",
+    "playerName": "Danny Wolf",
+    "action": "enters the game for Michael Porter Jr.",
+    "homeScore": 96,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:22:32.100Z",
+    "period": 4,
+    "clock": "29.4",
+    "playerName": "Gradey Dick",
+    "action": "misses tip shot",
+    "homeScore": 96,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:22:32.948Z",
+    "period": 4,
+    "clock": "29.4",
+    "playerName": "Gradey Dick",
+    "action": "misses tip shot",
+    "homeScore": 96,
+    "awayScore": 81,
+    "isTimeout": false
+  }
+]

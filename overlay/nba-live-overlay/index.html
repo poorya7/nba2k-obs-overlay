@@ -11,8 +11,6 @@
     <!-- Current Game Box (top-anchored, grows from bottom for MVP) -->
     <div class="current-game-box" id="currentGameBox">
         <div class="current-game-content" id="currentGameContent">
-            <div class="game-status" data-status>3rd QTR - 4:15</div>
-            
             <div class="teams">
                 <!-- Home Team -->
                 <div class="team" data-team="home">
@@ -20,6 +18,9 @@
                     <div class="team-name" data-abbr="home">---</div>
                     <div class="score" data-score="home">0</div>
                 </div>
+                
+                <!-- Game Status (between teams) -->
+                <div class="game-status" data-status><div>Q3</div><div>4:15</div></div>
                 
                 <!-- Away Team -->
                 <div class="team" data-team="away">
@@ -95,9 +96,9 @@
             <div class="pbp-photo-container">
                 <img class="pbp-photo" id="pbpPhoto" src="" alt="Player">
             </div>
-            <div class="pbp-icon" id="pbpIcon"></div>
+            <img class="pbp-icon" id="pbpIcon" src="" alt="Team">
             <div class="pbp-content">
-                <div class="pbp-time" id="pbpTime"></div>
+                <div class="pbp-time"><span id="pbpQuarter"></span> <span id="pbpClock"></span></div>
                 <div class="pbp-text" id="pbpText">
                     <span class="pbp-player" id="pbpPlayer"></span> <span class="pbp-action" id="pbpAction"></span>
                 </div>
@@ -114,13 +115,13 @@
         window.pbpProcessor = pbpProcessor; // Expose for app-controller.js
 
         const pbpPhoto = document.getElementById('pbpPhoto');
-        const pbpTime = document.getElementById('pbpTime');
+        const pbpQuarter = document.getElementById('pbpQuarter');
+        const pbpClock = document.getElementById('pbpClock');
         const pbpPlayer = document.getElementById('pbpPlayer');
         const pbpAction = document.getElementById('pbpAction');
         const pbpIcon = document.getElementById('pbpIcon');
         const playByPlayBox = document.getElementById('playByPlayBox');
         
-        let lastTimeoutAnalysisPlayId = null; // Track last timeout play we requested analysis for
         
         // Score tracking for display animations (separate from processor's dedup tracking)
         let lastHomeScore = null;
@@ -128,188 +129,6 @@
 
         // Store current audio to manage playback
         let currentPbpAudio = null;
-        let currentAnalysisAudio = null; // For timeout/halftime/dead-air analysis
-        let analysisAudioUrl = null; // Cache the audio blob URL
-        let analysisLastPosition = 0; // Track playback position for resuming
-        let analysisTimestamp = null; // Track when analysis was generated
-        let analysisInterrupted = false; // Track if analysis was interrupted by play-by-play
-        let deadAirTimer = null; // Timer for dead air detection
-        let lastPlayTimestamp = Date.now(); // Track when last play occurred
-
-        // Function to request game analysis audio during timeout/halftime/dead-air
-        async function requestGameAnalysisAudio(gameId, forceRegenerate = false, isShortAnalysis = false) {
-            if (!gameId) {
-                console.error('❌ requestGameAnalysisAudio called without gameId');
-                return;
-            }
-            
-            console.log('🎤 requestGameAnalysisAudio called for gameId:', gameId, 'forceRegenerate:', forceRegenerate);
-            
-            // Save current playback position if audio is playing
-            if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
-                analysisLastPosition = currentAnalysisAudio.currentTime;
-                currentAnalysisAudio.pause();
-            }
-            
-            // Check if we should use cached audio (less than 10 minutes old, not forcing regenerate)
-            const TEN_MINUTES = 10 * 60 * 1000;
-            const useCached = !forceRegenerate && analysisAudioUrl && analysisTimestamp && 
-                             (Date.now() - analysisTimestamp) < TEN_MINUTES;
-            
-            if (useCached && !analysisInterrupted) {
-                console.log('✅ Using cached analysis audio');
-                // Use cached audio, resume from last position (only if not interrupted)
-                if (!currentAnalysisAudio || currentAnalysisAudio.src !== analysisAudioUrl) {
-                    if (currentAnalysisAudio) {
-                        currentAnalysisAudio.pause();
-                        const oldUrl = currentAnalysisAudio.src;
-                        if (oldUrl.startsWith('blob:')) {
-                            URL.revokeObjectURL(oldUrl);
-                        }
-                    }
-                    currentAnalysisAudio = new Audio(analysisAudioUrl);
-                }
-                currentAnalysisAudio.currentTime = analysisLastPosition;
-                currentAnalysisAudio.play().catch((error) => {
-                    console.error('❌ Failed to play cached analysis audio:', error);
-                });
-                analysisInterrupted = false; // Reset flag
-                return;
-            } else if (useCached && analysisInterrupted) {
-                // If interrupted, don't use cache - request fresh audio
-                console.log('🔄 Cached analysis was interrupted, requesting fresh audio');
-                analysisInterrupted = false; // Reset flag
-            }
-            
-            console.log(`🔄 Requesting new ${isShortAnalysis ? 'SHORT' : 'LONG'} analysis audio from server...`);
-            
-            // Generate new analysis audio
-            const homeTeam = (window.gameView?.elements?.homeAbbr?.textContent || 
-                             document.querySelector('[data-abbr="home"]')?.textContent || 
-                             'Home Team').trim();
-            const awayTeam = (window.gameView?.elements?.awayAbbr?.textContent || 
-                             document.querySelector('[data-abbr="away"]')?.textContent || 
-                             'Away Team').trim();
-            const homeScore = window.gameView?.elements?.homeScore?.textContent?.trim() || '0';
-            const awayScore = window.gameView?.elements?.awayScore?.textContent?.trim() || '0';
-            const currentScore = `${homeTeam} ${homeScore} - ${awayScore} ${awayTeam}`;
-            
-            console.log('📊 Analysis request data:', { gameId, homeTeam, awayTeam, currentScore, forceRegenerate, isShortAnalysis });
-            
-            try {
-                const response = await fetch('http://localhost:3000/api/game-analysis', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        gameId: gameId,
-                        homeTeam: homeTeam,
-                        awayTeam: awayTeam,
-                        currentScore: currentScore,
-                        forceRegenerate: forceRegenerate,
-                        isShortAnalysis: isShortAnalysis
-                    })
-                });
-                
-                console.log('📡 Analysis API response status:', response.status, response.statusText);
-                
-                if (!response.ok) {
-                    console.error('❌ Game analysis request failed:', response.status, response.statusText);
-                    return;
-                }
-                
-                // Get audio blob, cache it, and play it
-                const audioBlob = await response.blob();
-                console.log('🎵 Received audio blob, size:', audioBlob.size, 'bytes');
-                
-                if (!audioBlob || audioBlob.size === 0) {
-                    console.error('❌ Game analysis audio blob is empty');
-                    return;
-                }
-                
-                // Clean up old audio URL if exists
-                if (analysisAudioUrl && analysisAudioUrl.startsWith('blob:')) {
-                    URL.revokeObjectURL(analysisAudioUrl);
-                }
-                
-                analysisAudioUrl = URL.createObjectURL(audioBlob);
-                const generatedAt = response.headers.get('X-Generated-At');
-                analysisTimestamp = generatedAt ? parseInt(generatedAt) : Date.now();
-                analysisLastPosition = 0; // Reset position for new audio
-                analysisInterrupted = false; // Reset interruption flag
-                
-                console.log('✅ Created audio URL, attempting to play...');
-                
-                // Clean up old audio object if exists
-                if (currentAnalysisAudio) {
-                    currentAnalysisAudio.pause();
-                    currentAnalysisAudio = null; // Clear reference
-                    const oldUrl = currentAnalysisAudio?.src;
-                    if (oldUrl && oldUrl.startsWith('blob:') && oldUrl !== analysisAudioUrl) {
-                        URL.revokeObjectURL(oldUrl);
-                    }
-                }
-                
-                // Create new audio and play from start
-                currentAnalysisAudio = new Audio(analysisAudioUrl);
-                currentAnalysisAudio.currentTime = 0; // Always start from beginning
-                currentAnalysisAudio.play().then(() => {
-                    console.log('✅ Game analysis audio is now playing from start');
-                }).catch((error) => {
-                    console.error('❌ Failed to play game analysis audio:', error);
-                });
-            } catch (error) {
-                console.error('❌ Error requesting game analysis audio:', error);
-            }
-        }
-        
-        // Function to handle dead air detection (no play-by-play for 8 seconds)
-        function handleDeadAir(gameId) {
-            console.log('🔍 handleDeadAir called with gameId:', gameId);
-            if (!gameId) {
-                console.error('❌ handleDeadAir called without gameId');
-                return;
-            }
-            
-            // Only start timer if we don't already have one running
-            if (deadAirTimer) {
-                console.log('⏱️ Dead air timer already running, not resetting');
-                // Timer already running, don't reset it
-                return;
-            }
-            
-            console.log('⏱️ Starting dead air timer (8s) for gameId:', gameId);
-            
-            // Set new timer for 8 seconds
-            deadAirTimer = setTimeout(() => {
-                console.log('🔊 Dead air detected (8s), requesting game analysis for gameId:', gameId);
-                deadAirTimer = null; // Clear timer before making request
-                
-                // Check if 10 minutes have passed since last analysis generation
-                const TEN_MINUTES = 10 * 60 * 1000;
-                const shouldRegenerate = !analysisTimestamp || (Date.now() - analysisTimestamp) >= TEN_MINUTES;
-                console.log('📊 Analysis check - timestamp:', analysisTimestamp, 'shouldRegenerate:', shouldRegenerate);
-                
-                // Request SHORT analysis audio for dead air (will use cache if recent, or regenerate if old)
-                requestGameAnalysisAudio(gameId, shouldRegenerate, true).catch((error) => {
-                    console.error('❌ Error in requestGameAnalysisAudio:', error);
-                });
-            }, 8000); // 8 seconds
-        }
-        
-        // Function to stop dead air analysis when new play comes in
-        function stopDeadAirAnalysis() {
-            // Clear dead air timer
-            if (deadAirTimer) {
-                clearTimeout(deadAirTimer);
-                deadAirTimer = null;
-            }
-            
-            // Stop analysis audio (but save position for resuming)
-            if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
-                analysisLastPosition = currentAnalysisAudio.currentTime;
-                currentAnalysisAudio.pause();
-            }
-        }
 
         // Function to enhance play-by-play text for energetic, enthusiastic commentator-style TTS
         // The text is formatted to sound like an excited sports commentator while staying accurate
@@ -373,14 +192,6 @@
                     currentPbpAudio.pause();
                     currentPbpAudio = null;
                 }
-                
-                // Stop analysis audio when play-by-play starts (mark as interrupted)
-                if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
-                    currentAnalysisAudio.pause();
-                    currentAnalysisAudio = null;
-                    analysisLastPosition = 0; // Reset position
-                    analysisInterrupted = true; // Mark as interrupted - don't resume this audio
-                }
 
                 const requestBody = {
                     text: playText, // Original play-by-play text
@@ -422,12 +233,6 @@
         // IMPORTANT: Waits for TTS BEFORE starting animations (no empty frame!)
         async function updatePlayByPlay(play) {
             if (!play || !playByPlayBox) return;
-            
-            // Don't show play-by-play if MVP is visible
-            if (window.mvpView && window.mvpView.getVisibility && window.mvpView.getVisibility()) {
-                playByPlayBox.style.display = 'none';
-                return;
-            }
             
             // Update game overlay time from play-by-play data
             if (play.period && play.clock && window.gameView) {
@@ -485,18 +290,6 @@
                     }
                 }
                 
-                // Request analysis audio for timeout
-                if (lastTimeoutAnalysisPlayId !== play.id) {
-                    lastTimeoutAnalysisPlayId = play.id;
-                    const currentGameId = window.gameView?.gameId || window.appController?.selectedGameId;
-                    if (currentGameId) {
-                        setTimeout(() => {
-                            requestGameAnalysisAudio(currentGameId, true, false);
-                        }, 10000);
-                    }
-                }
-            } else {
-                stopDeadAirAnalysis();
             }
             
             // Prepare TTS text
@@ -567,10 +360,21 @@
                 pbpPhoto.alt = play.playerName;
             }
             
-            pbpTime.textContent = `Q${play.period} ${play.clock}`;
+            pbpQuarter.textContent = `Q${play.period}`;
+            pbpClock.textContent = play.clock;
             pbpPlayer.textContent = (play.isTimeout || play.isTeamEvent) ? '' : play.playerName;
             pbpAction.textContent = play.action;
-            pbpIcon.textContent = (play.isTimeout || play.isTeamEvent) ? '' : play.icon;
+            // Show team logo in icon area ONLY for regular plays (not timeouts/team events)
+            // For timeouts, logo already shows in the photo circle
+            if (play.isTimeout || play.isTeamEvent) {
+                pbpIcon.style.display = 'none';
+            } else if (play.teamLogo) {
+                pbpIcon.src = play.teamLogo;
+                pbpIcon.style.display = 'block';
+            } else {
+                // Fallback: hide icon if no team logo available
+                pbpIcon.style.display = 'none';
+            }
             
             // Start enter animation
             playByPlayBox.classList.remove('exiting');
@@ -583,13 +387,6 @@
                     if (currentPbpAudio) {
                         currentPbpAudio.pause();
                         currentPbpAudio = null;
-                    }
-                    
-                    if (currentAnalysisAudio && !currentAnalysisAudio.paused) {
-                        currentAnalysisAudio.pause();
-                        currentAnalysisAudio = null;
-                        analysisLastPosition = 0;
-                        analysisInterrupted = true;
                     }
                     
                     currentPbpAudio = new Audio(audioUrl);
@@ -616,72 +413,19 @@
 
         // Function to check and update play-by-play from API data
         async function checkAndUpdatePlayByPlay(gameId, nbaApi, gameState) {
-            console.log('🔄 checkAndUpdatePlayByPlay called - gameId:', gameId, 'gameState:', gameState);
-            if (!gameId || !nbaApi) {
-                console.log('⚠️ checkAndUpdatePlayByPlay: Missing gameId or nbaApi, returning');
-                return;
-            }
+            if (!gameId || !nbaApi) return;
             
-            // If game is in halftime, final, or pregame, show status text instead of plays
+            // Hide play-by-play during halftime, final, or pregame
             if (gameState === 'halftime' || gameState === 'final' || gameState === 'pregame') {
-                if (!playByPlayBox) return;
-                
-                // Don't show if MVP is visible
-                if (window.mvpView && window.mvpView.getVisibility && window.mvpView.getVisibility()) {
-                    playByPlayBox.style.display = 'none';
-                    return;
-                }
-                
-                const pbpTime = document.getElementById('pbpTime');
-                const pbpPlayer = document.getElementById('pbpPlayer');
-                const pbpAction = document.getElementById('pbpAction');
-                const pbpIcon = document.getElementById('pbpIcon');
-                const pbpPhoto = document.getElementById('pbpPhoto');
-                const pbpPhotoContainer = document.querySelector('.pbp-photo-container');
-                
-                if (gameState === 'halftime') {
-                    // Show halftime status
-                    playByPlayBox.style.display = 'block';
-                    if (pbpTime) pbpTime.textContent = 'Halftime';
-                    if (pbpPlayer) pbpPlayer.textContent = '';
-                    if (pbpAction) pbpAction.textContent = '';
-                    if (pbpIcon) pbpIcon.textContent = ''; // Remove icon
-                    // Hide photo container to avoid empty frame
-                    if (pbpPhotoContainer) pbpPhotoContainer.style.display = 'none';
-                    if (pbpPhoto) pbpPhoto.src = '';
-                    
-                    // Request LONG game analysis audio for halftime (wait 10 seconds to avoid overlapping with play-by-play)
-                    setTimeout(() => {
-                        requestGameAnalysisAudio(gameId, true, false); // false = long analysis
-                    }, 10000); // Wait 10 seconds before starting analysis
-                } else if (gameState === 'final') {
-                    // Show final status
-                    playByPlayBox.style.display = 'block';
-                    if (pbpTime) pbpTime.textContent = 'Final';
-                    if (pbpPlayer) pbpPlayer.textContent = '';
-                    if (pbpAction) pbpAction.textContent = '';
-                    if (pbpIcon) pbpIcon.textContent = ''; // Remove icon
-                    // Hide photo container to avoid empty frame
-                    if (pbpPhotoContainer) pbpPhotoContainer.style.display = 'none';
-                    if (pbpPhoto) pbpPhoto.src = '';
-                } else {
-                    // Pregame - hide play-by-play
+                if (playByPlayBox) {
                     playByPlayBox.style.display = 'none';
                 }
-                
-                // Stop dead air analysis if game is not in timeout/halftime
-                if (gameState !== 'halftime') {
-                    stopDeadAirAnalysis();
-                }
-                
-                return; // Don't fetch plays during halftime/final/pregame
+                return;
             }
             
             try {
                 const plays = await nbaApi.getPlayByPlay(gameId);
                 if (!plays || plays.length === 0) {
-                    console.log('📭 No plays found, checking for dead air...');
-                    handleDeadAir(gameId);
                     return;
                 }
                 
@@ -697,18 +441,7 @@
                 const transformedPlay = pbpProcessor.findNewPlay(plays, teamContext);
                 
                 if (!transformedPlay) {
-                    // No valid new play found - check for dead air
-                    console.log('📭 No valid new play found, checking for dead air...');
-                    handleDeadAir(gameId);
                     return;
-                }
-                
-                // New play found! Stop dead air analysis
-                stopDeadAirAnalysis();
-                
-                // Reset timeout analysis tracking if this is not a timeout
-                if (!transformedPlay.isTimeout) {
-                    lastTimeoutAnalysisPlayId = null;
                 }
                 
                 // Send play-by-play data to server for storage
@@ -742,7 +475,6 @@
         // Function to reset play-by-play tracking (call when game changes)
         function resetPlayByPlayTracking() {
             pbpProcessor.reset();
-            lastTimeoutAnalysisPlayId = null; // Reset timeout analysis tracking
             lastHomeScore = null; // Reset display score tracking
             lastAwayScore = null;
         }
@@ -811,26 +543,6 @@
         
         const gameView = new GameView(unifiedBoxAnimator);
         const mvpView = new MvpView();
-        
-        // Wrap MVP show/hide to also control play-by-play visibility
-        const originalMvpShow = mvpView.show.bind(mvpView);
-        const originalMvpHide = mvpView.hide.bind(mvpView);
-        const playByPlayBoxElement = document.getElementById('playByPlayBox');
-        
-        mvpView.show = function(playerData) {
-            originalMvpShow(playerData);
-            // Hide play-by-play when MVP shows
-            if (playByPlayBoxElement) {
-                playByPlayBoxElement.style.display = 'none';
-            }
-        };
-        
-        mvpView.hide = function() {
-            originalMvpHide();
-            // When MVP hides, play-by-play can show again
-            // It will be shown on the next updatePlayByPlay call if there's new data
-        };
-        
         const otherGamesView = new OtherGamesView();
         const otherGamesContainerView = new OtherGamesContainerView();
         
@@ -885,7 +597,80 @@
         // Expose for debugging/testing
         window.appController = appController;
         window.gameView = gameView;
+        
         window.mvpView = mvpView; // Expose MVP view for play-by-play visibility checks
+        
+        // Listen for updates from test page
+        window.addEventListener('message', (event) => {
+            console.log('Message received:', event.data);
+            
+            if (event.data && event.data.type === 'UPDATE_TEAM_SPACING') {
+                const spacing = event.data.spacing;
+                console.log('Updating team spacing to:', spacing + 'px');
+                const teamsElements = document.querySelectorAll('.teams');
+                console.log('Found teams elements:', teamsElements.length);
+                
+                const gameBox = document.getElementById('currentGameBox');
+                console.log('Game box display:', gameBox ? window.getComputedStyle(gameBox).display : 'not found');
+                
+                teamsElements.forEach(el => {
+                    el.style.gap = spacing + 'px';
+                    console.log('Updated element gap to:', el.style.gap);
+                    console.log('Element computed gap:', window.getComputedStyle(el).gap);
+                    console.log('Element visible?:', el.offsetParent !== null);
+                });
+            }
+            
+            if (event.data && event.data.type === 'UPDATE_QUARTER_COLOR') {
+                const color = event.data.color;
+                console.log('Updating quarter color to:', color);
+                
+                // Create/update persistent CSS rule
+                let styleEl = document.getElementById('custom-quarter-color');
+                if (!styleEl) {
+                    styleEl = document.createElement('style');
+                    styleEl.id = 'custom-quarter-color';
+                    document.head.appendChild(styleEl);
+                }
+                styleEl.textContent = `
+                    .game-status > div:first-child { color: ${color} !important; }
+                    #pbpQuarter { color: ${color} !important; }
+                `;
+            }
+            
+            if (event.data && event.data.type === 'UPDATE_GAME_TIME_COLOR') {
+                const color = event.data.color;
+                console.log('Updating game time color to:', color);
+                
+                // Create/update persistent CSS rule
+                let styleEl = document.getElementById('custom-time-color');
+                if (!styleEl) {
+                    styleEl = document.createElement('style');
+                    styleEl.id = 'custom-time-color';
+                    document.head.appendChild(styleEl);
+                }
+                styleEl.textContent = `
+                    .game-status > div:last-child { color: ${color} !important; }
+                    #pbpClock { color: ${color} !important; }
+                `;
+            }
+            
+            if (event.data && event.data.type === 'UPDATE_PBP_ACTION_COLOR') {
+                const color = event.data.color;
+                console.log('Updating PBP action color to:', color);
+                
+                // Create/update persistent CSS rule
+                let styleEl = document.getElementById('custom-pbp-action-color');
+                if (!styleEl) {
+                    styleEl = document.createElement('style');
+                    styleEl.id = 'custom-pbp-action-color';
+                    document.head.appendChild(styleEl);
+                }
+                styleEl.textContent = `
+                    #pbpAction { color: ${color} !important; }
+                `;
+            }
+        });
         
         /* OLD CODE REMOVED - Now in modular classes:
          * - generateSimulationData() → SimulationManager

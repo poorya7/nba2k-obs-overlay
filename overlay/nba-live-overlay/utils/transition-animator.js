@@ -72,7 +72,7 @@ class TransitionAnimator {
             scores.forEach(score => score.style.opacity = '0');
 
             // Add game status (hidden)
-            const statusHTML = `<div class="game-status" data-status style="opacity: 0">${data.quarter} · ${data.time}</div>`;
+            const statusHTML = `<div class="game-status" data-status style="opacity: 0">${GameView.formatStatusHTML(data.quarter, data.time)}</div>`;
             elements.teamsContainer.insertAdjacentHTML('afterend', statusHTML);
             elements.gameStatus = document.querySelector('[data-status]');
 

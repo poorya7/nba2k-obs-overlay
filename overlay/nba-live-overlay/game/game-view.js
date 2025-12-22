@@ -16,6 +16,17 @@ const DEFAULT_SCORE_ANIMATION = 'slide';
 
 class GameView {
     /**
+     * Format game status HTML (quarter above time)
+     * Static method - can be called without instance
+     * @param {string} quarter - Quarter (e.g., 'Q1', 'Q2', 'OT')
+     * @param {string} time - Time remaining (e.g., '7:32')
+     * @returns {string} HTML string
+     */
+    static formatStatusHTML(quarter, time) {
+        return `<div>${quarter}</div><div>${time}</div>`;
+    }
+
+    /**
      * Initialize GameView and cache DOM elements
      * @param {UnifiedBoxAnimator} unifiedBoxAnimator - Box animator for height control
      */
@@ -49,6 +60,10 @@ class GameView {
         this.isVisible = false;   // Track visibility
         this.transitionAnimator = new TransitionAnimator(); // Delegate complex transitions
         this.unifiedBoxAnimator = unifiedBoxAnimator; // For height control
+        
+        // Time tracking to prevent reverting to older times
+        this.lastQuarterNum = 0;
+        this.lastTimeSeconds = Infinity; // Start high so any time is "newer"
     }
 
     /**
@@ -291,14 +306,18 @@ class GameView {
     }
 
     /**
-     * Update game status (quarter and time)
+     * Update game status (quarter and time) - used by state transitions
+     * Always updates and resets time tracking (state changes are authoritative)
      * @param {string} quarter - Quarter (e.g., 'Q1', 'Q2', 'OT')
      * @param {string} time - Time remaining (e.g., '7:32')
      */
     updateGameStatus(quarter, time) {
         if (this.elements.gameStatus) {
-            this.elements.gameStatus.textContent = `${quarter} - ${time}`;
+            this.elements.gameStatus.innerHTML = GameView.formatStatusHTML(quarter, time);
         }
+        // Update time tracking so subsequent updateStatusText calls compare correctly
+        this.lastQuarterNum = this.parseQuarterToNumber(quarter);
+        this.lastTimeSeconds = this.parseTimeToSeconds(time);
     }
 
     /**
@@ -327,15 +346,91 @@ class GameView {
     }
 
     /**
+     * Parse quarter string to comparable number
+     * @param {string} quarter - Quarter string (e.g., 'Q1', 'Q2', 'OT', 'OT2')
+     * @returns {number} Quarter as number (1-4 for quarters, 5+ for overtime)
+     */
+    parseQuarterToNumber(quarter) {
+        if (!quarter) return 0;
+        const q = quarter.toUpperCase().trim();
+        if (q.startsWith('Q')) {
+            return parseInt(q.substring(1)) || 0;
+        }
+        if (q.startsWith('OT')) {
+            const otNum = parseInt(q.substring(2)) || 1;
+            return 4 + otNum; // OT = 5, OT2 = 6, etc.
+        }
+        return 0;
+    }
+
+    /**
+     * Parse time string to seconds remaining
+     * @param {string} time - Time string (e.g., '7:32', '0:45.2')
+     * @returns {number} Seconds remaining
+     */
+    parseTimeToSeconds(time) {
+        if (!time) return Infinity;
+        // Handle formats like "7:32" or "0:45.2"
+        const parts = time.split(':');
+        if (parts.length !== 2) return Infinity;
+        const minutes = parseInt(parts[0]) || 0;
+        const seconds = parseFloat(parts[1]) || 0;
+        return minutes * 60 + seconds;
+    }
+
+    /**
+     * Check if new time is newer (further along in game) than current
+     * @param {string} newQuarter - New quarter
+     * @param {string} newTime - New time
+     * @returns {boolean} True if new time is newer
+     */
+    isNewerTime(newQuarter, newTime) {
+        const newQuarterNum = this.parseQuarterToNumber(newQuarter);
+        const newTimeSeconds = this.parseTimeToSeconds(newTime);
+        
+        // Higher quarter = definitely newer
+        if (newQuarterNum > this.lastQuarterNum) {
+            return true;
+        }
+        
+        // Same quarter, less time remaining = newer
+        if (newQuarterNum === this.lastQuarterNum && newTimeSeconds < this.lastTimeSeconds) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Reset time tracking (call when game changes)
+     */
+    resetTimeTracking() {
+        this.lastQuarterNum = 0;
+        this.lastTimeSeconds = Infinity;
+    }
+
+    /**
      * Update game status text (for live games - time updates)
+     * Only updates if new time is newer to prevent reverting from play-by-play
      * @param {string} quarter - Quarter (e.g., 'Q1', 'Q2', 'OT')
      * @param {string} time - Time remaining (e.g., '7:32')
+     * @param {boolean} force - Force update even if not newer (for state changes)
      */
-    updateStatusText(quarter, time) {
+    updateStatusText(quarter, time, force = false) {
         const statusElement = document.querySelector('[data-status]');
-        if (statusElement) {
-            statusElement.textContent = `${quarter} · ${time}`;
+        if (!statusElement) return;
+        
+        // Check if this is actually newer time
+        if (!force && !this.isNewerTime(quarter, time)) {
+            return; // Skip - would revert to older time
         }
+        
+        // Update tracking
+        this.lastQuarterNum = this.parseQuarterToNumber(quarter);
+        this.lastTimeSeconds = this.parseTimeToSeconds(time);
+        
+        // Update display - stacked vertically
+        statusElement.innerHTML = GameView.formatStatusHTML(quarter, time);
     }
 
     updateAll(gameData) {
@@ -378,6 +473,7 @@ class GameView {
         this.updateScore('home', 0);
         this.updateScore('away', 0);
         this.updateGameStatus('Q1', '12:00');
+        this.resetTimeTracking();
     }
 
     // ==================== STATE MANAGEMENT ====================
@@ -467,7 +563,7 @@ class GameView {
 
         // Update game status
         if (this.elements.gameStatus) {
-            this.elements.gameStatus.textContent = `${data.quarter} - ${data.time}`;
+            this.elements.gameStatus.innerHTML = GameView.formatStatusHTML(data.quarter, data.time);
         }
 
         // Update team stats if available

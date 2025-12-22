@@ -206,11 +206,29 @@ class PlayByPlayProcessor {
             icon = '🎯';
         }
 
-        // Get team logo for timeouts and other team events
+        // Get team logo for ALL plays (not just team events)
         let teamLogo = null;
-        let timeoutTeam = null; // 'home' or 'away'
+        let playTeam = null; // 'home' or 'away'
         
-        if (isTeamEvent && (homeAbbr || awayAbbr)) {
+        // Method 1: Check team abbreviation from API play data (works for all plays)
+        if (apiPlay.team && apiPlay.team.abbreviation && (homeAbbr || awayAbbr)) {
+            const teamAbbr = (apiPlay.team.abbreviation || '').trim().toUpperCase();
+            const upperHomeAbbr = homeAbbr.toUpperCase();
+            const upperAwayAbbr = awayAbbr.toUpperCase();
+            
+            if (teamAbbr === upperHomeAbbr) {
+                playTeam = 'home';
+                teamLogo = homeLogo;
+            } else if (teamAbbr === upperAwayAbbr) {
+                playTeam = 'away';
+                teamLogo = awayLogo;
+            }
+        }
+        
+        // For team events (timeouts, etc.), try additional methods if team not yet determined
+        let timeoutTeam = null; // 'home' or 'away' (legacy field for timeouts)
+        
+        if (isTeamEvent && !playTeam && (homeAbbr || awayAbbr)) {
             const upperHomeAbbr = homeAbbr.toUpperCase();
             const upperAwayAbbr = awayAbbr.toUpperCase();
             const upperPlayText = playText.toUpperCase();
@@ -271,14 +289,17 @@ class PlayByPlayProcessor {
                 }
             }
 
-            // Get logo for matched team
-            if (matchedTeam === 'home' && homeLogo) {
-                teamLogo = homeLogo;
-                timeoutTeam = 'home';
-            } else if (matchedTeam === 'away' && awayLogo) {
-                teamLogo = awayLogo;
-                timeoutTeam = 'away';
+            // Get logo for matched team (only if not already set)
+            if (!teamLogo) {
+                if (matchedTeam === 'home' && homeLogo) {
+                    teamLogo = homeLogo;
+                    playTeam = 'home';
+                } else if (matchedTeam === 'away' && awayLogo) {
+                    teamLogo = awayLogo;
+                    playTeam = 'away';
+                }
             }
+            timeoutTeam = playTeam; // Keep for backwards compatibility
         }
 
         return {
@@ -295,6 +316,7 @@ class PlayByPlayProcessor {
             isTimeout: isTimeout,
             isTeamEvent: isTeamEvent,
             teamLogo: teamLogo,
+            playTeam: playTeam,
             timeoutTeam: timeoutTeam
         };
     }

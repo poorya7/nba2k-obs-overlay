@@ -1,0 +1,1772 @@
+[
+  {
+    "timestamp": "2025-12-22T01:40:21.782Z",
+    "period": 3,
+    "clock": "7:05",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 60,
+    "awayScore": 68,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:40:21.859Z",
+    "period": 3,
+    "clock": "7:05",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 60,
+    "awayScore": 68,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:41:34.499Z",
+    "period": 3,
+    "clock": "5:51",
+    "playerName": "Naz Reid",
+    "action": "misses shot",
+    "homeScore": 63,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:41:35.306Z",
+    "period": 3,
+    "clock": "5:51",
+    "playerName": "Naz Reid",
+    "action": "misses shot",
+    "homeScore": 63,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:41:44.624Z",
+    "period": 3,
+    "clock": "5:47",
+    "playerName": "Naz Reid",
+    "action": "makes shot",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:41:45.587Z",
+    "period": 3,
+    "clock": "5:47",
+    "playerName": "Naz Reid",
+    "action": "makes shot",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:41:53.921Z",
+    "period": 3,
+    "clock": "5:47",
+    "playerName": "Naz Reid",
+    "action": "makes driving dunk",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:41:54.546Z",
+    "period": 3,
+    "clock": "5:47",
+    "playerName": "Naz Reid",
+    "action": "makes driving dunk",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:42:03.993Z",
+    "period": 3,
+    "clock": "5:18",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. misses shot",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:42:04.950Z",
+    "period": 3,
+    "clock": "5:18",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. misses shot",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:42:16.114Z",
+    "period": 3,
+    "clock": "5:20",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. misses 24-foot three point jumper",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:42:17.264Z",
+    "period": 3,
+    "clock": "5:20",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. misses 24-foot three point jumper",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:42:45.585Z",
+    "period": 3,
+    "clock": "5:19",
+    "playerName": "Ryan Rollins",
+    "action": "enters the game for AJ Green",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:42:46.309Z",
+    "period": 3,
+    "clock": "5:19",
+    "playerName": "Ryan Rollins",
+    "action": "enters the game for AJ Green",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:42:56.360Z",
+    "period": 3,
+    "clock": "5:08",
+    "playerName": "Kyle Kuzma",
+    "action": "kicked ball violation",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:42:56.601Z",
+    "period": 3,
+    "clock": "5:08",
+    "playerName": "Kyle Kuzma",
+    "action": "kicked ball violation",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:43:12.284Z",
+    "period": 3,
+    "clock": "5:08",
+    "playerName": "Kyle Kuzma",
+    "action": "kicked ball violation",
+    "homeScore": 65,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:43:16.193Z",
+    "period": 3,
+    "clock": "4:57",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 68,
+    "awayScore": 68,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:43:17.128Z",
+    "period": 3,
+    "clock": "4:57",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 68,
+    "awayScore": 68,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:44:55.301Z",
+    "period": 3,
+    "clock": "4:57",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 68,
+    "awayScore": 68,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:44:56.015Z",
+    "period": 3,
+    "clock": "4:57",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 68,
+    "awayScore": 68,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:45:39.849Z",
+    "period": 3,
+    "clock": "4:31",
+    "playerName": "Rudy Gobert",
+    "action": "defensive rebound",
+    "homeScore": 68,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:45:41.580Z",
+    "period": 3,
+    "clock": "4:31",
+    "playerName": "Rudy Gobert",
+    "action": "defensive rebound",
+    "homeScore": 68,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:46:07.937Z",
+    "period": 3,
+    "clock": "3:49",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. out of bounds bad pass turnover",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:46:08.185Z",
+    "period": 3,
+    "clock": "3:49",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. out of bounds bad pass turnover",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:46:40.086Z",
+    "period": 3,
+    "clock": "3:35",
+    "playerName": "Anthony Edwards",
+    "action": "misses shot",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:46:40.687Z",
+    "period": 3,
+    "clock": "3:35",
+    "playerName": "Anthony Edwards",
+    "action": "misses shot",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:46:50.172Z",
+    "period": 3,
+    "clock": "3:22",
+    "playerName": "Bobby Portis",
+    "action": "offensive rebound",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:46:50.844Z",
+    "period": 3,
+    "clock": "3:22",
+    "playerName": "Bobby Portis",
+    "action": "offensive rebound",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:46:59.292Z",
+    "period": 3,
+    "clock": "3:21",
+    "playerName": "Bobby Portis",
+    "action": "turnover",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:47:00.155Z",
+    "period": 3,
+    "clock": "3:21",
+    "playerName": "Bobby Portis",
+    "action": "turnover",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:47:18.505Z",
+    "period": 3,
+    "clock": "3:21",
+    "playerName": "Jericho Sims",
+    "action": "enters the game for Myles Turner",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:47:19.622Z",
+    "period": 3,
+    "clock": "3:21",
+    "playerName": "Jericho Sims",
+    "action": "enters the game for Myles Turner",
+    "homeScore": 71,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:47:39.984Z",
+    "period": 3,
+    "clock": "3:06",
+    "playerName": "Rudy Gobert",
+    "action": "makes 1-foot alley oop dunk (Anthony Edwards assists)",
+    "homeScore": 73,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:47:40.359Z",
+    "period": 3,
+    "clock": "3:06",
+    "playerName": "Rudy Gobert",
+    "action": "makes 1-foot alley oop dunk (Anthony Edwards assists)",
+    "homeScore": 73,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:47:50.072Z",
+    "period": 3,
+    "clock": "2:35",
+    "playerName": "Jericho Sims",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:47:50.419Z",
+    "period": 3,
+    "clock": "2:35",
+    "playerName": "Jericho Sims",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:48:20.616Z",
+    "period": 3,
+    "clock": "2:06",
+    "playerName": "Jericho Sims",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:48:20.619Z",
+    "period": 3,
+    "clock": "2:06",
+    "playerName": "Jericho Sims",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:48:30.782Z",
+    "period": 3,
+    "clock": "1:53",
+    "playerName": "Donte Di",
+    "action": "DiVincenzo defensive rebound",
+    "homeScore": 73,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:48:30.787Z",
+    "period": 3,
+    "clock": "1:53",
+    "playerName": "Donte Di",
+    "action": "DiVincenzo defensive rebound",
+    "homeScore": 73,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:48:40.813Z",
+    "period": 3,
+    "clock": "1:43",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 73,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:48:40.815Z",
+    "period": 3,
+    "clock": "1:43",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 73,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:48:50.957Z",
+    "period": 3,
+    "clock": "1:39",
+    "playerName": "Jericho Sims",
+    "action": "offensive rebound",
+    "homeScore": 73,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:48:50.969Z",
+    "period": 3,
+    "clock": "1:39",
+    "playerName": "Jericho Sims",
+    "action": "offensive rebound",
+    "homeScore": 73,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:49:21.000Z",
+    "period": 3,
+    "clock": "1:02",
+    "playerName": "Ryan Rollins",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:49:21.168Z",
+    "period": 3,
+    "clock": "1:02",
+    "playerName": "Ryan Rollins",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:49:51.206Z",
+    "period": 3,
+    "clock": "56.4",
+    "playerName": "Ryan Rollins",
+    "action": "makes driving layup",
+    "homeScore": 73,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:49:51.593Z",
+    "period": 3,
+    "clock": "56.4",
+    "playerName": "Ryan Rollins",
+    "action": "makes driving layup",
+    "homeScore": 73,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:50:11.243Z",
+    "period": 3,
+    "clock": "27.6",
+    "playerName": "Donte Di",
+    "action": "DiVincenzo defensive rebound",
+    "homeScore": 73,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:50:11.829Z",
+    "period": 3,
+    "clock": "27.6",
+    "playerName": "Donte Di",
+    "action": "DiVincenzo defensive rebound",
+    "homeScore": 73,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:50:21.395Z",
+    "period": 3,
+    "clock": "17.9",
+    "playerName": "Anthony Edwards",
+    "action": "makes driving layup",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:50:22.013Z",
+    "period": 3,
+    "clock": "17.9",
+    "playerName": "Anthony Edwards",
+    "action": "makes driving layup",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:50:51.475Z",
+    "period": 3,
+    "clock": "5.2",
+    "playerName": "Julius Randle",
+    "action": "enters the game for Naz Reid",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:50:52.522Z",
+    "period": 3,
+    "clock": "5.2",
+    "playerName": "Julius Randle",
+    "action": "enters the game for Naz Reid",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:51:11.648Z",
+    "period": 3,
+    "clock": "3.2",
+    "playerName": "Ryan Rollins",
+    "action": "misses 24-foot three point jumper",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:51:12.978Z",
+    "period": 3,
+    "clock": "3.2",
+    "playerName": "Ryan Rollins",
+    "action": "misses 24-foot three point jumper",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:05.197Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Myles Turner",
+    "action": "enters the game for Kevin Porter Jr.",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:06.279Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Myles Turner",
+    "action": "enters the game for Kevin Porter Jr.",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:15.289Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Gary Harris",
+    "action": "enters the game for AJ Green",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:16.596Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Gary Harris",
+    "action": "enters the game for AJ Green",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:18.537Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Gary Harris",
+    "action": "enters the game for AJ Green",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:24.798Z",
+    "period": 4,
+    "clock": "11:45",
+    "playerName": "Jericho Sims",
+    "action": "defensive rebound",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:25.359Z",
+    "period": 4,
+    "clock": "11:45",
+    "playerName": "Jericho Sims",
+    "action": "defensive rebound",
+    "homeScore": 75,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:55.675Z",
+    "period": 4,
+    "clock": "11:15",
+    "playerName": "Terrence Shannon J",
+    "action": "Shannon Jr. bad pass turnover (Gary Trent Jr. steals)",
+    "homeScore": 75,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:54:55.962Z",
+    "period": 4,
+    "clock": "11:15",
+    "playerName": "Terrence Shannon J",
+    "action": "Shannon Jr. bad pass turnover (Gary Trent Jr. steals)",
+    "homeScore": 75,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:55:16.389Z",
+    "period": 4,
+    "clock": "11:13",
+    "playerName": "Gary Trent J",
+    "action": "Trent Jr. out of bounds lost ball turnover",
+    "homeScore": 75,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:55:16.522Z",
+    "period": 4,
+    "clock": "11:13",
+    "playerName": "Gary Trent J",
+    "action": "Trent Jr. out of bounds lost ball turnover",
+    "homeScore": 75,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:55:57.431Z",
+    "period": 4,
+    "clock": "10:59",
+    "playerName": "Bones Hyland",
+    "action": "makes 24-foot three point jumper (Mike Conley assists)",
+    "homeScore": 78,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:55:57.992Z",
+    "period": 4,
+    "clock": "10:59",
+    "playerName": "Bones Hyland",
+    "action": "makes 24-foot three point jumper (Mike Conley assists)",
+    "homeScore": 78,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:07.618Z",
+    "period": 4,
+    "clock": "10:32",
+    "playerName": "Gary Trent J",
+    "action": "Trent Jr. makes 24-foot three point jumper (Ryan Rollins assists)",
+    "homeScore": 78,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:08.135Z",
+    "period": 4,
+    "clock": "10:32",
+    "playerName": "Gary Trent J",
+    "action": "Trent Jr. makes 24-foot three point jumper (Ryan Rollins assists)",
+    "homeScore": 78,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:10.090Z",
+    "period": 4,
+    "clock": "10:32",
+    "playerName": "Gary Trent J",
+    "action": "Trent Jr. makes 24-foot three point jumper (Ryan Rollins assists)",
+    "homeScore": 78,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:27.988Z",
+    "period": 4,
+    "clock": "10:12",
+    "playerName": "Terrence Shannon J",
+    "action": "Shannon Jr. makes 25-foot three point jumper (Mike Conley assists)",
+    "homeScore": 81,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:28.205Z",
+    "period": 4,
+    "clock": "10:12",
+    "playerName": "Terrence Shannon J",
+    "action": "Shannon Jr. makes 25-foot three point jumper (Mike Conley assists)",
+    "homeScore": 81,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:45.304Z",
+    "period": 4,
+    "clock": "10:12",
+    "playerName": "Terrence Shannon J",
+    "action": "Shannon Jr. makes 25-foot three point jumper (Mike Conley assists)",
+    "homeScore": 81,
+    "awayScore": 81,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:47.442Z",
+    "period": 4,
+    "clock": "9:56",
+    "playerName": "Jericho Sims",
+    "action": "makes 1-foot dunk (Myles Turner assists)",
+    "homeScore": 81,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:48.253Z",
+    "period": 4,
+    "clock": "9:56",
+    "playerName": "Jericho Sims",
+    "action": "makes 1-foot dunk (Myles Turner assists)",
+    "homeScore": 81,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:48.484Z",
+    "period": 4,
+    "clock": "9:56",
+    "playerName": "Jericho Sims",
+    "action": "makes 1-foot dunk (Myles Turner assists)",
+    "homeScore": 81,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:50.656Z",
+    "period": 4,
+    "clock": "9:56",
+    "playerName": "Jericho Sims",
+    "action": "makes 1-foot dunk (Myles Turner assists)",
+    "homeScore": 81,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:56.787Z",
+    "period": 4,
+    "clock": "9:40",
+    "playerName": "Bones Hyland",
+    "action": "makes 18-foot step back jumpshot",
+    "homeScore": 83,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:56:56.790Z",
+    "period": 4,
+    "clock": "9:40",
+    "playerName": "Bones Hyland",
+    "action": "makes 18-foot step back jumpshot",
+    "homeScore": 83,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:57:23.343Z",
+    "period": 4,
+    "clock": "9:40",
+    "playerName": "Bones Hyland",
+    "action": "makes 18-foot step back jumpshot",
+    "homeScore": 83,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:57:29.255Z",
+    "period": 4,
+    "clock": "9:06",
+    "playerName": "Mike Conley",
+    "action": "misses shot",
+    "homeScore": 83,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:57:29.531Z",
+    "period": 4,
+    "clock": "9:06",
+    "playerName": "Mike Conley",
+    "action": "misses shot",
+    "homeScore": 83,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:57:37.200Z",
+    "period": 4,
+    "clock": "9:03",
+    "playerName": "Gary Trent J",
+    "action": "Trent Jr. defensive rebound",
+    "homeScore": 83,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:57:37.599Z",
+    "period": 4,
+    "clock": "9:03",
+    "playerName": "Gary Trent J",
+    "action": "Trent Jr. defensive rebound",
+    "homeScore": 83,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:57:57.642Z",
+    "period": 4,
+    "clock": "8:56",
+    "playerName": "Jericho Sims",
+    "action": "makes dunk (Ryan Rollins assists)",
+    "homeScore": 83,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:57:58.257Z",
+    "period": 4,
+    "clock": "8:56",
+    "playerName": "Jericho Sims",
+    "action": "makes dunk (Ryan Rollins assists)",
+    "homeScore": 83,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:58:28.761Z",
+    "period": 4,
+    "clock": "8:06",
+    "playerName": "Mike Conley",
+    "action": "defensive rebound",
+    "homeScore": 86,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:58:29.998Z",
+    "period": 4,
+    "clock": "8:06",
+    "playerName": "Mike Conley",
+    "action": "defensive rebound",
+    "homeScore": 86,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T01:58:40.195Z",
+    "period": 4,
+    "clock": "7:55",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T01:58:40.767Z",
+    "period": 4,
+    "clock": "7:55",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:00:08.166Z",
+    "period": 4,
+    "clock": "7:55",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:00:56.243Z",
+    "period": 4,
+    "clock": "7:55",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:01:36.817Z",
+    "period": 4,
+    "clock": "7:55",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:01:45.974Z",
+    "period": 4,
+    "clock": "7:55",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:02:20.818Z",
+    "period": 4,
+    "clock": "7:44",
+    "playerName": "Naz Reid",
+    "action": "personal foul",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:02:20.998Z",
+    "period": 4,
+    "clock": "7:44",
+    "playerName": "Naz Reid",
+    "action": "personal foul",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:02:30.916Z",
+    "period": 4,
+    "clock": "7:44",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. enters the game for Gary Trent Jr.",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:02:31.918Z",
+    "period": 4,
+    "clock": "7:44",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. enters the game for Gary Trent Jr.",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:02:40.737Z",
+    "period": 4,
+    "clock": "7:44",
+    "playerName": "Bobby Portis",
+    "action": "enters the game for Ryan Rollins",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:02:41.907Z",
+    "period": 4,
+    "clock": "7:44",
+    "playerName": "Bobby Portis",
+    "action": "enters the game for Ryan Rollins",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:02:43.495Z",
+    "period": 4,
+    "clock": "7:44",
+    "playerName": "Bobby Portis",
+    "action": "enters the game for Ryan Rollins",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:02:52.199Z",
+    "period": 4,
+    "clock": "7:29",
+    "playerName": "Julius Randle",
+    "action": "defensive rebound",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:02:52.395Z",
+    "period": 4,
+    "clock": "7:29",
+    "playerName": "Julius Randle",
+    "action": "defensive rebound",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:03:01.591Z",
+    "period": 4,
+    "clock": "7:07",
+    "playerName": "Bobby Portis",
+    "action": "defensive rebound",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:03:02.234Z",
+    "period": 4,
+    "clock": "7:07",
+    "playerName": "Bobby Portis",
+    "action": "defensive rebound",
+    "homeScore": 89,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:03:52.728Z",
+    "period": 4,
+    "clock": "6:55",
+    "playerName": "Bobby Portis",
+    "action": "makes 9-foot floating jump shot (Kevin Porter Jr. assists)",
+    "homeScore": 89,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:03:53.047Z",
+    "period": 4,
+    "clock": "6:55",
+    "playerName": "Bobby Portis",
+    "action": "makes 9-foot floating jump shot (Kevin Porter Jr. assists)",
+    "homeScore": 89,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:04:03.088Z",
+    "period": 4,
+    "clock": "6:14",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. turnover Mike Conley",
+    "homeScore": 92,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:04:03.556Z",
+    "period": 4,
+    "clock": "6:14",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. turnover Mike Conley",
+    "homeScore": 92,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:04:08.749Z",
+    "period": 4,
+    "clock": "6:14",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. turnover Mike Conley",
+    "homeScore": 92,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:04:11.969Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:04:12.752Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:04:57.888Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:06:28.160Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:06:54.070Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Anthony Edwards",
+    "action": "enters the game for Bones Hyland",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:06:54.834Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Anthony Edwards",
+    "action": "enters the game for Bones Hyland",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:01.013Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Anthony Edwards",
+    "action": "enters the game for Bones Hyland",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:02.305Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Anthony Edwards",
+    "action": "enters the game for Bones Hyland",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:03.623Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Anthony Edwards",
+    "action": "enters the game for Bones Hyland",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:05.394Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Anthony Edwards",
+    "action": "enters the game for Bones Hyland",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:08.781Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Anthony Edwards",
+    "action": "enters the game for Bones Hyland",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:10.317Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Anthony Edwards",
+    "action": "enters the game for Bones Hyland",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:14.342Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Ryan Rollins",
+    "action": "enters the game for AJ Green",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:15.466Z",
+    "period": 4,
+    "clock": "6:12",
+    "playerName": "Ryan Rollins",
+    "action": "enters the game for AJ Green",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:34.610Z",
+    "period": 4,
+    "clock": "6:02",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. steps out of bounds turnover",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:34.640Z",
+    "period": 4,
+    "clock": "6:02",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. steps out of bounds turnover",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:45.830Z",
+    "period": 4,
+    "clock": "5:52",
+    "playerName": "Julius Randle",
+    "action": "offensive foul turnover",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:07:46.735Z",
+    "period": 4,
+    "clock": "5:52",
+    "playerName": "Julius Randle",
+    "action": "offensive foul turnover",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:08:15.355Z",
+    "period": 4,
+    "clock": "5:52",
+    "playerName": "Rudy Gobert",
+    "action": "enters the game for Naz Reid",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:08:15.357Z",
+    "period": 4,
+    "clock": "5:52",
+    "playerName": "Rudy Gobert",
+    "action": "enters the game for Naz Reid",
+    "homeScore": 94,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:08:35.771Z",
+    "period": 4,
+    "clock": "5:33",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. makes driving layup (Myles Turner assists)",
+    "homeScore": 94,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:08:36.287Z",
+    "period": 4,
+    "clock": "5:33",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. makes driving layup (Myles Turner assists)",
+    "homeScore": 94,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:08:42.044Z",
+    "period": 4,
+    "clock": "5:33",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. makes driving layup (Myles Turner assists)",
+    "homeScore": 94,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:08:47.676Z",
+    "period": 4,
+    "clock": "5:33",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. makes driving layup (Myles Turner assists)",
+    "homeScore": 94,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:08:57.839Z",
+    "period": 4,
+    "clock": "4:50",
+    "playerName": "Donte Di",
+    "action": "DiVincenzo shooting foul",
+    "homeScore": 96,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:09:16.847Z",
+    "period": 4,
+    "clock": "4:50",
+    "playerName": "Timberwolves Full",
+    "action": "timeout",
+    "homeScore": 96,
+    "awayScore": 89,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:10:02.473Z",
+    "period": 4,
+    "clock": "4:50",
+    "playerName": "Timberwolves Full",
+    "action": "timeout",
+    "homeScore": 96,
+    "awayScore": 89,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:10:37.184Z",
+    "period": 4,
+    "clock": "4:50",
+    "playerName": "Player",
+    "action": "(04:50) [Timberwolves] COACH'S CHALLENGE (CALL STANDS) [Timberwolves] charged with a timeout",
+    "homeScore": 96,
+    "awayScore": 89,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:10:37.649Z",
+    "period": 4,
+    "clock": "4:50",
+    "playerName": "Player",
+    "action": "(04:50) [Timberwolves] COACH'S CHALLENGE (CALL STANDS) [Timberwolves] charged with a timeout",
+    "homeScore": 96,
+    "awayScore": 89,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:11:05.431Z",
+    "period": 4,
+    "clock": "4:50",
+    "playerName": "Player",
+    "action": "(04:50) [Timberwolves] COACH'S CHALLENGE (CALL STANDS) [Timberwolves] charged with a timeout",
+    "homeScore": 96,
+    "awayScore": 89,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:11:27.907Z",
+    "period": 4,
+    "clock": "4:50",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. makes free throw 1 of 2",
+    "homeScore": 96,
+    "awayScore": 90,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:11:27.985Z",
+    "period": 4,
+    "clock": "4:50",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. makes free throw 1 of 2",
+    "homeScore": 96,
+    "awayScore": 90,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:11:37.998Z",
+    "period": 4,
+    "clock": "4:37",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 96,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:11:38.272Z",
+    "period": 4,
+    "clock": "4:37",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 96,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:12:03.157Z",
+    "period": 4,
+    "clock": "4:37",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 96,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:12:07.406Z",
+    "period": 4,
+    "clock": "4:37",
+    "playerName": "Kevin Porter J",
+    "action": "Porter Jr. defensive rebound",
+    "homeScore": 96,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:12:09.221Z",
+    "period": 4,
+    "clock": "4:28",
+    "playerName": "Mike Conley",
+    "action": "enters the game for Terrence Shannon Jr.",
+    "homeScore": 96,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:12:15.281Z",
+    "period": 4,
+    "clock": "4:28",
+    "playerName": "Mike Conley",
+    "action": "enters the game for Terrence Shannon Jr.",
+    "homeScore": 96,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:12:20.157Z",
+    "period": 4,
+    "clock": "4:28",
+    "playerName": "Mike Conley",
+    "action": "enters the game for Terrence Shannon Jr.",
+    "homeScore": 96,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:12:49.935Z",
+    "period": 4,
+    "clock": "3:59",
+    "playerName": "Ryan Rollins",
+    "action": "defensive rebound",
+    "homeScore": 96,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:12:51.219Z",
+    "period": 4,
+    "clock": "3:59",
+    "playerName": "Ryan Rollins",
+    "action": "defensive rebound",
+    "homeScore": 96,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:13:00.016Z",
+    "period": 4,
+    "clock": "3:47",
+    "playerName": "Rudy Gobert",
+    "action": "defensive rebound",
+    "homeScore": 96,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:13:30.798Z",
+    "period": 4,
+    "clock": "3:36",
+    "playerName": "Anthony Edwards",
+    "action": "makes 17-foot two point shot",
+    "homeScore": 98,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:13:40.744Z",
+    "period": 4,
+    "clock": "3:10",
+    "playerName": "Timberwolves Full",
+    "action": "timeout",
+    "homeScore": 98,
+    "awayScore": 93,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:15:12.961Z",
+    "period": 4,
+    "clock": "3:10",
+    "playerName": "Timberwolves Full",
+    "action": "timeout",
+    "homeScore": 98,
+    "awayScore": 93,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:15:53.790Z",
+    "period": 4,
+    "clock": "2:49",
+    "playerName": "Bobby Portis",
+    "action": "defensive rebound",
+    "homeScore": 98,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:16:03.593Z",
+    "period": 4,
+    "clock": "2:46",
+    "playerName": "Bobby Portis",
+    "action": "lost ball turnover (Donte DiVincenzo steals)",
+    "homeScore": 98,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:16:06.402Z",
+    "period": 4,
+    "clock": "2:46",
+    "playerName": "Bobby Portis",
+    "action": "lost ball turnover (Donte DiVincenzo steals)",
+    "homeScore": 98,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:16:22.997Z",
+    "period": 4,
+    "clock": "2:14",
+    "playerName": "Rudy Gobert",
+    "action": "defensive rebound",
+    "homeScore": 101,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:16:44.119Z",
+    "period": 4,
+    "clock": "1:52",
+    "playerName": "Kyle Kuzma",
+    "action": "defensive rebound",
+    "homeScore": 101,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:17:03.365Z",
+    "period": 4,
+    "clock": "1:49",
+    "playerName": "Julius Randle",
+    "action": "foul",
+    "homeScore": 101,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:17:33.506Z",
+    "period": 4,
+    "clock": "1:49",
+    "playerName": "Julius Randle",
+    "action": "shooting foul",
+    "homeScore": 101,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:17:55.856Z",
+    "period": 4,
+    "clock": "1:49",
+    "playerName": "Kyle Kuzma",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:18:04.406Z",
+    "period": 4,
+    "clock": "1:45",
+    "playerName": "Julius Randle",
+    "action": "defensive rebound",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:18:25.350Z",
+    "period": 4,
+    "clock": "1:18",
+    "playerName": "Julius Randle",
+    "action": "blocks Kyle Kuzma 's 5-foot shot",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:18:36.614Z",
+    "period": 4,
+    "clock": "1:15",
+    "playerName": "Donte Di",
+    "action": "DiVincenzo defensive rebound",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:18:56.761Z",
+    "period": 4,
+    "clock": "59.0",
+    "playerName": "Ryan Rollins",
+    "action": "blocks Mike Conley 's 5-foot driving layup",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-22T02:19:06.871Z",
+    "period": 4,
+    "clock": "59.0",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:19:19.736Z",
+    "period": 4,
+    "clock": "59.0",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:19:46.994Z",
+    "period": 4,
+    "clock": "59.0",
+    "playerName": "Player",
+    "action": "(00:59) [Bucks] COACH'S CHALLENGE (CALL OVERTURNED) [Bucks] retain their timeout",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:20:29.978Z",
+    "period": 4,
+    "clock": "59.0",
+    "playerName": "Player",
+    "action": "(00:59) [Bucks] COACH'S CHALLENGE (CALL OVERTURNED) [Bucks] retain their timeout",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:20:33.943Z",
+    "period": 4,
+    "clock": "59.0",
+    "playerName": "Player",
+    "action": "(00:59) [Bucks] COACH'S CHALLENGE (CALL OVERTURNED) [Bucks] retain their timeout",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:20:36.792Z",
+    "period": 4,
+    "clock": "59.0",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-22T02:21:55.922Z",
+    "period": 4,
+    "clock": "59.0",
+    "playerName": "Bucks Full",
+    "action": "timeout",
+    "homeScore": 101,
+    "awayScore": 94,
+    "isTimeout": true
+  }
+]

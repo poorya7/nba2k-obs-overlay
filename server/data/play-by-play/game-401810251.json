@@ -1568,5 +1568,2635 @@
     "homeScore": 29,
     "awayScore": 34,
     "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:04:30.023Z",
+    "period": 1,
+    "clock": "0.9",
+    "playerName": "Nikola Vucevic",
+    "action": "defensive rebound",
+    "homeScore": 38,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:06:01.740Z",
+    "period": 2,
+    "clock": "12:00",
+    "playerName": "Matas Buzelis",
+    "action": "enters the game for Tre Jones",
+    "homeScore": 38,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:06:11.926Z",
+    "period": 2,
+    "clock": "12:00",
+    "playerName": "Josh Giddey",
+    "action": "enters the game for Patrick Williams",
+    "homeScore": 38,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:07:01.383Z",
+    "period": 2,
+    "clock": "11:41",
+    "playerName": "Vit Krejci",
+    "action": "shooting foul",
+    "homeScore": 38,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:07:22.446Z",
+    "period": 2,
+    "clock": "11:41",
+    "playerName": "Coby White",
+    "action": "enters the game for Kevin Huerter",
+    "homeScore": 38,
+    "awayScore": 39,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:07:32.440Z",
+    "period": 2,
+    "clock": "11:28",
+    "playerName": "Dyson Daniels",
+    "action": "misses shot",
+    "homeScore": 38,
+    "awayScore": 40,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:07:42.683Z",
+    "period": 2,
+    "clock": "11:28",
+    "playerName": "Dyson Daniels",
+    "action": "misses 3-foot two point shot",
+    "homeScore": 38,
+    "awayScore": 40,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:08:19.116Z",
+    "period": 2,
+    "clock": "11:28",
+    "playerName": "Dyson Daniels",
+    "action": "misses 3-foot two point shot",
+    "homeScore": 38,
+    "awayScore": 40,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:08:32.232Z",
+    "period": 2,
+    "clock": "11:02",
+    "playerName": "Jalen Smith",
+    "action": "offensive rebound",
+    "homeScore": 38,
+    "awayScore": 40,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:08:52.421Z",
+    "period": 2,
+    "clock": "11:00",
+    "playerName": "Jalen Smith",
+    "action": "bad pass turnover (Luke Kennard steals)",
+    "homeScore": 38,
+    "awayScore": 40,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:09:13.813Z",
+    "period": 2,
+    "clock": "10:43",
+    "playerName": "Vit Krejci",
+    "action": "makes 24-foot three point jumper (Luke Kennard assists)",
+    "homeScore": 41,
+    "awayScore": 40,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:09:34.224Z",
+    "period": 2,
+    "clock": "10:23",
+    "playerName": "Luke Kennard",
+    "action": "shooting foul",
+    "homeScore": 41,
+    "awayScore": 40,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:09:52.652Z",
+    "period": 2,
+    "clock": "10:23",
+    "playerName": "Coby White",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 41,
+    "awayScore": 41,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:10:04.867Z",
+    "period": 2,
+    "clock": "10:23",
+    "playerName": "Coby White",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 41,
+    "awayScore": 42,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:10:23.361Z",
+    "period": 2,
+    "clock": "10:13",
+    "playerName": "Bulls Full",
+    "action": "timeout",
+    "homeScore": 44,
+    "awayScore": 42,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T21:12:20.824Z",
+    "period": 2,
+    "clock": "10:13",
+    "playerName": "Bulls Full",
+    "action": "timeout",
+    "homeScore": 44,
+    "awayScore": 42,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T21:13:46.622Z",
+    "period": 2,
+    "clock": "9:59",
+    "playerName": "Matas Buzelis",
+    "action": "makes 25-foot three pointer (Jalen Smith assists)",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:13:56.767Z",
+    "period": 2,
+    "clock": "9:38",
+    "playerName": "Onyeka Okongwu",
+    "action": "misses 24-foot three point jumper",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:14:18.879Z",
+    "period": 2,
+    "clock": "9:18",
+    "playerName": "Onyeka Okongwu",
+    "action": "defensive rebound",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:14:27.059Z",
+    "period": 2,
+    "clock": "9:01",
+    "playerName": "Dyson Daniels",
+    "action": "misses shot",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:14:37.393Z",
+    "period": 2,
+    "clock": "8:59",
+    "playerName": "Nikola Vucevic",
+    "action": "defensive rebound",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:14:57.422Z",
+    "period": 2,
+    "clock": "8:57",
+    "playerName": "Vit Krejci",
+    "action": "shooting foul",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:15:06.680Z",
+    "period": 2,
+    "clock": "8:57",
+    "playerName": "Josh Giddey",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:15:16.975Z",
+    "period": 2,
+    "clock": "8:57",
+    "playerName": "Zaccharie Risacher",
+    "action": "enters the game for Vit Krejci",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:15:25.598Z",
+    "period": 2,
+    "clock": "8:57",
+    "playerName": "Zaccharie Risacher",
+    "action": "enters the game for Vit Krejci",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:15:27.709Z",
+    "period": 2,
+    "clock": "8:57",
+    "playerName": "Ayo Dosunmu",
+    "action": "enters the game for Coby White",
+    "homeScore": 44,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:15:37.767Z",
+    "period": 2,
+    "clock": "8:57",
+    "playerName": "Josh Giddey",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 44,
+    "awayScore": 46,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:15:57.845Z",
+    "period": 2,
+    "clock": "8:44",
+    "playerName": "Zaccharie Risacher",
+    "action": "makes 24-foot three point jumper (Dyson Daniels assists)",
+    "homeScore": 47,
+    "awayScore": 46,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:16:18.970Z",
+    "period": 2,
+    "clock": "8:31",
+    "playerName": "Asa Newell",
+    "action": "shooting foul",
+    "homeScore": 47,
+    "awayScore": 46,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:16:30.095Z",
+    "period": 2,
+    "clock": "8:31",
+    "playerName": "Zach Collins",
+    "action": "enters the game for Nikola Vucevic",
+    "homeScore": 47,
+    "awayScore": 47,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:16:50.301Z",
+    "period": 2,
+    "clock": "8:29",
+    "playerName": "Asa Newell",
+    "action": "defensive rebound",
+    "homeScore": 47,
+    "awayScore": 47,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:17:20.144Z",
+    "period": 2,
+    "clock": "8:18",
+    "playerName": "Zaccharie Risacher",
+    "action": "makes 25-foot three point jumper (Jalen Johnson assists)",
+    "homeScore": 50,
+    "awayScore": 47,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:17:30.347Z",
+    "period": 2,
+    "clock": "8:00",
+    "playerName": "Ayo Dosunmu",
+    "action": "makes 23-foot three point jumper (Josh Giddey assists)",
+    "homeScore": 50,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:17:40.649Z",
+    "period": 2,
+    "clock": "7:48",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker bad pass turnover (Josh Giddey steals)",
+    "homeScore": 50,
+    "awayScore": 50,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:18:00.991Z",
+    "period": 2,
+    "clock": "7:18",
+    "playerName": "Josh Giddey",
+    "action": "defensive rebound",
+    "homeScore": 50,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:18:11.284Z",
+    "period": 2,
+    "clock": "7:13",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 50,
+    "awayScore": 54,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T21:18:56.729Z",
+    "period": 2,
+    "clock": "7:13",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 50,
+    "awayScore": 54,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T21:20:16.743Z",
+    "period": 2,
+    "clock": "7:13",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 50,
+    "awayScore": 54,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T21:21:23.161Z",
+    "period": 2,
+    "clock": "7:13",
+    "playerName": "Tre Jones",
+    "action": "enters the game for Matas Buzelis",
+    "homeScore": 50,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:21:43.292Z",
+    "period": 2,
+    "clock": "7:01",
+    "playerName": "Kevin Huerter",
+    "action": "shooting foul",
+    "homeScore": 50,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:21:53.361Z",
+    "period": 2,
+    "clock": "7:01",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 51,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:22:13.512Z",
+    "period": 2,
+    "clock": "7:01",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 52,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:22:23.538Z",
+    "period": 2,
+    "clock": "6:50",
+    "playerName": "Zach Collins",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 52,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:22:55.867Z",
+    "period": 2,
+    "clock": "6:50",
+    "playerName": "Zach Collins",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 52,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:23:24.341Z",
+    "period": 2,
+    "clock": "6:42",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 52,
+    "awayScore": 55,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T21:25:17.557Z",
+    "period": 2,
+    "clock": "6:42",
+    "playerName": "Isaac Okoro",
+    "action": "enters the game for Josh Giddey",
+    "homeScore": 52,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:25:27.831Z",
+    "period": 2,
+    "clock": "6:42",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 53,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:25:37.083Z",
+    "period": 2,
+    "clock": "6:42",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 54,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:26:07.675Z",
+    "period": 2,
+    "clock": "6:41",
+    "playerName": "Tre Jones",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 54,
+    "awayScore": 56,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:26:17.880Z",
+    "period": 2,
+    "clock": "6:41",
+    "playerName": "Onyeka Okongwu",
+    "action": "enters the game for Jalen Johnson",
+    "homeScore": 54,
+    "awayScore": 56,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:26:37.865Z",
+    "period": 2,
+    "clock": "6:41",
+    "playerName": "Dyson Daniels",
+    "action": "enters the game for Asa Newell",
+    "homeScore": 54,
+    "awayScore": 56,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:27:08.886Z",
+    "period": 2,
+    "clock": "6:41",
+    "playerName": "Tre Jones",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 54,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:27:19.163Z",
+    "period": 2,
+    "clock": "6:15",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker defensive rebound",
+    "homeScore": 54,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:27:29.241Z",
+    "period": 2,
+    "clock": "6:03",
+    "playerName": "Ayo Dosunmu",
+    "action": "misses shot",
+    "homeScore": 57,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:27:39.403Z",
+    "period": 2,
+    "clock": "6:01",
+    "playerName": "Zaccharie Risacher",
+    "action": "loose ball foul",
+    "homeScore": 57,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:28:00.002Z",
+    "period": 2,
+    "clock": "6:01",
+    "playerName": "Zach Collins",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 57,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:28:09.084Z",
+    "period": 2,
+    "clock": "5:59",
+    "playerName": "Dyson Daniels",
+    "action": "defensive rebound",
+    "homeScore": 57,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:28:29.569Z",
+    "period": 2,
+    "clock": "5:42",
+    "playerName": "Zach Collins",
+    "action": "defensive rebound",
+    "homeScore": 57,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:28:38.788Z",
+    "period": 2,
+    "clock": "5:34",
+    "playerName": "Zach Collins",
+    "action": "makes 2-foot layup (Kevin Huerter assists)",
+    "homeScore": 57,
+    "awayScore": 60,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:28:49.822Z",
+    "period": 2,
+    "clock": "5:17",
+    "playerName": "Onyeka Okongwu",
+    "action": "defensive rebound",
+    "homeScore": 57,
+    "awayScore": 60,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:29:30.460Z",
+    "period": 2,
+    "clock": "5:10",
+    "playerName": "Trae Young",
+    "action": "enters the game for Luke Kennard",
+    "homeScore": 57,
+    "awayScore": 60,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:29:49.948Z",
+    "period": 2,
+    "clock": "5:10",
+    "playerName": "Nikola Vucevic",
+    "action": "enters the game for Zach Collins",
+    "homeScore": 57,
+    "awayScore": 60,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:30:00.466Z",
+    "period": 2,
+    "clock": "5:06",
+    "playerName": "Trae Young",
+    "action": "makes driving layup (Dyson Daniels assists)",
+    "homeScore": 59,
+    "awayScore": 60,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:30:10.869Z",
+    "period": 2,
+    "clock": "4:54",
+    "playerName": "Coby White",
+    "action": "makes 23-foot three point jumper (Tre Jones assists)",
+    "homeScore": 59,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:30:32.128Z",
+    "period": 2,
+    "clock": "4:38",
+    "playerName": "Onyeka Okongwu",
+    "action": "makes driving layup (Trae Young assists)",
+    "homeScore": 61,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:30:52.271Z",
+    "period": 2,
+    "clock": "4:18",
+    "playerName": "Nikola Vucevic",
+    "action": "makes 9-foot two point shot",
+    "homeScore": 61,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:31:10.405Z",
+    "period": 2,
+    "clock": "4:04",
+    "playerName": "Trae Young",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 61,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:31:30.770Z",
+    "period": 2,
+    "clock": "4:04",
+    "playerName": "Josh Giddey",
+    "action": "enters the game for Kevin Huerter",
+    "homeScore": 61,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:31:40.978Z",
+    "period": 2,
+    "clock": "4:04",
+    "playerName": "Trae Young",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 62,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:31:51.417Z",
+    "period": 2,
+    "clock": "3:57",
+    "playerName": "Nikola Vucevic",
+    "action": "turnover Dyson Daniels",
+    "homeScore": 62,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:32:01.619Z",
+    "period": 2,
+    "clock": "3:52",
+    "playerName": "Dyson Daniels",
+    "action": "makes 1-foot shot",
+    "homeScore": 64,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:32:22.013Z",
+    "period": 2,
+    "clock": "3:22",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker turnover Isaac Okoro",
+    "homeScore": 64,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:32:32.290Z",
+    "period": 2,
+    "clock": "3:22",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker bad pass turnover (Isaac Okoro steals)",
+    "homeScore": 64,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:32:52.683Z",
+    "period": 2,
+    "clock": "3:16",
+    "playerName": "Onyeka Okongwu",
+    "action": "shooting foul",
+    "homeScore": 64,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:33:22.222Z",
+    "period": 2,
+    "clock": "3:16",
+    "playerName": "Tre Jones",
+    "action": "makes free throw 1 of 3",
+    "homeScore": 64,
+    "awayScore": 68,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:33:33.447Z",
+    "period": 2,
+    "clock": "3:16",
+    "playerName": "Tre Jones",
+    "action": "makes free throw 2 of 3",
+    "homeScore": 64,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:33:43.517Z",
+    "period": 2,
+    "clock": "3:16",
+    "playerName": "Matas Buzelis",
+    "action": "enters the game for Isaac Okoro",
+    "homeScore": 64,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:34:03.842Z",
+    "period": 2,
+    "clock": "3:16",
+    "playerName": "Tre Jones",
+    "action": "makes free throw 3 of 3",
+    "homeScore": 64,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:34:13.026Z",
+    "period": 2,
+    "clock": "2:44",
+    "playerName": "Tre Jones",
+    "action": "makes two point shot",
+    "homeScore": 64,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:34:23.415Z",
+    "period": 2,
+    "clock": "2:35",
+    "playerName": "Jalen Johnson",
+    "action": "misses shot",
+    "homeScore": 64,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:34:33.762Z",
+    "period": 2,
+    "clock": "2:26",
+    "playerName": "Trae Young",
+    "action": "defensive rebound",
+    "homeScore": 64,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:34:44.051Z",
+    "period": 2,
+    "clock": "2:20",
+    "playerName": "Trae Young",
+    "action": "makes 21-foot step back jumpshot",
+    "homeScore": 66,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:34:54.012Z",
+    "period": 2,
+    "clock": "2:03",
+    "playerName": "Dyson Daniels",
+    "action": "misses shot",
+    "homeScore": 66,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:35:04.185Z",
+    "period": 2,
+    "clock": "2:03",
+    "playerName": "Dyson Daniels",
+    "action": "makes driving layup",
+    "homeScore": 68,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:35:14.394Z",
+    "period": 2,
+    "clock": "2:03",
+    "playerName": "Matas Buzelis",
+    "action": "defensive goaltending violation",
+    "homeScore": 68,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:35:23.633Z",
+    "period": 2,
+    "clock": "1:45",
+    "playerName": "Tre Jones",
+    "action": "defensive rebound",
+    "homeScore": 68,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:35:33.852Z",
+    "period": 2,
+    "clock": "1:42",
+    "playerName": "Matas Buzelis",
+    "action": "makes 23-foot shot (Coby White assists)",
+    "homeScore": 68,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:35:54.123Z",
+    "period": 2,
+    "clock": "1:42",
+    "playerName": "Matas Buzelis",
+    "action": "makes 23-foot three point jumper (Coby White assists)",
+    "homeScore": 68,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:36:04.235Z",
+    "period": 2,
+    "clock": "1:30",
+    "playerName": "Coby White",
+    "action": "shooting foul",
+    "homeScore": 68,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:36:34.664Z",
+    "period": 2,
+    "clock": "1:30",
+    "playerName": "Trae Young",
+    "action": "makes free throw 1 of 3",
+    "homeScore": 69,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:36:44.766Z",
+    "period": 2,
+    "clock": "1:30",
+    "playerName": "Zaccharie Risacher",
+    "action": "enters the game for Nickeil Alexander-Walker",
+    "homeScore": 70,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:36:55.490Z",
+    "period": 2,
+    "clock": "1:30",
+    "playerName": "Kevin Huerter",
+    "action": "enters the game for Tre Jones",
+    "homeScore": 70,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:37:15.702Z",
+    "period": 2,
+    "clock": "1:30",
+    "playerName": "Trae Young",
+    "action": "makes free throw 3 of 3",
+    "homeScore": 71,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:37:24.933Z",
+    "period": 2,
+    "clock": "1:16",
+    "playerName": "Matas Buzelis",
+    "action": "makes 26-foot three pointer",
+    "homeScore": 71,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:37:35.470Z",
+    "period": 2,
+    "clock": "1:07",
+    "playerName": "Matas Buzelis",
+    "action": "personal foul",
+    "homeScore": 71,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:38:07.128Z",
+    "period": 2,
+    "clock": "1:07",
+    "playerName": "Trae Young",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 72,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:38:37.349Z",
+    "period": 2,
+    "clock": "1:07",
+    "playerName": "Trae Young",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 73,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:38:58.155Z",
+    "period": 2,
+    "clock": "50.3",
+    "playerName": "Zaccharie Risacher",
+    "action": "personal foul",
+    "homeScore": 73,
+    "awayScore": 78,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:39:06.859Z",
+    "period": 2,
+    "clock": "50.3",
+    "playerName": "Nikola Vucevic",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 73,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:39:27.408Z",
+    "period": 2,
+    "clock": "29.6",
+    "playerName": "Zaccharie Risacher",
+    "action": "misses shot",
+    "homeScore": 73,
+    "awayScore": 80,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:39:48.000Z",
+    "period": 2,
+    "clock": "26.4",
+    "playerName": "Matas Buzelis",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 80,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:55:35.090Z",
+    "period": 2,
+    "clock": "1.4",
+    "playerName": "Trae Young",
+    "action": "misses driving floating jump shot",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:55:51.342Z",
+    "period": 3,
+    "clock": "12:00",
+    "playerName": "Isaac Okoro",
+    "action": "enters the game for Kevin Huerter",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:56:01.486Z",
+    "period": 3,
+    "clock": "11:48",
+    "playerName": "Nikola Vucevic",
+    "action": "misses shot",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:56:11.700Z",
+    "period": 3,
+    "clock": "11:33",
+    "playerName": "Onyeka Okongwu",
+    "action": "misses shot",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:56:21.763Z",
+    "period": 3,
+    "clock": "11:24",
+    "playerName": "Coby White",
+    "action": "misses shot",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:56:32.020Z",
+    "period": 3,
+    "clock": "11:20",
+    "playerName": "Onyeka Okongwu",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:56:45.500Z",
+    "period": 3,
+    "clock": "11:20",
+    "playerName": "Onyeka Okongwu",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:56:51.458Z",
+    "period": 3,
+    "clock": "11:15",
+    "playerName": "Trae Young",
+    "action": "makes 26-foot running jump shot (Dyson Daniels assists)",
+    "homeScore": 76,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:57:12.099Z",
+    "period": 3,
+    "clock": "10:57",
+    "playerName": "Josh Giddey",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 76,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:57:34.397Z",
+    "period": 3,
+    "clock": "10:47",
+    "playerName": "Zaccharie Risacher",
+    "action": "misses shot",
+    "homeScore": 76,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:57:44.472Z",
+    "period": 3,
+    "clock": "10:44",
+    "playerName": "Josh Giddey",
+    "action": "defensive rebound",
+    "homeScore": 76,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:57:54.590Z",
+    "period": 3,
+    "clock": "10:37",
+    "playerName": "Nikola Vucevic",
+    "action": "misses 24-foot three point jumper",
+    "homeScore": 76,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:58:13.324Z",
+    "period": 3,
+    "clock": "10:21",
+    "playerName": "Zaccharie Risacher",
+    "action": "offensive rebound",
+    "homeScore": 76,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:58:44.275Z",
+    "period": 3,
+    "clock": "10:20",
+    "playerName": "Zaccharie Risacher",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 76,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:59:04.615Z",
+    "period": 3,
+    "clock": "10:20",
+    "playerName": "Zaccharie Risacher",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 77,
+    "awayScore": 84,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T21:59:14.774Z",
+    "period": 3,
+    "clock": "9:59",
+    "playerName": "Dyson Daniels",
+    "action": "misses shot",
+    "homeScore": 77,
+    "awayScore": 86,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:04:04.923Z",
+    "period": 3,
+    "clock": "8:45",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 84,
+    "awayScore": 93,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T22:06:08.835Z",
+    "period": 3,
+    "clock": "7:59",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker makes running layup (Dyson Daniels assists)",
+    "homeScore": 90,
+    "awayScore": 96,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:07:07.521Z",
+    "period": 3,
+    "clock": "7:01",
+    "playerName": "Josh Giddey",
+    "action": "defensive rebound",
+    "homeScore": 92,
+    "awayScore": 96,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:07:08.708Z",
+    "period": 3,
+    "clock": "7:01",
+    "playerName": "Josh Giddey",
+    "action": "defensive rebound",
+    "homeScore": 92,
+    "awayScore": 96,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:07:10.931Z",
+    "period": 3,
+    "clock": "6:40",
+    "playerName": "Jalen Johnson",
+    "action": "makes shot",
+    "homeScore": 94,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:07:30.118Z",
+    "period": 3,
+    "clock": "6:40",
+    "playerName": "Tre Jones",
+    "action": "enters the game for Coby White",
+    "homeScore": 94,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:07:51.363Z",
+    "period": 3,
+    "clock": "6:40",
+    "playerName": "Ayo Dosunmu",
+    "action": "enters the game for Josh Giddey",
+    "homeScore": 94,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:08:11.797Z",
+    "period": 3,
+    "clock": "6:40",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 1 of 1",
+    "homeScore": 95,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:08:21.797Z",
+    "period": 3,
+    "clock": "6:15",
+    "playerName": "Zach Collins",
+    "action": "defensive rebound",
+    "homeScore": 95,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:08:41.866Z",
+    "period": 3,
+    "clock": "6:10",
+    "playerName": "Isaac Okoro",
+    "action": "makes running layup",
+    "homeScore": 95,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:09:02.198Z",
+    "period": 3,
+    "clock": "6:01",
+    "playerName": "Isaac Okoro",
+    "action": "personal foul",
+    "homeScore": 95,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:09:11.831Z",
+    "period": 3,
+    "clock": "6:01",
+    "playerName": "Kevin Huerter",
+    "action": "enters the game for Matas Buzelis",
+    "homeScore": 95,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:09:31.916Z",
+    "period": 3,
+    "clock": "5:45",
+    "playerName": "Isaac Okoro",
+    "action": "foul",
+    "homeScore": 97,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:09:42.956Z",
+    "period": 3,
+    "clock": "5:45",
+    "playerName": "Isaac Okoro",
+    "action": "shooting foul",
+    "homeScore": 97,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:10:15.552Z",
+    "period": 3,
+    "clock": "5:43",
+    "playerName": "Jalen Smith",
+    "action": "defensive rebound",
+    "homeScore": 97,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:10:17.145Z",
+    "period": 3,
+    "clock": "5:43",
+    "playerName": "Jalen Smith",
+    "action": "defensive rebound",
+    "homeScore": 97,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:10:33.300Z",
+    "period": 3,
+    "clock": "5:32",
+    "playerName": "Zach Collins",
+    "action": "makes 10-foot floating jump shot (Kevin Huerter assists)",
+    "homeScore": 97,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:10:54.446Z",
+    "period": 3,
+    "clock": "4:57",
+    "playerName": "Onyeka Okongwu",
+    "action": "defensive rebound",
+    "homeScore": 99,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:11:12.978Z",
+    "period": 3,
+    "clock": "4:57",
+    "playerName": "Onyeka Okongwu",
+    "action": "defensive rebound",
+    "homeScore": 99,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:11:15.110Z",
+    "period": 3,
+    "clock": "4:50",
+    "playerName": "Bulls Full",
+    "action": "timeout",
+    "homeScore": 102,
+    "awayScore": 102,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T22:13:45.431Z",
+    "period": 3,
+    "clock": "4:50",
+    "playerName": "Vit Krejci",
+    "action": "enters the game for Zaccharie Risacher",
+    "homeScore": 102,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:14:17.224Z",
+    "period": 3,
+    "clock": "4:50",
+    "playerName": "Mouhamed Gueye",
+    "action": "enters the game for Onyeka Okongwu",
+    "homeScore": 102,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:14:35.258Z",
+    "period": 3,
+    "clock": "4:06",
+    "playerName": "Jalen Smith",
+    "action": "defensive rebound",
+    "homeScore": 102,
+    "awayScore": 105,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:14:45.424Z",
+    "period": 3,
+    "clock": "3:57",
+    "playerName": "Zach Collins",
+    "action": "misses driving layup",
+    "homeScore": 102,
+    "awayScore": 105,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:14:55.560Z",
+    "period": 3,
+    "clock": "3:57",
+    "playerName": "Zach Collins",
+    "action": "makes driving layup (Kevin Huerter assists)",
+    "homeScore": 102,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:15:05.654Z",
+    "period": 3,
+    "clock": "3:36",
+    "playerName": "Dyson Daniels",
+    "action": "defensive rebound",
+    "homeScore": 105,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:15:36.139Z",
+    "period": 3,
+    "clock": "3:05",
+    "playerName": "Tre Jones",
+    "action": "offensive rebound",
+    "homeScore": 108,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:15:48.281Z",
+    "period": 3,
+    "clock": "2:52",
+    "playerName": "Zach Collins",
+    "action": "offensive rebound",
+    "homeScore": 108,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:15:58.389Z",
+    "period": 3,
+    "clock": "2:44",
+    "playerName": "Kevin Huerter",
+    "action": "misses shot",
+    "homeScore": 108,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:16:18.413Z",
+    "period": 3,
+    "clock": "2:43",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker foul",
+    "homeScore": 108,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:16:28.557Z",
+    "period": 3,
+    "clock": "2:43",
+    "playerName": "Trae Young",
+    "action": "enters the game for Dyson Daniels",
+    "homeScore": 108,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:16:48.797Z",
+    "period": 3,
+    "clock": "2:27",
+    "playerName": "Mouhamed Gueye",
+    "action": "defensive rebound",
+    "homeScore": 108,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:17:08.957Z",
+    "period": 3,
+    "clock": "2:12",
+    "playerName": "Trae Young",
+    "action": "misses 26-foot three point jumper",
+    "homeScore": 108,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:17:59.306Z",
+    "period": 3,
+    "clock": "2:11",
+    "playerName": "Kevin Huerter",
+    "action": "loose ball foul",
+    "homeScore": 108,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:18:09.338Z",
+    "period": 3,
+    "clock": "2:11",
+    "playerName": "Vit Krejci",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 109,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:18:39.776Z",
+    "period": 3,
+    "clock": "2:11",
+    "playerName": "Vit Krejci",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 110,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:18:59.923Z",
+    "period": 3,
+    "clock": "2:04",
+    "playerName": "Mouhamed Gueye",
+    "action": "personal foul",
+    "homeScore": 110,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:19:20.545Z",
+    "period": 3,
+    "clock": "1:54",
+    "playerName": "Jalen Johnson",
+    "action": "shooting foul",
+    "homeScore": 110,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:19:40.523Z",
+    "period": 3,
+    "clock": "1:54",
+    "playerName": "Jalen Smith",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 110,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:19:50.556Z",
+    "period": 3,
+    "clock": "1:54",
+    "playerName": "Onyeka Okongwu",
+    "action": "enters the game for Jalen Johnson",
+    "homeScore": 110,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:20:00.602Z",
+    "period": 3,
+    "clock": "1:52",
+    "playerName": "Mouhamed Gueye",
+    "action": "defensive rebound",
+    "homeScore": 110,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:20:32.930Z",
+    "period": 3,
+    "clock": "1:41",
+    "playerName": "Mouhamed Gueye",
+    "action": "makes 1-foot alley oop dunk (Onyeka Okongwu assists)",
+    "homeScore": 112,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:20:43.074Z",
+    "period": 3,
+    "clock": "1:04",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker misses shot",
+    "homeScore": 112,
+    "awayScore": 110,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:20:53.174Z",
+    "period": 3,
+    "clock": "1:00",
+    "playerName": "Jalen Smith",
+    "action": "defensive rebound",
+    "homeScore": 112,
+    "awayScore": 110,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:21:21.430Z",
+    "period": 3,
+    "clock": "57.6",
+    "playerName": "Tre Jones",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 112,
+    "awayScore": 111,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:21:31.622Z",
+    "period": 3,
+    "clock": "57.6",
+    "playerName": "Nikola Vucevic",
+    "action": "enters the game for Kevin Huerter",
+    "homeScore": 112,
+    "awayScore": 111,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:21:51.861Z",
+    "period": 3,
+    "clock": "46.4",
+    "playerName": "Jalen Smith",
+    "action": "defensive rebound",
+    "homeScore": 112,
+    "awayScore": 112,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:22:12.112Z",
+    "period": 3,
+    "clock": "44.1",
+    "playerName": "Ayo Dosunmu",
+    "action": "makes running layup (Jalen Smith assists)",
+    "homeScore": 112,
+    "awayScore": 114,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:22:44.758Z",
+    "period": 3,
+    "clock": "31.3",
+    "playerName": "Trae Young",
+    "action": "makes 26-foot three pointer",
+    "homeScore": 115,
+    "awayScore": 114,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:22:52.703Z",
+    "period": 3,
+    "clock": "12.0",
+    "playerName": "Ayo Dosunmu",
+    "action": "makes 1-foot two point shot",
+    "homeScore": 115,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:23:02.871Z",
+    "period": 3,
+    "clock": "0.8",
+    "playerName": "Onyeka Okongwu",
+    "action": "misses 13-foot floating jump shot",
+    "homeScore": 115,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:25:44.472Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Josh Giddey",
+    "action": "enters the game for Tre Jones",
+    "homeScore": 115,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:26:16.718Z",
+    "period": 4,
+    "clock": "11:48",
+    "playerName": "Vit Krejci",
+    "action": "misses technical free throw",
+    "homeScore": 115,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:26:36.738Z",
+    "period": 4,
+    "clock": "11:37",
+    "playerName": "Patrick Williams",
+    "action": "defensive rebound",
+    "homeScore": 115,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:26:47.105Z",
+    "period": 4,
+    "clock": "11:31",
+    "playerName": "Luke Kennard",
+    "action": "defensive rebound",
+    "homeScore": 115,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:27:07.122Z",
+    "period": 4,
+    "clock": "11:26",
+    "playerName": "Vit Krejci",
+    "action": "makes 26-foot running jump shot (Onyeka Okongwu assists)",
+    "homeScore": 118,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:27:25.252Z",
+    "period": 4,
+    "clock": "11:13",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 118,
+    "awayScore": 116,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T22:29:28.238Z",
+    "period": 4,
+    "clock": "11:13",
+    "playerName": "Player",
+    "action": "(11:13) [Hawks] COACH'S CHALLENGE (CALL OVERTURNED) [Hawks] retain their timeout",
+    "homeScore": 118,
+    "awayScore": 116,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T22:29:38.387Z",
+    "period": 4,
+    "clock": "11:13",
+    "playerName": "Josh Giddey",
+    "action": "turnover",
+    "homeScore": 118,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:30:28.996Z",
+    "period": 4,
+    "clock": "10:54",
+    "playerName": "Josh Giddey",
+    "action": "defensive rebound",
+    "homeScore": 118,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:30:48.956Z",
+    "period": 4,
+    "clock": "10:36",
+    "playerName": "Dyson Daniels",
+    "action": "defensive rebound",
+    "homeScore": 118,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:30:59.058Z",
+    "period": 4,
+    "clock": "10:29",
+    "playerName": "Josh Giddey",
+    "action": "defensive rebound",
+    "homeScore": 118,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:31:29.557Z",
+    "period": 4,
+    "clock": "10:23",
+    "playerName": "Vit Krejci",
+    "action": "shooting foul",
+    "homeScore": 118,
+    "awayScore": 116,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:31:49.862Z",
+    "period": 4,
+    "clock": "10:23",
+    "playerName": "Coby White",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 118,
+    "awayScore": 117,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:32:09.960Z",
+    "period": 4,
+    "clock": "10:20",
+    "playerName": "Dyson Daniels",
+    "action": "defensive rebound",
+    "homeScore": 118,
+    "awayScore": 117,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:32:20.300Z",
+    "period": 4,
+    "clock": "10:09",
+    "playerName": "Vit Krejci",
+    "action": "misses shot",
+    "homeScore": 118,
+    "awayScore": 117,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:32:30.110Z",
+    "period": 4,
+    "clock": "10:09",
+    "playerName": "Vit Krejci",
+    "action": "misses 24-foot three point jumper",
+    "homeScore": 118,
+    "awayScore": 117,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:33:10.772Z",
+    "period": 4,
+    "clock": "9:24",
+    "playerName": "Vit Krejci",
+    "action": "misses shot",
+    "homeScore": 118,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:33:20.914Z",
+    "period": 4,
+    "clock": "9:24",
+    "playerName": "Vit Krejci",
+    "action": "misses 25-foot three point jumper",
+    "homeScore": 118,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:33:41.085Z",
+    "period": 4,
+    "clock": "9:23",
+    "playerName": "Jalen Johnson",
+    "action": "enters the game for Mouhamed Gueye",
+    "homeScore": 118,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:33:51.212Z",
+    "period": 4,
+    "clock": "9:23",
+    "playerName": "Kevin Huerter",
+    "action": "enters the game for Jalen Smith",
+    "homeScore": 118,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:34:01.307Z",
+    "period": 4,
+    "clock": "9:04",
+    "playerName": "Onyeka Okongwu",
+    "action": "blocks Josh Giddey's shot",
+    "homeScore": 118,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:34:11.396Z",
+    "period": 4,
+    "clock": "9:04",
+    "playerName": "Onyeka Okongwu",
+    "action": "blocks Josh Giddey's running layup",
+    "homeScore": 118,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:34:31.333Z",
+    "period": 4,
+    "clock": "8:52",
+    "playerName": "Dyson Daniels",
+    "action": "defensive rebound",
+    "homeScore": 118,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:34:51.620Z",
+    "period": 4,
+    "clock": "8:42",
+    "playerName": "Dyson Daniels",
+    "action": "makes dunk (Jalen Johnson assists)",
+    "homeScore": 120,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:35:11.923Z",
+    "period": 4,
+    "clock": "8:26",
+    "playerName": "Coby White",
+    "action": "offensive rebound",
+    "homeScore": 120,
+    "awayScore": 119,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:35:32.182Z",
+    "period": 4,
+    "clock": "8:05",
+    "playerName": "Kevin Huerter",
+    "action": "defensive rebound",
+    "homeScore": 120,
+    "awayScore": 122,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:35:42.140Z",
+    "period": 4,
+    "clock": "7:59",
+    "playerName": "Coby White",
+    "action": "traveling turnover",
+    "homeScore": 120,
+    "awayScore": 122,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:36:22.661Z",
+    "period": 4,
+    "clock": "7:35",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 120,
+    "awayScore": 124,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T22:38:44.176Z",
+    "period": 4,
+    "clock": "7:35",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker enters the game for Vit Krejci",
+    "homeScore": 120,
+    "awayScore": 124,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:39:34.582Z",
+    "period": 4,
+    "clock": "7:17",
+    "playerName": "Dyson Daniels",
+    "action": "bad pass turnover (Kevin Huerter steals)",
+    "homeScore": 120,
+    "awayScore": 124,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:39:44.784Z",
+    "period": 4,
+    "clock": "7:03",
+    "playerName": "Onyeka Okongwu",
+    "action": "makes 1-foot shot (Jalen Johnson assists)",
+    "homeScore": 122,
+    "awayScore": 126,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:40:05.168Z",
+    "period": 4,
+    "clock": "7:03",
+    "playerName": "Onyeka Okongwu",
+    "action": "makes 1-foot dunk (Jalen Johnson assists)",
+    "homeScore": 122,
+    "awayScore": 126,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:40:15.242Z",
+    "period": 4,
+    "clock": "6:38",
+    "playerName": "Kevin Huerter",
+    "action": "shooting foul",
+    "homeScore": 122,
+    "awayScore": 129,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:40:35.486Z",
+    "period": 4,
+    "clock": "6:38",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker misses free throw 1 of 3",
+    "homeScore": 122,
+    "awayScore": 129,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:42:36.955Z",
+    "period": 4,
+    "clock": "6:38",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker makes free throw 2 of 3",
+    "homeScore": 123,
+    "awayScore": 129,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:42:46.688Z",
+    "period": 4,
+    "clock": "6:38",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker makes free throw 3 of 3",
+    "homeScore": 124,
+    "awayScore": 129,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:42:56.892Z",
+    "period": 4,
+    "clock": "6:24",
+    "playerName": "Josh Giddey",
+    "action": "misses shot",
+    "homeScore": 124,
+    "awayScore": 129,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:43:07.139Z",
+    "period": 4,
+    "clock": "6:21",
+    "playerName": "Zach Collins",
+    "action": "offensive rebound",
+    "homeScore": 124,
+    "awayScore": 129,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:43:27.526Z",
+    "period": 4,
+    "clock": "6:20",
+    "playerName": "Trae Young",
+    "action": "shooting foul",
+    "homeScore": 124,
+    "awayScore": 129,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:43:37.611Z",
+    "period": 4,
+    "clock": "6:20",
+    "playerName": "Josh Giddey",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 124,
+    "awayScore": 130,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:43:57.935Z",
+    "period": 4,
+    "clock": "6:05",
+    "playerName": "Zaccharie Risacher",
+    "action": "makes 1-foot shot",
+    "homeScore": 126,
+    "awayScore": 131,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:44:08.348Z",
+    "period": 4,
+    "clock": "6:05",
+    "playerName": "Zaccharie Risacher",
+    "action": "makes two point shot",
+    "homeScore": 126,
+    "awayScore": 131,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:44:18.595Z",
+    "period": 4,
+    "clock": "5:54",
+    "playerName": "Zach Collins",
+    "action": "makes dunk (Josh Giddey assists)",
+    "homeScore": 126,
+    "awayScore": 133,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:44:28.873Z",
+    "period": 4,
+    "clock": "5:43",
+    "playerName": "Trae Young",
+    "action": "bad pass turnover (Matas Buzelis steals)",
+    "homeScore": 126,
+    "awayScore": 133,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:45:09.368Z",
+    "period": 4,
+    "clock": "5:20",
+    "playerName": "Jalen Johnson",
+    "action": "misses 25-foot three point jumper",
+    "homeScore": 126,
+    "awayScore": 133,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:45:39.841Z",
+    "period": 4,
+    "clock": "5:09",
+    "playerName": "Bulls Full",
+    "action": "timeout",
+    "homeScore": 126,
+    "awayScore": 133,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T22:47:09.097Z",
+    "period": 4,
+    "clock": "5:09",
+    "playerName": "Coby White",
+    "action": "enters the game for Zach Collins",
+    "homeScore": 126,
+    "awayScore": 133,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:47:29.349Z",
+    "period": 4,
+    "clock": "5:09",
+    "playerName": "Nikola Vucevic",
+    "action": "enters the game for Kevin Huerter",
+    "homeScore": 126,
+    "awayScore": 133,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:47:39.524Z",
+    "period": 4,
+    "clock": "4:59",
+    "playerName": "Coby White",
+    "action": "bad pass turnover (Dyson Daniels steals)",
+    "homeScore": 126,
+    "awayScore": 133,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:48:00.012Z",
+    "period": 4,
+    "clock": "4:52",
+    "playerName": "Trae Young",
+    "action": "makes 26-foot three point step back jumpshot",
+    "homeScore": 129,
+    "awayScore": 133,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:48:20.273Z",
+    "period": 4,
+    "clock": "4:11",
+    "playerName": "Jalen Johnson",
+    "action": "offensive rebound",
+    "homeScore": 129,
+    "awayScore": 136,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:48:40.535Z",
+    "period": 4,
+    "clock": "4:11",
+    "playerName": "Nikola Vucevic",
+    "action": "shooting foul",
+    "homeScore": 129,
+    "awayScore": 136,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:49:01.002Z",
+    "period": 4,
+    "clock": "4:11",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 130,
+    "awayScore": 136,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:49:11.341Z",
+    "period": 4,
+    "clock": "4:11",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 131,
+    "awayScore": 136,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:49:31.711Z",
+    "period": 4,
+    "clock": "4:00",
+    "playerName": "Coby White",
+    "action": "makes 24-foot three point jumper (Nikola Vucevic assists)",
+    "homeScore": 131,
+    "awayScore": 139,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:50:22.506Z",
+    "period": 4,
+    "clock": "3:21",
+    "playerName": "Nikola Vucevic",
+    "action": "misses 24-foot three point jumper",
+    "homeScore": 134,
+    "awayScore": 139,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:50:32.666Z",
+    "period": 4,
+    "clock": "3:22",
+    "playerName": "Nikola Vucevic",
+    "action": "misses 24-foot three point jumper",
+    "homeScore": 134,
+    "awayScore": 139,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:51:03.148Z",
+    "period": 4,
+    "clock": "3:01",
+    "playerName": "Jalen Johnson",
+    "action": "makes 8-foot turnaround jump shot",
+    "homeScore": 136,
+    "awayScore": 139,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:51:43.848Z",
+    "period": 4,
+    "clock": "2:45",
+    "playerName": "Trae Young",
+    "action": "personal foul",
+    "homeScore": 136,
+    "awayScore": 139,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:52:04.221Z",
+    "period": 4,
+    "clock": "2:45",
+    "playerName": "Isaac Okoro",
+    "action": "enters the game for Matas Buzelis",
+    "homeScore": 136,
+    "awayScore": 139,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:52:12.455Z",
+    "period": 4,
+    "clock": "2:34",
+    "playerName": "Coby White",
+    "action": "makes driving layup",
+    "homeScore": 136,
+    "awayScore": 141,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:52:34.888Z",
+    "period": 4,
+    "clock": "2:29",
+    "playerName": "Josh Giddey",
+    "action": "shooting foul",
+    "homeScore": 136,
+    "awayScore": 141,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:52:53.202Z",
+    "period": 4,
+    "clock": "2:29",
+    "playerName": "Trae Young",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 137,
+    "awayScore": 141,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:53:13.706Z",
+    "period": 4,
+    "clock": "2:29",
+    "playerName": "Trae Young",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 138,
+    "awayScore": 141,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:53:23.990Z",
+    "period": 4,
+    "clock": "2:14",
+    "playerName": "Coby White",
+    "action": "makes driving layup",
+    "homeScore": 138,
+    "awayScore": 143,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:53:54.511Z",
+    "period": 4,
+    "clock": "1:43",
+    "playerName": "Nikola Vucevic",
+    "action": "offensive rebound",
+    "homeScore": 140,
+    "awayScore": 143,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:54:04.785Z",
+    "period": 4,
+    "clock": "1:42",
+    "playerName": "Onyeka Okongwu",
+    "action": "defensive rebound",
+    "homeScore": 140,
+    "awayScore": 143,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:54:35.823Z",
+    "period": 4,
+    "clock": "1:29",
+    "playerName": "Jalen Johnson",
+    "action": "makes layup (Trae Young assists)",
+    "homeScore": 142,
+    "awayScore": 143,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:54:46.181Z",
+    "period": 4,
+    "clock": "1:03",
+    "playerName": "Jalen Johnson",
+    "action": "turnover Nikola Vucevic",
+    "homeScore": 142,
+    "awayScore": 146,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:54:56.171Z",
+    "period": 4,
+    "clock": "59.4",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker foul",
+    "homeScore": 142,
+    "awayScore": 148,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:55:16.618Z",
+    "period": 4,
+    "clock": "59.4",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker shooting foul",
+    "homeScore": 142,
+    "awayScore": 148,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:55:26.866Z",
+    "period": 4,
+    "clock": "50.8",
+    "playerName": "Jalen Johnson",
+    "action": "misses shot",
+    "homeScore": 142,
+    "awayScore": 148,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:55:47.113Z",
+    "period": 4,
+    "clock": "48.0",
+    "playerName": "Coby White",
+    "action": "defensive rebound",
+    "homeScore": 142,
+    "awayScore": 148,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:56:17.718Z",
+    "period": 4,
+    "clock": "48.0",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker personal foul",
+    "homeScore": 142,
+    "awayScore": 148,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:56:27.766Z",
+    "period": 4,
+    "clock": "48.0",
+    "playerName": "Vit Krejci",
+    "action": "enters the game for Dyson Daniels",
+    "homeScore": 142,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:56:48.042Z",
+    "period": 4,
+    "clock": "46.5",
+    "playerName": "Jalen Johnson",
+    "action": "defensive rebound",
+    "homeScore": 142,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:56:58.136Z",
+    "period": 4,
+    "clock": "42.7",
+    "playerName": "Nickeil Alexander",
+    "action": "-Walker misses 23-foot three point jumper",
+    "homeScore": 142,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:57:18.718Z",
+    "period": 4,
+    "clock": "41.5",
+    "playerName": "Isaac Okoro",
+    "action": "loose ball foul",
+    "homeScore": 142,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:57:28.840Z",
+    "period": 4,
+    "clock": "41.5",
+    "playerName": "Tre Jones",
+    "action": "enters the game for Isaac Okoro",
+    "homeScore": 142,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:57:39.044Z",
+    "period": 4,
+    "clock": "41.5",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 143,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:57:49.541Z",
+    "period": 4,
+    "clock": "41.5",
+    "playerName": "Dyson Daniels",
+    "action": "enters the game for Vit Krejci",
+    "homeScore": 143,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:57:59.407Z",
+    "period": 4,
+    "clock": "41.5",
+    "playerName": "Jalen Johnson",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 144,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:58:19.920Z",
+    "period": 4,
+    "clock": "37.7",
+    "playerName": "Coby White",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 144,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:58:40.468Z",
+    "period": 4,
+    "clock": "37.7",
+    "playerName": "Vit Krejci",
+    "action": "enters the game for Dyson Daniels",
+    "homeScore": 144,
+    "awayScore": 149,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:58:50.603Z",
+    "period": 4,
+    "clock": "25.6",
+    "playerName": "Jalen Johnson",
+    "action": "offensive rebound",
+    "homeScore": 144,
+    "awayScore": 150,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T22:59:11.017Z",
+    "period": 4,
+    "clock": "22.8",
+    "playerName": "Bulls Full",
+    "action": "timeout",
+    "homeScore": 147,
+    "awayScore": 150,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T23:00:52.358Z",
+    "period": 4,
+    "clock": "22.8",
+    "playerName": "Dyson Daniels",
+    "action": "enters the game for Vit Krejci",
+    "homeScore": 147,
+    "awayScore": 150,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T23:01:22.764Z",
+    "period": 4,
+    "clock": "18.2",
+    "playerName": "Coby White",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 147,
+    "awayScore": 151,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T23:01:43.140Z",
+    "period": 4,
+    "clock": "16.6",
+    "playerName": "Jalen Johnson",
+    "action": "defensive rebound",
+    "homeScore": 147,
+    "awayScore": 151,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T23:02:03.561Z",
+    "period": 4,
+    "clock": "4.9",
+    "playerName": "Bulls Full",
+    "action": "timeout",
+    "homeScore": 150,
+    "awayScore": 151,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T23:04:03.322Z",
+    "period": 4,
+    "clock": "4.9",
+    "playerName": "Dyson Daniels",
+    "action": "enters the game for Vit Krejci",
+    "homeScore": 150,
+    "awayScore": 151,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T23:04:25.527Z",
+    "period": 4,
+    "clock": "4.2",
+    "playerName": "Matas Buzelis",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 150,
+    "awayScore": 151,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T23:04:54.123Z",
+    "period": 4,
+    "clock": "4.2",
+    "playerName": "Hawks Full",
+    "action": "timeout",
+    "homeScore": 150,
+    "awayScore": 152,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-21T23:06:25.500Z",
+    "period": 4,
+    "clock": "4.2",
+    "playerName": "Trae Young",
+    "action": "enters the game for Asa Newell",
+    "homeScore": 150,
+    "awayScore": 152,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-21T23:06:45.461Z",
+    "period": 4,
+    "clock": "4.2",
+    "playerName": "Ayo Dosunmu",
+    "action": "enters the game for Matas Buzelis",
+    "homeScore": 150,
+    "awayScore": 152,
+    "isTimeout": false
   }
 ]

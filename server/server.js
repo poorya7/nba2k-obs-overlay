@@ -529,7 +529,11 @@ function callOpenAITTS(text, voice, model, speed, res, extraHeaders = {}) {
         apiRes.on('end', () => {
           try {
             const errorData = JSON.parse(errorBody);
-            console.error('❌ OpenAI TTS error:', apiRes.statusCode, errorData);
+            // Short error message
+            const shortMsg = errorData.error?.code === 'insufficient_quota' 
+              ? 'OpenAI API quota exceeded' 
+              : (errorData.error?.code || 'API error');
+            console.error(`❌ TTS (${apiRes.statusCode}): ${shortMsg}`);
             if (!res.headersSent) {
               const headers = {
                 'Content-Type': 'application/json',
@@ -537,9 +541,9 @@ function callOpenAITTS(text, voice, model, speed, res, extraHeaders = {}) {
                 ...extraHeaders
               };
               res.writeHead(apiRes.statusCode, headers);
-              res.end(JSON.stringify({ error: `OpenAI API error: ${errorData.error?.message || apiRes.statusMessage}` }));
+              res.end(JSON.stringify({ error: shortMsg }));
             }
-            reject(new Error(`OpenAI API error: ${errorData.error?.message || apiRes.statusMessage}`));
+            reject(new Error(shortMsg));
           } catch (e) {
             if (!res.headersSent) {
               const headers = {
@@ -640,13 +644,16 @@ async function handlePostTextToSpeech(req, res) {
     await callOpenAITTS(text, voice, model, speedValue, res, extraHeaders);
     
   } catch (error) {
-    console.error('❌ TTS error:', error.message);
-    const headers = {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    };
-    res.writeHead(500, headers);
-    res.end(JSON.stringify({ error: error.message }));
+    // Error already logged in callOpenAITTS, no need to log again
+    // Only send error response if headers haven't been sent yet
+    if (!res.headersSent) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ error: 'TTS failed' }));
+    }
   }
 }
 
