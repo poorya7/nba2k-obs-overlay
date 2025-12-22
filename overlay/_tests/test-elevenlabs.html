@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElevenLabs TTS Test - Play-by-Play</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 30px;
+            color: #fff;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { 
+            font-size: 28px; 
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #00f2f2, #4AB5E8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #888; margin-bottom: 30px; }
+        
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            font-size: 16px;
+            color: #4AB5E8;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Voice buttons */
+        .voice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        .voice-btn {
+            padding: 12px 16px;
+            border: 2px solid rgba(74, 181, 232, 0.3);
+            background: rgba(74, 181, 232, 0.1);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+        .voice-btn:hover {
+            border-color: #4AB5E8;
+            background: rgba(74, 181, 232, 0.2);
+        }
+        .voice-btn.active {
+            border-color: #00f2f2;
+            background: rgba(0, 242, 242, 0.2);
+            box-shadow: 0 0 15px rgba(0, 242, 242, 0.3);
+        }
+        .voice-btn .voice-name { font-weight: 600; }
+        .voice-btn .voice-desc { 
+            font-size: 11px; 
+            color: #888; 
+            margin-top: 4px;
+        }
+        
+        /* Sample plays */
+        .play-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .play-btn {
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 14px;
+        }
+        .play-btn:hover {
+            border-color: rgba(74, 181, 232, 0.5);
+            background: rgba(74, 181, 232, 0.1);
+        }
+        .play-btn .player { color: #4AB5E8; font-weight: 600; }
+        .play-btn .action { color: #ccc; }
+        .play-btn .meta { font-size: 11px; color: #666; margin-top: 4px; }
+        
+        /* Custom text */
+        .custom-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .custom-input:focus {
+            outline: none;
+            border-color: #4AB5E8;
+        }
+        
+        /* Speak button */
+        .speak-btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #00f2f2, #4AB5E8);
+            border: none;
+            color: #1a1a2e;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 15px;
+        }
+        .speak-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 242, 242, 0.3);
+        }
+        .speak-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Status */
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .status.loading { background: rgba(74, 181, 232, 0.2); color: #4AB5E8; }
+        .status.success { background: rgba(0, 242, 150, 0.2); color: #00f296; }
+        .status.error { background: rgba(255, 100, 100, 0.2); color: #ff6464; }
+        
+        /* Audio player */
+        .audio-container {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        .audio-container audio { width: 100%; }
+        .audio-container.hidden { display: none; }
+        
+        /* Model selector */
+        .model-select {
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .model-select option { background: #1a1a2e; }
+        
+        .row { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎙️ ElevenLabs TTS Test</h1>
+        <p class="subtitle">Test different voices for NBA play-by-play commentary</p>
+        
+        <!-- Voice Selection -->
+        <div class="section">
+            <h2>1. Select Voice</h2>
+            <div class="voice-grid" id="voice-grid">
+                <!-- Voices will be populated by JS -->
+            </div>
+        </div>
+        
+        <!-- Model Selection -->
+        <div class="section">
+            <h2>2. Select Model</h2>
+            <div class="row">
+                <select class="model-select" id="model-select">
+                    <option value="eleven_flash_v2_5">Flash v2.5 (Fastest ~200ms)</option>
+                    <option value="eleven_turbo_v2_5">Turbo v2.5 (Fast ~400ms)</option>
+                    <option value="eleven_multilingual_v2">Multilingual v2 (Best quality)</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Sample Plays -->
+        <div class="section">
+            <h2>3. Sample Play-by-Play Lines</h2>
+            <div class="play-list" id="play-list">
+                <!-- Plays will be populated by JS -->
+            </div>
+        </div>
+        
+        <!-- Custom Text -->
+        <div class="section">
+            <h2>4. Or Enter Custom Text</h2>
+            <textarea class="custom-input" id="custom-text" placeholder="Type your own play-by-play line..."></textarea>
+            <button class="speak-btn" id="speak-btn">🔊 Speak It!</button>
+            <div id="status"></div>
+            <div class="audio-container hidden" id="audio-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // Voices will be fetched from ElevenLabs API
+        let VOICES = [];
+        
+        // Only show these voices (user's preferred list)
+        const PREFERRED_VOICES = [
+            'blondie - seductive', 'xavier', 'angry ogre'
+        ];
+        
+        // Random mode flag
+        let randomMode = false;
+        
+        // Sample play-by-play lines (from real games)
+        const SAMPLE_PLAYS = [
+            { player: 'Stephen Curry', action: 'makes 28-foot three point jumper' },
+            { player: 'LeBron James', action: 'drives and throws down a monster dunk!' },
+            { player: 'Anthony Edwards', action: 'misses 26-foot three point step back jumpshot' },
+            { player: 'Shai Gilgeous-Alexander', action: 'makes 11-foot jumper' },
+            { player: 'Kevin Durant', action: 'drains the three from the corner!' },
+            { player: 'Giannis Antetokounmpo', action: 'powerful slam dunk!' },
+            { player: 'Luka Doncic', action: 'step back three... BANG!' },
+            { player: 'Jayson Tatum', action: 'makes free throw 2 of 2' },
+            { player: 'Nikola Jokic', action: 'beautiful no-look pass for the assist' },
+            { player: 'Joel Embiid', action: 'blocks the shot at the rim!' },
+            { player: 'Ja Morant', action: 'incredible floating layup over the defender' },
+            { player: 'Devin Booker', action: 'pulls up from mid-range... money!' },
+            { player: 'Timberwolves', action: 'Full timeout', isTimeout: true },
+            { player: 'Thunder', action: 'coach\'s challenge', isTimeout: true }
+        ];
+        
+        let selectedVoice = null;
+        let currentAudio = null;
+        const voiceGrid = document.getElementById('voice-grid');
+        
+        // Fetch voices from ElevenLabs API
+        async function loadVoices() {
+            voiceGrid.innerHTML = '<div style="color: #888; padding: 20px;">Loading voices from ElevenLabs...</div>';
+            try {
+                const response = await fetch('http://localhost:3000/api/elevenlabs-voices');
+                if (!response.ok) throw new Error('Failed to fetch voices');
+                const data = await response.json();
+                VOICES = data.voices || [];
+                
+                // Filter to only preferred voices (exact name or name + partial description)
+                VOICES = VOICES.filter(v => {
+                    const fullName = v.name.toLowerCase().trim();
+                    const voiceName = fullName.split(' - ')[0].trim();
+                    return PREFERRED_VOICES.some(pv => {
+                        const pvLower = pv.toLowerCase();
+                        return voiceName === pvLower || fullName.includes(pvLower);
+                    });
+                });
+                
+                if (VOICES.length === 0) {
+                    voiceGrid.innerHTML = '<div style="color: #ff6464; padding: 20px;">No matching voices found. Check voice names.</div>';
+                    return;
+                }
+                
+                // Set first voice as selected
+                selectedVoice = VOICES[0].id;
+                
+                // Populate voice grid
+                voiceGrid.innerHTML = '';
+                
+                // Add RANDOM button first
+                const randomBtn = document.createElement('button');
+                randomBtn.className = 'voice-btn random-btn';
+                randomBtn.innerHTML = `
+                    <div class="voice-name">🎲 RANDOM</div>
+                    <div class="voice-desc">Pick random voice each time</div>
+                `;
+                randomBtn.onclick = () => {
+                    document.querySelectorAll('.voice-btn').forEach(b => b.classList.remove('active'));
+                    randomBtn.classList.add('active');
+                    randomMode = true;
+                    // Auto-play if there's text in the input
+                    if (customText.value.trim()) {
+                        speakBtn.click();
+                    }
+                };
+                voiceGrid.appendChild(randomBtn);
+                
+                // Add individual voice buttons
+                VOICES.forEach((voice, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'voice-btn' + (i === 0 ? ' active' : '');
+                    btn.innerHTML = `
+                        <div class="voice-name">${voice.name}</div>
+                        <div class="voice-desc">${voice.category}${voice.description ? ' - ' + voice.description : ''}</div>
+                    `;
+                    btn.onclick = () => {
+                        document.querySelectorAll('.voice-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        selectedVoice = voice.id;
+                        randomMode = false;
+                        // Auto-play if there's text in the input
+                        if (customText.value.trim()) {
+                            speakBtn.click();
+                        }
+                    };
+                    voiceGrid.appendChild(btn);
+                });
+                
+                console.log(`✅ Loaded ${VOICES.length} voices from ElevenLabs`);
+            } catch (error) {
+                console.error('Failed to load voices:', error);
+                voiceGrid.innerHTML = `<div style="color: #ff6464; padding: 20px;">Error loading voices: ${error.message}</div>`;
+            }
+        }
+        
+        // Load voices on page load
+        loadVoices();
+        
+        // Populate play list
+        const playList = document.getElementById('play-list');
+        SAMPLE_PLAYS.forEach(play => {
+            const btn = document.createElement('button');
+            btn.className = 'play-btn';
+            const fullText = `${play.player} ${play.action}`;
+            btn.innerHTML = `
+                <span class="player">${play.player}</span> 
+                <span class="action">${play.action}</span>
+                ${play.isTimeout ? '<div class="meta">Team Event</div>' : ''}
+            `;
+            btn.onclick = () => {
+                document.getElementById('custom-text').value = fullText;
+            };
+            playList.appendChild(btn);
+        });
+        
+        // Speak button
+        const speakBtn = document.getElementById('speak-btn');
+        const statusDiv = document.getElementById('status');
+        const audioContainer = document.getElementById('audio-container');
+        const customText = document.getElementById('custom-text');
+        const modelSelect = document.getElementById('model-select');
+        
+        function showStatus(msg, type) {
+            statusDiv.textContent = msg;
+            statusDiv.className = 'status ' + type;
+        }
+        
+        speakBtn.onclick = async () => {
+            const text = customText.value.trim();
+            if (!text) {
+                showStatus('Please enter some text or select a play', 'error');
+                return;
+            }
+            
+            // Stop current audio
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+            
+            speakBtn.disabled = true;
+            speakBtn.textContent = '⏳ Generating...';
+            showStatus('Calling ElevenLabs API...', 'loading');
+            audioContainer.classList.add('hidden');
+            
+            try {
+                // Pick voice (random or selected)
+                let voiceToUse = selectedVoice;
+                let voiceName = VOICES.find(v => v.id === selectedVoice)?.name || 'Unknown';
+                
+                if (randomMode && VOICES.length > 0) {
+                    const randomVoice = VOICES[Math.floor(Math.random() * VOICES.length)];
+                    voiceToUse = randomVoice.id;
+                    voiceName = randomVoice.name + ' (random)';
+                }
+                
+                const startTime = Date.now();
+                const response = await fetch('http://localhost:3000/api/elevenlabs-tts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: text,
+                        voiceId: voiceToUse,
+                        model: modelSelect.value
+                    })
+                });
+                
+                const latency = Date.now() - startTime;
+                
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ error: response.statusText }));
+                    throw new Error(error.error || `HTTP ${response.status}`);
+                }
+                
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                
+                audioContainer.innerHTML = `
+                    <div style="color: #888; font-size: 12px; margin-bottom: 10px;">
+                        Latency: ${latency}ms | Voice: ${voiceName} | Model: ${modelSelect.value}
+                    </div>
+                    <audio controls autoplay>
+                        <source src="${audioUrl}" type="audio/mpeg">
+                    </audio>
+                `;
+                audioContainer.classList.remove('hidden');
+                
+                currentAudio = audioContainer.querySelector('audio');
+                
+                showStatus(`✓ Generated in ${latency}ms`, 'success');
+                
+            } catch (error) {
+                console.error('TTS Error:', error);
+                showStatus(`Error: ${error.message}`, 'error');
+            } finally {
+                speakBtn.disabled = false;
+                speakBtn.textContent = '🔊 Speak It!';
+            }
+        };
+        
+        // Allow Enter key in textarea (with Ctrl/Cmd)
+        customText.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                speakBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>

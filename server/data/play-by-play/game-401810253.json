@@ -1,322 +1,642 @@
 [
   {
-    "timestamp": "2025-12-22T01:03:00.898Z",
+    "id": "401810253-0000",
+    "text": "Dru Smith misses driving layup",
+    "shortText": "misses driving layup",
     "period": 4,
     "clock": "9:26",
-    "playerName": "Dru Smith",
-    "action": "misses driving layup",
     "homeScore": 111,
     "awayScore": 100,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Dru Smith"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:03:00.898Z"
   },
   {
-    "timestamp": "2025-12-22T01:03:03.256Z",
+    "id": "401810253-0001",
+    "text": "Mikal Bridges defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "9:21",
-    "playerName": "Mikal Bridges",
-    "action": "defensive rebound",
     "homeScore": 111,
     "awayScore": 100,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Mikal Bridges"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:03:03.256Z"
   },
   {
-    "timestamp": "2025-12-22T01:23:34.620Z",
+    "id": "401810253-0002",
+    "text": "Mikal Bridges makes 22-foot three point jumper (OG Anunoby assists)",
+    "shortText": "makes 22-foot three point jumper (OG Anunoby assists)",
     "period": 4,
     "clock": "2:15",
-    "playerName": "Mikal Bridges",
-    "action": "makes 22-foot three point jumper (OG Anunoby assists)",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Mikal Bridges"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:23:34.620Z"
   },
   {
-    "timestamp": "2025-12-22T01:23:35.080Z",
+    "id": "401810253-0003",
+    "text": "Mikal Bridges makes 22-foot three point jumper (OG Anunoby assists)",
+    "shortText": "makes 22-foot three point jumper (OG Anunoby assists)",
     "period": 4,
     "clock": "2:15",
-    "playerName": "Mikal Bridges",
-    "action": "makes 22-foot three point jumper (OG Anunoby assists)",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Mikal Bridges"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:23:35.080Z"
   },
   {
-    "timestamp": "2025-12-22T01:24:07.644Z",
+    "id": "401810253-0004",
+    "text": "Norman Powell vs. Jalen Brunson (Bam Adebayo gains possession)",
+    "shortText": "vs. Jalen Brunson (Bam Adebayo gains possession)",
     "period": 4,
     "clock": "1:59",
-    "playerName": "Norman Powell",
-    "action": "vs. Jalen Brunson (Bam Adebayo gains possession)",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Norman Powell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:24:07.644Z"
   },
   {
-    "timestamp": "2025-12-22T01:24:07.662Z",
+    "id": "401810253-0005",
+    "text": "Norman Powell vs. Jalen Brunson (Bam Adebayo gains possession)",
+    "shortText": "vs. Jalen Brunson (Bam Adebayo gains possession)",
     "period": 4,
     "clock": "1:59",
-    "playerName": "Norman Powell",
-    "action": "vs. Jalen Brunson (Bam Adebayo gains possession)",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Norman Powell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:24:07.662Z"
   },
   {
-    "timestamp": "2025-12-22T01:24:46.439Z",
+    "id": "401810253-0006",
+    "text": "Jaime Jaquez J Jaquez Jr. misses free throw 1 of 2",
+    "shortText": "Jaquez Jr. misses free throw 1 of 2",
     "period": 4,
     "clock": "1:53",
-    "playerName": "Jaime Jaquez J",
-    "action": "Jaquez Jr. misses free throw 1 of 2",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jaime Jaquez J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:24:46.439Z"
   },
   {
-    "timestamp": "2025-12-22T01:24:48.113Z",
+    "id": "401810253-0007",
+    "text": "Jaime Jaquez J Jaquez Jr. misses free throw 1 of 2",
+    "shortText": "Jaquez Jr. misses free throw 1 of 2",
     "period": 4,
     "clock": "1:53",
-    "playerName": "Jaime Jaquez J",
-    "action": "Jaquez Jr. misses free throw 1 of 2",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jaime Jaquez J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:24:48.113Z"
   },
   {
-    "timestamp": "2025-12-22T01:24:58.189Z",
+    "id": "401810253-0008",
+    "text": "Jaime Jaquez J Jaquez Jr. misses free throw 2 of 2",
+    "shortText": "Jaquez Jr. misses free throw 2 of 2",
     "period": 4,
     "clock": "1:53",
-    "playerName": "Jaime Jaquez J",
-    "action": "Jaquez Jr. misses free throw 2 of 2",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jaime Jaquez J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:24:58.189Z"
   },
   {
-    "timestamp": "2025-12-22T01:24:58.365Z",
+    "id": "401810253-0009",
+    "text": "Jaime Jaquez J Jaquez Jr. misses free throw 2 of 2",
+    "shortText": "Jaquez Jr. misses free throw 2 of 2",
     "period": 4,
     "clock": "1:53",
-    "playerName": "Jaime Jaquez J",
-    "action": "Jaquez Jr. misses free throw 2 of 2",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jaime Jaquez J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:24:58.365Z"
   },
   {
-    "timestamp": "2025-12-22T01:25:46.974Z",
+    "id": "401810253-0010",
+    "text": "Norman Powell shooting foul",
+    "shortText": "shooting foul",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Norman Powell",
-    "action": "shooting foul",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Norman Powell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:25:46.974Z"
   },
   {
-    "timestamp": "2025-12-22T01:25:46.982Z",
+    "id": "401810253-0011",
+    "text": "Norman Powell shooting foul",
+    "shortText": "shooting foul",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Norman Powell",
-    "action": "shooting foul",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Norman Powell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:25:46.982Z"
   },
   {
-    "timestamp": "2025-12-22T01:26:51.122Z",
+    "id": "401810253-0012",
+    "text": "Norman Powell shooting foul",
+    "shortText": "shooting foul",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Norman Powell",
-    "action": "shooting foul",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Norman Powell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:26:51.122Z"
   },
   {
-    "timestamp": "2025-12-22T01:27:41.046Z",
+    "id": "401810253-0013",
+    "text": "Norman Powell shooting foul",
+    "shortText": "shooting foul",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Norman Powell",
-    "action": "shooting foul",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Norman Powell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:27:41.046Z"
   },
   {
-    "timestamp": "2025-12-22T01:28:50.985Z",
+    "id": "401810253-0014",
+    "text": "Norman Powell flagrant foul type 1",
+    "shortText": "flagrant foul type 1",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Norman Powell",
-    "action": "flagrant foul type 1",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Norman Powell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:28:50.985Z"
   },
   {
-    "timestamp": "2025-12-22T01:28:51.106Z",
+    "id": "401810253-0015",
+    "text": "Norman Powell flagrant foul type 1",
+    "shortText": "flagrant foul type 1",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Norman Powell",
-    "action": "flagrant foul type 1",
     "homeScore": 125,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Norman Powell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:28:51.106Z"
   },
   {
-    "timestamp": "2025-12-22T01:29:01.315Z",
+    "id": "401810253-0016",
+    "text": "Jalen Brunson makes free throw 1 of 3",
+    "shortText": "makes free throw 1 of 3",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Jalen Brunson",
-    "action": "makes free throw 1 of 3",
     "homeScore": 126,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:29:01.315Z"
   },
   {
-    "timestamp": "2025-12-22T01:29:01.317Z",
+    "id": "401810253-0017",
+    "text": "Jalen Brunson makes free throw 1 of 3",
+    "shortText": "makes free throw 1 of 3",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Jalen Brunson",
-    "action": "makes free throw 1 of 3",
     "homeScore": 126,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:29:01.317Z"
   },
   {
-    "timestamp": "2025-12-22T01:29:21.860Z",
+    "id": "401810253-0018",
+    "text": "Jalen Brunson makes free throw 3 of 3",
+    "shortText": "makes free throw 3 of 3",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Jalen Brunson",
-    "action": "makes free throw 3 of 3",
     "homeScore": 128,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:29:21.860Z"
   },
   {
-    "timestamp": "2025-12-22T01:29:21.864Z",
+    "id": "401810253-0019",
+    "text": "Jalen Brunson makes free throw 3 of 3",
+    "shortText": "makes free throw 3 of 3",
     "period": 4,
     "clock": "1:34",
-    "playerName": "Jalen Brunson",
-    "action": "makes free throw 3 of 3",
     "homeScore": 128,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:29:21.864Z"
   },
   {
-    "timestamp": "2025-12-22T01:30:02.130Z",
+    "id": "401810253-0020",
+    "text": "Jalen Brunson misses two point shot",
+    "shortText": "misses two point shot",
     "period": 4,
     "clock": "1:12",
-    "playerName": "Jalen Brunson",
-    "action": "misses two point shot",
     "homeScore": 128,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:30:02.130Z"
   },
   {
-    "timestamp": "2025-12-22T01:30:02.132Z",
+    "id": "401810253-0021",
+    "text": "Jalen Brunson misses two point shot",
+    "shortText": "misses two point shot",
     "period": 4,
     "clock": "1:12",
-    "playerName": "Jalen Brunson",
-    "action": "misses two point shot",
     "homeScore": 128,
     "awayScore": 118,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:30:02.132Z"
   },
   {
-    "timestamp": "2025-12-22T01:30:32.420Z",
+    "id": "401810253-0022",
+    "text": "Jaime Jaquez J Jaquez Jr. makes 6-foot two point shot",
+    "shortText": "Jaquez Jr. makes 6-foot two point shot",
     "period": 4,
     "clock": "1:02",
-    "playerName": "Jaime Jaquez J",
-    "action": "Jaquez Jr. makes 6-foot two point shot",
     "homeScore": 128,
     "awayScore": 120,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jaime Jaquez J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:30:32.420Z"
   },
   {
-    "timestamp": "2025-12-22T01:30:32.601Z",
+    "id": "401810253-0023",
+    "text": "Jaime Jaquez J Jaquez Jr. makes 6-foot two point shot",
+    "shortText": "Jaquez Jr. makes 6-foot two point shot",
     "period": 4,
     "clock": "1:02",
-    "playerName": "Jaime Jaquez J",
-    "action": "Jaquez Jr. makes 6-foot two point shot",
     "homeScore": 128,
     "awayScore": 120,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jaime Jaquez J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:30:32.601Z"
   },
   {
-    "timestamp": "2025-12-22T01:30:52.454Z",
+    "id": "401810253-0024",
+    "text": "Davion Mitchell makes 25-foot three point jumper (Jaime Jaquez Jr. assists)",
+    "shortText": "makes 25-foot three point jumper (Jaime Jaquez Jr. assists)",
     "period": 4,
     "clock": "34.6",
-    "playerName": "Davion Mitchell",
-    "action": "makes 25-foot three point jumper (Jaime Jaquez Jr. assists)",
     "homeScore": 130,
     "awayScore": 123,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Davion Mitchell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:30:52.454Z"
   },
   {
-    "timestamp": "2025-12-22T01:30:53.608Z",
+    "id": "401810253-0025",
+    "text": "Davion Mitchell makes 25-foot three point jumper (Jaime Jaquez Jr. assists)",
+    "shortText": "makes 25-foot three point jumper (Jaime Jaquez Jr. assists)",
     "period": 4,
     "clock": "34.6",
-    "playerName": "Davion Mitchell",
-    "action": "makes 25-foot three point jumper (Jaime Jaquez Jr. assists)",
     "homeScore": 130,
     "awayScore": 123,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Davion Mitchell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:30:53.608Z"
   },
   {
-    "timestamp": "2025-12-22T01:31:22.763Z",
+    "id": "401810253-0026",
+    "text": "Davion Mitchell personal take foul",
+    "shortText": "personal take foul",
     "period": 4,
     "clock": "33.4",
-    "playerName": "Davion Mitchell",
-    "action": "personal take foul",
     "homeScore": 130,
     "awayScore": 123,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Davion Mitchell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:31:22.763Z"
   },
   {
-    "timestamp": "2025-12-22T01:31:22.766Z",
+    "id": "401810253-0027",
+    "text": "Davion Mitchell personal take foul",
+    "shortText": "personal take foul",
     "period": 4,
     "clock": "33.4",
-    "playerName": "Davion Mitchell",
-    "action": "personal take foul",
     "homeScore": 130,
     "awayScore": 123,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Davion Mitchell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:31:22.766Z"
   },
   {
-    "timestamp": "2025-12-22T01:31:42.902Z",
+    "id": "401810253-0028",
+    "text": "Jalen Brunson makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 4,
     "clock": "33.4",
-    "playerName": "Jalen Brunson",
-    "action": "makes free throw 1 of 2",
     "homeScore": 131,
     "awayScore": 123,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:31:42.902Z"
   },
   {
-    "timestamp": "2025-12-22T01:31:43.099Z",
+    "id": "401810253-0029",
+    "text": "Jalen Brunson makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 4,
     "clock": "33.4",
-    "playerName": "Jalen Brunson",
-    "action": "makes free throw 1 of 2",
     "homeScore": 131,
     "awayScore": 123,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:31:43.099Z"
   },
   {
-    "timestamp": "2025-12-22T01:31:52.915Z",
+    "id": "401810253-0030",
+    "text": "Jalen Brunson makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 4,
     "clock": "33.4",
-    "playerName": "Jalen Brunson",
-    "action": "makes free throw 2 of 2",
     "homeScore": 132,
     "awayScore": 123,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:31:52.915Z"
   },
   {
-    "timestamp": "2025-12-22T01:31:53.246Z",
+    "id": "401810253-0031",
+    "text": "Jalen Brunson makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 4,
     "clock": "33.4",
-    "playerName": "Jalen Brunson",
-    "action": "makes free throw 2 of 2",
     "homeScore": 132,
     "awayScore": 123,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jalen Brunson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:31:53.246Z"
   }
 ]

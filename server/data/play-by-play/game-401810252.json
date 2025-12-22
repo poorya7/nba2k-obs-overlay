@@ -1,1732 +1,3462 @@
 [
   {
-    "timestamp": "2025-12-22T00:40:06.162Z",
+    "id": "401810252-0000",
+    "text": "Nets Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "4:34",
-    "playerName": "Nets Full",
-    "action": "timeout",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nets Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T00:40:06.162Z"
   },
   {
-    "timestamp": "2025-12-22T00:40:08.258Z",
+    "id": "401810252-0001",
+    "text": "Nets Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "4:34",
-    "playerName": "Nets Full",
-    "action": "timeout",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nets Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T00:40:08.258Z"
   },
   {
-    "timestamp": "2025-12-22T00:41:39.821Z",
+    "id": "401810252-0002",
+    "text": "Nolan Traore enters the game for Terance Mann",
+    "shortText": "enters the game for Terance Mann",
     "period": 3,
     "clock": "4:34",
-    "playerName": "Nolan Traore",
-    "action": "enters the game for Terance Mann",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:41:39.821Z"
   },
   {
-    "timestamp": "2025-12-22T00:41:45.387Z",
+    "id": "401810252-0003",
+    "text": "Nolan Traore enters the game for Terance Mann",
+    "shortText": "enters the game for Terance Mann",
     "period": 3,
     "clock": "4:34",
-    "playerName": "Nolan Traore",
-    "action": "enters the game for Terance Mann",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:41:45.387Z"
   },
   {
-    "timestamp": "2025-12-22T00:41:52.382Z",
+    "id": "401810252-0004",
+    "text": "Jamison Battle enters the game for Collin Murray-Boyles",
+    "shortText": "enters the game for Collin Murray-Boyles",
     "period": 3,
     "clock": "4:34",
-    "playerName": "Jamison Battle",
-    "action": "enters the game for Collin Murray-Boyles",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:41:52.382Z"
   },
   {
-    "timestamp": "2025-12-22T00:42:00.592Z",
+    "id": "401810252-0005",
+    "text": "Immanuel Quickley enters the game for Jamal Shead",
+    "shortText": "enters the game for Jamal Shead",
     "period": 3,
     "clock": "4:34",
-    "playerName": "Immanuel Quickley",
-    "action": "enters the game for Jamal Shead",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:42:00.592Z"
   },
   {
-    "timestamp": "2025-12-22T00:42:10.822Z",
+    "id": "401810252-0006",
+    "text": "Nolan Traore defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "4:25",
-    "playerName": "Nolan Traore",
-    "action": "defensive rebound",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:42:10.822Z"
   },
   {
-    "timestamp": "2025-12-22T00:42:21.223Z",
+    "id": "401810252-0007",
+    "text": "Nolan Traore lost ball turnover (Ja'Kobe Walter steals)",
+    "shortText": "lost ball turnover (Ja'Kobe Walter steals)",
     "period": 3,
     "clock": "4:23",
-    "playerName": "Nolan Traore",
-    "action": "lost ball turnover (Ja'Kobe Walter steals)",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:42:21.223Z"
   },
   {
-    "timestamp": "2025-12-22T00:42:23.356Z",
+    "id": "401810252-0008",
+    "text": "Nolan Traore lost ball turnover (Ja'Kobe Walter steals)",
+    "shortText": "lost ball turnover (Ja'Kobe Walter steals)",
     "period": 3,
     "clock": "4:23",
-    "playerName": "Nolan Traore",
-    "action": "lost ball turnover (Ja'Kobe Walter steals)",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:42:23.356Z"
   },
   {
-    "timestamp": "2025-12-22T00:42:23.599Z",
+    "id": "401810252-0009",
+    "text": "Nolan Traore lost ball turnover (Ja'Kobe Walter steals)",
+    "shortText": "lost ball turnover (Ja'Kobe Walter steals)",
     "period": 3,
     "clock": "4:23",
-    "playerName": "Nolan Traore",
-    "action": "lost ball turnover (Ja'Kobe Walter steals)",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:42:23.599Z"
   },
   {
-    "timestamp": "2025-12-22T00:42:42.065Z",
+    "id": "401810252-0010",
+    "text": "Immanuel Quickley misses running layup",
+    "shortText": "misses running layup",
     "period": 3,
     "clock": "4:17",
-    "playerName": "Immanuel Quickley",
-    "action": "misses running layup",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:42:42.065Z"
   },
   {
-    "timestamp": "2025-12-22T00:43:03.088Z",
+    "id": "401810252-0011",
+    "text": "Immanuel Quickley misses running layup",
+    "shortText": "misses running layup",
     "period": 3,
     "clock": "4:17",
-    "playerName": "Immanuel Quickley",
-    "action": "misses running layup",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:43:03.088Z"
   },
   {
-    "timestamp": "2025-12-22T00:43:11.245Z",
+    "id": "401810252-0012",
+    "text": "Danny Wolf enters the game for Nic Claxton",
+    "shortText": "enters the game for Nic Claxton",
     "period": 3,
     "clock": "4:13",
-    "playerName": "Danny Wolf",
-    "action": "enters the game for Nic Claxton",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:43:11.245Z"
   },
   {
-    "timestamp": "2025-12-22T00:43:23.290Z",
+    "id": "401810252-0013",
+    "text": "Scottie Barnes defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "3:53",
-    "playerName": "Scottie Barnes",
-    "action": "defensive rebound",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:43:23.290Z"
   },
   {
-    "timestamp": "2025-12-22T00:43:33.382Z",
+    "id": "401810252-0014",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 3,
     "clock": "3:48",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:43:33.382Z"
   },
   {
-    "timestamp": "2025-12-22T00:43:52.487Z",
+    "id": "401810252-0015",
+    "text": "Danny Wolf defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "3:36",
-    "playerName": "Danny Wolf",
-    "action": "defensive rebound",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:43:52.487Z"
   },
   {
-    "timestamp": "2025-12-22T00:44:23.078Z",
+    "id": "401810252-0016",
+    "text": "Brandon Ingram defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "3:11",
-    "playerName": "Brandon Ingram",
-    "action": "defensive rebound",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:44:23.078Z"
   },
   {
-    "timestamp": "2025-12-22T00:44:29.632Z",
+    "id": "401810252-0017",
+    "text": "Brandon Ingram defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "3:11",
-    "playerName": "Brandon Ingram",
-    "action": "defensive rebound",
     "homeScore": 62,
     "awayScore": 50,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:44:29.632Z"
   },
   {
-    "timestamp": "2025-12-22T00:44:33.689Z",
+    "id": "401810252-0018",
+    "text": "Brandon Ingram makes 19-foot jumper",
+    "shortText": "makes 19-foot jumper",
     "period": 3,
     "clock": "3:06",
-    "playerName": "Brandon Ingram",
-    "action": "makes 19-foot jumper",
     "homeScore": 62,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:44:33.689Z"
   },
   {
-    "timestamp": "2025-12-22T00:44:37.892Z",
+    "id": "401810252-0019",
+    "text": "Brandon Ingram makes 19-foot jumper",
+    "shortText": "makes 19-foot jumper",
     "period": 3,
     "clock": "3:06",
-    "playerName": "Brandon Ingram",
-    "action": "makes 19-foot jumper",
     "homeScore": 62,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:44:37.892Z"
   },
   {
-    "timestamp": "2025-12-22T00:44:43.977Z",
+    "id": "401810252-0020",
+    "text": "Immanuel Quickley personal foul",
+    "shortText": "personal foul",
     "period": 3,
     "clock": "2:59",
-    "playerName": "Immanuel Quickley",
-    "action": "personal foul",
     "homeScore": 62,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:44:43.977Z"
   },
   {
-    "timestamp": "2025-12-22T00:45:03.071Z",
+    "id": "401810252-0021",
+    "text": "Nolan Traore makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "2:59",
-    "playerName": "Nolan Traore",
-    "action": "makes free throw 1 of 2",
     "homeScore": 63,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:45:03.071Z"
   },
   {
-    "timestamp": "2025-12-22T00:45:14.101Z",
+    "id": "401810252-0022",
+    "text": "Immanuel Quickley defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "2:57",
-    "playerName": "Immanuel Quickley",
-    "action": "defensive rebound",
     "homeScore": 63,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:45:14.101Z"
   },
   {
-    "timestamp": "2025-12-22T00:45:32.413Z",
+    "id": "401810252-0023",
+    "text": "Immanuel Quickley defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "2:57",
-    "playerName": "Immanuel Quickley",
-    "action": "defensive rebound",
     "homeScore": 63,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:45:32.413Z"
   },
   {
-    "timestamp": "2025-12-22T00:45:47.514Z",
+    "id": "401810252-0024",
+    "text": "Immanuel Quickley defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "2:57",
-    "playerName": "Immanuel Quickley",
-    "action": "defensive rebound",
     "homeScore": 63,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:45:47.514Z"
   },
   {
-    "timestamp": "2025-12-22T00:46:03.784Z",
+    "id": "401810252-0025",
+    "text": "Nolan Traore defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "2:35",
-    "playerName": "Nolan Traore",
-    "action": "defensive rebound",
     "homeScore": 63,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:46:03.784Z"
   },
   {
-    "timestamp": "2025-12-22T00:46:04.308Z",
+    "id": "401810252-0026",
+    "text": "Nolan Traore defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "2:35",
-    "playerName": "Nolan Traore",
-    "action": "defensive rebound",
     "homeScore": 63,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:46:04.308Z"
   },
   {
-    "timestamp": "2025-12-22T00:46:44.602Z",
+    "id": "401810252-0027",
+    "text": "Brandon Ingram shooting foul",
+    "shortText": "shooting foul",
     "period": 3,
     "clock": "2:24",
-    "playerName": "Brandon Ingram",
-    "action": "shooting foul",
     "homeScore": 63,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:46:44.602Z"
   },
   {
-    "timestamp": "2025-12-22T00:46:55.326Z",
+    "id": "401810252-0028",
+    "text": "Jamal Shead enters the game for Brandon Ingram",
+    "shortText": "enters the game for Brandon Ingram",
     "period": 3,
     "clock": "2:24",
-    "playerName": "Jamal Shead",
-    "action": "enters the game for Brandon Ingram",
     "homeScore": 64,
     "awayScore": 52,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamal Shead"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:46:55.326Z"
   },
   {
-    "timestamp": "2025-12-22T00:47:44.526Z",
+    "id": "401810252-0029",
+    "text": "Immanuel Quickley makes 10-foot driving floating jump shot (Jamal Shead assists)",
+    "shortText": "makes 10-foot driving floating jump shot (Jamal Shead assists)",
     "period": 3,
     "clock": "2:07",
-    "playerName": "Immanuel Quickley",
-    "action": "makes 10-foot driving floating jump shot (Jamal Shead assists)",
     "homeScore": 65,
     "awayScore": 54,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:47:44.526Z"
   },
   {
-    "timestamp": "2025-12-22T00:47:49.251Z",
+    "id": "401810252-0030",
+    "text": "Immanuel Quickley makes 10-foot driving floating jump shot (Jamal Shead assists)",
+    "shortText": "makes 10-foot driving floating jump shot (Jamal Shead assists)",
     "period": 3,
     "clock": "2:07",
-    "playerName": "Immanuel Quickley",
-    "action": "makes 10-foot driving floating jump shot (Jamal Shead assists)",
     "homeScore": 65,
     "awayScore": 54,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:47:49.251Z"
   },
   {
-    "timestamp": "2025-12-22T00:48:26.358Z",
+    "id": "401810252-0031",
+    "text": "Ziaire Williams makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "1:47",
-    "playerName": "Ziaire Williams",
-    "action": "makes free throw 1 of 2",
     "homeScore": 66,
     "awayScore": 54,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Ziaire Williams"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:48:26.358Z"
   },
   {
-    "timestamp": "2025-12-22T00:48:28.058Z",
+    "id": "401810252-0032",
+    "text": "Ziaire Williams makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "1:47",
-    "playerName": "Ziaire Williams",
-    "action": "makes free throw 1 of 2",
     "homeScore": 66,
     "awayScore": 54,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Ziaire Williams"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:48:28.058Z"
   },
   {
-    "timestamp": "2025-12-22T00:49:17.377Z",
+    "id": "401810252-0033",
+    "text": "Ziaire Williams makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 3,
     "clock": "1:47",
-    "playerName": "Ziaire Williams",
-    "action": "makes free throw 2 of 2",
     "homeScore": 67,
     "awayScore": 54,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Ziaire Williams"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:49:17.377Z"
   },
   {
-    "timestamp": "2025-12-22T00:49:47.115Z",
+    "id": "401810252-0034",
+    "text": "Gradey Dick enters the game for Ja'Kobe Walter",
+    "shortText": "enters the game for Ja'Kobe Walter",
     "period": 3,
     "clock": "1:47",
-    "playerName": "Gradey Dick",
-    "action": "enters the game for Ja'Kobe Walter",
     "homeScore": 67,
     "awayScore": 54,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Gradey Dick"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:49:47.115Z"
   },
   {
-    "timestamp": "2025-12-22T00:50:15.876Z",
+    "id": "401810252-0035",
+    "text": "Danny Wolf misses shot",
+    "shortText": "misses shot",
     "period": 3,
     "clock": "1:13",
-    "playerName": "Danny Wolf",
-    "action": "misses shot",
     "homeScore": 67,
     "awayScore": 57,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:50:15.876Z"
   },
   {
-    "timestamp": "2025-12-22T00:50:28.178Z",
+    "id": "401810252-0036",
+    "text": "Danny Wolf misses 13-foot two point shot",
+    "shortText": "misses 13-foot two point shot",
     "period": 3,
     "clock": "1:13",
-    "playerName": "Danny Wolf",
-    "action": "misses 13-foot two point shot",
     "homeScore": 67,
     "awayScore": 57,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:50:28.178Z"
   },
   {
-    "timestamp": "2025-12-22T00:51:06.992Z",
+    "id": "401810252-0037",
+    "text": "Scottie Barnes traveling turnover",
+    "shortText": "traveling turnover",
     "period": 3,
     "clock": "1:03",
-    "playerName": "Scottie Barnes",
-    "action": "traveling turnover",
     "homeScore": 67,
     "awayScore": 57,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:51:06.992Z"
   },
   {
-    "timestamp": "2025-12-22T00:51:08.436Z",
+    "id": "401810252-0038",
+    "text": "Scottie Barnes traveling turnover",
+    "shortText": "traveling turnover",
     "period": 3,
     "clock": "1:03",
-    "playerName": "Scottie Barnes",
-    "action": "traveling turnover",
     "homeScore": 67,
     "awayScore": 57,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:51:08.436Z"
   },
   {
-    "timestamp": "2025-12-22T00:51:16.588Z",
+    "id": "401810252-0039",
+    "text": "Scottie Barnes traveling turnover",
+    "shortText": "traveling turnover",
     "period": 3,
     "clock": "1:03",
-    "playerName": "Scottie Barnes",
-    "action": "traveling turnover",
     "homeScore": 67,
     "awayScore": 57,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:51:16.588Z"
   },
   {
-    "timestamp": "2025-12-22T00:51:47.400Z",
+    "id": "401810252-0040",
+    "text": "Immanuel Quickley defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "31.6",
-    "playerName": "Immanuel Quickley",
-    "action": "defensive rebound",
     "homeScore": 67,
     "awayScore": 59,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:51:47.400Z"
   },
   {
-    "timestamp": "2025-12-22T00:52:07.537Z",
+    "id": "401810252-0041",
+    "text": "Immanuel Quickley makes 25-foot running jump shot",
+    "shortText": "makes 25-foot running jump shot",
     "period": 3,
     "clock": "28.9",
-    "playerName": "Immanuel Quickley",
-    "action": "makes 25-foot running jump shot",
     "homeScore": 67,
     "awayScore": 62,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:52:07.537Z"
   },
   {
-    "timestamp": "2025-12-22T00:52:24.113Z",
+    "id": "401810252-0042",
+    "text": "Immanuel Quickley makes 25-foot running jump shot",
+    "shortText": "makes 25-foot running jump shot",
     "period": 3,
     "clock": "28.9",
-    "playerName": "Immanuel Quickley",
-    "action": "makes 25-foot running jump shot",
     "homeScore": 67,
     "awayScore": 62,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:52:24.113Z"
   },
   {
-    "timestamp": "2025-12-22T00:52:28.281Z",
+    "id": "401810252-0043",
+    "text": "Immanuel Quickley makes 25-foot running pullup jump shot",
+    "shortText": "makes 25-foot running pullup jump shot",
     "period": 3,
     "clock": "28.9",
-    "playerName": "Immanuel Quickley",
-    "action": "makes 25-foot running pullup jump shot",
     "homeScore": 67,
     "awayScore": 62,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:52:28.281Z"
   },
   {
-    "timestamp": "2025-12-22T00:52:39.119Z",
+    "id": "401810252-0044",
+    "text": "Tyrese Martin turnover",
+    "shortText": "turnover",
     "period": 3,
     "clock": "12.2",
-    "playerName": "Tyrese Martin",
-    "action": "turnover",
     "homeScore": 67,
     "awayScore": 62,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Tyrese Martin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:52:39.119Z"
   },
   {
-    "timestamp": "2025-12-22T00:52:48.691Z",
+    "id": "401810252-0045",
+    "text": "Nolan Traore misses shot",
+    "shortText": "misses shot",
     "period": 3,
     "clock": "0.0",
-    "playerName": "Nolan Traore",
-    "action": "misses shot",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:52:48.691Z"
   },
   {
-    "timestamp": "2025-12-22T00:53:08.951Z",
+    "id": "401810252-0046",
+    "text": "Nolan Traore misses heave jump shot",
+    "shortText": "misses heave jump shot",
     "period": 3,
     "clock": "0.6",
-    "playerName": "Nolan Traore",
-    "action": "misses heave jump shot",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:53:08.951Z"
   },
   {
-    "timestamp": "2025-12-22T00:53:19.813Z",
+    "id": "401810252-0047",
+    "text": "Nolan Traore misses heave jump shot",
+    "shortText": "misses heave jump shot",
     "period": 3,
     "clock": "0.6",
-    "playerName": "Nolan Traore",
-    "action": "misses heave jump shot",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:53:19.813Z"
   },
   {
-    "timestamp": "2025-12-22T00:55:22.483Z",
+    "id": "401810252-0048",
+    "text": "Nolan Traore misses heave jump shot",
+    "shortText": "misses heave jump shot",
     "period": 3,
     "clock": "0.6",
-    "playerName": "Nolan Traore",
-    "action": "misses heave jump shot",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:55:22.483Z"
   },
   {
-    "timestamp": "2025-12-22T00:55:30.609Z",
+    "id": "401810252-0049",
+    "text": "Sandro Mamukelashvili enters the game for Scottie Barnes",
+    "shortText": "enters the game for Scottie Barnes",
     "period": 4,
     "clock": "12:00",
-    "playerName": "Sandro Mamukelashvili",
-    "action": "enters the game for Scottie Barnes",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Sandro Mamukelashvili"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:55:30.609Z"
   },
   {
-    "timestamp": "2025-12-22T00:55:40.739Z",
+    "id": "401810252-0050",
+    "text": "Collin Murray-Boyles enters the game for Jamal Shead",
+    "shortText": "enters the game for Jamal Shead",
     "period": 4,
     "clock": "12:00",
-    "playerName": "Collin Murray",
-    "action": "-Boyles enters the game for Jamal Shead",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:55:40.739Z"
   },
   {
-    "timestamp": "2025-12-22T00:56:21.160Z",
+    "id": "401810252-0051",
+    "text": "Collin Murray-Boyles defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "11:36",
-    "playerName": "Collin Murray",
-    "action": "-Boyles defensive rebound",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:56:21.160Z"
   },
   {
-    "timestamp": "2025-12-22T00:56:37.640Z",
+    "id": "401810252-0052",
+    "text": "Collin Murray-Boyles defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "11:36",
-    "playerName": "Collin Murray",
-    "action": "-Boyles defensive rebound",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:56:37.640Z"
   },
   {
-    "timestamp": "2025-12-22T00:56:46.112Z",
+    "id": "401810252-0053",
+    "text": "Collin Murray-Boyles defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "11:36",
-    "playerName": "Collin Murray",
-    "action": "-Boyles defensive rebound",
     "homeScore": 67,
     "awayScore": 65,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:56:46.112Z"
   },
   {
-    "timestamp": "2025-12-22T00:56:52.993Z",
+    "id": "401810252-0054",
+    "text": "Sandro Mamukelashvili defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "10:57",
-    "playerName": "Sandro Mamukelashvili",
-    "action": "defensive rebound",
     "homeScore": 67,
     "awayScore": 67,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Sandro Mamukelashvili"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:56:52.993Z"
   },
   {
-    "timestamp": "2025-12-22T00:57:03.145Z",
+    "id": "401810252-0055",
+    "text": "Nets Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "10:55",
-    "playerName": "Nets Full",
-    "action": "timeout",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nets Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T00:57:03.145Z"
   },
   {
-    "timestamp": "2025-12-22T00:57:07.422Z",
+    "id": "401810252-0056",
+    "text": "Nets Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "10:55",
-    "playerName": "Nets Full",
-    "action": "timeout",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nets Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T00:57:07.422Z"
   },
   {
-    "timestamp": "2025-12-22T00:57:23.733Z",
+    "id": "401810252-0057",
+    "text": "Nets Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "10:55",
-    "playerName": "Nets Full",
-    "action": "timeout",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nets Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T00:57:23.733Z"
   },
   {
-    "timestamp": "2025-12-22T00:57:48.416Z",
+    "id": "401810252-0058",
+    "text": "Nets Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "10:55",
-    "playerName": "Nets Full",
-    "action": "timeout",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nets Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T00:57:48.416Z"
   },
   {
-    "timestamp": "2025-12-22T00:59:24.314Z",
+    "id": "401810252-0059",
+    "text": "Danny Wolf enters the game for Ziaire Williams",
+    "shortText": "enters the game for Ziaire Williams",
     "period": 4,
     "clock": "10:55",
-    "playerName": "Danny Wolf",
-    "action": "enters the game for Ziaire Williams",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:59:24.314Z"
   },
   {
-    "timestamp": "2025-12-22T00:59:44.832Z",
+    "id": "401810252-0060",
+    "text": "Terance Mann enters the game for Egor Demin",
+    "shortText": "enters the game for Egor Demin",
     "period": 4,
     "clock": "10:55",
-    "playerName": "Terance Mann",
-    "action": "enters the game for Egor Demin",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Terance Mann"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T00:59:44.832Z"
   },
   {
-    "timestamp": "2025-12-22T01:00:05.061Z",
+    "id": "401810252-0061",
+    "text": "Terance Mann enters the game for Ziaire Williams",
+    "shortText": "enters the game for Ziaire Williams",
     "period": 4,
     "clock": "10:55",
-    "playerName": "Terance Mann",
-    "action": "enters the game for Ziaire Williams",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Terance Mann"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:00:05.061Z"
   },
   {
-    "timestamp": "2025-12-22T01:00:15.229Z",
+    "id": "401810252-0062",
+    "text": "Sandro Mamukelashvili defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "10:37",
-    "playerName": "Sandro Mamukelashvili",
-    "action": "defensive rebound",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Sandro Mamukelashvili"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:00:15.229Z"
   },
   {
-    "timestamp": "2025-12-22T01:00:23.672Z",
+    "id": "401810252-0063",
+    "text": "Egor Demin defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "10:27",
-    "playerName": "Egor Demin",
-    "action": "defensive rebound",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:00:23.672Z"
   },
   {
-    "timestamp": "2025-12-22T01:00:28.044Z",
+    "id": "401810252-0064",
+    "text": "Egor Demin defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "10:27",
-    "playerName": "Egor Demin",
-    "action": "defensive rebound",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:00:28.044Z"
   },
   {
-    "timestamp": "2025-12-22T01:00:31.035Z",
+    "id": "401810252-0065",
+    "text": "Egor Demin defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "10:27",
-    "playerName": "Egor Demin",
-    "action": "defensive rebound",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:00:31.035Z"
   },
   {
-    "timestamp": "2025-12-22T01:00:41.788Z",
+    "id": "401810252-0066",
+    "text": "Egor Demin defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "10:27",
-    "playerName": "Egor Demin",
-    "action": "defensive rebound",
     "homeScore": 67,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:00:41.788Z"
   },
   {
-    "timestamp": "2025-12-22T01:00:46.102Z",
+    "id": "401810252-0067",
+    "text": "Michael Porter J Porter Jr. makes running layup (Egor Demin assists)",
+    "shortText": "Porter Jr. makes running layup (Egor Demin assists)",
     "period": 4,
     "clock": "10:23",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. makes running layup (Egor Demin assists)",
     "homeScore": 69,
     "awayScore": 69,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:00:46.102Z"
   },
   {
-    "timestamp": "2025-12-22T01:00:54.705Z",
+    "id": "401810252-0068",
+    "text": "Immanuel Quickley makes layup",
+    "shortText": "makes layup",
     "period": 4,
     "clock": "10:10",
-    "playerName": "Immanuel Quickley",
-    "action": "makes layup",
     "homeScore": 69,
     "awayScore": 71,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:00:54.705Z"
   },
   {
-    "timestamp": "2025-12-22T01:01:16.098Z",
+    "id": "401810252-0069",
+    "text": "Egor Demin makes 26-foot three pointer (Terance Mann assists)",
+    "shortText": "makes 26-foot three pointer (Terance Mann assists)",
     "period": 4,
     "clock": "9:55",
-    "playerName": "Egor Demin",
-    "action": "makes 26-foot three pointer (Terance Mann assists)",
     "homeScore": 72,
     "awayScore": 71,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:01:16.098Z"
   },
   {
-    "timestamp": "2025-12-22T01:01:36.428Z",
+    "id": "401810252-0070",
+    "text": "Jamison Battle makes 2-foot dunk (Collin Murray-Boyles assists)",
+    "shortText": "makes 2-foot dunk (Collin Murray-Boyles assists)",
     "period": 4,
     "clock": "9:37",
-    "playerName": "Jamison Battle",
-    "action": "makes 2-foot dunk (Collin Murray-Boyles assists)",
     "homeScore": 72,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:01:36.428Z"
   },
   {
-    "timestamp": "2025-12-22T01:01:46.836Z",
+    "id": "401810252-0071",
+    "text": "Terance Mann makes 20-foot jumper",
+    "shortText": "makes 20-foot jumper",
     "period": 4,
     "clock": "9:23",
-    "playerName": "Terance Mann",
-    "action": "makes 20-foot jumper",
     "homeScore": 74,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Terance Mann"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:01:46.836Z"
   },
   {
-    "timestamp": "2025-12-22T01:01:54.782Z",
+    "id": "401810252-0072",
+    "text": "Egor Demin defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "9:08",
-    "playerName": "Egor Demin",
-    "action": "defensive rebound",
     "homeScore": 74,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:01:54.782Z"
   },
   {
-    "timestamp": "2025-12-22T01:02:04.871Z",
+    "id": "401810252-0073",
+    "text": "Jamison Battle personal foul",
+    "shortText": "personal foul",
     "period": 4,
     "clock": "9:04",
-    "playerName": "Jamison Battle",
-    "action": "personal foul",
     "homeScore": 74,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:02:04.871Z"
   },
   {
-    "timestamp": "2025-12-22T01:02:27.158Z",
+    "id": "401810252-0074",
+    "text": "Scottie Barnes enters the game for Collin Murray-Boyles",
+    "shortText": "enters the game for Collin Murray-Boyles",
     "period": 4,
     "clock": "9:04",
-    "playerName": "Scottie Barnes",
-    "action": "enters the game for Collin Murray-Boyles",
     "homeScore": 74,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:02:27.158Z"
   },
   {
-    "timestamp": "2025-12-22T01:02:47.567Z",
+    "id": "401810252-0075",
+    "text": "Jamison Battle offensive rebound",
+    "shortText": "offensive rebound",
     "period": 4,
     "clock": "8:41",
-    "playerName": "Jamison Battle",
-    "action": "offensive rebound",
     "homeScore": 74,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:02:47.567Z"
   },
   {
-    "timestamp": "2025-12-22T01:03:05.373Z",
+    "id": "401810252-0076",
+    "text": "Noah Clowney makes running layup (Michael Porter Jr. assists)",
+    "shortText": "makes running layup (Michael Porter Jr. assists)",
     "period": 4,
     "clock": "8:38",
-    "playerName": "Noah Clowney",
-    "action": "makes running layup (Michael Porter Jr. assists)",
     "homeScore": 76,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:03:05.373Z"
   },
   {
-    "timestamp": "2025-12-22T01:03:15.697Z",
+    "id": "401810252-0077",
+    "text": "Scottie Barnes offensive rebound",
+    "shortText": "offensive rebound",
     "period": 4,
     "clock": "8:11",
-    "playerName": "Scottie Barnes",
-    "action": "offensive rebound",
     "homeScore": 76,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:03:15.697Z"
   },
   {
-    "timestamp": "2025-12-22T01:03:30.103Z",
+    "id": "401810252-0078",
+    "text": "Nic Claxton defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "8:06",
-    "playerName": "Nic Claxton",
-    "action": "defensive rebound",
     "homeScore": 76,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:03:30.103Z"
   },
   {
-    "timestamp": "2025-12-22T01:03:36.273Z",
+    "id": "401810252-0079",
+    "text": "Raptors Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "7:54",
-    "playerName": "Raptors Full",
-    "action": "timeout",
     "homeScore": 79,
     "awayScore": 73,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Raptors Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:03:36.273Z"
   },
   {
-    "timestamp": "2025-12-22T01:04:22.762Z",
+    "id": "401810252-0080",
+    "text": "Raptors Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "7:54",
-    "playerName": "Raptors Full",
-    "action": "timeout",
     "homeScore": 79,
     "awayScore": 73,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Raptors Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:04:22.762Z"
   },
   {
-    "timestamp": "2025-12-22T01:05:22.861Z",
+    "id": "401810252-0081",
+    "text": "Raptors Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "7:54",
-    "playerName": "Raptors Full",
-    "action": "timeout",
     "homeScore": 79,
     "awayScore": 73,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Raptors Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:05:22.861Z"
   },
   {
-    "timestamp": "2025-12-22T01:06:28.721Z",
+    "id": "401810252-0082",
+    "text": "Jamal Shead enters the game for Sandro Mamukelashvili",
+    "shortText": "enters the game for Sandro Mamukelashvili",
     "period": 4,
     "clock": "7:54",
-    "playerName": "Jamal Shead",
-    "action": "enters the game for Sandro Mamukelashvili",
     "homeScore": 79,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamal Shead"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:06:28.721Z"
   },
   {
-    "timestamp": "2025-12-22T01:06:29.056Z",
+    "id": "401810252-0083",
+    "text": "Jamal Shead enters the game for Sandro Mamukelashvili",
+    "shortText": "enters the game for Sandro Mamukelashvili",
     "period": 4,
     "clock": "7:54",
-    "playerName": "Jamal Shead",
-    "action": "enters the game for Sandro Mamukelashvili",
     "homeScore": 79,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamal Shead"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:06:29.056Z"
   },
   {
-    "timestamp": "2025-12-22T01:06:33.724Z",
+    "id": "401810252-0084",
+    "text": "Jamal Shead enters the game for Sandro Mamukelashvili",
+    "shortText": "enters the game for Sandro Mamukelashvili",
     "period": 4,
     "clock": "7:54",
-    "playerName": "Jamal Shead",
-    "action": "enters the game for Sandro Mamukelashvili",
     "homeScore": 79,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamal Shead"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:06:33.724Z"
   },
   {
-    "timestamp": "2025-12-22T01:06:59.836Z",
+    "id": "401810252-0085",
+    "text": "Brandon Ingram enters the game for Jamison Battle",
+    "shortText": "enters the game for Jamison Battle",
     "period": 4,
     "clock": "7:54",
-    "playerName": "Brandon Ingram",
-    "action": "enters the game for Jamison Battle",
     "homeScore": 79,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:06:59.836Z"
   },
   {
-    "timestamp": "2025-12-22T01:07:00.115Z",
+    "id": "401810252-0086",
+    "text": "Brandon Ingram enters the game for Jamison Battle",
+    "shortText": "enters the game for Jamison Battle",
     "period": 4,
     "clock": "7:54",
-    "playerName": "Brandon Ingram",
-    "action": "enters the game for Jamison Battle",
     "homeScore": 79,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:07:00.115Z"
   },
   {
-    "timestamp": "2025-12-22T01:07:19.352Z",
+    "id": "401810252-0087",
+    "text": "Noah Clowney makes 25-foot shot",
+    "shortText": "makes 25-foot shot",
     "period": 4,
     "clock": "7:22",
-    "playerName": "Noah Clowney",
-    "action": "makes 25-foot shot",
     "homeScore": 82,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:07:19.352Z"
   },
   {
-    "timestamp": "2025-12-22T01:07:19.841Z",
+    "id": "401810252-0088",
+    "text": "Noah Clowney makes 25-foot shot",
+    "shortText": "makes 25-foot shot",
     "period": 4,
     "clock": "7:22",
-    "playerName": "Noah Clowney",
-    "action": "makes 25-foot shot",
     "homeScore": 82,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:07:19.841Z"
   },
   {
-    "timestamp": "2025-12-22T01:07:59.746Z",
+    "id": "401810252-0089",
+    "text": "Noah Clowney makes 25-foot three point jumper (Terance Mann assists)",
+    "shortText": "makes 25-foot three point jumper (Terance Mann assists)",
     "period": 4,
     "clock": "7:22",
-    "playerName": "Noah Clowney",
-    "action": "makes 25-foot three point jumper (Terance Mann assists)",
     "homeScore": 82,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:07:59.746Z"
   },
   {
-    "timestamp": "2025-12-22T01:08:00.671Z",
+    "id": "401810252-0090",
+    "text": "Noah Clowney makes 25-foot three point jumper (Terance Mann assists)",
+    "shortText": "makes 25-foot three point jumper (Terance Mann assists)",
     "period": 4,
     "clock": "7:22",
-    "playerName": "Noah Clowney",
-    "action": "makes 25-foot three point jumper (Terance Mann assists)",
     "homeScore": 82,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:08:00.671Z"
   },
   {
-    "timestamp": "2025-12-22T01:08:19.874Z",
+    "id": "401810252-0091",
+    "text": "Terance Mann shooting foul",
+    "shortText": "shooting foul",
     "period": 4,
     "clock": "6:56",
-    "playerName": "Terance Mann",
-    "action": "shooting foul",
     "homeScore": 82,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Terance Mann"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:08:19.874Z"
   },
   {
-    "timestamp": "2025-12-22T01:08:20.862Z",
+    "id": "401810252-0092",
+    "text": "Terance Mann shooting foul",
+    "shortText": "shooting foul",
     "period": 4,
     "clock": "6:56",
-    "playerName": "Terance Mann",
-    "action": "shooting foul",
     "homeScore": 82,
     "awayScore": 73,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Terance Mann"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:08:20.862Z"
   },
   {
-    "timestamp": "2025-12-22T01:08:31.295Z",
+    "id": "401810252-0093",
+    "text": "Danny Wolf enters the game for Egor Demin",
+    "shortText": "enters the game for Egor Demin",
     "period": 4,
     "clock": "6:56",
-    "playerName": "Danny Wolf",
-    "action": "enters the game for Egor Demin",
     "homeScore": 82,
     "awayScore": 74,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:08:31.295Z"
   },
   {
-    "timestamp": "2025-12-22T01:08:31.792Z",
+    "id": "401810252-0094",
+    "text": "Danny Wolf enters the game for Egor Demin",
+    "shortText": "enters the game for Egor Demin",
     "period": 4,
     "clock": "6:56",
-    "playerName": "Danny Wolf",
-    "action": "enters the game for Egor Demin",
     "homeScore": 82,
     "awayScore": 74,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:08:31.792Z"
   },
   {
-    "timestamp": "2025-12-22T01:08:41.495Z",
+    "id": "401810252-0095",
+    "text": "Nolan Traore enters the game for Michael Porter Jr.",
+    "shortText": "enters the game for Michael Porter Jr.",
     "period": 4,
     "clock": "6:56",
-    "playerName": "Nolan Traore",
-    "action": "enters the game for Michael Porter Jr.",
     "homeScore": 82,
     "awayScore": 74,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:08:41.495Z"
   },
   {
-    "timestamp": "2025-12-22T01:08:41.824Z",
+    "id": "401810252-0096",
+    "text": "Nolan Traore enters the game for Michael Porter Jr.",
+    "shortText": "enters the game for Michael Porter Jr.",
     "period": 4,
     "clock": "6:56",
-    "playerName": "Nolan Traore",
-    "action": "enters the game for Michael Porter Jr.",
     "homeScore": 82,
     "awayScore": 74,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:08:41.824Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:01.691Z",
+    "id": "401810252-0097",
+    "text": "Noah Clowney misses 29-foot three point jumper",
+    "shortText": "misses 29-foot three point jumper",
     "period": 4,
     "clock": "6:47",
-    "playerName": "Noah Clowney",
-    "action": "misses 29-foot three point jumper",
     "homeScore": 82,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:01.691Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:01.973Z",
+    "id": "401810252-0098",
+    "text": "Noah Clowney misses 29-foot three point jumper",
+    "shortText": "misses 29-foot three point jumper",
     "period": 4,
     "clock": "6:47",
-    "playerName": "Noah Clowney",
-    "action": "misses 29-foot three point jumper",
     "homeScore": 82,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:01.973Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:20.534Z",
+    "id": "401810252-0099",
+    "text": "Nic Claxton defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "6:26",
-    "playerName": "Nic Claxton",
-    "action": "defensive rebound",
     "homeScore": 82,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:20.534Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:22.065Z",
+    "id": "401810252-0100",
+    "text": "Nic Claxton defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "6:26",
-    "playerName": "Nic Claxton",
-    "action": "defensive rebound",
     "homeScore": 82,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:22.065Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:22.280Z",
+    "id": "401810252-0101",
+    "text": "Nic Claxton defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "6:26",
-    "playerName": "Nic Claxton",
-    "action": "defensive rebound",
     "homeScore": 82,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:22.280Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:29.671Z",
+    "id": "401810252-0102",
+    "text": "Nic Claxton defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "6:26",
-    "playerName": "Nic Claxton",
-    "action": "defensive rebound",
     "homeScore": 82,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:29.671Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:50.256Z",
+    "id": "401810252-0103",
+    "text": "Nic Claxton defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "6:26",
-    "playerName": "Nic Claxton",
-    "action": "defensive rebound",
     "homeScore": 82,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:50.256Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:52.121Z",
+    "id": "401810252-0104",
+    "text": "Nolan Traore defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "5:51",
-    "playerName": "Nolan Traore",
-    "action": "defensive rebound",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:52.121Z"
   },
   {
-    "timestamp": "2025-12-22T01:09:53.437Z",
+    "id": "401810252-0105",
+    "text": "Nolan Traore defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "5:51",
-    "playerName": "Nolan Traore",
-    "action": "defensive rebound",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:09:53.437Z"
   },
   {
-    "timestamp": "2025-12-22T01:10:11.715Z",
+    "id": "401810252-0106",
+    "text": "Michael Porter J Porter Jr. enters the game for Terance Mann",
+    "shortText": "Porter Jr. enters the game for Terance Mann",
     "period": 4,
     "clock": "5:51",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. enters the game for Terance Mann",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:10:11.715Z"
   },
   {
-    "timestamp": "2025-12-22T01:10:12.179Z",
+    "id": "401810252-0107",
+    "text": "Michael Porter J Porter Jr. enters the game for Terance Mann",
+    "shortText": "Porter Jr. enters the game for Terance Mann",
     "period": 4,
     "clock": "5:51",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. enters the game for Terance Mann",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:10:12.179Z"
   },
   {
-    "timestamp": "2025-12-22T01:10:52.419Z",
+    "id": "401810252-0108",
+    "text": "Scottie Barnes blocks Nolan Traore 's 22-foot three point jumper",
+    "shortText": "blocks Nolan Traore 's 22-foot three point jumper",
     "period": 4,
     "clock": "5:33",
-    "playerName": "Scottie Barnes",
-    "action": "blocks Nolan Traore 's 22-foot three point jumper",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:10:52.419Z"
   },
   {
-    "timestamp": "2025-12-22T01:10:52.965Z",
+    "id": "401810252-0109",
+    "text": "Scottie Barnes blocks Nolan Traore 's 22-foot three point jumper",
+    "shortText": "blocks Nolan Traore 's 22-foot three point jumper",
     "period": 4,
     "clock": "5:33",
-    "playerName": "Scottie Barnes",
-    "action": "blocks Nolan Traore 's 22-foot three point jumper",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:10:52.965Z"
   },
   {
-    "timestamp": "2025-12-22T01:11:07.531Z",
+    "id": "401810252-0110",
+    "text": "Scottie Barnes blocks Nolan Traore 's 22-foot three point jumper",
+    "shortText": "blocks Nolan Traore 's 22-foot three point jumper",
     "period": 4,
     "clock": "5:33",
-    "playerName": "Scottie Barnes",
-    "action": "blocks Nolan Traore 's 22-foot three point jumper",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Scottie Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:11:07.531Z"
   },
   {
-    "timestamp": "2025-12-22T01:11:12.413Z",
+    "id": "401810252-0111",
+    "text": "Noah Clowney offensive rebound",
+    "shortText": "offensive rebound",
     "period": 4,
     "clock": "5:25",
-    "playerName": "Noah Clowney",
-    "action": "offensive rebound",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:11:12.413Z"
   },
   {
-    "timestamp": "2025-12-22T01:11:13.520Z",
+    "id": "401810252-0112",
+    "text": "Noah Clowney offensive rebound",
+    "shortText": "offensive rebound",
     "period": 4,
     "clock": "5:25",
-    "playerName": "Noah Clowney",
-    "action": "offensive rebound",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:11:13.520Z"
   },
   {
-    "timestamp": "2025-12-22T01:11:34.380Z",
+    "id": "401810252-0113",
+    "text": "Noah Clowney offensive rebound",
+    "shortText": "offensive rebound",
     "period": 4,
     "clock": "5:25",
-    "playerName": "Noah Clowney",
-    "action": "offensive rebound",
     "homeScore": 84,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:11:34.380Z"
   },
   {
-    "timestamp": "2025-12-22T01:11:42.776Z",
+    "id": "401810252-0114",
+    "text": "Nic Claxton defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "4:51",
-    "playerName": "Nic Claxton",
-    "action": "defensive rebound",
     "homeScore": 86,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:11:42.776Z"
   },
   {
-    "timestamp": "2025-12-22T01:11:42.778Z",
+    "id": "401810252-0115",
+    "text": "Nic Claxton defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "4:51",
-    "playerName": "Nic Claxton",
-    "action": "defensive rebound",
     "homeScore": 86,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:11:42.778Z"
   },
   {
-    "timestamp": "2025-12-22T01:11:52.553Z",
+    "id": "401810252-0116",
+    "text": "Raptors Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "4:42",
-    "playerName": "Raptors Full",
-    "action": "timeout",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Raptors Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:11:52.553Z"
   },
   {
-    "timestamp": "2025-12-22T01:11:52.875Z",
+    "id": "401810252-0117",
+    "text": "Raptors Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "4:42",
-    "playerName": "Raptors Full",
-    "action": "timeout",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Raptors Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:11:52.875Z"
   },
   {
-    "timestamp": "2025-12-22T01:13:02.875Z",
+    "id": "401810252-0118",
+    "text": "Raptors Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "4:42",
-    "playerName": "Raptors Full",
-    "action": "timeout",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Raptors Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:13:02.875Z"
   },
   {
-    "timestamp": "2025-12-22T01:13:44.375Z",
+    "id": "401810252-0119",
+    "text": "Jamison Battle enters the game for Ja'Kobe Walter",
+    "shortText": "enters the game for Ja'Kobe Walter",
     "period": 4,
     "clock": "4:42",
-    "playerName": "Jamison Battle",
-    "action": "enters the game for Ja'Kobe Walter",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:13:44.375Z"
   },
   {
-    "timestamp": "2025-12-22T01:13:45.096Z",
+    "id": "401810252-0120",
+    "text": "Jamison Battle enters the game for Ja'Kobe Walter",
+    "shortText": "enters the game for Ja'Kobe Walter",
     "period": 4,
     "clock": "4:42",
-    "playerName": "Jamison Battle",
-    "action": "enters the game for Ja'Kobe Walter",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:13:45.096Z"
   },
   {
-    "timestamp": "2025-12-22T01:14:04.706Z",
+    "id": "401810252-0121",
+    "text": "Ochai Agbaji enters the game for Jamal Shead",
+    "shortText": "enters the game for Jamal Shead",
     "period": 4,
     "clock": "4:42",
-    "playerName": "Ochai Agbaji",
-    "action": "enters the game for Jamal Shead",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Ochai Agbaji"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:14:04.706Z"
   },
   {
-    "timestamp": "2025-12-22T01:14:05.167Z",
+    "id": "401810252-0122",
+    "text": "Ochai Agbaji enters the game for Jamal Shead",
+    "shortText": "enters the game for Jamal Shead",
     "period": 4,
     "clock": "4:42",
-    "playerName": "Ochai Agbaji",
-    "action": "enters the game for Jamal Shead",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Ochai Agbaji"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:14:05.167Z"
   },
   {
-    "timestamp": "2025-12-22T01:14:35.045Z",
+    "id": "401810252-0123",
+    "text": "Nolan Traore shooting foul",
+    "shortText": "shooting foul",
     "period": 4,
     "clock": "4:27",
-    "playerName": "Nolan Traore",
-    "action": "shooting foul",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:14:35.045Z"
   },
   {
-    "timestamp": "2025-12-22T01:14:35.348Z",
+    "id": "401810252-0124",
+    "text": "Nolan Traore shooting foul",
+    "shortText": "shooting foul",
     "period": 4,
     "clock": "4:27",
-    "playerName": "Nolan Traore",
-    "action": "shooting foul",
     "homeScore": 88,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nolan Traore"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:14:35.348Z"
   },
   {
-    "timestamp": "2025-12-22T01:14:55.425Z",
+    "id": "401810252-0125",
+    "text": "Immanuel Quickley makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 4,
     "clock": "4:27",
-    "playerName": "Immanuel Quickley",
-    "action": "makes free throw 1 of 2",
     "homeScore": 88,
     "awayScore": 76,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:14:55.425Z"
   },
   {
-    "timestamp": "2025-12-22T01:14:55.435Z",
+    "id": "401810252-0126",
+    "text": "Immanuel Quickley makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 4,
     "clock": "4:27",
-    "playerName": "Immanuel Quickley",
-    "action": "makes free throw 1 of 2",
     "homeScore": 88,
     "awayScore": 76,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:14:55.435Z"
   },
   {
-    "timestamp": "2025-12-22T01:15:15.748Z",
+    "id": "401810252-0127",
+    "text": "Immanuel Quickley makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 4,
     "clock": "4:27",
-    "playerName": "Immanuel Quickley",
-    "action": "makes free throw 2 of 2",
     "homeScore": 88,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:15:15.748Z"
   },
   {
-    "timestamp": "2025-12-22T01:15:15.751Z",
+    "id": "401810252-0128",
+    "text": "Immanuel Quickley makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 4,
     "clock": "4:27",
-    "playerName": "Immanuel Quickley",
-    "action": "makes free throw 2 of 2",
     "homeScore": 88,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Immanuel Quickley"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:15:15.751Z"
   },
   {
-    "timestamp": "2025-12-22T01:15:25.846Z",
+    "id": "401810252-0129",
+    "text": "Egor Demin makes 23-foot three point jumper (Danny Wolf assists)",
+    "shortText": "makes 23-foot three point jumper (Danny Wolf assists)",
     "period": 4,
     "clock": "4:05",
-    "playerName": "Egor Demin",
-    "action": "makes 23-foot three point jumper (Danny Wolf assists)",
     "homeScore": 91,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:15:25.846Z"
   },
   {
-    "timestamp": "2025-12-22T01:15:25.848Z",
+    "id": "401810252-0130",
+    "text": "Egor Demin makes 23-foot three point jumper (Danny Wolf assists)",
+    "shortText": "makes 23-foot three point jumper (Danny Wolf assists)",
     "period": 4,
     "clock": "4:05",
-    "playerName": "Egor Demin",
-    "action": "makes 23-foot three point jumper (Danny Wolf assists)",
     "homeScore": 91,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:15:25.848Z"
   },
   {
-    "timestamp": "2025-12-22T01:15:45.964Z",
+    "id": "401810252-0131",
+    "text": "Brandon Ingram misses 27-foot three point jumper",
+    "shortText": "misses 27-foot three point jumper",
     "period": 4,
     "clock": "3:52",
-    "playerName": "Brandon Ingram",
-    "action": "misses 27-foot three point jumper",
     "homeScore": 91,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:15:45.964Z"
   },
   {
-    "timestamp": "2025-12-22T01:15:46.112Z",
+    "id": "401810252-0132",
+    "text": "Brandon Ingram misses 27-foot three point jumper",
+    "shortText": "misses 27-foot three point jumper",
     "period": 4,
     "clock": "3:52",
-    "playerName": "Brandon Ingram",
-    "action": "misses 27-foot three point jumper",
     "homeScore": 91,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:15:46.112Z"
   },
   {
-    "timestamp": "2025-12-22T01:16:26.023Z",
+    "id": "401810252-0133",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 4,
     "clock": "3:17",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:16:26.023Z"
   },
   {
-    "timestamp": "2025-12-22T01:16:26.767Z",
+    "id": "401810252-0134",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 4,
     "clock": "3:17",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:16:26.767Z"
   },
   {
-    "timestamp": "2025-12-22T01:16:38.123Z",
+    "id": "401810252-0135",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 4,
     "clock": "3:19",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:16:38.123Z"
   },
   {
-    "timestamp": "2025-12-22T01:16:38.831Z",
+    "id": "401810252-0136",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 4,
     "clock": "3:19",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:16:38.831Z"
   },
   {
-    "timestamp": "2025-12-22T01:16:48.408Z",
+    "id": "401810252-0137",
+    "text": "Nic Claxton offensive foul turnover",
+    "shortText": "offensive foul turnover",
     "period": 4,
     "clock": "3:03",
-    "playerName": "Nic Claxton",
-    "action": "offensive foul turnover",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:16:48.408Z"
   },
   {
-    "timestamp": "2025-12-22T01:16:49.001Z",
+    "id": "401810252-0138",
+    "text": "Nic Claxton offensive foul turnover",
+    "shortText": "offensive foul turnover",
     "period": 4,
     "clock": "3:03",
-    "playerName": "Nic Claxton",
-    "action": "offensive foul turnover",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Nic Claxton"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:16:49.001Z"
   },
   {
-    "timestamp": "2025-12-22T01:16:58.385Z",
+    "id": "401810252-0139",
+    "text": "Noah Clowney enters the game for Danny Wolf",
+    "shortText": "enters the game for Danny Wolf",
     "period": 4,
     "clock": "3:03",
-    "playerName": "Noah Clowney",
-    "action": "enters the game for Danny Wolf",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:16:58.385Z"
   },
   {
-    "timestamp": "2025-12-22T01:16:59.134Z",
+    "id": "401810252-0140",
+    "text": "Noah Clowney enters the game for Danny Wolf",
+    "shortText": "enters the game for Danny Wolf",
     "period": 4,
     "clock": "3:03",
-    "playerName": "Noah Clowney",
-    "action": "enters the game for Danny Wolf",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:16:59.134Z"
   },
   {
-    "timestamp": "2025-12-22T01:17:07.486Z",
+    "id": "401810252-0141",
+    "text": "Sandro Mamukelashvili enters the game for Jamison Battle",
+    "shortText": "enters the game for Jamison Battle",
     "period": 4,
     "clock": "3:03",
-    "playerName": "Sandro Mamukelashvili",
-    "action": "enters the game for Jamison Battle",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Sandro Mamukelashvili"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:17:07.486Z"
   },
   {
-    "timestamp": "2025-12-22T01:17:08.209Z",
+    "id": "401810252-0142",
+    "text": "Sandro Mamukelashvili enters the game for Jamison Battle",
+    "shortText": "enters the game for Jamison Battle",
     "period": 4,
     "clock": "3:03",
-    "playerName": "Sandro Mamukelashvili",
-    "action": "enters the game for Jamison Battle",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Sandro Mamukelashvili"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:17:08.209Z"
   },
   {
-    "timestamp": "2025-12-22T01:17:17.587Z",
+    "id": "401810252-0143",
+    "text": "Brandon Ingram misses shot",
+    "shortText": "misses shot",
     "period": 4,
     "clock": "2:40",
-    "playerName": "Brandon Ingram",
-    "action": "misses shot",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:17:17.587Z"
   },
   {
-    "timestamp": "2025-12-22T01:17:18.280Z",
+    "id": "401810252-0144",
+    "text": "Brandon Ingram misses shot",
+    "shortText": "misses shot",
     "period": 4,
     "clock": "2:40",
-    "playerName": "Brandon Ingram",
-    "action": "misses shot",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Brandon Ingram"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:17:18.280Z"
   },
   {
-    "timestamp": "2025-12-22T01:17:27.735Z",
+    "id": "401810252-0145",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 4,
     "clock": "2:36",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:17:27.735Z"
   },
   {
-    "timestamp": "2025-12-22T01:17:28.373Z",
+    "id": "401810252-0146",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 4,
     "clock": "2:36",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:17:28.373Z"
   },
   {
-    "timestamp": "2025-12-22T01:17:57.958Z",
+    "id": "401810252-0147",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 4,
     "clock": "2:40",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:17:57.958Z"
   },
   {
-    "timestamp": "2025-12-22T01:17:58.696Z",
+    "id": "401810252-0148",
+    "text": "Michael Porter J Porter Jr. defensive rebound",
+    "shortText": "Porter Jr. defensive rebound",
     "period": 4,
     "clock": "2:40",
-    "playerName": "Michael Porter J",
-    "action": "Porter Jr. defensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Michael Porter J"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:17:58.696Z"
   },
   {
-    "timestamp": "2025-12-22T01:18:08.059Z",
+    "id": "401810252-0149",
+    "text": "Noah Clowney offensive rebound",
+    "shortText": "offensive rebound",
     "period": 4,
     "clock": "2:15",
-    "playerName": "Noah Clowney",
-    "action": "offensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:18:08.059Z"
   },
   {
-    "timestamp": "2025-12-22T01:18:08.821Z",
+    "id": "401810252-0150",
+    "text": "Noah Clowney offensive rebound",
+    "shortText": "offensive rebound",
     "period": 4,
     "clock": "2:15",
-    "playerName": "Noah Clowney",
-    "action": "offensive rebound",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:18:08.821Z"
   },
   {
-    "timestamp": "2025-12-22T01:18:29.028Z",
+    "id": "401810252-0151",
+    "text": "Raptors Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "2:05",
-    "playerName": "Raptors Full",
-    "action": "timeout",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Raptors Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:18:29.028Z"
   },
   {
-    "timestamp": "2025-12-22T01:18:29.030Z",
+    "id": "401810252-0152",
+    "text": "Raptors Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "2:05",
-    "playerName": "Raptors Full",
-    "action": "timeout",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Raptors Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:18:29.030Z"
   },
   {
-    "timestamp": "2025-12-22T01:20:10.204Z",
+    "id": "401810252-0153",
+    "text": "Collin Murray-Boyles enters the game for Ochai Agbaji",
+    "shortText": "enters the game for Ochai Agbaji",
     "period": 4,
     "clock": "2:05",
-    "playerName": "Collin Murray",
-    "action": "-Boyles enters the game for Ochai Agbaji",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:20:10.204Z"
   },
   {
-    "timestamp": "2025-12-22T01:20:10.359Z",
+    "id": "401810252-0154",
+    "text": "Collin Murray-Boyles enters the game for Ochai Agbaji",
+    "shortText": "enters the game for Ochai Agbaji",
     "period": 4,
     "clock": "2:05",
-    "playerName": "Collin Murray",
-    "action": "-Boyles enters the game for Ochai Agbaji",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:20:10.359Z"
   },
   {
-    "timestamp": "2025-12-22T01:20:30.262Z",
+    "id": "401810252-0155",
+    "text": "Garrett Temple enters the game for Sandro Mamukelashvili",
+    "shortText": "enters the game for Sandro Mamukelashvili",
     "period": 4,
     "clock": "2:05",
-    "playerName": "Garrett Temple",
-    "action": "enters the game for Sandro Mamukelashvili",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Garrett Temple"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:20:30.262Z"
   },
   {
-    "timestamp": "2025-12-22T01:20:30.690Z",
+    "id": "401810252-0156",
+    "text": "Garrett Temple enters the game for Sandro Mamukelashvili",
+    "shortText": "enters the game for Sandro Mamukelashvili",
     "period": 4,
     "clock": "2:05",
-    "playerName": "Garrett Temple",
-    "action": "enters the game for Sandro Mamukelashvili",
     "homeScore": 93,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Garrett Temple"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:20:30.690Z"
   },
   {
-    "timestamp": "2025-12-22T01:20:40.310Z",
+    "id": "401810252-0157",
+    "text": "Collin Murray-Boyles makes 3-foot layup (Garrett Temple assists)",
+    "shortText": "makes 3-foot layup (Garrett Temple assists)",
     "period": 4,
     "clock": "1:53",
-    "playerName": "Collin Murray",
-    "action": "-Boyles makes 3-foot layup (Garrett Temple assists)",
     "homeScore": 93,
     "awayScore": 79,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:20:40.310Z"
   },
   {
-    "timestamp": "2025-12-22T01:20:40.964Z",
+    "id": "401810252-0158",
+    "text": "Collin Murray-Boyles makes 3-foot layup (Garrett Temple assists)",
+    "shortText": "makes 3-foot layup (Garrett Temple assists)",
     "period": 4,
     "clock": "1:53",
-    "playerName": "Collin Murray",
-    "action": "-Boyles makes 3-foot layup (Garrett Temple assists)",
     "homeScore": 93,
     "awayScore": 79,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:20:40.964Z"
   },
   {
-    "timestamp": "2025-12-22T01:20:50.353Z",
+    "id": "401810252-0159",
+    "text": "Jamison Battle defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "1:35",
-    "playerName": "Jamison Battle",
-    "action": "defensive rebound",
     "homeScore": 93,
     "awayScore": 79,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:20:50.353Z"
   },
   {
-    "timestamp": "2025-12-22T01:20:51.295Z",
+    "id": "401810252-0160",
+    "text": "Jamison Battle defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "1:35",
-    "playerName": "Jamison Battle",
-    "action": "defensive rebound",
     "homeScore": 93,
     "awayScore": 79,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:20:51.295Z"
   },
   {
-    "timestamp": "2025-12-22T01:21:00.382Z",
+    "id": "401810252-0161",
+    "text": "Egor Demin defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "1:23",
-    "playerName": "Egor Demin",
-    "action": "defensive rebound",
     "homeScore": 93,
     "awayScore": 79,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:21:00.382Z"
   },
   {
-    "timestamp": "2025-12-22T01:21:01.504Z",
+    "id": "401810252-0162",
+    "text": "Egor Demin defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "1:23",
-    "playerName": "Egor Demin",
-    "action": "defensive rebound",
     "homeScore": 93,
     "awayScore": 79,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Egor Demin"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:21:01.504Z"
   },
   {
-    "timestamp": "2025-12-22T01:21:20.551Z",
+    "id": "401810252-0163",
+    "text": "Jamison Battle defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "1:03",
-    "playerName": "Jamison Battle",
-    "action": "defensive rebound",
     "homeScore": 93,
     "awayScore": 79,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:21:20.551Z"
   },
   {
-    "timestamp": "2025-12-22T01:21:21.857Z",
+    "id": "401810252-0164",
+    "text": "Jamison Battle defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "1:03",
-    "playerName": "Jamison Battle",
-    "action": "defensive rebound",
     "homeScore": 93,
     "awayScore": 79,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamison Battle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:21:21.857Z"
   },
   {
-    "timestamp": "2025-12-22T01:21:40.618Z",
+    "id": "401810252-0165",
+    "text": "Collin Murray-Boyles makes running dunk (Jamison Battle assists)",
+    "shortText": "makes running dunk (Jamison Battle assists)",
     "period": 4,
     "clock": "1:02",
-    "playerName": "Collin Murray",
-    "action": "-Boyles makes running dunk (Jamison Battle assists)",
     "homeScore": 93,
     "awayScore": 81,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:21:40.618Z"
   },
   {
-    "timestamp": "2025-12-22T01:21:41.121Z",
+    "id": "401810252-0166",
+    "text": "Collin Murray-Boyles makes running dunk (Jamison Battle assists)",
+    "shortText": "makes running dunk (Jamison Battle assists)",
     "period": 4,
     "clock": "1:02",
-    "playerName": "Collin Murray",
-    "action": "-Boyles makes running dunk (Jamison Battle assists)",
     "homeScore": 93,
     "awayScore": 81,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Collin Murray-Boyles"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:21:41.121Z"
   },
   {
-    "timestamp": "2025-12-22T01:21:50.688Z",
+    "id": "401810252-0167",
+    "text": "Noah Clowney makes 25-foot three point jumper (Michael Porter Jr. assists)",
+    "shortText": "makes 25-foot three point jumper (Michael Porter Jr. assists)",
     "period": 4,
     "clock": "45.5",
-    "playerName": "Noah Clowney",
-    "action": "makes 25-foot three point jumper (Michael Porter Jr. assists)",
     "homeScore": 96,
     "awayScore": 81,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:21:50.688Z"
   },
   {
-    "timestamp": "2025-12-22T01:21:51.459Z",
+    "id": "401810252-0168",
+    "text": "Noah Clowney makes 25-foot three point jumper (Michael Porter Jr. assists)",
+    "shortText": "makes 25-foot three point jumper (Michael Porter Jr. assists)",
     "period": 4,
     "clock": "45.5",
-    "playerName": "Noah Clowney",
-    "action": "makes 25-foot three point jumper (Michael Porter Jr. assists)",
     "homeScore": 96,
     "awayScore": 81,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Noah Clowney"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:21:51.459Z"
   },
   {
-    "timestamp": "2025-12-22T01:22:11.838Z",
+    "id": "401810252-0169",
+    "text": "Danny Wolf enters the game for Michael Porter Jr.",
+    "shortText": "enters the game for Michael Porter Jr.",
     "period": 4,
     "clock": "41.5",
-    "playerName": "Danny Wolf",
-    "action": "enters the game for Michael Porter Jr.",
     "homeScore": 96,
     "awayScore": 81,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:22:11.838Z"
   },
   {
-    "timestamp": "2025-12-22T01:22:12.799Z",
+    "id": "401810252-0170",
+    "text": "Danny Wolf enters the game for Michael Porter Jr.",
+    "shortText": "enters the game for Michael Porter Jr.",
     "period": 4,
     "clock": "41.5",
-    "playerName": "Danny Wolf",
-    "action": "enters the game for Michael Porter Jr.",
     "homeScore": 96,
     "awayScore": 81,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Danny Wolf"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:22:12.799Z"
   },
   {
-    "timestamp": "2025-12-22T01:22:32.100Z",
+    "id": "401810252-0171",
+    "text": "Gradey Dick misses tip shot",
+    "shortText": "misses tip shot",
     "period": 4,
     "clock": "29.4",
-    "playerName": "Gradey Dick",
-    "action": "misses tip shot",
     "homeScore": 96,
     "awayScore": 81,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Gradey Dick"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:22:32.100Z"
   },
   {
-    "timestamp": "2025-12-22T01:22:32.948Z",
+    "id": "401810252-0172",
+    "text": "Gradey Dick misses tip shot",
+    "shortText": "misses tip shot",
     "period": 4,
     "clock": "29.4",
-    "playerName": "Gradey Dick",
-    "action": "misses tip shot",
     "homeScore": 96,
     "awayScore": 81,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Gradey Dick"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:22:32.948Z"
   }
 ]

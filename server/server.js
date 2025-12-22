@@ -5,7 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
-const openaiConfig = require('../overlay/nba-live-overlay/config/openai.config.js');
+const apiConfig = require('../overlay/nba-live-overlay/config/config.js');
 
 // Ensure data directory exists
 const DATA_DIR = path.join(__dirname, 'data');
@@ -445,7 +445,7 @@ Respond with ONLY the enhanced commentary text, nothing else.`;
       path: '/v1/chat/completions',
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
+        'Authorization': `Bearer ${apiConfig.openaiApiKey}`,
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(requestData)
       }
@@ -500,6 +500,111 @@ Respond with ONLY the enhanced commentary text, nothing else.`;
   });
 }
 
+// Helper function to shorten long play text using OpenAI
+// Makes it sound more like a commentator, less formal/robotic
+async function shortenPlayText(playerName, actionText) {
+  return new Promise((resolve, reject) => {
+    const systemPrompt = 'You are a concise NBA play-by-play commentator. Your job is to shorten formal play descriptions into quick, natural commentary. Be brief and punchy. Max 5-6 words for the action.';
+    
+    const userPrompt = `Shorten this basketball play action to sound like quick commentary (keep it under 6 words):
+
+Original action: "${actionText}"
+
+Examples:
+- "misses 24-foot three point jumper" → "misses the three"
+- "makes 26-foot three point jump shot" → "drains the three"
+- "makes driving floating jump shot" → "floater is good"
+- "offensive rebound" → "offensive board"
+- "defensive rebound" → "grabs the board"
+- "makes 2-foot two point shot" → "easy bucket"
+- "makes driving layup" → "drives and scores"
+
+Respond with ONLY the shortened action text, nothing else.`;
+
+    const requestData = JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ],
+      max_tokens: 30,
+      temperature: 0.7
+    });
+
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/chat/completions',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiConfig.openaiApiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(requestData)
+      }
+    };
+
+    const apiReq = https.request(options, (apiRes) => {
+      let responseBody = '';
+      
+      apiRes.on('data', (chunk) => {
+        responseBody += chunk;
+      });
+      
+      apiRes.on('end', () => {
+        if (apiRes.statusCode !== 200) {
+          console.error('❌ OpenAI shorten API error:', apiRes.statusCode);
+          resolve(actionText); // Fallback to original
+          return;
+        }
+        
+        try {
+          const chatData = JSON.parse(responseBody);
+          const shortened = chatData.choices?.[0]?.message?.content?.trim() || actionText;
+          resolve(shortened);
+        } catch (e) {
+          resolve(actionText);
+        }
+      });
+    });
+    
+    apiReq.on('error', (error) => {
+      console.error('❌ OpenAI shorten request error:', error.message);
+      resolve(actionText);
+    });
+    
+    apiReq.write(requestData);
+    apiReq.end();
+  });
+}
+
+// POST /api/shorten-play - Shorten long play text
+async function handlePostShortenPlay(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    const { playerName, actionText } = data;
+
+    if (!actionText) {
+      const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Missing actionText' }));
+      return;
+    }
+
+    const shortened = await shortenPlayText(playerName || '', actionText);
+    
+    const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ 
+      original: actionText, 
+      shortened: shortened,
+      playerName: playerName 
+    }));
+  } catch (error) {
+    const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+    res.writeHead(500, headers);
+    res.end(JSON.stringify({ error: 'Failed to shorten text' }));
+  }
+}
+
 // Shared helper function to call OpenAI TTS API
 // Returns a Promise that resolves when the audio is piped to the response
 function callOpenAITTS(text, voice, model, speed, res, extraHeaders = {}) {
@@ -516,7 +621,7 @@ function callOpenAITTS(text, voice, model, speed, res, extraHeaders = {}) {
       path: '/v1/audio/speech',
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
+        'Authorization': `Bearer ${apiConfig.openaiApiKey}`,
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(requestData)
       }
@@ -590,8 +695,211 @@ function callOpenAITTS(text, voice, model, speed, res, extraHeaders = {}) {
   });
 }
 
-// POST /api/text-to-speech - Convert text to speech using OpenAI TTS
+// Shared helper function to call ElevenLabs TTS API
+// Returns a Promise that resolves when the audio is piped to the response
+function callElevenLabsTTS(text, voiceId, modelId, res, extraHeaders = {}) {
+  return new Promise((resolve, reject) => {
+    const requestData = JSON.stringify({
+      text: text,
+      model_id: modelId,
+      voice_settings: {
+        stability: 0.5,
+        similarity_boost: 0.75,
+        style: 0.0,
+        use_speaker_boost: true
+      }
+    });
+    
+    const options = {
+      hostname: 'api.elevenlabs.io',
+      path: `/v1/text-to-speech/${voiceId}`,
+      method: 'POST',
+      headers: {
+        'xi-api-key': apiConfig.elevenLabsApiKey,
+        'Content-Type': 'application/json',
+        'Accept': 'audio/mpeg'
+      }
+    };
+    
+    const apiReq = https.request(options, (apiRes) => {
+      if (apiRes.statusCode !== 200) {
+        let errorBody = '';
+        apiRes.on('data', (chunk) => { errorBody += chunk; });
+        apiRes.on('end', () => {
+          try {
+            const errorData = JSON.parse(errorBody);
+            const shortMsg = errorData.detail?.message || errorData.detail || 'ElevenLabs API error';
+            console.error(`❌ ElevenLabs TTS (${apiRes.statusCode}): ${shortMsg}`);
+            if (!res.headersSent) {
+              const headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                ...extraHeaders
+              };
+              res.writeHead(apiRes.statusCode, headers);
+              res.end(JSON.stringify({ error: shortMsg }));
+            }
+            reject(new Error(shortMsg));
+          } catch (e) {
+            if (!res.headersSent) {
+              const headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                ...extraHeaders
+              };
+              res.writeHead(apiRes.statusCode, headers);
+              res.end(JSON.stringify({ error: `ElevenLabs API error: ${apiRes.statusMessage}` }));
+            }
+            reject(new Error(`ElevenLabs API error: ${apiRes.statusMessage}`));
+          }
+        });
+        return;
+      }
+      
+      // Stream audio response
+      const headers = {
+        'Content-Type': 'audio/mpeg',
+        'Access-Control-Allow-Origin': '*',
+        ...extraHeaders
+      };
+      res.writeHead(200, headers);
+      apiRes.pipe(res);
+      apiRes.on('end', () => resolve());
+    });
+    
+    apiReq.on('error', (error) => {
+      console.error('❌ ElevenLabs TTS request error:', error.message);
+      if (!res.headersSent) {
+        const headers = {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          ...extraHeaders
+        };
+        res.writeHead(500, headers);
+        res.end(JSON.stringify({ error: error.message }));
+      }
+      reject(error);
+    });
+    
+    apiReq.write(requestData);
+    apiReq.end();
+  });
+}
+
+// POST /api/elevenlabs-tts - Convert text to speech using ElevenLabs
+async function handlePostElevenLabsTTS(req, res) {
+  try {
+    const data = await parseJsonBody(req);
+    // Default voice: "Josh" (energetic male) - good for sports commentary
+    // Other options: "Adam" (deep male), "Rachel" (female), etc.
+    let { text, voiceId = 'TxGEqnHWrfWFTfGW9XjX', model = 'eleven_flash_v2_5' } = data;
+    
+    if (!text || text.trim().length === 0) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(400, headers);
+      res.end(JSON.stringify({ error: 'Missing required field: text' }));
+      return;
+    }
+
+    // Text transformation disabled - read exact play text as-is
+    // To re-enable: text = makeTextEnergetic(text);
+
+    // Call ElevenLabs TTS
+    await callElevenLabsTTS(text, voiceId, model, res);
+    
+  } catch (error) {
+    if (!res.headersSent) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ error: 'ElevenLabs TTS failed' }));
+    }
+  }
+}
+
+// GET /api/elevenlabs-voices - Fetch available voices from ElevenLabs
+async function handleGetElevenLabsVoices(req, res) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.elevenlabs.io',
+      path: '/v1/voices',
+      method: 'GET',
+      headers: {
+        'xi-api-key': apiConfig.elevenLabsApiKey,
+        'Accept': 'application/json'
+      }
+    };
+    
+    const apiReq = https.request(options, (apiRes) => {
+      let data = '';
+      apiRes.on('data', (chunk) => { data += chunk; });
+      apiRes.on('end', () => {
+        const headers = {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        };
+        
+        if (apiRes.statusCode !== 200) {
+          console.error(`❌ ElevenLabs Voices API (${apiRes.statusCode}): ${data}`);
+          res.writeHead(apiRes.statusCode, headers);
+          res.end(JSON.stringify({ error: 'Failed to fetch voices' }));
+          resolve();
+          return;
+        }
+        
+        try {
+          const voicesData = JSON.parse(data);
+          // Simplify the response - just return id, name, and category
+          const voices = (voicesData.voices || []).map(v => ({
+            id: v.voice_id,
+            name: v.name,
+            category: v.category || 'custom',
+            description: v.labels?.description || v.description || ''
+          }));
+          res.writeHead(200, headers);
+          res.end(JSON.stringify({ voices }));
+          resolve();
+        } catch (e) {
+          res.writeHead(500, headers);
+          res.end(JSON.stringify({ error: 'Failed to parse voices response' }));
+          resolve();
+        }
+      });
+    });
+    
+    apiReq.on('error', (error) => {
+      console.error('❌ ElevenLabs Voices request error:', error.message);
+      const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      };
+      res.writeHead(500, headers);
+      res.end(JSON.stringify({ error: error.message }));
+      resolve();
+    });
+    
+    apiReq.end();
+  });
+}
+
+// POST /api/text-to-speech - DISABLED (was OpenAI TTS)
 async function handlePostTextToSpeech(req, res) {
+  // OpenAI TTS is disabled - use /api/elevenlabs-tts instead
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  };
+  res.writeHead(503, headers);
+  res.end(JSON.stringify({ error: 'OpenAI TTS is disabled. Use /api/elevenlabs-tts instead.' }));
+  return;
+
+  // --- ORIGINAL CODE BELOW (kept for reference) ---
+  /*
   try {
     const data = await parseJsonBody(req);
     let { text, voice = 'alloy', model = 'tts-1', speed = 1.0, enhance = false } = data;
@@ -655,6 +963,7 @@ async function handlePostTextToSpeech(req, res) {
       res.end(JSON.stringify({ error: 'TTS failed' }));
     }
   }
+  */
 }
 
 // POST /api/play-by-play - Store play-by-play data in memory
@@ -789,7 +1098,7 @@ Provide a natural, conversational analysis of how the game has been going so far
       path: '/v1/chat/completions',
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiConfig.openaiApiKey}`,
+        'Authorization': `Bearer ${apiConfig.openaiApiKey}`,
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(requestData)
       }
@@ -1004,6 +1313,9 @@ const API_ROUTES = {
   'DELETE /api/chat': handleDeleteChat,
   'POST /api/chat/refresh': handlePostChatRefresh,
   'POST /api/text-to-speech': handlePostTextToSpeech,
+  'POST /api/elevenlabs-tts': handlePostElevenLabsTTS,
+  'GET /api/elevenlabs-voices': handleGetElevenLabsVoices,
+  'POST /api/shorten-play': handlePostShortenPlay,
   'POST /api/play-by-play': handlePostPlayByPlay,
   'POST /api/game-analysis': handlePostGameAnalysis,
   'GET /api/image-proxy': handleGetImageProxy
@@ -1102,6 +1414,8 @@ const server = http.createServer(async (req, res) => {
     filePath = './overlay/_tests/index.html';
   } else if (filePath === './test-tts' || filePath === './test-tts/') {
     filePath = './overlay/_tests/test-tts.html';
+  } else if (filePath === './test-elevenlabs' || filePath === './test-elevenlabs/') {
+    filePath = './overlay/_tests/test-elevenlabs.html';
   } else if (filePath === './test-pbp-animations' || filePath === './test-pbp-animations/') {
     filePath = './overlay/_tests/test-pbp-animations.html';
   } else if (filePath === './design-test' || filePath === './design-test/') {
@@ -1149,7 +1463,8 @@ server.listen(PORT, () => {
   console.log('🎨 Color Overlay (OBS): http://localhost:' + PORT + '/overlay/color');
     console.log('🧪 Chat Test Page: http://localhost:' + PORT + '/chat-test');
     console.log('🎨 Design Tester: http://localhost:' + PORT + '/design-test');
-    console.log('🔊 TTS Test Page: http://localhost:' + PORT + '/test-tts');
+    console.log('🔊 TTS Test (OpenAI): http://localhost:' + PORT + '/test-tts');
+    console.log('🎙️ TTS Test (ElevenLabs): http://localhost:' + PORT + '/test-elevenlabs');
     console.log('🎬 PBP Animations Test: http://localhost:' + PORT + '/test-pbp-animations');
   console.log('');
   console.log('Press Ctrl+C to stop the server');

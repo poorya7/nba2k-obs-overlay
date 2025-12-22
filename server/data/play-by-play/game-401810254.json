@@ -1,602 +1,1202 @@
 [
   {
-    "timestamp": "2025-12-22T01:02:49.579Z",
+    "id": "401810254-0000",
+    "text": "Wizards Full timeout",
+    "shortText": "timeout",
     "period": 2,
     "clock": "5:27",
-    "playerName": "Wizards Full",
-    "action": "timeout",
     "homeScore": 38,
     "awayScore": 55,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Wizards Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:02:49.579Z"
   },
   {
-    "timestamp": "2025-12-22T01:32:36.501Z",
+    "id": "401810254-0001",
+    "text": "Bub Carrington makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "10:04",
-    "playerName": "Bub Carrington",
-    "action": "makes free throw 1 of 2",
     "homeScore": 52,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:32:36.501Z"
   },
   {
-    "timestamp": "2025-12-22T01:32:36.515Z",
+    "id": "401810254-0002",
+    "text": "Bub Carrington makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "10:04",
-    "playerName": "Bub Carrington",
-    "action": "makes free throw 1 of 2",
     "homeScore": 52,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:32:36.515Z"
   },
   {
-    "timestamp": "2025-12-22T01:33:04.882Z",
+    "id": "401810254-0003",
+    "text": "Bub Carrington makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 3,
     "clock": "10:04",
-    "playerName": "Bub Carrington",
-    "action": "makes free throw 2 of 2",
     "homeScore": 53,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:33:04.882Z"
   },
   {
-    "timestamp": "2025-12-22T01:33:04.885Z",
+    "id": "401810254-0004",
+    "text": "Bub Carrington makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 3,
     "clock": "10:04",
-    "playerName": "Bub Carrington",
-    "action": "makes free throw 2 of 2",
     "homeScore": 53,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:33:04.885Z"
   },
   {
-    "timestamp": "2025-12-22T01:33:24.917Z",
+    "id": "401810254-0005",
+    "text": "Bub Carrington shooting foul",
+    "shortText": "shooting foul",
     "period": 3,
     "clock": "9:48",
-    "playerName": "Bub Carrington",
-    "action": "shooting foul",
     "homeScore": 53,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:33:24.917Z"
   },
   {
-    "timestamp": "2025-12-22T01:33:25.152Z",
+    "id": "401810254-0006",
+    "text": "Bub Carrington shooting foul",
+    "shortText": "shooting foul",
     "period": 3,
     "clock": "9:48",
-    "playerName": "Bub Carrington",
-    "action": "shooting foul",
     "homeScore": 53,
     "awayScore": 75,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:33:25.152Z"
   },
   {
-    "timestamp": "2025-12-22T01:33:34.942Z",
+    "id": "401810254-0007",
+    "text": "Luke Kornet makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "9:48",
-    "playerName": "Luke Kornet",
-    "action": "makes free throw 1 of 2",
     "homeScore": 53,
     "awayScore": 76,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Luke Kornet"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:33:34.942Z"
   },
   {
-    "timestamp": "2025-12-22T01:33:35.304Z",
+    "id": "401810254-0008",
+    "text": "Luke Kornet makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "9:48",
-    "playerName": "Luke Kornet",
-    "action": "makes free throw 1 of 2",
     "homeScore": 53,
     "awayScore": 76,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Luke Kornet"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:33:35.304Z"
   },
   {
-    "timestamp": "2025-12-22T01:34:05.102Z",
+    "id": "401810254-0009",
+    "text": "Luke Kornet makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 3,
     "clock": "9:48",
-    "playerName": "Luke Kornet",
-    "action": "makes free throw 2 of 2",
     "homeScore": 53,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Luke Kornet"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:34:05.102Z"
   },
   {
-    "timestamp": "2025-12-22T01:34:05.806Z",
+    "id": "401810254-0010",
+    "text": "Luke Kornet makes free throw 2 of 2",
+    "shortText": "makes free throw 2 of 2",
     "period": 3,
     "clock": "9:48",
-    "playerName": "Luke Kornet",
-    "action": "makes free throw 2 of 2",
     "homeScore": 53,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Luke Kornet"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:34:05.806Z"
   },
   {
-    "timestamp": "2025-12-22T01:34:15.600Z",
+    "id": "401810254-0011",
+    "text": "Bub Carrington makes 25-foot three point jumper (Kyshawn George assists)",
+    "shortText": "makes 25-foot three point jumper (Kyshawn George assists)",
     "period": 3,
     "clock": "9:28",
-    "playerName": "Bub Carrington",
-    "action": "makes 25-foot three point jumper (Kyshawn George assists)",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:34:15.600Z"
   },
   {
-    "timestamp": "2025-12-22T01:34:15.975Z",
+    "id": "401810254-0012",
+    "text": "Bub Carrington makes 25-foot three point jumper (Kyshawn George assists)",
+    "shortText": "makes 25-foot three point jumper (Kyshawn George assists)",
     "period": 3,
     "clock": "9:28",
-    "playerName": "Bub Carrington",
-    "action": "makes 25-foot three point jumper (Kyshawn George assists)",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:34:15.975Z"
   },
   {
-    "timestamp": "2025-12-22T01:34:46.569Z",
+    "id": "401810254-0013",
+    "text": "Harrison Barnes misses shot",
+    "shortText": "misses shot",
     "period": 3,
     "clock": "9:12",
-    "playerName": "Harrison Barnes",
-    "action": "misses shot",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Harrison Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:34:46.569Z"
   },
   {
-    "timestamp": "2025-12-22T01:34:46.857Z",
+    "id": "401810254-0014",
+    "text": "Harrison Barnes misses shot",
+    "shortText": "misses shot",
     "period": 3,
     "clock": "9:12",
-    "playerName": "Harrison Barnes",
-    "action": "misses shot",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Harrison Barnes"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:34:46.857Z"
   },
   {
-    "timestamp": "2025-12-22T01:34:56.717Z",
+    "id": "401810254-0015",
+    "text": "Tristan Vukcevic loose ball foul",
+    "shortText": "loose ball foul",
     "period": 3,
     "clock": "9:07",
-    "playerName": "Tristan Vukcevic",
-    "action": "loose ball foul",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Tristan Vukcevic"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:34:56.717Z"
   },
   {
-    "timestamp": "2025-12-22T01:34:57.626Z",
+    "id": "401810254-0016",
+    "text": "Tristan Vukcevic loose ball foul",
+    "shortText": "loose ball foul",
     "period": 3,
     "clock": "9:07",
-    "playerName": "Tristan Vukcevic",
-    "action": "loose ball foul",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Tristan Vukcevic"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:34:57.626Z"
   },
   {
-    "timestamp": "2025-12-22T01:35:16.371Z",
+    "id": "401810254-0017",
+    "text": "Jamir Watkins enters the game for Tristan Vukcevic",
+    "shortText": "enters the game for Tristan Vukcevic",
     "period": 3,
     "clock": "9:07",
-    "playerName": "Jamir Watkins",
-    "action": "enters the game for Tristan Vukcevic",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamir Watkins"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:35:16.371Z"
   },
   {
-    "timestamp": "2025-12-22T01:35:16.926Z",
+    "id": "401810254-0018",
+    "text": "Jamir Watkins enters the game for Tristan Vukcevic",
+    "shortText": "enters the game for Tristan Vukcevic",
     "period": 3,
     "clock": "9:07",
-    "playerName": "Jamir Watkins",
-    "action": "enters the game for Tristan Vukcevic",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamir Watkins"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:35:16.926Z"
   },
   {
-    "timestamp": "2025-12-22T01:35:37.214Z",
+    "id": "401810254-0019",
+    "text": "Jamir Watkins defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "8:57",
-    "playerName": "Jamir Watkins",
-    "action": "defensive rebound",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamir Watkins"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:35:37.214Z"
   },
   {
-    "timestamp": "2025-12-22T01:35:37.258Z",
+    "id": "401810254-0020",
+    "text": "Jamir Watkins defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "8:57",
-    "playerName": "Jamir Watkins",
-    "action": "defensive rebound",
     "homeScore": 56,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Jamir Watkins"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:35:37.258Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:16.107Z",
+    "id": "401810254-0021",
+    "text": "Bub Carrington makes 25-foot three point step back jumpshot",
+    "shortText": "makes 25-foot three point step back jumpshot",
     "period": 3,
     "clock": "8:52",
-    "playerName": "Bub Carrington",
-    "action": "makes 25-foot three point step back jumpshot",
     "homeScore": 59,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:16.107Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:16.109Z",
+    "id": "401810254-0022",
+    "text": "Bub Carrington makes 25-foot three point step back jumpshot",
+    "shortText": "makes 25-foot three point step back jumpshot",
     "period": 3,
     "clock": "8:52",
-    "playerName": "Bub Carrington",
-    "action": "makes 25-foot three point step back jumpshot",
     "homeScore": 59,
     "awayScore": 77,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:16.109Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:18.128Z",
+    "id": "401810254-0023",
+    "text": "Devin Vassell shooting foul",
+    "shortText": "shooting foul",
     "period": 3,
     "clock": "8:20",
-    "playerName": "Devin Vassell",
-    "action": "shooting foul",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Devin Vassell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:18.128Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:18.130Z",
+    "id": "401810254-0024",
+    "text": "Devin Vassell shooting foul",
+    "shortText": "shooting foul",
     "period": 3,
     "clock": "8:20",
-    "playerName": "Devin Vassell",
-    "action": "shooting foul",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Devin Vassell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:18.130Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:28.334Z",
+    "id": "401810254-0025",
+    "text": "Victor Wembanyama enters the game for Luke Kornet",
+    "shortText": "enters the game for Luke Kornet",
     "period": 3,
     "clock": "8:20",
-    "playerName": "Victor Wembanyama",
-    "action": "enters the game for Luke Kornet",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Victor Wembanyama"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:28.334Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:28.339Z",
+    "id": "401810254-0026",
+    "text": "Victor Wembanyama enters the game for Luke Kornet",
+    "shortText": "enters the game for Luke Kornet",
     "period": 3,
     "clock": "8:20",
-    "playerName": "Victor Wembanyama",
-    "action": "enters the game for Luke Kornet",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Victor Wembanyama"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:28.339Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:38.444Z",
+    "id": "401810254-0027",
+    "text": "Victor Wembanyama defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "8:18",
-    "playerName": "Victor Wembanyama",
-    "action": "defensive rebound",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Victor Wembanyama"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:38.444Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:38.453Z",
+    "id": "401810254-0028",
+    "text": "Victor Wembanyama defensive rebound",
+    "shortText": "defensive rebound",
     "period": 3,
     "clock": "8:18",
-    "playerName": "Victor Wembanyama",
-    "action": "defensive rebound",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Victor Wembanyama"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:38.453Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:48.591Z",
+    "id": "401810254-0029",
+    "text": "Victor Wembanyama lost ball turnover (Kyshawn George steals)",
+    "shortText": "lost ball turnover (Kyshawn George steals)",
     "period": 3,
     "clock": "8:10",
-    "playerName": "Victor Wembanyama",
-    "action": "lost ball turnover (Kyshawn George steals)",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Victor Wembanyama"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:48.591Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:48.593Z",
+    "id": "401810254-0030",
+    "text": "Victor Wembanyama lost ball turnover (Kyshawn George steals)",
+    "shortText": "lost ball turnover (Kyshawn George steals)",
     "period": 3,
     "clock": "8:10",
-    "playerName": "Victor Wembanyama",
-    "action": "lost ball turnover (Kyshawn George steals)",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Victor Wembanyama"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:48.593Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:58.840Z",
+    "id": "401810254-0031",
+    "text": "Stephon Castle shooting foul",
+    "shortText": "shooting foul",
     "period": 3,
     "clock": "8:08",
-    "playerName": "Stephon Castle",
-    "action": "shooting foul",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Stephon Castle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:58.840Z"
   },
   {
-    "timestamp": "2025-12-22T01:36:58.929Z",
+    "id": "401810254-0032",
+    "text": "Stephon Castle shooting foul",
+    "shortText": "shooting foul",
     "period": 3,
     "clock": "8:08",
-    "playerName": "Stephon Castle",
-    "action": "shooting foul",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Stephon Castle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:36:58.929Z"
   },
   {
-    "timestamp": "2025-12-22T01:37:17.574Z",
+    "id": "401810254-0033",
+    "text": "Stephon Castle shooting foul",
+    "shortText": "shooting foul",
     "period": 3,
     "clock": "8:08",
-    "playerName": "Stephon Castle",
-    "action": "shooting foul",
     "homeScore": 61,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Stephon Castle"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:37:17.574Z"
   },
   {
-    "timestamp": "2025-12-22T01:37:19.172Z",
+    "id": "401810254-0034",
+    "text": "Kyshawn George makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "8:08",
-    "playerName": "Kyshawn George",
-    "action": "makes free throw 1 of 2",
     "homeScore": 62,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Kyshawn George"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:37:19.172Z"
   },
   {
-    "timestamp": "2025-12-22T01:37:19.400Z",
+    "id": "401810254-0035",
+    "text": "Kyshawn George makes free throw 1 of 2",
+    "shortText": "makes free throw 1 of 2",
     "period": 3,
     "clock": "8:08",
-    "playerName": "Kyshawn George",
-    "action": "makes free throw 1 of 2",
     "homeScore": 62,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Kyshawn George"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:37:19.400Z"
   },
   {
-    "timestamp": "2025-12-22T01:37:38.483Z",
+    "id": "401810254-0036",
+    "text": "Bub Carrington blocks De'Aaron Fox's shot",
+    "shortText": "blocks De'Aaron Fox's shot",
     "period": 3,
     "clock": "7:58",
-    "playerName": "Bub Carrington",
-    "action": "blocks De'Aaron Fox's shot",
     "homeScore": 63,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:37:38.483Z"
   },
   {
-    "timestamp": "2025-12-22T01:37:39.352Z",
+    "id": "401810254-0037",
+    "text": "Bub Carrington blocks De'Aaron Fox's shot",
+    "shortText": "blocks De'Aaron Fox's shot",
     "period": 3,
     "clock": "7:58",
-    "playerName": "Bub Carrington",
-    "action": "blocks De'Aaron Fox's shot",
     "homeScore": 63,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:37:39.352Z"
   },
   {
-    "timestamp": "2025-12-22T01:37:48.877Z",
+    "id": "401810254-0038",
+    "text": "Bub Carrington blocks De'Aaron Fox 's 6-foot driving layup",
+    "shortText": "blocks De'Aaron Fox 's 6-foot driving layup",
     "period": 3,
     "clock": "7:58",
-    "playerName": "Bub Carrington",
-    "action": "blocks De'Aaron Fox 's 6-foot driving layup",
     "homeScore": 63,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:37:48.877Z"
   },
   {
-    "timestamp": "2025-12-22T01:37:49.656Z",
+    "id": "401810254-0039",
+    "text": "Bub Carrington blocks De'Aaron Fox 's 6-foot driving layup",
+    "shortText": "blocks De'Aaron Fox 's 6-foot driving layup",
     "period": 3,
     "clock": "7:58",
-    "playerName": "Bub Carrington",
-    "action": "blocks De'Aaron Fox 's 6-foot driving layup",
     "homeScore": 63,
     "awayScore": 80,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Bub Carrington"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:37:49.656Z"
   },
   {
-    "timestamp": "2025-12-22T01:38:30.425Z",
+    "id": "401810254-0040",
+    "text": "Devin Vassell makes 29-foot three point jumper (Harrison Barnes assists)",
+    "shortText": "makes 29-foot three point jumper (Harrison Barnes assists)",
     "period": 3,
     "clock": "7:49",
-    "playerName": "Devin Vassell",
-    "action": "makes 29-foot three point jumper (Harrison Barnes assists)",
     "homeScore": 63,
     "awayScore": 83,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Devin Vassell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:38:30.425Z"
   },
   {
-    "timestamp": "2025-12-22T01:38:30.795Z",
+    "id": "401810254-0041",
+    "text": "Devin Vassell makes 29-foot three point jumper (Harrison Barnes assists)",
+    "shortText": "makes 29-foot three point jumper (Harrison Barnes assists)",
     "period": 3,
     "clock": "7:49",
-    "playerName": "Devin Vassell",
-    "action": "makes 29-foot three point jumper (Harrison Barnes assists)",
     "homeScore": 63,
     "awayScore": 83,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Devin Vassell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:38:30.795Z"
   },
   {
-    "timestamp": "2025-12-22T01:39:40.505Z",
+    "id": "401810254-0042",
+    "text": "Spurs Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "7:05",
-    "playerName": "Spurs Full",
-    "action": "timeout",
     "homeScore": 68,
     "awayScore": 85,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Spurs Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:39:40.505Z"
   },
   {
-    "timestamp": "2025-12-22T01:39:41.139Z",
+    "id": "401810254-0043",
+    "text": "Spurs Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "7:05",
-    "playerName": "Spurs Full",
-    "action": "timeout",
     "homeScore": 68,
     "awayScore": 85,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Spurs Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:39:41.139Z"
   },
   {
-    "timestamp": "2025-12-22T01:40:38.508Z",
+    "id": "401810254-0044",
+    "text": "Spurs Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "7:05",
-    "playerName": "Spurs Full",
-    "action": "timeout",
     "homeScore": 68,
     "awayScore": 85,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Spurs Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:40:38.508Z"
   },
   {
-    "timestamp": "2025-12-22T01:40:38.714Z",
+    "id": "401810254-0045",
+    "text": "Spurs Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "7:05",
-    "playerName": "Spurs Full",
-    "action": "timeout",
     "homeScore": 68,
     "awayScore": 85,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Spurs Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:40:38.714Z"
   },
   {
-    "timestamp": "2025-12-22T01:44:12.037Z",
+    "id": "401810254-0046",
+    "text": "Devin Vassell makes technical free throw",
+    "shortText": "makes technical free throw",
     "period": 3,
     "clock": "6:37",
-    "playerName": "Devin Vassell",
-    "action": "makes technical free throw",
     "homeScore": 68,
     "awayScore": 89,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Devin Vassell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:44:12.037Z"
   },
   {
-    "timestamp": "2025-12-22T01:44:12.039Z",
+    "id": "401810254-0047",
+    "text": "Devin Vassell makes technical free throw",
+    "shortText": "makes technical free throw",
     "period": 3,
     "clock": "6:37",
-    "playerName": "Devin Vassell",
-    "action": "makes technical free throw",
     "homeScore": 68,
     "awayScore": 89,
-    "isTimeout": false
+    "isScoringPlay": true,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Devin Vassell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:44:12.039Z"
   },
   {
-    "timestamp": "2025-12-22T01:44:25.644Z",
+    "id": "401810254-0048",
+    "text": "Tre Johnson enters the game for Justin Champagnie",
+    "shortText": "enters the game for Justin Champagnie",
     "period": 3,
     "clock": "6:37",
-    "playerName": "Tre Johnson",
-    "action": "enters the game for Justin Champagnie",
     "homeScore": 68,
     "awayScore": 89,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Tre Johnson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:44:25.644Z"
   },
   {
-    "timestamp": "2025-12-22T01:44:25.907Z",
+    "id": "401810254-0049",
+    "text": "Tre Johnson enters the game for Justin Champagnie",
+    "shortText": "enters the game for Justin Champagnie",
     "period": 3,
     "clock": "6:37",
-    "playerName": "Tre Johnson",
-    "action": "enters the game for Justin Champagnie",
     "homeScore": 68,
     "awayScore": 89,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Tre Johnson"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T01:44:25.907Z"
   },
   {
-    "timestamp": "2025-12-22T01:44:45.784Z",
+    "id": "401810254-0050",
+    "text": "Spurs Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "5:53",
-    "playerName": "Spurs Full",
-    "action": "timeout",
     "homeScore": 73,
     "awayScore": 89,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Spurs Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:44:45.784Z"
   },
   {
-    "timestamp": "2025-12-22T01:44:46.759Z",
+    "id": "401810254-0051",
+    "text": "Spurs Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "5:53",
-    "playerName": "Spurs Full",
-    "action": "timeout",
     "homeScore": 73,
     "awayScore": 89,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Spurs Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:44:46.759Z"
   },
   {
-    "timestamp": "2025-12-22T01:45:14.973Z",
+    "id": "401810254-0052",
+    "text": "Spurs Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "5:53",
-    "playerName": "Spurs Full",
-    "action": "timeout",
     "homeScore": 73,
     "awayScore": 89,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Spurs Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:45:14.973Z"
   },
   {
-    "timestamp": "2025-12-22T01:45:15.605Z",
+    "id": "401810254-0053",
+    "text": "Spurs Full timeout",
+    "shortText": "timeout",
     "period": 3,
     "clock": "5:53",
-    "playerName": "Spurs Full",
-    "action": "timeout",
     "homeScore": 73,
     "awayScore": 89,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Spurs Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T01:45:15.605Z"
   },
   {
-    "timestamp": "2025-12-22T02:28:48.441Z",
+    "id": "401810254-0054",
+    "text": "Wizards Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "01:51",
-    "playerName": "Wizards Full",
-    "action": "timeout",
     "homeScore": 109,
     "awayScore": 120,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Wizards Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T02:28:48.441Z"
   },
   {
-    "timestamp": "2025-12-22T02:29:00.575Z",
+    "id": "401810254-0055",
+    "text": "Wizards Full timeout",
+    "shortText": "timeout",
     "period": 4,
     "clock": "01:51",
-    "playerName": "Wizards Full",
-    "action": "timeout",
     "homeScore": 109,
     "awayScore": 120,
-    "isTimeout": true
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Wizards Full"
+        }
+      }
+    ],
+    "isTimeout": true,
+    "timestamp": "2025-12-22T02:29:00.575Z"
   },
   {
-    "timestamp": "2025-12-22T02:30:16.054Z",
+    "id": "401810254-0056",
+    "text": "Justin Champagnie enters the game for Tre Johnson",
+    "shortText": "enters the game for Tre Johnson",
     "period": 4,
     "clock": "01:51",
-    "playerName": "Justin Champagnie",
-    "action": "enters the game for Tre Johnson",
     "homeScore": 109,
     "awayScore": 120,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Justin Champagnie"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T02:30:16.054Z"
   },
   {
-    "timestamp": "2025-12-22T02:30:34.466Z",
+    "id": "401810254-0057",
+    "text": "Justin Champagnie enters the game for Tre Johnson",
+    "shortText": "enters the game for Tre Johnson",
     "period": 4,
     "clock": "01:51",
-    "playerName": "Justin Champagnie",
-    "action": "enters the game for Tre Johnson",
     "homeScore": 109,
     "awayScore": 120,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Justin Champagnie"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T02:30:34.466Z"
   },
   {
-    "timestamp": "2025-12-22T02:30:36.409Z",
+    "id": "401810254-0058",
+    "text": "Devin Vassell bad pass turnover (Jamir Watkins steals)",
+    "shortText": "bad pass turnover (Jamir Watkins steals)",
     "period": 4,
     "clock": "01:35",
-    "playerName": "Devin Vassell",
-    "action": "bad pass turnover (Jamir Watkins steals)",
     "homeScore": 111,
     "awayScore": 120,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Devin Vassell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T02:30:36.409Z"
   },
   {
-    "timestamp": "2025-12-22T02:30:46.782Z",
+    "id": "401810254-0059",
+    "text": "Devin Vassell defensive rebound",
+    "shortText": "defensive rebound",
     "period": 4,
     "clock": "01:24",
-    "playerName": "Devin Vassell",
-    "action": "defensive rebound",
     "homeScore": 111,
     "awayScore": 120,
-    "isTimeout": false
+    "isScoringPlay": false,
+    "team": null,
+    "participants": [
+      {
+        "athlete": {
+          "displayName": "Devin Vassell"
+        }
+      }
+    ],
+    "isTimeout": false,
+    "timestamp": "2025-12-22T02:30:46.782Z"
   }
 ]

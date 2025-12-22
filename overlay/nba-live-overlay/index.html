@@ -129,6 +129,28 @@
 
         // Store current audio to manage playback
         let currentPbpAudio = null;
+        
+        // Crossfade: fade out audio over duration (ms)
+        function fadeOutAudio(audio, duration = 1000) {
+            if (!audio) return;
+            const startVolume = audio.volume;
+            const steps = 20; // Number of fade steps
+            const stepDuration = duration / steps;
+            const volumeStep = startVolume / steps;
+            
+            let currentStep = 0;
+            const fadeInterval = setInterval(() => {
+                currentStep++;
+                const newVolume = Math.max(0, startVolume - (volumeStep * currentStep));
+                audio.volume = newVolume;
+                
+                if (currentStep >= steps) {
+                    clearInterval(fadeInterval);
+                    audio.pause();
+                    audio.volume = 1; // Reset for reuse
+                }
+            }, stepDuration);
+        }
 
         // Function to enhance play-by-play text for energetic, enthusiastic commentator-style TTS
         // The text is formatted to sound like an excited sports commentator while staying accurate
@@ -184,25 +206,176 @@
             }
         }
 
+        // TTS Voice configuration
+        // Two voices: "angry ogre" for subs/timeouts, "blondie - seductive" for everything else
+        let ttsVoiceAngryOgre = null;
+        let ttsVoiceBlondie = null;
+        
+        // Load specific voices from ElevenLabs
+        async function loadTTSVoices() {
+            try {
+                const response = await fetch('http://localhost:3000/api/elevenlabs-voices');
+                if (!response.ok) return;
+                const data = await response.json();
+                const voices = data.voices || [];
+                
+                // Find angry ogre
+                const angryOgre = voices.find(v => v.name.toLowerCase().includes('angry ogre'));
+                if (angryOgre) {
+                    ttsVoiceAngryOgre = angryOgre.id;
+                    console.log(`🎙️ Loaded voice: Angry Ogre (${angryOgre.id})`);
+                }
+                
+                // Find blondie - seductive
+                const blondie = voices.find(v => v.name.toLowerCase().includes('blondie') && v.name.toLowerCase().includes('seductive'));
+                if (blondie) {
+                    ttsVoiceBlondie = blondie.id;
+                }
+                
+                if (!ttsVoiceAngryOgre || !ttsVoiceBlondie) {
+                    console.warn('⚠️ Could not find all required voices. Found:', 
+                        ttsVoiceAngryOgre ? 'Angry Ogre' : 'NO Angry Ogre',
+                        ttsVoiceBlondie ? 'Blondie' : 'NO Blondie');
+                }
+            } catch (e) {
+                console.error('Failed to load TTS voices:', e);
+            }
+        }
+        loadTTSVoices();
+        
+        // Detect if play should use Ogre voice (subs, timeouts, rebounds)
+        // Combined frequency: ~47% (about 1 in 2 plays)
+        function isOgrePlay(text) {
+            const lowerText = text.toLowerCase();
+            return lowerText.includes('enters the game') ||  // substitutions
+                   lowerText.includes('timeout') ||          // timeouts
+                   lowerText.includes('rebound');            // rebounds
+        }
+        
+        // Transform rebound text: "Player Name defensive rebound" → "defensive rebound, Player Name"
+        function transformForTTS(text) {
+            const lowerText = text.toLowerCase();
+            
+            // Check if it's a rebound
+            if (lowerText.includes('rebound')) {
+                // Pattern: "Player Name (offensive|defensive) rebound"
+                const reboundMatch = text.match(/^(.+?)\s+((?:offensive|defensive)\s+rebound)$/i);
+                if (reboundMatch) {
+                    const playerName = reboundMatch[1];
+                    const reboundType = reboundMatch[2];
+                    return `${reboundType}, ${playerName}`;
+                }
+            }
+            
+            return text; // No transformation needed
+        }
+        
+        // Counter for Blondie plays to add "Oh!" or "Wow!" every 3rd play
+        let blondiePlayCount = 0;
+        
+        // Add excitement to Blondie plays (every 3rd play alternates Oh!/Wow!)
+        function addBlondieExcitement(text) {
+            blondiePlayCount++;
+            
+            // Every 3rd play, add excitement
+            if (blondiePlayCount % 3 === 0) {
+                // Alternate between "Oh!" (at start) and "Wow!" (at end)
+                // Cycle: 3rd play = Oh!, 6th play = Wow!, 9th = Oh!, 12th = Wow!...
+                const cyclePosition = Math.floor(blondiePlayCount / 3);
+                if (cyclePosition % 2 === 1) {
+                    // Odd cycle (3, 9, 15...) = "Oh!" at start
+                    return `Oh! ${text}`;
+                } else {
+                    // Even cycle (6, 12, 18...) = "Wow!" at end
+                    return `${text} Wow!`;
+                }
+            }
+            
+            return text; // Normal play, no excitement added
+        }
+        
+        // Extract player name and action from play text
+        function extractPlayerAndAction(text) {
+            // Pattern: "Player Name action description"
+            // Player names are capitalized words at the start
+            const match = text.match(/^([A-Z][a-z]+(?:\s+[A-Z][a-z'-]+)*)\s+(.+)$/);
+            if (match) {
+                return { playerName: match[1], actionText: match[2] };
+            }
+            return { playerName: '', actionText: text };
+        }
+        
+        // Shorten long action text using OpenAI (if > 34 chars)
+        const ACTION_LENGTH_THRESHOLD = 34;
+        
+        async function shortenIfNeeded(text) {
+            const { playerName, actionText } = extractPlayerAndAction(text);
+            
+            // Only shorten if action text exceeds threshold
+            if (actionText.length <= ACTION_LENGTH_THRESHOLD) {
+                return text; // Short enough, no change needed
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/shorten-play', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ playerName, actionText })
+                });
+                
+                if (!response.ok) {
+                    console.warn('⚠️ Shorten API failed, using original');
+                    return text;
+                }
+                
+                const data = await response.json();
+                const shortened = playerName ? `${playerName} ${data.shortened}` : data.shortened;
+                return shortened;
+            } catch (error) {
+                console.error('❌ Shorten API error:', error);
+                return text; // Fallback to original
+            }
+        }
+        
         // Function to generate TTS audio for play-by-play text
         async function generatePlayByPlayAudio(playText, enhance = false) {
             try {
-                // Stop any currently playing play-by-play audio
-                if (currentPbpAudio) {
-                    currentPbpAudio.pause();
-                    currentPbpAudio = null;
+                // Don't stop current audio here - crossfade happens when new audio plays
+                // (handled in updatePlayByPlay)
+                
+                // Pick voice based on play type:
+                // - Angry Ogre: substitutions, timeouts, rebounds (~47% of plays)
+                // - Blondie - Seductive: everything else (~53% of plays)
+                let voiceToUse;
+                if (isOgrePlay(playText)) {
+                    voiceToUse = ttsVoiceAngryOgre;
+                } else {
+                    voiceToUse = ttsVoiceBlondie;
+                }
+                
+                // Fallback if voices not loaded yet
+                if (!voiceToUse) {
+                    return null;
+                }
+                
+                // Step 1: Shorten long text using OpenAI (if > 34 chars action)
+                let ttsText = await shortenIfNeeded(playText);
+                
+                // Step 2: Transform text for TTS (e.g., reverse order for rebounds)
+                ttsText = transformForTTS(ttsText);
+                
+                // Step 3: Add excitement for Blondie plays (every 3rd play)
+                if (voiceToUse === ttsVoiceBlondie) {
+                    ttsText = addBlondieExcitement(ttsText);
                 }
 
                 const requestBody = {
-                    text: playText, // Original play-by-play text
-                    voice: 'alloy',
-                    model: 'tts-1',
-                    speed: 1.0,
-                    enhance: enhance // If true, server will use AI to enhance it
+                    text: ttsText,
+                    voiceId: voiceToUse,
+                    model: 'eleven_flash_v2_5' // Fastest model
                 };
-                
 
-                const response = await fetch('http://localhost:3000/api/text-to-speech', {
+                const response = await fetch('http://localhost:3000/api/elevenlabs-tts', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -214,7 +387,6 @@
                     return null;
                 }
 
-                
                 // Get audio blob
                 const audioBlob = await response.blob();
                 const audioUrl = URL.createObjectURL(audioBlob);
@@ -381,15 +553,17 @@
             playByPlayBox.classList.add('entering');
             void pbpPhoto.offsetWidth; // Force reflow
             
-            // Play audio shortly after enter animation starts
+            // Play audio shortly after enter animation starts (with crossfade)
             if (audioUrl) {
                 setTimeout(() => {
+                    // Fade out old audio instead of stopping abruptly
                     if (currentPbpAudio) {
-                        currentPbpAudio.pause();
-                        currentPbpAudio = null;
+                        fadeOutAudio(currentPbpAudio, 1000); // 1 second fade
                     }
                     
+                    // Start new audio immediately at full volume
                     currentPbpAudio = new Audio(audioUrl);
+                    currentPbpAudio.volume = 1;
                     currentPbpAudio.play().catch(() => {});
                 }, 200);
             }

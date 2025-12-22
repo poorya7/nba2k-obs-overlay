@@ -68,21 +68,23 @@ class PlayByPlayProcessor {
 
     /**
      * Generate a unique key from play content for deduplication
-     * Uses period + clock + playerName + action (ignores timestamps/IDs)
-     * @param {Object} play - Play object (raw or transformed)
+     * Uses id if available, otherwise period + clock + text
+     * @param {Object} play - Play object in ESPN format
      * @returns {string} Unique content key
      */
     _generatePlayKey(play) {
         if (!play) return null;
         
-        // Handle both raw API format and transformed format
+        // Prefer unique id if available
+        if (play.id) return play.id;
+        
+        // Fallback to content-based key
         const period = play.period || 0;
         const clock = play.clock || '';
-        const playerName = play.playerName || play.text?.match(/^([A-Z][a-z]+ [A-Z][a-z]+)/)?.[1] || '';
-        const action = play.action || play.text || play.shortText || '';
+        const text = play.text || play.shortText || '';
         
         // Normalize: lowercase, trim, remove extra spaces
-        const key = `${period}|${clock}|${playerName}|${action}`.toLowerCase().replace(/\s+/g, ' ').trim();
+        const key = `${period}|${clock}|${text}`.toLowerCase().replace(/\s+/g, ' ').trim();
         return key;
     }
 
@@ -174,6 +176,10 @@ class PlayByPlayProcessor {
      */
     transformPlayForDisplay(apiPlay, teamContext = {}) {
         if (!apiPlay) return null;
+        
+        // NOTE: Both real mode (ESPN API) and sim mode (pre-converted JSON) now use
+        // identical ESPN format with 'text' and 'participants' fields.
+        // No special handling needed - same processing for both modes!
 
         const { homeId = '', awayId = '', homeAbbr = '', awayAbbr = '', homeLogo = '', awayLogo = '' } = teamContext;
 

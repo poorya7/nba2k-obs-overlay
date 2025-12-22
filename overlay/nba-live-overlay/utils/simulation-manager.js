@@ -266,7 +266,7 @@ class SimulationManager {
      * @param {string} gameId - Game ID (used to find the JSON file)
      * @returns {Promise<boolean>} True if loaded successfully
      */
-    async loadPlayByPlayData(gameId = 'game-401810240') {
+    async loadPlayByPlayData(gameId = 'game-401810251') {
         try {
             const response = await fetch(`http://localhost:3000/server/data/play-by-play/${gameId}.json`);
             if (!response.ok) {
@@ -276,16 +276,19 @@ class SimulationManager {
             
             const plays = await response.json();
             
-            // Deduplicate plays based on period+clock+player+action
+            // Deduplicate plays based on content (period + clock + text)
+            // NOTE: Don't use play.id - each play has unique ID even if content is same
             const seenKeys = new Set();
             this.pbpPlays = plays.filter(play => {
-                const key = `${play.period}|${play.clock}|${play.playerName}|${play.action}`.toLowerCase();
+                const key = `${play.period}|${play.clock}|${play.text}`.toLowerCase();
                 if (seenKeys.has(key)) {
                     return false; // Skip duplicate
                 }
                 seenKeys.add(key);
                 return true;
             });
+            
+            console.log(`📋 Loaded ${plays.length} plays, ${this.pbpPlays.length} after dedup`);
             
             this.pbpIndex = 0;
             this.pbpLastPlayTime = Date.now();
@@ -299,6 +302,10 @@ class SimulationManager {
     /**
      * Get the next play in sequence (if enough time has passed)
      * Returns plays at ~3-5 second intervals to simulate real game pace
+     * 
+     * NOTE: JSON files are pre-converted to ESPN API format, so we just pass through.
+     * This makes sim mode identical to real mode - both use same data structure.
+     * 
      * @param {number} minIntervalMs - Minimum time between plays (default 3000ms)
      * @returns {Object|null} Next play object or null if not ready/no more plays
      */
@@ -324,27 +331,9 @@ class SimulationManager {
         this.pbpIndex++;
         this.pbpLastPlayTime = now;
         
-        // Transform to match ESPN API format expected by processor
-        return {
-            id: `sim-${this.pbpIndex}`,
-            text: `${play.playerName} ${play.action}`,
-            shortText: play.action,
-            period: play.period,
-            clock: play.clock,
-            homeScore: play.homeScore,
-            awayScore: play.awayScore,
-            isScoringPlay: false,
-            team: null,
-            participants: [{
-                athlete: {
-                    displayName: play.playerName
-                }
-            }],
-            // Pass through original fields too
-            isTimeout: play.isTimeout || false,
-            playerName: play.playerName,
-            action: play.action
-        };
+        // JSON files are already in ESPN API format - just pass through!
+        // No transformation needed - sim mode and real mode now identical.
+        return play;
     }
 
     /**
