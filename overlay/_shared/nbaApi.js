@@ -236,6 +236,7 @@ function parseGameData(game) {
     date: game.date,
     
     awayTeam: {
+      id: awayTeam.team.id,
       name: awayTeam.team.displayName,
       abbreviation: awayTeam.team.abbreviation,
       logo: awayTeam.team.logo,
@@ -244,6 +245,7 @@ function parseGameData(game) {
     },
     
     homeTeam: {
+      id: homeTeam.team.id,
       name: homeTeam.team.displayName,
       abbreviation: homeTeam.team.abbreviation,
       logo: homeTeam.team.logo,

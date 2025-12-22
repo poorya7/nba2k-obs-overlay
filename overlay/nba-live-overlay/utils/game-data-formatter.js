@@ -33,12 +33,14 @@ class GameDataFormatter {
         // Base team data (used by all states)
         const baseData = {
             home: {
+                id: game.homeTeam.id,
                 abbr: game.homeTeam.abbreviation,
                 logoUrl: game.homeTeam.logo,
                 score: parseInt(game.homeTeam.score) || 0,
                 animate: scoreChanges.homeChanged // Add animation flag
             },
             away: {
+                id: game.awayTeam.id,
                 abbr: game.awayTeam.abbreviation,
                 logoUrl: game.awayTeam.logo,
                 score: parseInt(game.awayTeam.score) || 0,

@@ -431,6 +431,8 @@
                 
                 // Build team context from gameView for logo resolution
                 const teamContext = {
+                    homeId: window.gameView?.teamIds?.home || '',
+                    awayId: window.gameView?.teamIds?.away || '',
                     homeAbbr: (window.gameView?.elements?.homeAbbr?.textContent || '').trim(),
                     awayAbbr: (window.gameView?.elements?.awayAbbr?.textContent || '').trim(),
                     homeLogo: window.gameView?.elements?.homeLogo?.src || '',
@@ -627,7 +629,25 @@
                     el.style.gap = spacing + 'px';
                 });
             }
-            
+
+            if (event.data && event.data.type === 'UPDATE_PBP_GAP') {
+                const gap = event.data.gap;
+                console.log('Updating PBP gap to:', gap + 'px');
+                const pbpBox = document.querySelector('.pbp-box');
+                if (pbpBox) {
+                    pbpBox.style.gap = gap + 'px';
+                }
+            }
+
+            if (event.data && event.data.type === 'UPDATE_PBP_TOP') {
+                const top = event.data.top;
+                console.log('Updating PBP top to:', top + 'px');
+                const pbpBox = document.querySelector('.play-by-play-box');
+                if (pbpBox) {
+                    pbpBox.style.top = top + 'px';
+                }
+            }
+
             if (event.data && event.data.type === 'UPDATE_QUARTER_COLOR') {
                 const color = event.data.color;
                 console.log('Updating quarter color to:', color);

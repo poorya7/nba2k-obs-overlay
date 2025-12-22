@@ -163,7 +163,7 @@ class PlayByPlayProcessor {
     transformPlayForDisplay(apiPlay, teamContext = {}) {
         if (!apiPlay) return null;
 
-        const { homeAbbr = '', awayAbbr = '', homeLogo = '', awayLogo = '' } = teamContext;
+        const { homeId = '', awayId = '', homeAbbr = '', awayAbbr = '', homeLogo = '', awayLogo = '' } = teamContext;
 
         // Get first participant (usually the main player)
         const participant = apiPlay.participants && apiPlay.participants.length > 0 ? apiPlay.participants[0] : null;
@@ -228,8 +228,20 @@ class PlayByPlayProcessor {
         let teamLogo = null;
         let playTeam = null; // 'home' or 'away'
         
-        // Method 1: Check team abbreviation from API play data (works for all plays)
-        if (apiPlay.team && apiPlay.team.abbreviation && (homeAbbr || awayAbbr)) {
+        // Method 1: Match by team ID (most reliable - ESPN API provides team.id)
+        if (apiPlay.team && apiPlay.team.id && (homeId || awayId)) {
+            const playTeamId = String(apiPlay.team.id);
+            if (playTeamId === String(homeId)) {
+                playTeam = 'home';
+                teamLogo = homeLogo;
+            } else if (playTeamId === String(awayId)) {
+                playTeam = 'away';
+                teamLogo = awayLogo;
+            }
+        }
+        
+        // Method 2: Fallback to team abbreviation if ID didn't match
+        if (!playTeam && apiPlay.team && apiPlay.team.abbreviation && (homeAbbr || awayAbbr)) {
             const teamAbbr = (apiPlay.team.abbreviation || '').trim().toUpperCase();
             const upperHomeAbbr = homeAbbr.toUpperCase();
             const upperAwayAbbr = awayAbbr.toUpperCase();

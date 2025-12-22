@@ -101,7 +101,7 @@ html {
 .play-by-play-box {
     position: fixed;
     z-index: 10;
-    top: 685px;
+    top: 675px;
     left: 30px;
     width: 700px; /* Match game overlay width */
     display: none; /* Hidden by default, shown when play-by-play data arrives */
@@ -115,7 +115,7 @@ html {
     padding: 20px 30px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 40px;
     box-shadow: 0 8px 40px rgba(59, 130, 246, 0.34);
 }
 

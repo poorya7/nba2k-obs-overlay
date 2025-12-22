@@ -1,48 +1,68 @@
-Webpage Print Cleaner content script loaded content.js:53:9
-⏱️ [PBP] TIME BLOCKED: Q2 7:13 (433s) - current: Q2 - 07:13 (433s) 2 game-view.js:418:21
-🏀 [API] SCORE CHANGE @ 1766352093234: HOME 51 (ATL) - time: Q2 07:01 app-controller.js:568:25
-⏱️ [API] TIME UPDATE: Q2 07:01 (421s) - was: Q2 - 07:13 (433s) game-view.js:422:17
-⏱️ [PBP] TIME BLOCKED: Q2 7:01 (421s) - current: Q2 · 07:01 (421s) game-view.js:418:21
-🏀 [API] SCORE CHANGE @ 1766352113356: HOME 52 (ATL) - time: Q2 07:01 app-controller.js:568:25
-⏱️ [API] TIME BLOCKED: Q2 07:01 (421s) - current: Q2 · 07:01 (421s) game-view.js:418:21
-⏱️ [PBP] TIME BLOCKED: Q2 7:01 (421s) - current: Q2 · 07:01 (421s) game-view.js:418:21
-🎯 [PBP] SCORE: HOME 51 @ Q2 7:01 - player: Jalen Johnson - action: makes free throw 1 of 2 index.html:427:29
-⏱️ [PBP] TIME BLOCKED: Q2 7:01 (421s) - current: Q2 · 07:01 (421s) game-view.js:418:21
-🎯 [PBP] SCORE: HOME 52 @ Q2 7:01 - player: Jalen Johnson - action: makes free throw 2 of 2 (API was 20161ms earlier) index.html:427:29
-⏱️ [PBP] TIME UPDATE: Q2 6:50 (410s) - was: Q2 · 07:01 (421s) game-view.js:422:17
-🏀 [API] SCORE CHANGE @ 1766352163670: AWAY 55 (CHI) - time: Q2 06:50 app-controller.js:572:25
-⏱️ [API] TIME BLOCKED: Q2 06:50 (410s) - current: Q2 · 6:50 (410s) game-view.js:418:21
-⏱️ [PBP] TIME BLOCKED: Q2 6:50 (410s) - current: Q2 · 6:50 (410s) game-view.js:418:21
-🎯 [PBP] SCORE: AWAY 55 @ Q2 6:50 - player: Zach Collins - action: makes free throw 2 of 2 (API was 12202ms earlier) index.html:439:29
-⏱️ [PBP] TIME UPDATE: Q2 6:42 (402s) - was: Q2 · 6:50 (410s) game-view.js:422:17
-🏀 [API] SCORE CHANGE @ 1766352304341: HOME 53 (ATL) - time: Q2 06:42 app-controller.js:568:25
-⏱️ [API] TIME BLOCKED: Q2 06:42 (402s) - current: Q2 · 6:42 (402s) game-view.js:418:21
-🏀 [API] SCORE CHANGE @ 1766352315439: HOME 54 (ATL) - time: Q2 06:42 app-controller.js:568:25
-⏱️ [API] TIME BLOCKED: Q2 06:42 (402s) - current: Q2 · 6:42 (402s) game-view.js:418:21
-⏱️ [PBP] TIME BLOCKED: Q2 6:42 (402s) - current: Q2 · 6:42 (402s) 2 game-view.js:418:21
-🎯 [PBP] SCORE: HOME 53 @ Q2 6:42 - player: Jalen Johnson - action: makes free throw 1 of 2 index.html:427:29
-⏱️ [PBP] TIME BLOCKED: Q2 6:42 (402s) - current: Q2 · 6:42 (402s) game-view.js:418:21
-🎯 [PBP] SCORE: HOME 54 @ Q2 6:42 - player: Jalen Johnson - action: makes free throw 2 of 2 (API was 21653ms earlier) index.html:427:29
-🏀 [API] SCORE CHANGE @ 1766352355373: AWAY 56 (CHI) - time: Q2 06:41 app-controller.js:572:25
-⏱️ [API] TIME UPDATE: Q2 06:41 (401s) - was: Q2 · 6:42 (402s) game-view.js:422:17
-⏱️ [PBP] TIME BLOCKED: Q2 6:41 (401s) - current: Q2 · 06:41 (401s) game-view.js:418:21
-🎯 [PBP] SCORE: AWAY 56 @ Q2 6:41 - player: Tre Jones - action: makes free throw 1 of 2 (API was 12311ms earlier) index.html:439:29
-⏱️ [PBP] TIME BLOCKED: Q2 6:41 (401s) - current: Q2 · 06:41 (401s) game-view.js:418:21
-🏀 [API] SCORE CHANGE @ 1766352395906: AWAY 57 (CHI) - time: Q2 06:41 app-controller.js:572:25
-⏱️ [API] TIME BLOCKED: Q2 06:41 (401s) - current: Q2 · 06:41 (401s) game-view.js:418:21
-⏱️ [PBP] TIME BLOCKED: Q2 6:41 (401s) - current: Q2 · 06:41 (401s) 2 game-view.js:418:21
-🎯 [PBP] SCORE: AWAY 57 @ Q2 6:41 - player: Tre Jones - action: makes free throw 2 of 2 (API was 32984ms earlier) index.html:439:29
-🏀 [API] SCORE CHANGE @ 1766352436991: HOME 57 (ATL) - time: Q2 06:01 app-controller.js:568:25
-⏱️ [API] TIME UPDATE: Q2 06:01 (361s) - was: Q2 · 06:41 (401s) game-view.js:422:17
-⏱️ [PBP] TIME BLOCKED: Q2 6:15 (375s) - current: Q2 · 06:01 (361s) game-view.js:418:21
-⏱️ [PBP] TIME BLOCKED: Q2 6:03 (363s) - current: Q2 · 06:01 (361s) game-view.js:418:21
-🎯 [PBP] SCORE: HOME 57 @ Q2 6:03 - player: Ayo Dosunmu - action: misses shot (API was 12256ms earlier) index.html:427:29
-⏱️ [PBP] TIME BLOCKED: Q2 6:01 (361s) - current: Q2 · 06:01 (361s) game-view.js:418:21
-🏀 [API] SCORE CHANGE @ 1766352465350: AWAY 58 (CHI) - time: Q2 06:01 app-controller.js:572:25
-⏱️ [API] TIME BLOCKED: Q2 06:01 (361s) - current: Q2 · 06:01 (361s) game-view.js:418:21
-⏱️ [PBP] TIME BLOCKED: Q2 6:01 (361s) - current: Q2 · 06:01 (361s) game-view.js:418:21
-🎯 [PBP] SCORE: AWAY 58 @ Q2 6:01 - player: Zach Collins - action: makes free throw 1 of 2 (API was 14659ms earlier) index.html:439:29
-⏱️ [PBP] TIME UPDATE: Q2 5:59 (359s) - was: Q2 · 06:01 (361s) game-view.js:422:17
-🏀 [API] SCORE CHANGE @ 1766352507585: AWAY 60 (CHI) - time: Q2 05:33 app-controller.js:572:25
-⏱️ [API] TIME UPDATE: Q2 05:33 (333s) - was: Q2 · 5:59 (359s) game-view.js:422:17
-⏱️ [PBP] TIME BLOCKED: Q2 5:42 (342s) - current: Q2 · 05:33 (333s) game-view.js:418:21
+Game frame loaded, applying defaults test.html:212:21
+PBP teamContext: 
+Object { homeAbbr: "SAC", awayAbbr: "HOU", homeLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/sac.png", awayLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/hou.png" }
+index.html:439:25
+PBP first play team: 
+Object { id: "10", abbreviation: undefined, name: undefined }
+index.html:440:25
+PBP transformedPlay teamLogo: null index.html:444:25
+Message received: 
+Object { type: "UPDATE_QUARTER_COLOR", color: "#86efac" }
+index.html:607:21
+Updating quarter color to: #86efac index.html:636:25
+Message received: 
+Object { type: "UPDATE_GAME_TIME_COLOR", color: "#10b981" }
+index.html:607:21
+Updating game time color to: #10b981 index.html:653:25
+Message received: 
+Object { type: "UPDATE_PBP_ACTION_COLOR", color: "#fb923c" }
+index.html:607:21
+Updating PBP action color to: #fb923c index.html:670:25
+Message received: 
+Object { type: "UPDATE_TEAM_SPACING", spacing: 268 }
+index.html:607:21
+Updating team spacing to: 268px index.html:611:25
+Found teams elements: 1 index.html:613:25
+Game box display: block index.html:616:25
+Updated element gap to: 268px index.html:620:29
+Element computed gap: 268px index.html:621:29
+Element visible?: true index.html:622:29
+PBP teamContext: 
+Object { homeAbbr: "SAC", awayAbbr: "HOU", homeLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/sac.png", awayLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/hou.png" }
+index.html:439:25
+PBP first play team: 
+Object { id: "10", abbreviation: undefined, name: undefined }
+index.html:440:25
+PBP transformedPlay teamLogo: undefined index.html:444:25
+PBP teamContext: 
+Object { homeAbbr: "SAC", awayAbbr: "HOU", homeLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/sac.png", awayLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/hou.png" }
+index.html:439:25
+PBP first play team: 
+Object { id: "10", abbreviation: undefined, name: undefined }
+index.html:440:25
+PBP transformedPlay teamLogo: undefined index.html:444:25
+PBP teamContext: 
+Object { homeAbbr: "SAC", awayAbbr: "HOU", homeLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/sac.png", awayLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/hou.png" }
+index.html:439:25
+PBP first play team: 
+Object { id: "10", abbreviation: undefined, name: undefined }
+index.html:440:25
+PBP transformedPlay teamLogo: null index.html:444:25
+XHRPOST
+http://localhost:3000/api/text-to-speech
+[HTTP/1.1 429 Too Many Requests 395ms]
+
+PBP teamContext: 
+Object { homeAbbr: "SAC", awayAbbr: "HOU", homeLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/sac.png", awayLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/hou.png" }
+index.html:439:25
+PBP first play team: 
+Object { id: "10", abbreviation: undefined, name: undefined }
+index.html:440:25
+PBP transformedPlay teamLogo: undefined index.html:444:25
+PBP teamContext: 
+Object { homeAbbr: "SAC", awayAbbr: "HOU", homeLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/sac.png", awayLogo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/hou.png" }
+index.html:439:25
+PBP first play team: 
+Object { id: "10", abbreviation: undefined, name: undefined }
+index.html:440:25
+PBP transformedPlay teamLogo: undefined index.html:444:25

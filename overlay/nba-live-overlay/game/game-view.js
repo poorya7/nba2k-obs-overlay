@@ -64,6 +64,12 @@ class GameView {
         // Time tracking to prevent reverting to older times
         this.lastQuarterNum = 0;
         this.lastTimeSeconds = Infinity; // Start high so any time is "newer"
+        
+        // Team IDs for play-by-play matching
+        this.teamIds = {
+            home: null,
+            away: null
+        };
     }
 
     /**
@@ -437,6 +443,9 @@ class GameView {
         const { home, away, quarter, time, teamStats } = gameData;
 
         if (home) {
+            if (home.id !== undefined) {
+                this.teamIds.home = home.id;
+            }
             if (home.abbr !== undefined && home.logoUrl !== undefined) {
                 this.updateTeam('home', home.abbr, home.logoUrl);
             }
@@ -446,6 +455,9 @@ class GameView {
         }
 
         if (away) {
+            if (away.id !== undefined) {
+                this.teamIds.away = away.id;
+            }
             if (away.abbr !== undefined && away.logoUrl !== undefined) {
                 this.updateTeam('away', away.abbr, away.logoUrl);
             }
