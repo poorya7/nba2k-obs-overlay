@@ -79,7 +79,7 @@ html {
 
 .current-game-box {
     padding: 20px 0;
-    width: 640px;
+    width: 700px;
 }
 
 .other-games-box {
@@ -103,7 +103,7 @@ html {
     z-index: 10;
     top: 685px;
     left: 30px;
-    width: 640px; /* Match game overlay width */
+    width: 700px; /* Match game overlay width */
     display: none; /* Hidden by default, shown when play-by-play data arrives */
     pointer-events: none; /* Allow clicking through */
 }
@@ -276,7 +276,7 @@ html {
 .teams {
     display: flex;
     justify-content: center;
-    gap: 305px;
+    gap: 336px;
     margin-bottom: 20px;
     transition: opacity 0.3s ease-in, gap 0.3s ease-out;
     align-items: center;
@@ -352,7 +352,7 @@ html {
 .stats-row {
     display: flex;
     justify-content: center;
-    gap: 305px;
+    gap: 277px;
     padding: 8px 0;
     border-bottom: 1px solid rgba(59, 130, 246, 0.2);
     font-size: 23px;
@@ -378,7 +378,11 @@ html {
     font-weight: 700;
     color: #fff;
     text-align: center;
-    width: auto;
+}
+
+.team-stats .stat-value {
+    width: 180px;
+    white-space: nowrap;
 }
 
 /* Score animations */
@@ -700,8 +704,8 @@ html {
 }
 
 .mvp-content .player-pic {
-    width: 75px;
-    height: 75px;
+    width: 98px;
+    height: 98px;
     border-radius: 50%;
     border: 2px solid #60a5fa;
     object-fit: cover;
@@ -1074,4 +1078,5 @@ html {
     min-width: 45px;
     text-align: right;
 }
+
 

@@ -597,7 +597,6 @@
         // Expose for debugging/testing
         window.appController = appController;
         window.gameView = gameView;
-        
         window.mvpView = mvpView; // Expose MVP view for play-by-play visibility checks
         
         // Listen for updates from test page
@@ -618,6 +617,14 @@
                     console.log('Updated element gap to:', el.style.gap);
                     console.log('Element computed gap:', window.getComputedStyle(el).gap);
                     console.log('Element visible?:', el.offsetParent !== null);
+                });
+            }
+            
+            if (event.data && event.data.type === 'UPDATE_STATS_SPACING') {
+                const spacing = event.data.spacing;
+                console.log('Updating stats spacing to:', spacing + 'px');
+                document.querySelectorAll('.stats-row').forEach(el => {
+                    el.style.gap = spacing + 'px';
                 });
             }
             
@@ -670,6 +677,17 @@
                     #pbpAction { color: ${color} !important; }
                 `;
             }
+            
+            if (event.data && event.data.type === 'UPDATE_MVP_PHOTO_SIZE') {
+                const size = event.data.size;
+                console.log('Updating MVP photo size to:', size + 'px');
+                
+                const playerPic = document.querySelector('.mvp-content .player-pic');
+                if (playerPic) {
+                    playerPic.style.width = size + 'px';
+                    playerPic.style.height = size + 'px';
+                }
+            }
         });
         
         /* OLD CODE REMOVED - Now in modular classes:
@@ -682,6 +700,7 @@
          * - checkSimulatedMVP() → AppController
          * - All state variables → StateManager
          */
+        
     </script>
 
 </body>
