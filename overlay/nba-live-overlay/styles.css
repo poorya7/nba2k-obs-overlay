@@ -253,7 +253,7 @@ html {
 .game-status {
     font-size: 28px;
     font-weight: 700;
-    color: #fbbf24;
+    color: #86efac;
     text-align: center;
     display: flex !important;
     flex-direction: column !important;
@@ -261,7 +261,8 @@ html {
     align-items: center;
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
     line-height: 1.2;
     gap: 2px;
@@ -273,13 +274,21 @@ html {
     white-space: nowrap;
 }
 
+.game-status > div:first-child {
+    color: #86efac;
+}
+
+.game-status > div:last-child {
+    color: #10b981;
+}
+
 .teams {
     display: flex;
     justify-content: center;
-    gap: 336px;
+    gap: 268px;
     margin-bottom: 20px;
     transition: opacity 0.3s ease-in, gap 0.3s ease-out;
-    align-items: center;
+    align-items: flex-start;
     position: relative;
 }
 
@@ -288,7 +297,7 @@ html {
 }
 
 .team {
-    flex: 0 0 auto;
+    flex: 0 0 180px;
     display: flex;
     flex-direction: column;
 }
@@ -315,6 +324,7 @@ html {
     margin-bottom: 12px;
     filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
     transition: all 0.4s ease-out;
+    object-fit: contain;
 }
 
 .team-name {
@@ -322,6 +332,10 @@ html {
     font-weight: 700;
     color: #fff;
     margin-bottom: 10px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Keep team-abbr for backwards compatibility */
@@ -338,13 +352,17 @@ html {
     color: #60a5fa;
     text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
     font-variant-numeric: tabular-nums;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Team stats section */
 .team-stats {
     background: rgba(0, 0, 0, 0.5);
     border-radius: 8px;
-    padding: 15px 0;
+    padding: 8px 0;
     margin-top: 20px;
     display: block;
 }
@@ -352,7 +370,7 @@ html {
 .stats-row {
     display: flex;
     justify-content: center;
-    gap: 277px;
+    gap: 268px;
     padding: 8px 0;
     border-bottom: 1px solid rgba(59, 130, 246, 0.2);
     font-size: 23px;
@@ -383,6 +401,9 @@ html {
 .team-stats .stat-value {
     width: 180px;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Score animations */
