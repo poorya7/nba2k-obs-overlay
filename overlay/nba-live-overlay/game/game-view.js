@@ -784,6 +784,11 @@ class GameView {
             ftValues[0].textContent = `${teamStats.away.ftMade}/${teamStats.away.ftAttempted} ${formatPercent(teamStats.away.ftPct)}`;
             ftValues[1].textContent = `${teamStats.home.ftMade}/${teamStats.home.ftAttempted} ${formatPercent(teamStats.home.ftPct)}`;
         }
+        
+        // Apply stat comparison style (block-inward) after updating values
+        if (window.applyStatComparisonStyle) {
+            window.applyStatComparisonStyle('block-inward');
+        }
     }
 
     /**

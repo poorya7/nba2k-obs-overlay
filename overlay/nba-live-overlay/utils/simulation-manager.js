@@ -263,11 +263,29 @@ class SimulationManager {
 
     /**
      * Load play-by-play data from server JSON file
-     * @param {string} gameId - Game ID (used to find the JSON file)
+     * If no gameId provided, fetches the first file in the folder (sorted alphabetically)
+     * @param {string} gameId - Optional game ID (filename without .json)
      * @returns {Promise<boolean>} True if loaded successfully
      */
-    async loadPlayByPlayData(gameId = 'game-401810251') {
+    async loadPlayByPlayData(gameId = null) {
         try {
+            // If no gameId provided, get the first file from the server
+            if (!gameId) {
+                const listResponse = await fetch('http://localhost:3000/api/play-by-play-files');
+                if (!listResponse.ok) {
+                    console.warn('⚠️ Could not list play-by-play files:', listResponse.status);
+                    return false;
+                }
+                const { files } = await listResponse.json();
+                if (!files || files.length === 0) {
+                    console.warn('⚠️ No play-by-play files found');
+                    return false;
+                }
+                // Use first file (sorted alphabetically = lowest number)
+                gameId = files[0].replace('.json', '');
+                console.log(`📂 Auto-selected play-by-play file: ${gameId}`);
+            }
+            
             const response = await fetch(`http://localhost:3000/server/data/play-by-play/${gameId}.json`);
             if (!response.ok) {
                 console.warn('⚠️ Could not load play-by-play data:', response.status);

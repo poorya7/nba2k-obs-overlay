@@ -1221,6 +1221,20 @@ async function handlePostGameAnalysis(req, res) {
   }
 }
 
+// GET /api/play-by-play-files - List available play-by-play JSON files
+function handleGetPlayByPlayFiles(req, res) {
+  try {
+    const files = fs.readdirSync(PLAY_BY_PLAY_DIR)
+      .filter(f => f.endsWith('.json'))
+      .sort(); // Alphabetical = lowest number first
+    
+    sendJson(res, 200, { files });
+  } catch (error) {
+    console.error('Error listing play-by-play files:', error);
+    sendJson(res, 500, { error: 'Failed to list files' });
+  }
+}
+
 // GET /api/image-proxy?url=... - Proxy images to bypass CORS
 function handleGetImageProxy(req, res) {
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
@@ -1318,6 +1332,7 @@ const API_ROUTES = {
   'POST /api/shorten-play': handlePostShortenPlay,
   'POST /api/play-by-play': handlePostPlayByPlay,
   'POST /api/game-analysis': handlePostGameAnalysis,
+  'GET /api/play-by-play-files': handleGetPlayByPlayFiles,
   'GET /api/image-proxy': handleGetImageProxy
 };
 

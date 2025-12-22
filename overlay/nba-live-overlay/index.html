@@ -763,6 +763,16 @@
         // Start the overlay when DOM is ready
         window.addEventListener('DOMContentLoaded', () => {
             appController.start();
+            
+            // Apply block-inward style after stats load
+            setTimeout(() => {
+                applyStatComparisonStyle('block-inward');
+            }, 500);
+            
+            // Also apply again after a bit more time for slower loads
+            setTimeout(() => {
+                applyStatComparisonStyle('block-inward');
+            }, 2000);
         });
         
         // Cleanup timers when page unloads (OBS hides source, browser navigates away, etc.)
@@ -857,14 +867,11 @@
                 }
             }
 
-            if (event.data && event.data.type === 'UPDATE_STAT_STYLE') {
-                const styleId = event.data.styleId;
-                applyStatComparisonStyle(styleId);
-            }
         });
 
         // ==================== STAT COMPARISON LOGIC ====================
-        let currentStatStyle = 'none';
+        let currentStatStyle = 'block-inward'; // Permanent style
+        let blockFillColor = '#7095ad'; // Steel blue
 
         function parseStatForComparison(text, statLabel) {
             // Parse stat values and return a comparable number
@@ -961,308 +968,51 @@
         }
 
         function applyMagnitudeStyle(row, leftEl, rightEl, props, styleId) {
-            const { leftPct, rightPct, winner } = props;
-            
-            switch(styleId) {
-                case 'split-bar':
-                    applySplitBar(row, leftPct, rightPct, winner);
-                    break;
-                case 'dot-stack':
-                    applyDotStack(leftEl, rightEl, leftPct, rightPct);
-                    break;
-                case 'mini-chart':
-                    applyMiniChart(leftEl, rightEl, leftPct, rightPct, winner);
-                    break;
-                case 'vertical-bars':
-                    applyVerticalBars(leftEl, rightEl, leftPct, rightPct, winner);
-                    break;
-                case 'ring-progress':
-                    applyRingProgress(leftEl, rightEl, leftPct, rightPct, winner);
-                    break;
-                case 'block-stack':
-                    applyBlockStack(leftEl, rightEl, leftPct, rightPct);
-                    break;
-                case 'advantage-bar':
-                    applyAdvantageBar(row, leftPct, rightPct, winner);
-                    break;
-                case 'difference-badge':
-                    applyDifferenceBadge(leftEl, rightEl, props);
-                    break;
-                case 'size-difference':
-                    applySizeDifference(leftEl, rightEl, props);
-                    break;
-                case 'color-intensity':
-                    applyColorIntensity(leftEl, rightEl, props);
-                    break;
-                case 'plus-blocks':
-                    applyPlusBlocks(leftEl, rightEl, props);
-                    break;
-            }
+            const { leftPct, rightPct } = props;
+            // Only block-inward style is used
+            applyBlockInward(leftEl, rightEl, leftPct, rightPct);
         }
 
-        // Style 1: Split Bar - horizontal bar between stats
-        function applySplitBar(row, leftPct, rightPct, winner) {
-            const bar = document.createElement('div');
-            bar.className = 'stat-split-bar';
-            bar.innerHTML = `
-                <div class="split-left" style="width: ${leftPct}%; background: ${winner === 'left' ? '#4ade80' : '#64748b'};"></div>
-                <div class="split-right" style="width: ${rightPct}%; background: ${winner === 'right' ? '#4ade80' : '#64748b'};"></div>
-            `;
-            row.appendChild(bar);
-        }
-
-        // Style 2: Dot Stack - dots showing relative performance
-        function applyDotStack(leftEl, rightEl, leftPct, rightPct) {
-            [leftEl, rightEl].forEach((el, idx) => {
-                const pct = idx === 0 ? leftPct : rightPct;
-                const filledDots = Math.round((pct / 100) * 5); // 5 dots max
-                
-                const dots = document.createElement('span');
-                dots.className = 'stat-dots';
-                dots.style.cssText = `
-                    font-size: 8px;
-                    margin-left: 8px;
-                    letter-spacing: 2px;
-                `;
-                dots.innerHTML = Array(5).fill(0).map((_, i) => 
-                    `<span style="color: ${i < filledDots ? '#4ade80' : '#334155'}">●</span>`
-                ).join('');
-                el.appendChild(dots);
-            });
-        }
-
-        // Style 3: Mini Chart - tiny bar chart next to value
-        function applyMiniChart(leftEl, rightEl, leftPct, rightPct, winner) {
-            [leftEl, rightEl].forEach((el, idx) => {
-                const pct = idx === 0 ? leftPct : rightPct;
-                const isWinner = (idx === 0 && winner === 'left') || (idx === 1 && winner === 'right');
-                
-                const chart = document.createElement('span');
-                chart.className = 'stat-mini-bar';
-                chart.style.cssText = `
-                    display: inline-block;
-                    width: 40px;
-                    height: 8px;
-                    background: #1e293b;
-                    border-radius: 4px;
-                    margin-left: 10px;
-                    overflow: hidden;
-                    vertical-align: middle;
-                `;
-                chart.innerHTML = `<span style="display: block; width: ${pct}%; height: 100%; background: ${isWinner ? '#4ade80' : '#64748b'}; border-radius: 4px;"></span>`;
-                el.appendChild(chart);
-            });
-        }
-
-        // Style 4: Vertical Bars - small vertical bar chart
-        function applyVerticalBars(leftEl, rightEl, leftPct, rightPct, winner) {
-            [leftEl, rightEl].forEach((el, idx) => {
-                const pct = idx === 0 ? leftPct : rightPct;
-                const isWinner = (idx === 0 && winner === 'left') || (idx === 1 && winner === 'right');
-                const height = Math.max(20, (pct / 100) * 100); // Scale to max 100% of container
-                
-                const bar = document.createElement('span');
-                bar.className = 'stat-mini-bar';
-                bar.style.cssText = `
-                    display: inline-flex;
-                    align-items: flex-end;
-                    width: 12px;
-                    height: 28px;
-                    background: #1e293b;
-                    border-radius: 3px;
-                    margin-left: 10px;
-                    overflow: hidden;
-                    vertical-align: middle;
-                `;
-                bar.innerHTML = `<span style="display: block; width: 100%; height: ${height}%; background: ${isWinner ? '#4ade80' : '#64748b'}; border-radius: 3px;"></span>`;
-                el.appendChild(bar);
-            });
-        }
-
-        // Style 5: Ring Progress - circular progress ring
-        function applyRingProgress(leftEl, rightEl, leftPct, rightPct, winner) {
-            [leftEl, rightEl].forEach((el, idx) => {
-                const pct = idx === 0 ? leftPct : rightPct;
-                const isWinner = (idx === 0 && winner === 'left') || (idx === 1 && winner === 'right');
-                const color = isWinner ? '#4ade80' : '#64748b';
-                const circumference = 2 * Math.PI * 8; // radius = 8
-                const offset = circumference - (pct / 100) * circumference;
-                
-                const ring = document.createElement('span');
-                ring.className = 'stat-mini-bar';
-                ring.style.cssText = `
-                    display: inline-block;
-                    margin-left: 10px;
-                    vertical-align: middle;
-                `;
-                ring.innerHTML = `
-                    <svg width="22" height="22" style="transform: rotate(-90deg);">
-                        <circle cx="11" cy="11" r="8" fill="none" stroke="#1e293b" stroke-width="3"/>
-                        <circle cx="11" cy="11" r="8" fill="none" stroke="${color}" stroke-width="3"
-                            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
-                    </svg>
-                `;
-                el.appendChild(ring);
-            });
-        }
-
-        // Style 6: Block Stack - 5 squares like battery indicator
-        function applyBlockStack(leftEl, rightEl, leftPct, rightPct) {
+        // Block Inward style - blocks face the center (left blocks on right, right blocks on left)
+        function applyBlockInward(leftEl, rightEl, leftPct, rightPct) {
             [leftEl, rightEl].forEach((el, idx) => {
                 const pct = idx === 0 ? leftPct : rightPct;
                 const filledBlocks = Math.round((pct / 100) * 5);
-                
+
                 const blocks = document.createElement('span');
                 blocks.className = 'stat-mini-bar';
-                blocks.style.cssText = `
-                    display: inline-flex;
-                    gap: 2px;
-                    margin-left: 10px;
-                    vertical-align: middle;
-                `;
-                blocks.innerHTML = Array(5).fill(0).map((_, i) => 
-                    `<span style="width: 6px; height: 14px; background: ${i < filledBlocks ? '#4ade80' : '#334155'}; border-radius: 2px;"></span>`
-                ).join('');
-                el.appendChild(blocks);
-            });
-        }
-
-        // Style 7: Advantage Bar - single bar extending toward winner based on margin
-        function applyAdvantageBar(row, leftPct, rightPct, winner) {
-            const margin = Math.abs(leftPct - rightPct);
-            const maxWidth = 60; // max width in px
-            const barWidth = (margin / 50) * maxWidth; // 50% margin = full width
-            
-            const container = document.createElement('div');
-            container.className = 'stat-split-bar';
-            container.style.cssText = `
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                bottom: 4px;
-                width: ${maxWidth * 2}px;
-                height: 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 0;
-            `;
-            
-            if (winner === 'tie') {
-                container.innerHTML = `<div style="width: 4px; height: 6px; background: #64748b; border-radius: 2px;"></div>`;
-            } else {
-                const direction = winner === 'left' ? 'right' : 'left';
-                container.innerHTML = `
-                    <div style="width: 4px; height: 6px; background: #64748b; border-radius: 2px;"></div>
-                    <div style="position: absolute; ${direction}: 50%; width: ${barWidth}px; height: 6px; background: #4ade80; border-radius: ${winner === 'left' ? '2px 0 0 2px' : '0 2px 2px 0'}; margin-${direction}: 2px;"></div>
-                `;
-            }
-            row.appendChild(container);
-        }
-
-        // Style 8: Difference Badge - shows +X% on winner
-        function applyDifferenceBadge(leftEl, rightEl, props) {
-            const { leftPct, rightPct, winner, leftVal, rightVal } = props;
-            if (winner === 'tie') return;
-            
-            const diff = Math.abs(leftVal - rightVal);
-            const pctDiff = Math.abs(leftPct - rightPct).toFixed(0);
-            
-            const winnerEl = winner === 'left' ? leftEl : rightEl;
-            const loserEl = winner === 'left' ? rightEl : leftEl;
-            
-            const badge = document.createElement('span');
-            badge.className = 'stat-badge';
-            badge.style.cssText = `
-                font-size: 12px;
-                color: #4ade80;
-                margin-left: 8px;
-                font-weight: 700;
-                background: rgba(74, 222, 128, 0.15);
-                padding: 2px 6px;
-                border-radius: 4px;
-            `;
-            badge.textContent = `+${diff}`;
-            winnerEl.appendChild(badge);
-            
-            // Dim the loser
-            loserEl.style.opacity = '0.6';
-        }
-
-        // Style 9: Size Difference - winner grows based on margin
-        function applySizeDifference(leftEl, rightEl, props) {
-            const { winner, margin } = props;
-            if (winner === 'tie') return;
-            
-            // Scale: 0% margin = 1x, 50% margin = 1.3x
-            const scale = 1 + Math.min(0.3, (margin / 50) * 0.3);
-            const shrink = 1 - Math.min(0.2, (margin / 50) * 0.2);
-            
-            const winnerEl = winner === 'left' ? leftEl : rightEl;
-            const loserEl = winner === 'left' ? rightEl : leftEl;
-            
-            winnerEl.style.transform = `scale(${scale})`;
-            winnerEl.style.color = '#4ade80';
-            loserEl.style.transform = `scale(${shrink})`;
-            loserEl.style.opacity = '0.5';
-        }
-
-        // Style 10: Color Intensity - winner color intensity based on margin
-        function applyColorIntensity(leftEl, rightEl, props) {
-            const { winner, margin } = props;
-            
-            // Intensity: 0% margin = 0.4 opacity, 50% margin = 1.0 opacity
-            const intensity = 0.4 + Math.min(0.6, (margin / 40) * 0.6);
-            
-            const winnerEl = winner === 'left' ? leftEl : rightEl;
-            const loserEl = winner === 'left' ? rightEl : leftEl;
-            
-            if (winner !== 'tie') {
-                winnerEl.style.color = `rgba(74, 222, 128, ${intensity})`;
-                winnerEl.style.textShadow = `0 0 ${margin / 3}px rgba(74, 222, 128, ${intensity * 0.5})`;
-                loserEl.style.color = `rgba(248, 113, 113, ${0.3 + intensity * 0.3})`;
-                loserEl.style.opacity = `${1 - (margin / 150)}`;
-            }
-        }
-
-        // Style 11: Plus Blocks - shows advantage as extra blocks
-        function applyPlusBlocks(leftEl, rightEl, props) {
-            const { leftPct, rightPct, winner } = props;
-            if (winner === 'tie') return;
-            
-            const margin = Math.abs(leftPct - rightPct);
-            const advantageBlocks = Math.min(5, Math.ceil(margin / 10)); // 1 block per 10% margin
-            
-            [leftEl, rightEl].forEach((el, idx) => {
-                const isWinner = (idx === 0 && winner === 'left') || (idx === 1 && winner === 'right');
                 
-                const blocks = document.createElement('span');
-                blocks.className = 'stat-mini-bar';
-                blocks.style.cssText = `
-                    display: inline-flex;
-                    gap: 2px;
-                    margin-left: 10px;
-                    vertical-align: middle;
-                `;
-                
-                if (isWinner) {
-                    blocks.innerHTML = Array(advantageBlocks).fill(0).map(() => 
-                        `<span style="width: 6px; height: 14px; background: #4ade80; border-radius: 2px;"></span>`
+                // Left element: blocks on right (margin-left, append)
+                // Right element: blocks on left (margin-right, prepend) + reverse order
+                if (idx === 0) {
+                    blocks.style.cssText = `
+                        display: inline-flex;
+                        gap: 2px;
+                        margin-left: 10px;
+                        vertical-align: middle;
+                    `;
+                    blocks.innerHTML = Array(5).fill(0).map((_, i) =>
+                        `<span style="width: 6px; height: 14px; background: ${i < filledBlocks ? blockFillColor : '#334155'}; border-radius: 2px;"></span>`
                     ).join('');
+                    el.appendChild(blocks);
                 } else {
-                    // Show empty blocks for loser to indicate deficit
-                    blocks.innerHTML = Array(advantageBlocks).fill(0).map(() => 
-                        `<span style="width: 6px; height: 14px; background: #334155; border-radius: 2px;"></span>`
+                    blocks.style.cssText = `
+                        display: inline-flex;
+                        gap: 2px;
+                        margin-right: 10px;
+                        vertical-align: middle;
+                    `;
+                    // Reverse the blocks so filled ones are on the right (towards center)
+                    blocks.innerHTML = Array(5).fill(0).map((_, i) =>
+                        `<span style="width: 6px; height: 14px; background: ${(4 - i) < filledBlocks ? blockFillColor : '#334155'}; border-radius: 2px;"></span>`
                     ).join('');
+                    el.insertBefore(blocks, el.firstChild);
                 }
-                el.appendChild(blocks);
             });
         }
-
 
         // Expose for re-applying after data updates
         window.applyStatComparisonStyle = applyStatComparisonStyle;
-        window.getCurrentStatStyle = () => currentStatStyle;
         
         /* OLD CODE REMOVED - Now in modular classes:
          * - generateSimulationData() → SimulationManager
