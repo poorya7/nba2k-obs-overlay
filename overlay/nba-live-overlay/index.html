@@ -603,28 +603,15 @@
         
         // Listen for updates from test page
         window.addEventListener('message', (event) => {
-            console.log('Message received:', event.data);
-            
             if (event.data && event.data.type === 'UPDATE_TEAM_SPACING') {
                 const spacing = event.data.spacing;
-                console.log('Updating team spacing to:', spacing + 'px');
-                const teamsElements = document.querySelectorAll('.teams');
-                console.log('Found teams elements:', teamsElements.length);
-                
-                const gameBox = document.getElementById('currentGameBox');
-                console.log('Game box display:', gameBox ? window.getComputedStyle(gameBox).display : 'not found');
-                
-                teamsElements.forEach(el => {
+                document.querySelectorAll('.teams').forEach(el => {
                     el.style.gap = spacing + 'px';
-                    console.log('Updated element gap to:', el.style.gap);
-                    console.log('Element computed gap:', window.getComputedStyle(el).gap);
-                    console.log('Element visible?:', el.offsetParent !== null);
                 });
             }
             
             if (event.data && event.data.type === 'UPDATE_STATS_SPACING') {
                 const spacing = event.data.spacing;
-                console.log('Updating stats spacing to:', spacing + 'px');
                 document.querySelectorAll('.stats-row').forEach(el => {
                     el.style.gap = spacing + 'px';
                 });
@@ -632,7 +619,6 @@
 
             if (event.data && event.data.type === 'UPDATE_PBP_GAP') {
                 const gap = event.data.gap;
-                console.log('Updating PBP gap to:', gap + 'px');
                 const pbpBox = document.querySelector('.pbp-box');
                 if (pbpBox) {
                     pbpBox.style.gap = gap + 'px';
@@ -641,7 +627,6 @@
 
             if (event.data && event.data.type === 'UPDATE_PBP_TOP') {
                 const top = event.data.top;
-                console.log('Updating PBP top to:', top + 'px');
                 const pbpBox = document.querySelector('.play-by-play-box');
                 if (pbpBox) {
                     pbpBox.style.top = top + 'px';
@@ -650,9 +635,6 @@
 
             if (event.data && event.data.type === 'UPDATE_QUARTER_COLOR') {
                 const color = event.data.color;
-                console.log('Updating quarter color to:', color);
-                
-                // Create/update persistent CSS rule
                 let styleEl = document.getElementById('custom-quarter-color');
                 if (!styleEl) {
                     styleEl = document.createElement('style');
@@ -667,9 +649,6 @@
             
             if (event.data && event.data.type === 'UPDATE_GAME_TIME_COLOR') {
                 const color = event.data.color;
-                console.log('Updating game time color to:', color);
-                
-                // Create/update persistent CSS rule
                 let styleEl = document.getElementById('custom-time-color');
                 if (!styleEl) {
                     styleEl = document.createElement('style');
@@ -684,9 +663,6 @@
             
             if (event.data && event.data.type === 'UPDATE_PBP_ACTION_COLOR') {
                 const color = event.data.color;
-                console.log('Updating PBP action color to:', color);
-                
-                // Create/update persistent CSS rule
                 let styleEl = document.getElementById('custom-pbp-action-color');
                 if (!styleEl) {
                     styleEl = document.createElement('style');
@@ -700,8 +676,6 @@
             
             if (event.data && event.data.type === 'UPDATE_MVP_PHOTO_SIZE') {
                 const size = event.data.size;
-                console.log('Updating MVP photo size to:', size + 'px');
-                
                 const playerPic = document.querySelector('.mvp-content .player-pic');
                 if (playerPic) {
                     playerPic.style.width = size + 'px';
