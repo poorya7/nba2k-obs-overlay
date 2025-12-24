@@ -1,0 +1,2382 @@
+[
+  {
+    "timestamp": "2025-12-23T01:11:09.163Z",
+    "period": 1,
+    "clock": "12:00",
+    "playerName": "Anthony Davis",
+    "action": "vs. Derik Queen (Ryan Nembhard gains possession)",
+    "homeScore": 0,
+    "awayScore": 0,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:11:29.103Z",
+    "period": 1,
+    "clock": "11:45",
+    "playerName": "Anthony Davis",
+    "action": "makes layup (Cooper Flagg assists)",
+    "homeScore": 0,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:12:11.096Z",
+    "period": 1,
+    "clock": "11:28",
+    "playerName": "Saddiq Bey",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 1,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:12:31.083Z",
+    "period": 1,
+    "clock": "11:09",
+    "playerName": "Saddiq Bey",
+    "action": "defensive rebound",
+    "homeScore": 2,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:13:01.199Z",
+    "period": 1,
+    "clock": "10:47",
+    "playerName": "Jeremiah Fears",
+    "action": "misses shot",
+    "homeScore": 2,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:13:31.076Z",
+    "period": 1,
+    "clock": "10:33",
+    "playerName": "Ryan Nembhard",
+    "action": "bad pass turnover (Derik Queen steals)",
+    "homeScore": 2,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:13:51.099Z",
+    "period": 1,
+    "clock": "10:04",
+    "playerName": "Saddiq Bey",
+    "action": "defensive rebound",
+    "homeScore": 5,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:14:21.235Z",
+    "period": 1,
+    "clock": "10:01",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III makes jumper (Herbert Jones assists)",
+    "homeScore": 7,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:14:41.235Z",
+    "period": 1,
+    "clock": "09:34",
+    "playerName": "Naji Marshall",
+    "action": "makes 11-foot driving floating jump shot",
+    "homeScore": 7,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:14:53.268Z",
+    "period": 1,
+    "clock": "09:20",
+    "playerName": "Jeremiah Fears",
+    "action": "offensive rebound",
+    "homeScore": 7,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:15:03.290Z",
+    "period": 1,
+    "clock": "09:18",
+    "playerName": "Jeremiah Fears",
+    "action": "makes driving layup",
+    "homeScore": 9,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:15:13.263Z",
+    "period": 1,
+    "clock": "08:54",
+    "playerName": "Anthony Davis",
+    "action": "defensive rebound",
+    "homeScore": 9,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:15:53.118Z",
+    "period": 1,
+    "clock": "08:45",
+    "playerName": "Derik Queen",
+    "action": "out of bounds bad pass turnover",
+    "homeScore": 9,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:16:03.205Z",
+    "period": 1,
+    "clock": "08:31",
+    "playerName": "Derik Queen",
+    "action": "defensive rebound",
+    "homeScore": 9,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:16:13.175Z",
+    "period": 1,
+    "clock": "08:22",
+    "playerName": "Derik Queen",
+    "action": "offensive rebound",
+    "homeScore": 9,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:17:03.164Z",
+    "period": 1,
+    "clock": "08:17",
+    "playerName": "Derik Queen",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 10,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:17:13.264Z",
+    "period": 1,
+    "clock": "08:17",
+    "playerName": "Klay Thompson",
+    "action": "enters the game for P.J. Washington",
+    "homeScore": 10,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:17:23.182Z",
+    "period": 1,
+    "clock": "08:17",
+    "playerName": "Derik Queen",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 11,
+    "awayScore": 4,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:17:45.174Z",
+    "period": 1,
+    "clock": "08:08",
+    "playerName": "Anthony Davis",
+    "action": "makes 8-foot pullup jump shot (Naji Marshall assists)",
+    "homeScore": 11,
+    "awayScore": 6,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:17:55.140Z",
+    "period": 1,
+    "clock": "07:53",
+    "playerName": "Herbert Jones",
+    "action": "makes two point shot (Derik Queen assists)",
+    "homeScore": 13,
+    "awayScore": 6,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:18:05.166Z",
+    "period": 1,
+    "clock": "07:47",
+    "playerName": "Klay Thompson",
+    "action": "makes 22-foot three point jumper (Naji Marshall assists)",
+    "homeScore": 13,
+    "awayScore": 9,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:18:15.213Z",
+    "period": 1,
+    "clock": "07:34",
+    "playerName": "Klay Thompson",
+    "action": "foul",
+    "homeScore": 15,
+    "awayScore": 9,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:18:55.163Z",
+    "period": 1,
+    "clock": "07:34",
+    "playerName": "Saddiq Bey",
+    "action": "makes free throw 1 of 1",
+    "homeScore": 16,
+    "awayScore": 9,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:19:15.185Z",
+    "period": 1,
+    "clock": "07:05",
+    "playerName": "Mavericks Full",
+    "action": "timeout",
+    "homeScore": 18,
+    "awayScore": 9,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T01:22:19.224Z",
+    "period": 1,
+    "clock": "06:43",
+    "playerName": "Derik Queen",
+    "action": "defensive rebound",
+    "homeScore": 18,
+    "awayScore": 9,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:22:39.230Z",
+    "period": 1,
+    "clock": "06:40",
+    "playerName": "Brandon Williams",
+    "action": "makes 4-foot shot",
+    "homeScore": 18,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:23:09.155Z",
+    "period": 1,
+    "clock": "06:11",
+    "playerName": "Cooper Flagg",
+    "action": "misses shot",
+    "homeScore": 20,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:23:19.162Z",
+    "period": 1,
+    "clock": "06:11",
+    "playerName": "Herbert Jones",
+    "action": "foul",
+    "homeScore": 20,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:23:31.271Z",
+    "period": 1,
+    "clock": "06:11",
+    "playerName": "Jordan Poole",
+    "action": "enters the game for Jeremiah Fears",
+    "homeScore": 20,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:23:41.121Z",
+    "period": 1,
+    "clock": "06:11",
+    "playerName": "Zion Williamson",
+    "action": "enters the game for Saddiq Bey",
+    "homeScore": 20,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:23:51.113Z",
+    "period": 1,
+    "clock": "05:58",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III defensive rebound",
+    "homeScore": 20,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:24:11.135Z",
+    "period": 1,
+    "clock": "05:31",
+    "playerName": "Anthony Davis",
+    "action": "makes dunk",
+    "homeScore": 22,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:24:21.123Z",
+    "period": 1,
+    "clock": "05:28",
+    "playerName": "Brandon Williams",
+    "action": "foul",
+    "homeScore": 22,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:25:01.109Z",
+    "period": 1,
+    "clock": "05:28",
+    "playerName": "Jordan Poole",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 23,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:25:21.159Z",
+    "period": 1,
+    "clock": "05:28",
+    "playerName": "Jordan Poole",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 24,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:25:33.118Z",
+    "period": 1,
+    "clock": "04:53",
+    "playerName": "Anthony Davis",
+    "action": "defensive rebound",
+    "homeScore": 24,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:25:41.242Z",
+    "period": 1,
+    "clock": "04:45",
+    "playerName": "Klay Thompson",
+    "action": "misses shot",
+    "homeScore": 24,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:25:51.188Z",
+    "period": 1,
+    "clock": "04:44",
+    "playerName": "Daniel Gafford",
+    "action": "enters the game for Anthony Davis",
+    "homeScore": 24,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:26:23.124Z",
+    "period": 1,
+    "clock": "04:44",
+    "playerName": "Caleb Martin",
+    "action": "enters the game for Naji Marshall",
+    "homeScore": 24,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:26:43.116Z",
+    "period": 1,
+    "clock": "04:38",
+    "playerName": "Klay Thompson",
+    "action": "misses free throw 1 of 3",
+    "homeScore": 24,
+    "awayScore": 15,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:27:03.118Z",
+    "period": 1,
+    "clock": "04:38",
+    "playerName": "Klay Thompson",
+    "action": "makes free throw 2 of 3",
+    "homeScore": 24,
+    "awayScore": 16,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:27:23.115Z",
+    "period": 1,
+    "clock": "04:35",
+    "playerName": "Zion Williamson",
+    "action": "defensive rebound",
+    "homeScore": 24,
+    "awayScore": 16,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:27:43.191Z",
+    "period": 1,
+    "clock": "04:30",
+    "playerName": "Zion Williamson",
+    "action": "makes driving layup",
+    "homeScore": 26,
+    "awayScore": 16,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:27:53.425Z",
+    "period": 1,
+    "clock": "04:15",
+    "playerName": "Klay Thompson",
+    "action": "makes 25-foot three point jumper (Cooper Flagg assists)",
+    "homeScore": 26,
+    "awayScore": 19,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:28:03.275Z",
+    "period": 1,
+    "clock": "03:57",
+    "playerName": "Brandon Williams",
+    "action": "defensive rebound",
+    "homeScore": 26,
+    "awayScore": 19,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:28:15.184Z",
+    "period": 1,
+    "clock": "03:55",
+    "playerName": "Zion Williamson",
+    "action": "shooting foul",
+    "homeScore": 26,
+    "awayScore": 19,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:28:23.224Z",
+    "period": 1,
+    "clock": "03:55",
+    "playerName": "Cooper Flagg",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 26,
+    "awayScore": 19,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:28:45.222Z",
+    "period": 1,
+    "clock": "03:55",
+    "playerName": "Jose Alvarado",
+    "action": "enters the game for Herbert Jones",
+    "homeScore": 26,
+    "awayScore": 19,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:28:55.208Z",
+    "period": 1,
+    "clock": "03:55",
+    "playerName": "Cooper Flagg",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 26,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:29:25.235Z",
+    "period": 1,
+    "clock": "03:28",
+    "playerName": "Cooper Flagg",
+    "action": "makes 24-foot three point jumper (Caleb Martin assists)",
+    "homeScore": 28,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:30:05.126Z",
+    "period": 1,
+    "clock": "03:13",
+    "playerName": "Pelicans Full",
+    "action": "timeout",
+    "homeScore": 28,
+    "awayScore": 23,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T01:32:57.102Z",
+    "period": 1,
+    "clock": "03:04",
+    "playerName": "Zion Williamson",
+    "action": "offensive rebound",
+    "homeScore": 28,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:33:07.110Z",
+    "period": 1,
+    "clock": "02:50",
+    "playerName": "Zion Williamson",
+    "action": "defensive rebound",
+    "homeScore": 30,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:33:37.164Z",
+    "period": 1,
+    "clock": "02:20",
+    "playerName": "Jose Alvarado",
+    "action": "defensive rebound",
+    "homeScore": 32,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:33:47.263Z",
+    "period": 1,
+    "clock": "02:16",
+    "playerName": "Jordan Poole",
+    "action": "makes 3-foot shot",
+    "homeScore": 34,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:33:59.165Z",
+    "period": 1,
+    "clock": "02:02",
+    "playerName": "Klay Thompson",
+    "action": "offensive rebound",
+    "homeScore": 34,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:34:17.265Z",
+    "period": 1,
+    "clock": "01:42",
+    "playerName": "Naji Marshall",
+    "action": "defensive rebound",
+    "homeScore": 34,
+    "awayScore": 25,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:34:27.281Z",
+    "period": 1,
+    "clock": "01:37",
+    "playerName": "Naji Marshall",
+    "action": "makes 3-foot shot",
+    "homeScore": 34,
+    "awayScore": 27,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:34:37.156Z",
+    "period": 1,
+    "clock": "01:17",
+    "playerName": "Brandon Williams",
+    "action": "defensive rebound",
+    "homeScore": 34,
+    "awayScore": 27,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:34:57.159Z",
+    "period": 1,
+    "clock": "00:54",
+    "playerName": "Naji Marshall",
+    "action": "defensive rebound",
+    "homeScore": 34,
+    "awayScore": 29,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:35:19.105Z",
+    "period": 1,
+    "clock": "00:37",
+    "playerName": "Klay Thompson",
+    "action": "defensive rebound",
+    "homeScore": 34,
+    "awayScore": 31,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:35:39.186Z",
+    "period": 1,
+    "clock": "00:32",
+    "playerName": "Caleb Martin",
+    "action": "offensive rebound",
+    "homeScore": 34,
+    "awayScore": 31,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:35:49.112Z",
+    "period": 1,
+    "clock": "00:28",
+    "playerName": "Klay Thompson",
+    "action": "makes 25-foot three point jumper (Naji Marshall assists)",
+    "homeScore": 34,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:36:09.133Z",
+    "period": 1,
+    "clock": "00:04",
+    "playerName": "Klay Thompson",
+    "action": "misses shot",
+    "homeScore": 36,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:36:19.208Z",
+    "period": 1,
+    "clock": "00:00",
+    "playerName": "Jordan Poole",
+    "action": "misses shot",
+    "homeScore": 36,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:39:13.116Z",
+    "period": 2,
+    "clock": "12:00",
+    "playerName": "Jaden Hardy",
+    "action": "enters the game for Klay Thompson",
+    "homeScore": 36,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:39:33.168Z",
+    "period": 2,
+    "clock": "11:38",
+    "playerName": "Anthony Davis",
+    "action": "defensive rebound",
+    "homeScore": 36,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:40:03.195Z",
+    "period": 2,
+    "clock": "11:23",
+    "playerName": "Anthony Davis",
+    "action": "makes layup (Jaden Hardy assists)",
+    "homeScore": 36,
+    "awayScore": 36,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:40:13.151Z",
+    "period": 2,
+    "clock": "11:02",
+    "playerName": "Naji Marshall",
+    "action": "makes 11-foot pullup jump shot",
+    "homeScore": 36,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:40:43.207Z",
+    "period": 2,
+    "clock": "10:24",
+    "playerName": "Anthony Davis",
+    "action": "misses shot",
+    "homeScore": 38,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:40:53.214Z",
+    "period": 2,
+    "clock": "10:16",
+    "playerName": "Brandon Williams",
+    "action": "defensive rebound",
+    "homeScore": 38,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:41:03.209Z",
+    "period": 2,
+    "clock": "10:08",
+    "playerName": "Saddiq Bey",
+    "action": "defensive rebound",
+    "homeScore": 38,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:41:13.280Z",
+    "period": 2,
+    "clock": "10:00",
+    "playerName": "Derik Queen",
+    "action": "makes driving layup",
+    "homeScore": 40,
+    "awayScore": 38,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:41:23.192Z",
+    "period": 2,
+    "clock": "09:52",
+    "playerName": "Pelicans Full",
+    "action": "timeout",
+    "homeScore": 40,
+    "awayScore": 40,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T01:44:37.160Z",
+    "period": 2,
+    "clock": "09:30",
+    "playerName": "Naji Marshall",
+    "action": "defensive rebound",
+    "homeScore": 40,
+    "awayScore": 40,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:44:57.156Z",
+    "period": 2,
+    "clock": "09:26",
+    "playerName": "Caleb Martin",
+    "action": "makes running layup (Ryan Nembhard assists)",
+    "homeScore": 40,
+    "awayScore": 42,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:45:27.229Z",
+    "period": 2,
+    "clock": "08:50",
+    "playerName": "Anthony Davis",
+    "action": "makes 15-foot shot",
+    "homeScore": 42,
+    "awayScore": 44,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:46:09.117Z",
+    "period": 2,
+    "clock": "08:32",
+    "playerName": "Caleb Martin",
+    "action": "defensive 3-seconds (technical foul)",
+    "homeScore": 42,
+    "awayScore": 44,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:46:19.118Z",
+    "period": 2,
+    "clock": "08:32",
+    "playerName": "Cooper Flagg",
+    "action": "enters the game for Naji Marshall",
+    "homeScore": 43,
+    "awayScore": 44,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:46:39.115Z",
+    "period": 2,
+    "clock": "08:23",
+    "playerName": "Jeremiah Fears",
+    "action": "makes 24-foot three point jumper (Saddiq Bey assists)",
+    "homeScore": 46,
+    "awayScore": 44,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:46:49.147Z",
+    "period": 2,
+    "clock": "08:00",
+    "playerName": "Herbert Jones",
+    "action": "defensive rebound",
+    "homeScore": 46,
+    "awayScore": 44,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:46:59.211Z",
+    "period": 2,
+    "clock": "07:53",
+    "playerName": "Jeremiah Fears",
+    "action": "misses shot",
+    "homeScore": 46,
+    "awayScore": 44,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:47:09.272Z",
+    "period": 2,
+    "clock": "07:52",
+    "playerName": "Cooper Flagg",
+    "action": "defensive rebound",
+    "homeScore": 46,
+    "awayScore": 44,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:47:19.244Z",
+    "period": 2,
+    "clock": "07:36",
+    "playerName": "Ryan Nembhard",
+    "action": "defensive rebound",
+    "homeScore": 46,
+    "awayScore": 46,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:48:11.204Z",
+    "period": 2,
+    "clock": "07:10",
+    "playerName": "Klay Thompson",
+    "action": "enters the game for Anthony Davis",
+    "homeScore": 46,
+    "awayScore": 48,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:48:21.233Z",
+    "period": 2,
+    "clock": "07:04",
+    "playerName": "Daniel Gafford",
+    "action": "defensive rebound",
+    "homeScore": 46,
+    "awayScore": 48,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:48:31.194Z",
+    "period": 2,
+    "clock": "06:59",
+    "playerName": "Cooper Flagg",
+    "action": "offensive foul turnover",
+    "homeScore": 46,
+    "awayScore": 48,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:49:21.111Z",
+    "period": 2,
+    "clock": "06:45",
+    "playerName": "Derik Queen",
+    "action": "makes two point shot",
+    "homeScore": 48,
+    "awayScore": 48,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:49:43.207Z",
+    "period": 2,
+    "clock": "06:17",
+    "playerName": "Herbert Jones",
+    "action": "bad pass turnover (Ryan Nembhard steals)",
+    "homeScore": 48,
+    "awayScore": 48,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:49:53.116Z",
+    "period": 2,
+    "clock": "06:11",
+    "playerName": "Klay Thompson",
+    "action": "makes 24-foot running jump shot (Ryan Nembhard assists)",
+    "homeScore": 48,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:50:13.123Z",
+    "period": 2,
+    "clock": "05:44",
+    "playerName": "Derik Queen",
+    "action": "makes layup",
+    "homeScore": 50,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:50:23.113Z",
+    "period": 2,
+    "clock": "05:31",
+    "playerName": "Ryan Nembhard",
+    "action": "defensive rebound",
+    "homeScore": 50,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:50:33.104Z",
+    "period": 2,
+    "clock": "05:18",
+    "playerName": "Klay Thompson",
+    "action": "defensive rebound",
+    "homeScore": 50,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:51:03.108Z",
+    "period": 2,
+    "clock": "05:17",
+    "playerName": "Jordan Poole",
+    "action": "shooting foul",
+    "homeScore": 50,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:51:13.111Z",
+    "period": 2,
+    "clock": "05:17",
+    "playerName": "Cooper Flagg",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 50,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:51:23.119Z",
+    "period": 2,
+    "clock": "05:17",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III enters the game for Herbert Jones",
+    "homeScore": 50,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:51:43.104Z",
+    "period": 2,
+    "clock": "05:17",
+    "playerName": "Zion Williamson",
+    "action": "enters the game for Derik Queen",
+    "homeScore": 50,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:52:03.122Z",
+    "period": 2,
+    "clock": "05:00",
+    "playerName": "Saddiq Bey",
+    "action": "misses shot",
+    "homeScore": 50,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:52:13.112Z",
+    "period": 2,
+    "clock": "04:59",
+    "playerName": "Zion Williamson",
+    "action": "offensive rebound",
+    "homeScore": 50,
+    "awayScore": 52,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:52:23.152Z",
+    "period": 2,
+    "clock": "04:48",
+    "playerName": "Daniel Gafford",
+    "action": "makes 2-foot dunk (Ryan Nembhard assists)",
+    "homeScore": 50,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:52:45.113Z",
+    "period": 2,
+    "clock": "04:19",
+    "playerName": "Ryan Nembhard",
+    "action": "misses shot",
+    "homeScore": 52,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:52:55.109Z",
+    "period": 2,
+    "clock": "04:09",
+    "playerName": "Karlo Matkovic",
+    "action": "defensive rebound",
+    "homeScore": 52,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:53:15.127Z",
+    "period": 2,
+    "clock": "03:51",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III defensive rebound",
+    "homeScore": 52,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:53:35.101Z",
+    "period": 2,
+    "clock": "03:28",
+    "playerName": "Cooper Flagg",
+    "action": "defensive rebound",
+    "homeScore": 52,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:53:45.127Z",
+    "period": 2,
+    "clock": "03:21",
+    "playerName": "Cooper Flagg",
+    "action": "offensive rebound",
+    "homeScore": 52,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:54:05.119Z",
+    "period": 2,
+    "clock": "03:18",
+    "playerName": "Anthony Davis",
+    "action": "enters the game for Ryan Nembhard",
+    "homeScore": 52,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:54:25.127Z",
+    "period": 2,
+    "clock": "03:08",
+    "playerName": "Klay Thompson",
+    "action": "makes 26-foot shot (Cooper Flagg assists)",
+    "homeScore": 52,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:54:35.202Z",
+    "period": 2,
+    "clock": "03:01",
+    "playerName": "Pelicans Full",
+    "action": "timeout",
+    "homeScore": 52,
+    "awayScore": 57,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T01:57:37.169Z",
+    "period": 2,
+    "clock": "02:46",
+    "playerName": "Klay Thompson",
+    "action": "defensive rebound",
+    "homeScore": 52,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:57:57.160Z",
+    "period": 2,
+    "clock": "02:44",
+    "playerName": "Mavericks Full",
+    "action": "timeout",
+    "homeScore": 52,
+    "awayScore": 57,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T01:59:49.120Z",
+    "period": 2,
+    "clock": "02:44",
+    "playerName": "Ryan Nembhard",
+    "action": "enters the game for Brandon Williams",
+    "homeScore": 52,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T01:59:59.117Z",
+    "period": 2,
+    "clock": "02:29",
+    "playerName": "Zion Williamson",
+    "action": "misses driving layup",
+    "homeScore": 52,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:00:29.123Z",
+    "period": 2,
+    "clock": "02:13",
+    "playerName": "Anthony Davis",
+    "action": "offensive rebound",
+    "homeScore": 52,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:01:01.115Z",
+    "period": 2,
+    "clock": "02:13",
+    "playerName": "Karlo Matkovic",
+    "action": "shooting foul",
+    "homeScore": 52,
+    "awayScore": 57,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:01:21.123Z",
+    "period": 2,
+    "clock": "02:12",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III defensive rebound",
+    "homeScore": 52,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:02:11.204Z",
+    "period": 2,
+    "clock": "01:47",
+    "playerName": "Zion Williamson",
+    "action": "makes 1-foot shot",
+    "homeScore": 54,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:02:31.207Z",
+    "period": 2,
+    "clock": "01:32",
+    "playerName": "Klay Thompson",
+    "action": "misses driving layup",
+    "homeScore": 54,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:02:51.118Z",
+    "period": 2,
+    "clock": "01:31",
+    "playerName": "Derik Queen",
+    "action": "enters the game for Karlo Matkovic",
+    "homeScore": 54,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:03:01.164Z",
+    "period": 2,
+    "clock": "01:26",
+    "playerName": "Anthony Davis",
+    "action": "makes 14-foot jumper (Ryan Nembhard assists)",
+    "homeScore": 54,
+    "awayScore": 60,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:03:11.176Z",
+    "period": 2,
+    "clock": "01:08",
+    "playerName": "Anthony Davis",
+    "action": "defensive rebound",
+    "homeScore": 54,
+    "awayScore": 60,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:03:41.179Z",
+    "period": 2,
+    "clock": "00:59",
+    "playerName": "Anthony Davis",
+    "action": "makes 25-foot three point jumper (Ryan Nembhard assists)",
+    "homeScore": 54,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:04:03.112Z",
+    "period": 2,
+    "clock": "00:46",
+    "playerName": "Anthony Davis",
+    "action": "shooting foul",
+    "homeScore": 54,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:04:13.115Z",
+    "period": 2,
+    "clock": "00:46",
+    "playerName": "Derik Queen",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 55,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:04:33.181Z",
+    "period": 2,
+    "clock": "00:44",
+    "playerName": "Anthony Davis",
+    "action": "defensive rebound",
+    "homeScore": 55,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:04:53.161Z",
+    "period": 2,
+    "clock": "00:30",
+    "playerName": "Jordan Poole",
+    "action": "defensive rebound",
+    "homeScore": 55,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:05:23.167Z",
+    "period": 2,
+    "clock": "00:04",
+    "playerName": "Zion Williamson",
+    "action": "makes dunk",
+    "homeScore": 57,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:05:33.159Z",
+    "period": 2,
+    "clock": "00:00",
+    "playerName": "Ryan Nembhard",
+    "action": "misses shot",
+    "homeScore": 57,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:20:59.110Z",
+    "period": 3,
+    "clock": "12:00",
+    "playerName": "Saddiq Bey",
+    "action": "enters the game for Jordan Poole",
+    "homeScore": 57,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:21:27.248Z",
+    "period": 3,
+    "clock": "11:39",
+    "playerName": "Cooper Flagg",
+    "action": "defensive rebound",
+    "homeScore": 57,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:21:57.334Z",
+    "period": 3,
+    "clock": "11:12",
+    "playerName": "Naji Marshall",
+    "action": "defensive rebound",
+    "homeScore": 57,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:22:07.227Z",
+    "period": 3,
+    "clock": "10:57",
+    "playerName": "Derik Queen",
+    "action": "defensive rebound",
+    "homeScore": 57,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:22:39.221Z",
+    "period": 3,
+    "clock": "10:46",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III makes 2-foot driving dunk (Derik Queen assists)",
+    "homeScore": 59,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:22:59.214Z",
+    "period": 3,
+    "clock": "10:25",
+    "playerName": "Anthony Davis",
+    "action": "makes 10-foot fade away jump shot (Cooper Flagg assists)",
+    "homeScore": 59,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:23:09.164Z",
+    "period": 3,
+    "clock": "09:57",
+    "playerName": "Jeremiah Fears",
+    "action": "offensive rebound",
+    "homeScore": 59,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:23:59.118Z",
+    "period": 3,
+    "clock": "09:57",
+    "playerName": "Jeremiah Fears",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 60,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:24:09.238Z",
+    "period": 3,
+    "clock": "09:55",
+    "playerName": "Anthony Davis",
+    "action": "defensive rebound",
+    "homeScore": 60,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:24:29.120Z",
+    "period": 3,
+    "clock": "09:30",
+    "playerName": "Ryan Nembhard",
+    "action": "offensive rebound",
+    "homeScore": 60,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:24:49.183Z",
+    "period": 3,
+    "clock": "09:14",
+    "playerName": "Derik Queen",
+    "action": "makes 4-foot layup (Herbert Jones assists)",
+    "homeScore": 62,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:24:59.115Z",
+    "period": 3,
+    "clock": "09:00",
+    "playerName": "Jeremiah Fears",
+    "action": "makes 2-foot shot",
+    "homeScore": 64,
+    "awayScore": 70,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:25:31.268Z",
+    "period": 3,
+    "clock": "08:47",
+    "playerName": "Cooper Flagg",
+    "action": "makes 14-foot pullup jump shot",
+    "homeScore": 64,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:25:41.170Z",
+    "period": 3,
+    "clock": "08:25",
+    "playerName": "Ryan Nembhard",
+    "action": "defensive rebound",
+    "homeScore": 64,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:26:01.376Z",
+    "period": 3,
+    "clock": "08:25",
+    "playerName": "Zion Williamson",
+    "action": "enters the game for Herbert Jones",
+    "homeScore": 64,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:26:11.245Z",
+    "period": 3,
+    "clock": "08:25",
+    "playerName": "Klay Thompson",
+    "action": "enters the game for P.J. Washington",
+    "homeScore": 64,
+    "awayScore": 72,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:26:21.166Z",
+    "period": 3,
+    "clock": "07:58",
+    "playerName": "Ryan Nembhard",
+    "action": "defensive rebound",
+    "homeScore": 64,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:26:31.277Z",
+    "period": 3,
+    "clock": "07:50",
+    "playerName": "Naji Marshall",
+    "action": "offensive rebound",
+    "homeScore": 64,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:26:41.274Z",
+    "period": 3,
+    "clock": "07:43",
+    "playerName": "Cooper Flagg",
+    "action": "offensive rebound",
+    "homeScore": 64,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:27:21.220Z",
+    "period": 3,
+    "clock": "07:39",
+    "playerName": "Ryan Nembhard",
+    "action": "traveling turnover",
+    "homeScore": 64,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:27:31.230Z",
+    "period": 3,
+    "clock": "07:12",
+    "playerName": "Ryan Nembhard",
+    "action": "misses shot",
+    "homeScore": 64,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:27:41.111Z",
+    "period": 3,
+    "clock": "06:59",
+    "playerName": "Jeremiah Fears",
+    "action": "offensive rebound",
+    "homeScore": 64,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:27:51.575Z",
+    "period": 3,
+    "clock": "06:58",
+    "playerName": "Jeremiah Fears",
+    "action": "makes two point shot",
+    "homeScore": 66,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:28:03.276Z",
+    "period": 3,
+    "clock": "06:54",
+    "playerName": "Derik Queen",
+    "action": "shooting foul",
+    "homeScore": 66,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:28:13.374Z",
+    "period": 3,
+    "clock": "06:54",
+    "playerName": "Pelicans Full",
+    "action": "timeout",
+    "homeScore": 66,
+    "awayScore": 74,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T02:31:25.163Z",
+    "period": 3,
+    "clock": "06:54",
+    "playerName": "Cooper Flagg",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 66,
+    "awayScore": 74,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:32:05.302Z",
+    "period": 3,
+    "clock": "06:27",
+    "playerName": "Cooper Flagg",
+    "action": "defensive rebound",
+    "homeScore": 66,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:32:25.163Z",
+    "period": 3,
+    "clock": "06:24",
+    "playerName": "Cooper Flagg",
+    "action": "makes two point shot",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:32:55.182Z",
+    "period": 3,
+    "clock": "05:44",
+    "playerName": "Derik Queen",
+    "action": "defensive rebound",
+    "homeScore": 68,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:33:05.242Z",
+    "period": 3,
+    "clock": "05:37",
+    "playerName": "Anthony Davis",
+    "action": "defensive rebound",
+    "homeScore": 68,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:33:17.147Z",
+    "period": 3,
+    "clock": "05:20",
+    "playerName": "Zion Williamson",
+    "action": "defensive rebound",
+    "homeScore": 68,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:33:47.111Z",
+    "period": 3,
+    "clock": "05:16",
+    "playerName": "Micah Peavy",
+    "action": "enters the game for Saddiq Bey",
+    "homeScore": 68,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:33:57.177Z",
+    "period": 3,
+    "clock": "05:07",
+    "playerName": "Micah Peavy",
+    "action": "offensive rebound",
+    "homeScore": 68,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:34:17.139Z",
+    "period": 3,
+    "clock": "04:42",
+    "playerName": "Micah Peavy",
+    "action": "misses shot",
+    "homeScore": 70,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:34:27.260Z",
+    "period": 3,
+    "clock": "04:38",
+    "playerName": "Naji Marshall",
+    "action": "defensive rebound",
+    "homeScore": 70,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:34:37.386Z",
+    "period": 3,
+    "clock": "04:31",
+    "playerName": "Naji Marshall",
+    "action": "makes driving layup",
+    "homeScore": 70,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:35:07.159Z",
+    "period": 3,
+    "clock": "04:17",
+    "playerName": "Karlo Matkovic",
+    "action": "makes 23-foot three point jumper (Jose Alvarado assists)",
+    "homeScore": 73,
+    "awayScore": 79,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:35:17.271Z",
+    "period": 3,
+    "clock": "03:53",
+    "playerName": "Naji Marshall",
+    "action": "makes 23-foot three point jumper",
+    "homeScore": 73,
+    "awayScore": 82,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:35:39.162Z",
+    "period": 3,
+    "clock": "03:36",
+    "playerName": "Karlo Matkovic",
+    "action": "offensive foul turnover",
+    "homeScore": 73,
+    "awayScore": 82,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:35:49.151Z",
+    "period": 3,
+    "clock": "03:36",
+    "playerName": "Daniel Gafford",
+    "action": "enters the game for Cooper Flagg",
+    "homeScore": 73,
+    "awayScore": 82,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:36:09.110Z",
+    "period": 3,
+    "clock": "03:25",
+    "playerName": "Karlo Matkovic",
+    "action": "shooting foul",
+    "homeScore": 73,
+    "awayScore": 82,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:36:39.224Z",
+    "period": 3,
+    "clock": "03:25",
+    "playerName": "Daniel Gafford",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 73,
+    "awayScore": 82,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:36:59.198Z",
+    "period": 3,
+    "clock": "03:25",
+    "playerName": "Daniel Gafford",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:37:09.276Z",
+    "period": 3,
+    "clock": "03:13",
+    "playerName": "Jaden Hardy",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:37:19.211Z",
+    "period": 3,
+    "clock": "03:06",
+    "playerName": "Karlo Matkovic",
+    "action": "defensive rebound",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:37:29.131Z",
+    "period": 3,
+    "clock": "02:52",
+    "playerName": "Karlo Matkovic",
+    "action": "offensive rebound",
+    "homeScore": 73,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:37:49.125Z",
+    "period": 3,
+    "clock": "02:31",
+    "playerName": "Karlo Matkovic",
+    "action": "defensive rebound",
+    "homeScore": 76,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:37:59.128Z",
+    "period": 3,
+    "clock": "02:18",
+    "playerName": "Daniel Gafford",
+    "action": "defensive rebound",
+    "homeScore": 76,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:38:09.137Z",
+    "period": 3,
+    "clock": "02:05",
+    "playerName": "Micah Peavy",
+    "action": "defensive rebound",
+    "homeScore": 76,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:38:19.124Z",
+    "period": 3,
+    "clock": "01:59",
+    "playerName": "Jose Alvarado",
+    "action": "makes 26-foot three point jumper (Trey Murphy III assists)",
+    "homeScore": 79,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:38:31.519Z",
+    "period": 3,
+    "clock": "01:58",
+    "playerName": "Mavericks Full",
+    "action": "timeout",
+    "homeScore": 79,
+    "awayScore": 83,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T02:41:13.170Z",
+    "period": 3,
+    "clock": "01:58",
+    "playerName": "Jordan Poole",
+    "action": "enters the game for Zion Williamson",
+    "homeScore": 79,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:41:43.181Z",
+    "period": 3,
+    "clock": "01:58",
+    "playerName": "Saddiq Bey",
+    "action": "enters the game for Trey Murphy III",
+    "homeScore": 79,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:41:53.123Z",
+    "period": 3,
+    "clock": "01:21",
+    "playerName": "Jose Alvarado",
+    "action": "bad pass turnover (Daniel Gafford steals)",
+    "homeScore": 79,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:42:03.182Z",
+    "period": 3,
+    "clock": "01:13",
+    "playerName": "Saddiq Bey",
+    "action": "defensive rebound",
+    "homeScore": 79,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:42:13.222Z",
+    "period": 3,
+    "clock": "00:59",
+    "playerName": "Daniel Gafford",
+    "action": "defensive rebound",
+    "homeScore": 79,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:42:45.121Z",
+    "period": 3,
+    "clock": "00:49",
+    "playerName": "Jaden Hardy",
+    "action": "makes driving layup (Caleb Martin assists)",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:42:55.149Z",
+    "period": 3,
+    "clock": "00:32",
+    "playerName": "Daniel Gafford",
+    "action": "defensive rebound",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:43:05.125Z",
+    "period": 3,
+    "clock": "00:23",
+    "playerName": "Jordan Poole",
+    "action": "defensive rebound",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:43:25.129Z",
+    "period": 3,
+    "clock": "00:05",
+    "playerName": "Daniel Gafford",
+    "action": "foul",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:43:55.206Z",
+    "period": 3,
+    "clock": "00:05",
+    "playerName": "Karlo Matkovic",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:44:25.248Z",
+    "period": 3,
+    "clock": "00:05",
+    "playerName": "Karlo Matkovic",
+    "action": "misses free throw 2 of 2",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:47:09.119Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Derik Queen",
+    "action": "enters the game for Karlo Matkovic",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:47:19.164Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Caleb Martin",
+    "action": "enters the game for Klay Thompson",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:47:59.152Z",
+    "period": 4,
+    "clock": "11:52",
+    "playerName": "Saddiq Bey",
+    "action": "personal foul",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:48:29.167Z",
+    "period": 4,
+    "clock": "11:49",
+    "playerName": "Caleb Martin",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:49:21.136Z",
+    "period": 4,
+    "clock": "11:49",
+    "playerName": "Anthony Davis",
+    "action": "lane violation turnover",
+    "homeScore": 79,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:49:41.213Z",
+    "period": 4,
+    "clock": "11:27",
+    "playerName": "Saddiq Bey",
+    "action": "makes 11-foot fade away jump shot",
+    "homeScore": 81,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:49:51.166Z",
+    "period": 4,
+    "clock": "11:06",
+    "playerName": "Anthony Davis",
+    "action": "makes 8-foot shot (Brandon Williams assists)",
+    "homeScore": 81,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:50:11.117Z",
+    "period": 4,
+    "clock": "11:06",
+    "playerName": "Derik Queen",
+    "action": "shooting foul",
+    "homeScore": 81,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:50:31.175Z",
+    "period": 4,
+    "clock": "11:06",
+    "playerName": "Anthony Davis",
+    "action": "makes free throw 1 of 1",
+    "homeScore": 81,
+    "awayScore": 90,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:51:13.138Z",
+    "period": 4,
+    "clock": "10:58",
+    "playerName": "Mavericks Full",
+    "action": "timeout",
+    "homeScore": 81,
+    "awayScore": 90,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T02:54:05.180Z",
+    "period": 4,
+    "clock": "10:58",
+    "playerName": "Player",
+    "action": "(10:58) [Mavericks] COACH'S CHALLENGE (REPLAY SUPPORTS CALL) [Mavericks] charged with a timeout",
+    "homeScore": 81,
+    "awayScore": 90,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T02:54:25.313Z",
+    "period": 4,
+    "clock": "10:58",
+    "playerName": "Jeremiah Fears",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 82,
+    "awayScore": 90,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:54:45.219Z",
+    "period": 4,
+    "clock": "10:58",
+    "playerName": "Jeremiah Fears",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 83,
+    "awayScore": 90,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:55:17.176Z",
+    "period": 4,
+    "clock": "10:44",
+    "playerName": "Jeremiah Fears",
+    "action": "shooting foul",
+    "homeScore": 83,
+    "awayScore": 90,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:55:35.234Z",
+    "period": 4,
+    "clock": "10:44",
+    "playerName": "Jaden Hardy",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 83,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:56:07.232Z",
+    "period": 4,
+    "clock": "10:44",
+    "playerName": "Jaden Hardy",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 83,
+    "awayScore": 92,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:56:17.336Z",
+    "period": 4,
+    "clock": "10:28",
+    "playerName": "Jeremiah Fears",
+    "action": "out of bounds bad pass turnover",
+    "homeScore": 83,
+    "awayScore": 92,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:56:37.282Z",
+    "period": 4,
+    "clock": "10:17",
+    "playerName": "Anthony Davis",
+    "action": "makes 7-foot fade away jump shot (Brandon Williams assists)",
+    "homeScore": 83,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:56:57.228Z",
+    "period": 4,
+    "clock": "09:41",
+    "playerName": "Jaden Hardy",
+    "action": "misses 23-foot three point jumper",
+    "homeScore": 86,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:57:08.102Z",
+    "period": 4,
+    "clock": "09:26",
+    "playerName": "Jaden Hardy",
+    "action": "offensive rebound",
+    "homeScore": 86,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:57:17.158Z",
+    "period": 4,
+    "clock": "09:24",
+    "playerName": "Jaden Hardy",
+    "action": "misses 61-foot three point jumper",
+    "homeScore": 86,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:58:19.152Z",
+    "period": 4,
+    "clock": "09:18",
+    "playerName": "Anthony Davis",
+    "action": "shooting foul",
+    "homeScore": 86,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:58:29.246Z",
+    "period": 4,
+    "clock": "09:18",
+    "playerName": "Klay Thompson",
+    "action": "enters the game for Caleb Martin",
+    "homeScore": 87,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:59:19.179Z",
+    "period": 4,
+    "clock": "09:18",
+    "playerName": "Jordan Poole",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 88,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:59:29.236Z",
+    "period": 4,
+    "clock": "08:58",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III defensive rebound",
+    "homeScore": 88,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:59:39.199Z",
+    "period": 4,
+    "clock": "08:44",
+    "playerName": "Saddiq Bey",
+    "action": "misses tip shot",
+    "homeScore": 88,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:59:49.165Z",
+    "period": 4,
+    "clock": "08:31",
+    "playerName": "Brandon Williams",
+    "action": "misses shot",
+    "homeScore": 88,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T02:59:59.236Z",
+    "period": 4,
+    "clock": "08:26",
+    "playerName": "Saddiq Bey",
+    "action": "bad pass turnover (P.J. Washington steals)",
+    "homeScore": 88,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:00:09.166Z",
+    "period": 4,
+    "clock": "08:24",
+    "playerName": "Anthony Davis",
+    "action": "violation",
+    "homeScore": 90,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:00:29.409Z",
+    "period": 4,
+    "clock": "08:09",
+    "playerName": "Jeremiah Fears",
+    "action": "defensive rebound",
+    "homeScore": 90,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:00:39.173Z",
+    "period": 4,
+    "clock": "08:03",
+    "playerName": "Jordan Poole",
+    "action": "lost ball turnover (Anthony Davis steals)",
+    "homeScore": 90,
+    "awayScore": 94,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:00:49.217Z",
+    "period": 4,
+    "clock": "07:59",
+    "playerName": "Cooper Flagg",
+    "action": "makes 1-foot layup (Anthony Davis assists)",
+    "homeScore": 90,
+    "awayScore": 96,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:01:09.191Z",
+    "period": 4,
+    "clock": "07:43",
+    "playerName": "Derik Queen",
+    "action": "makes 10-foot fade away jump shot (Jeremiah Fears assists)",
+    "homeScore": 92,
+    "awayScore": 96,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:01:19.229Z",
+    "period": 4,
+    "clock": "07:28",
+    "playerName": "Brandon Williams",
+    "action": "makes driving layup (Cooper Flagg assists)",
+    "homeScore": 92,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:01:31.120Z",
+    "period": 4,
+    "clock": "07:10",
+    "playerName": "Saddiq Bey",
+    "action": "makes driving layup (Trey Murphy III assists)",
+    "homeScore": 94,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:02:01.188Z",
+    "period": 4,
+    "clock": "07:10",
+    "playerName": "Ryan Nembhard",
+    "action": "enters the game for Brandon Williams",
+    "homeScore": 94,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:02:11.157Z",
+    "period": 4,
+    "clock": "07:10",
+    "playerName": "Naji Marshall",
+    "action": "enters the game for P.J. Washington",
+    "homeScore": 94,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:02:21.171Z",
+    "period": 4,
+    "clock": "07:10",
+    "playerName": "Saddiq Bey",
+    "action": "makes free throw 1 of 1",
+    "homeScore": 95,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:02:31.188Z",
+    "period": 4,
+    "clock": "06:56",
+    "playerName": "Derik Queen",
+    "action": "defensive rebound",
+    "homeScore": 95,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:02:41.354Z",
+    "period": 4,
+    "clock": "06:53",
+    "playerName": "Jordan Poole",
+    "action": "makes 23-foot running jump shot (Derik Queen assists)",
+    "homeScore": 98,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:03:53.134Z",
+    "period": 4,
+    "clock": "06:54",
+    "playerName": "Mavericks Full",
+    "action": "timeout",
+    "homeScore": 95,
+    "awayScore": 98,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T03:05:43.268Z",
+    "period": 4,
+    "clock": "06:48",
+    "playerName": "Ryan Nembhard",
+    "action": "offensive foul turnover",
+    "homeScore": 98,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:06:13.232Z",
+    "period": 4,
+    "clock": "06:29",
+    "playerName": "Zion Williamson",
+    "action": "offensive rebound",
+    "homeScore": 98,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:06:33.207Z",
+    "period": 4,
+    "clock": "06:28",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III makes 24-foot three point jumper (Zion Williamson assists)",
+    "homeScore": 101,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:06:45.122Z",
+    "period": 4,
+    "clock": "06:05",
+    "playerName": "Anthony Davis",
+    "action": "makes 4-foot turnaround jump shot (Ryan Nembhard assists)",
+    "homeScore": 101,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:06:55.122Z",
+    "period": 4,
+    "clock": "05:46",
+    "playerName": "Anthony Davis",
+    "action": "defensive rebound",
+    "homeScore": 101,
+    "awayScore": 100,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:07:15.128Z",
+    "period": 4,
+    "clock": "05:27",
+    "playerName": "Trey Murphy I",
+    "action": "Murphy III misses alley oop layup",
+    "homeScore": 101,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:07:35.129Z",
+    "period": 4,
+    "clock": "05:26",
+    "playerName": "Naji Marshall",
+    "action": "loose ball foul",
+    "homeScore": 101,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T03:07:45.161Z",
+    "period": 4,
+    "clock": "05:26",
+    "playerName": "Daniel Gafford",
+    "action": "enters the game for Anthony Davis",
+    "homeScore": 101,
+    "awayScore": 102,
+    "isTimeout": false
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "timestamp": "2025-12-23T00:31:32.505Z",
+    "period": 1,
+    "clock": "05:02",
+    "playerName": "Thomas Bryant",
+    "action": "enters the game for Jarrett Allen",
+    "homeScore": 24,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:37:49.914Z",
+    "period": 1,
+    "clock": "02:43",
+    "playerName": "Cavaliers Full",
+    "action": "timeout",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T00:37:51.373Z",
+    "period": 1,
+    "clock": "02:43",
+    "playerName": "Cavaliers Full",
+    "action": "timeout",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-23T00:38:37.271Z",
+    "period": 1,
+    "clock": "02:28",
+    "playerName": "Tre Mann",
+    "action": "blocks Donovan Mitchell 's 1-foot shot",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:39:17.277Z",
+    "period": 1,
+    "clock": "02:14",
+    "playerName": "Tre Mann",
+    "action": "lost ball turnover (De'Andre Hunter steals)",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:39:27.181Z",
+    "period": 1,
+    "clock": "02:05",
+    "playerName": "Miles Bridges",
+    "action": "defensive rebound",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:39:37.192Z",
+    "period": 1,
+    "clock": "01:47",
+    "playerName": "Tre Mann",
+    "action": "offensive rebound",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:40:07.150Z",
+    "period": 1,
+    "clock": "01:45",
+    "playerName": "Josh Green",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:40:19.432Z",
+    "period": 1,
+    "clock": "01:45",
+    "playerName": "Tidjane Salaun",
+    "action": "enters the game for Miles Bridges",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:40:29.163Z",
+    "period": 1,
+    "clock": "01:45",
+    "playerName": "Kon Knueppel",
+    "action": "enters the game for Tre Mann",
+    "homeScore": 31,
+    "awayScore": 30,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:40:39.188Z",
+    "period": 1,
+    "clock": "01:45",
+    "playerName": "Josh Green",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 31,
+    "awayScore": 31,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-23T00:40:49.265Z",
+    "period": 1,
+    "clock": "01:45",
+    "playerName": "Josh Green",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 31,
+    "awayScore": 31,
+    "isTimeout": false
+  }
+]

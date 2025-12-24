@@ -1,0 +1,622 @@
+[
+  {
+    "timestamp": "2025-12-24T02:11:32.068Z",
+    "period": 1,
+    "clock": "11:33",
+    "playerName": "Mark Williams",
+    "action": "defensive rebound",
+    "homeScore": 0,
+    "awayScore": 0,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:11:33.212Z",
+    "period": 1,
+    "clock": "11:33",
+    "playerName": "Mark Williams",
+    "action": "defensive rebound",
+    "homeScore": 0,
+    "awayScore": 0,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:11:53.180Z",
+    "period": 1,
+    "clock": "11:17",
+    "playerName": "Jake La",
+    "action": "LaRavia defensive rebound",
+    "homeScore": 0,
+    "awayScore": 0,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:12:13.268Z",
+    "period": 1,
+    "clock": "10:52",
+    "playerName": "Devin Booker",
+    "action": "bad pass turnover (Deandre Ayton steals)",
+    "homeScore": 0,
+    "awayScore": 3,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:12:23.517Z",
+    "period": 1,
+    "clock": "10:48",
+    "playerName": "Jake La",
+    "action": "LaRavia makes running layup (LeBron James assists)",
+    "homeScore": 0,
+    "awayScore": 5,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:13:03.453Z",
+    "period": 1,
+    "clock": "10:36",
+    "playerName": "Dillon Brooks",
+    "action": "makes 6-foot fade away jump shot",
+    "homeScore": 2,
+    "awayScore": 5,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:13:33.284Z",
+    "period": 1,
+    "clock": "09:53",
+    "playerName": "Dillon Brooks",
+    "action": "makes driving layup",
+    "homeScore": 4,
+    "awayScore": 7,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:14:03.319Z",
+    "period": 1,
+    "clock": "09:35",
+    "playerName": "Dillon Brooks",
+    "action": "shooting foul",
+    "homeScore": 4,
+    "awayScore": 7,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:15:03.326Z",
+    "period": 1,
+    "clock": "09:35",
+    "playerName": "Dillon Brooks",
+    "action": "lane violation",
+    "homeScore": 4,
+    "awayScore": 8,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:15:15.268Z",
+    "period": 1,
+    "clock": "08:57",
+    "playerName": "Devin Booker",
+    "action": "makes shot",
+    "homeScore": 9,
+    "awayScore": 9,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:15:55.251Z",
+    "period": 1,
+    "clock": "08:57",
+    "playerName": "Devin Booker",
+    "action": "misses free throw 1 of 1",
+    "homeScore": 9,
+    "awayScore": 9,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:16:05.213Z",
+    "period": 1,
+    "clock": "08:54",
+    "playerName": "Marcus Smart",
+    "action": "defensive rebound",
+    "homeScore": 9,
+    "awayScore": 9,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:16:15.217Z",
+    "period": 1,
+    "clock": "08:38",
+    "playerName": "Deandre Ayton",
+    "action": "makes 1-foot shot",
+    "homeScore": 9,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:16:25.383Z",
+    "period": 1,
+    "clock": "08:38",
+    "playerName": "Devin Booker",
+    "action": "shooting foul",
+    "homeScore": 9,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:16:45.269Z",
+    "period": 1,
+    "clock": "08:38",
+    "playerName": "Deandre Ayton",
+    "action": "misses free throw 1 of 1",
+    "homeScore": 9,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:17:05.185Z",
+    "period": 1,
+    "clock": "08:20",
+    "playerName": "Devin Booker",
+    "action": "offensive foul turnover",
+    "homeScore": 9,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:17:35.384Z",
+    "period": 1,
+    "clock": "08:03",
+    "playerName": "Collin Gillespie",
+    "action": "defensive rebound",
+    "homeScore": 9,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:17:45.322Z",
+    "period": 1,
+    "clock": "07:51",
+    "playerName": "Mark Williams",
+    "action": "offensive rebound",
+    "homeScore": 9,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:17:55.273Z",
+    "period": 1,
+    "clock": "07:45",
+    "playerName": "Mark Williams",
+    "action": "makes layup (Devin Booker assists)",
+    "homeScore": 11,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:18:25.274Z",
+    "period": 1,
+    "clock": "07:45",
+    "playerName": "Jake La",
+    "action": "LaRavia shooting foul",
+    "homeScore": 11,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:18:57.288Z",
+    "period": 1,
+    "clock": "07:26",
+    "playerName": "Jake La",
+    "action": "LaRavia lost ball turnover (Devin Booker steals)",
+    "homeScore": 12,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:19:07.266Z",
+    "period": 1,
+    "clock": "07:18",
+    "playerName": "Deandre Ayton",
+    "action": "defensive rebound",
+    "homeScore": 12,
+    "awayScore": 11,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:19:17.197Z",
+    "period": 1,
+    "clock": "07:14",
+    "playerName": "Marcus Smart",
+    "action": "makes 23-foot shot (LeBron James assists)",
+    "homeScore": 12,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:19:56.632Z",
+    "period": 1,
+    "clock": "06:39",
+    "playerName": "Marcus Smart",
+    "action": "misses 28-foot three point pullup jump shot",
+    "homeScore": 14,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:20:07.192Z",
+    "period": 1,
+    "clock": "06:19",
+    "playerName": "Nick Smith J",
+    "action": "Smith Jr. misses shot",
+    "homeScore": 14,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:20:10.428Z",
+    "period": 1,
+    "clock": "06:19",
+    "playerName": "Nick Smith J",
+    "action": "Smith Jr. misses shot",
+    "homeScore": 14,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:20:12.916Z",
+    "period": 1,
+    "clock": "06:19",
+    "playerName": "Nick Smith J",
+    "action": "Smith Jr. misses shot",
+    "homeScore": 14,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:20:16.912Z",
+    "period": 1,
+    "clock": "06:17",
+    "playerName": "Mark Williams",
+    "action": "defensive rebound",
+    "homeScore": 14,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:20:28.113Z",
+    "period": 1,
+    "clock": "06:10",
+    "playerName": "Dillon Brooks",
+    "action": "makes driving layup",
+    "homeScore": 16,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:20:46.903Z",
+    "period": 1,
+    "clock": "05:50",
+    "playerName": "Deandre Ayton",
+    "action": "makes layup (Marcus Smart assists)",
+    "homeScore": 16,
+    "awayScore": 16,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:20:56.959Z",
+    "period": 1,
+    "clock": "05:33",
+    "playerName": "Deandre Ayton",
+    "action": "defensive rebound",
+    "homeScore": 16,
+    "awayScore": 16,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:21:08.933Z",
+    "period": 1,
+    "clock": "05:23",
+    "playerName": "Suns Full",
+    "action": "timeout",
+    "homeScore": 16,
+    "awayScore": 18,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-24T02:21:12.278Z",
+    "period": 1,
+    "clock": "05:23",
+    "playerName": "Suns Full",
+    "action": "timeout",
+    "homeScore": 16,
+    "awayScore": 18,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-24T02:21:15.584Z",
+    "period": 1,
+    "clock": "05:23",
+    "playerName": "Suns Full",
+    "action": "timeout",
+    "homeScore": 16,
+    "awayScore": 18,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-24T02:22:35.230Z",
+    "period": 1,
+    "clock": "05:23",
+    "playerName": "Suns Full",
+    "action": "timeout",
+    "homeScore": 16,
+    "awayScore": 18,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-24T02:24:09.735Z",
+    "period": 1,
+    "clock": "05:23",
+    "playerName": "Austin Reaves",
+    "action": "enters the game for Marcus Smart",
+    "homeScore": 16,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:24:19.720Z",
+    "period": 1,
+    "clock": "05:23",
+    "playerName": "Austin Reaves",
+    "action": "enters the game for LeBron James",
+    "homeScore": 16,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:24:39.712Z",
+    "period": 1,
+    "clock": "05:07",
+    "playerName": "Devin Booker",
+    "action": "makes 20-foot pullup jump shot",
+    "homeScore": 18,
+    "awayScore": 18,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:24:51.645Z",
+    "period": 1,
+    "clock": "04:39",
+    "playerName": "Marcus Smart",
+    "action": "makes 1-foot shot",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:25:02.995Z",
+    "period": 1,
+    "clock": "04:39",
+    "playerName": "Marcus Smart",
+    "action": "makes 1-foot shot",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:25:05.751Z",
+    "period": 1,
+    "clock": "04:39",
+    "playerName": "Marcus Smart",
+    "action": "makes 1-foot shot",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:25:22.162Z",
+    "period": 1,
+    "clock": "04:16",
+    "playerName": "Jake La",
+    "action": "LaRavia misses shot",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:25:29.959Z",
+    "period": 1,
+    "clock": "04:06",
+    "playerName": "Jordan Goodwin",
+    "action": "misses shot",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:25:39.930Z",
+    "period": 1,
+    "clock": "04:03",
+    "playerName": "Deandre Ayton",
+    "action": "defensive rebound",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:26:01.831Z",
+    "period": 1,
+    "clock": "03:55",
+    "playerName": "Jaxson Hayes",
+    "action": "enters the game for Deandre Ayton",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:26:11.792Z",
+    "period": 1,
+    "clock": "03:55",
+    "playerName": "Jarred Vanderbilt",
+    "action": "enters the game for Marcus Smart",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:26:27.447Z",
+    "period": 1,
+    "clock": "03:55",
+    "playerName": "Jarred Vanderbilt",
+    "action": "enters the game for Marcus Smart",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:26:31.363Z",
+    "period": 1,
+    "clock": "03:52",
+    "playerName": "Jordan Goodwin",
+    "action": "shooting foul",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:26:32.950Z",
+    "period": 1,
+    "clock": "03:52",
+    "playerName": "Jordan Goodwin",
+    "action": "shooting foul",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:26:40.980Z",
+    "period": 1,
+    "clock": "03:52",
+    "playerName": "Austin Reaves",
+    "action": "misses free throw 1 of 3",
+    "homeScore": 18,
+    "awayScore": 20,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:27:01.003Z",
+    "period": 1,
+    "clock": "03:52",
+    "playerName": "Austin Reaves",
+    "action": "makes free throw 2 of 3",
+    "homeScore": 18,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:27:22.989Z",
+    "period": 1,
+    "clock": "03:52",
+    "playerName": "Austin Reaves",
+    "action": "makes free throw 3 of 3",
+    "homeScore": 18,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:27:31.167Z",
+    "period": 1,
+    "clock": "03:37",
+    "playerName": "Devin Booker",
+    "action": "makes driving layup",
+    "homeScore": 20,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:27:42.919Z",
+    "period": 1,
+    "clock": "03:37",
+    "playerName": "Jaxson Hayes",
+    "action": "shooting foul",
+    "homeScore": 20,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:27:52.928Z",
+    "period": 1,
+    "clock": "03:37",
+    "playerName": "Jamaree Bouyea",
+    "action": "enters the game for Dillon Brooks",
+    "homeScore": 20,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:28:12.924Z",
+    "period": 1,
+    "clock": "03:21",
+    "playerName": "Austin Reaves",
+    "action": "misses shot",
+    "homeScore": 21,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:28:32.982Z",
+    "period": 1,
+    "clock": "03:20",
+    "playerName": "Jaxson Hayes",
+    "action": "turnover",
+    "homeScore": 21,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:28:42.982Z",
+    "period": 1,
+    "clock": "03:04",
+    "playerName": "Ryan Dunn",
+    "action": "offensive rebound",
+    "homeScore": 21,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:29:23.190Z",
+    "period": 1,
+    "clock": "02:37",
+    "playerName": "Ryan Dunn",
+    "action": "defensive rebound",
+    "homeScore": 23,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:29:33.193Z",
+    "period": 1,
+    "clock": "02:25",
+    "playerName": "Jarred Vanderbilt",
+    "action": "defensive rebound",
+    "homeScore": 23,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:29:53.224Z",
+    "period": 1,
+    "clock": "02:15",
+    "playerName": "Lakers Full",
+    "action": "timeout",
+    "homeScore": 23,
+    "awayScore": 22,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-24T02:32:24.918Z",
+    "period": 1,
+    "clock": "02:15",
+    "playerName": "Collin Gillespie",
+    "action": "enters the game for Devin Booker",
+    "homeScore": 23,
+    "awayScore": 22,
+    "isTimeout": false
+  }
+]

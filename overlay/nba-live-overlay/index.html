@@ -129,6 +129,11 @@
 
         // Store current audio to manage playback
         let currentPbpAudio = null;
+
+        // Play-by-play TTS volume (0.0 - 1.0)
+        // Blondie = girl voice, Ogre = guy voice
+        const PBP_TTS_VOLUME_BLONDIE = 0.4;
+        const PBP_TTS_VOLUME_OGRE = 0.2;
         
         // Crossfade: fade out audio over duration (ms)
         function fadeOutAudio(audio, duration = 1000) {
@@ -147,7 +152,7 @@
                 if (currentStep >= steps) {
                     clearInterval(fadeInterval);
                     audio.pause();
-                    audio.volume = 1; // Reset for reuse
+                    audio.volume = startVolume; // Reset for reuse (keep original volume)
                 }
             }, stepDuration);
         }
@@ -561,9 +566,11 @@
                         fadeOutAudio(currentPbpAudio, 1000); // 1 second fade
                     }
                     
-                    // Start new audio immediately at full volume
+                    // Start new audio at per-voice configured volume
                     currentPbpAudio = new Audio(audioUrl);
-                    currentPbpAudio.volume = 1;
+                    currentPbpAudio.volume = isOgrePlay(originalPlayText)
+                        ? PBP_TTS_VOLUME_OGRE
+                        : PBP_TTS_VOLUME_BLONDIE;
                     currentPbpAudio.play().catch(() => {});
                 }, 200);
             }
