@@ -618,5 +618,65 @@
     "homeScore": 23,
     "awayScore": 22,
     "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:32:44.996Z",
+    "period": 1,
+    "clock": "02:15",
+    "playerName": "Dalton Knecht",
+    "action": "enters the game for Nick Smith Jr.",
+    "homeScore": 23,
+    "awayScore": 22,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:33:04.934Z",
+    "period": 1,
+    "clock": "02:15",
+    "playerName": "Jaxson Hayes",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 23,
+    "awayScore": 23,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:33:15.028Z",
+    "period": 1,
+    "clock": "02:15",
+    "playerName": "Jaxson Hayes",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 23,
+    "awayScore": 24,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:33:25.103Z",
+    "period": 1,
+    "clock": "01:59",
+    "playerName": "Jamaree Bouyea",
+    "action": "makes 13-foot shot",
+    "homeScore": 25,
+    "awayScore": 24,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:34:15.052Z",
+    "period": 1,
+    "clock": "01:37",
+    "playerName": "Jaxson Hayes",
+    "action": "back court turnover",
+    "homeScore": 25,
+    "awayScore": 24,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-24T02:34:27.066Z",
+    "period": 1,
+    "clock": "01:23",
+    "playerName": "Jamaree Bouyea",
+    "action": "makes 4-foot step back jumpshot",
+    "homeScore": 27,
+    "awayScore": 24,
+    "isTimeout": false
   }
 ]
