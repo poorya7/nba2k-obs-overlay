@@ -25,3 +25,6 @@ overlay/game.mp4
 # Logs
 *.log
 npm-debug.log*
+
+# Resume (personal)
+docs/*.pdf
