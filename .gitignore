@@ -28,3 +28,13 @@ npm-debug.log*
 
 # Resume (personal)
 docs/*.pdf
+
+# Personal screenshots / scratch (not part of the app)
+ideas/
+overlay/other streamers/
+/compare.png
+/stream*.png
+/chats.png
+/game-stream.png
+/img.png
+/nba2k26 game screenshot.png
