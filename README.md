@@ -10,7 +10,7 @@ The overlays provide real NBA game context (live scores, team info, chat message
 
 ## 🎙️ AI Live Commentary
 
-The standout feature: a real-time AI commentary system that turns ESPN play-by-play data into spoken narration over the stream.
+A real-time AI commentary system that turns ESPN play-by-play data into spoken narration over the stream.
 
 - **Live Narration**: Every new play is converted to speech and played in real time
 - **Two Voices**: Plays are routed to two distinct AI voices (ElevenLabs) - one for substitutions, timeouts, and rebounds; another for scoring and action plays - with smooth crossfading between clips
@@ -22,7 +22,7 @@ Powered by ESPN play-by-play, OpenAI for commentary text, and ElevenLabs + OpenA
 
 ## ✨ Features
 
-- **🎙️ AI Live Commentary**: Real-time spoken play-by-play in two AI voices, with analyst recaps during breaks
+- **AI Live Commentary**: Real-time spoken play-by-play in two AI voices, with analyst recaps during breaks
 - **Clean ASMR Design**: Minimalist pill-style overlay with smooth animations
 - **Fast Updates**: Game data refreshes every 3 seconds for responsive score changes
 - **Smooth Animations**: Score slide animation (slot-machine effect), instant state changes
