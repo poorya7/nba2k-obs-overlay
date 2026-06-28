@@ -7,6 +7,7 @@ node_modules/
 
 # Config files with API keys
 overlay/config.js
+overlay/nba-live-overlay/config/config.js
 
 # IDE
 .vscode/

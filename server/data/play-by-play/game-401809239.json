@@ -1,0 +1,2602 @@
+[
+  {
+    "timestamp": "2025-12-25T19:45:22.523Z",
+    "period": 1,
+    "clock": "12:00",
+    "playerName": "Luke Kornet",
+    "action": "vs. Chet Holmgren (Shai Gilgeous-Alexander gains possession)",
+    "homeScore": 0,
+    "awayScore": 0,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:45:42.516Z",
+    "period": 1,
+    "clock": "11:22",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander defensive rebound",
+    "homeScore": 2,
+    "awayScore": 0,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:46:04.557Z",
+    "period": 1,
+    "clock": "11:02",
+    "playerName": "Stephon Castle",
+    "action": "makes 8-foot pullup jump shot",
+    "homeScore": 4,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:46:34.510Z",
+    "period": 1,
+    "clock": "11:02",
+    "playerName": "Stephon Castle",
+    "action": "misses free throw 1 of 1",
+    "homeScore": 4,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:46:44.468Z",
+    "period": 1,
+    "clock": "11:00",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 4,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:47:04.474Z",
+    "period": 1,
+    "clock": "10:44",
+    "playerName": "Chet Holmgren",
+    "action": "makes 4-foot driving floating jump shot",
+    "homeScore": 6,
+    "awayScore": 2,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:47:24.541Z",
+    "period": 1,
+    "clock": "10:30",
+    "playerName": "Harrison Barnes",
+    "action": "makes 22-foot three point jumper (De'Aaron Fox assists)",
+    "homeScore": 6,
+    "awayScore": 5,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:47:34.475Z",
+    "period": 1,
+    "clock": "10:10",
+    "playerName": "Chet Holmgren",
+    "action": "turnover Stephon Castle",
+    "homeScore": 6,
+    "awayScore": 5,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:47:54.517Z",
+    "period": 1,
+    "clock": "09:51",
+    "playerName": "Chet Holmgren",
+    "action": "makes 9-foot two point shot (Isaiah Hartenstein assists)",
+    "homeScore": 8,
+    "awayScore": 7,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:48:24.475Z",
+    "period": 1,
+    "clock": "09:09",
+    "playerName": "Stephon Castle",
+    "action": "makes 1-foot shot",
+    "homeScore": 11,
+    "awayScore": 12,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:48:44.554Z",
+    "period": 1,
+    "clock": "08:49",
+    "playerName": "Stephon Castle",
+    "action": "misses shot",
+    "homeScore": 14,
+    "awayScore": 12,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:48:54.545Z",
+    "period": 1,
+    "clock": "08:47",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 14,
+    "awayScore": 12,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:49:44.451Z",
+    "period": 1,
+    "clock": "08:32",
+    "playerName": "Stephon Castle",
+    "action": "shooting foul",
+    "homeScore": 14,
+    "awayScore": 12,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:50:16.563Z",
+    "period": 1,
+    "clock": "08:32",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes free throw 1 of 2",
+    "homeScore": 15,
+    "awayScore": 12,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:50:26.484Z",
+    "period": 1,
+    "clock": "08:32",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes free throw 2 of 2",
+    "homeScore": 16,
+    "awayScore": 12,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:50:36.461Z",
+    "period": 1,
+    "clock": "08:25",
+    "playerName": "Luke Kornet",
+    "action": "offensive foul turnover",
+    "homeScore": 16,
+    "awayScore": 12,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:50:56.474Z",
+    "period": 1,
+    "clock": "08:10",
+    "playerName": "Spurs Full",
+    "action": "timeout",
+    "homeScore": 18,
+    "awayScore": 12,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T19:55:20.498Z",
+    "period": 1,
+    "clock": "07:54",
+    "playerName": "Jalen Williams",
+    "action": "shooting foul",
+    "homeScore": 18,
+    "awayScore": 12,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:55:38.539Z",
+    "period": 1,
+    "clock": "07:54",
+    "playerName": "Devin Vassell",
+    "action": "makes free throw 1 of 3",
+    "homeScore": 18,
+    "awayScore": 13,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:55:48.556Z",
+    "period": 1,
+    "clock": "07:54",
+    "playerName": "Devin Vassell",
+    "action": "misses free throw 3 of 3",
+    "homeScore": 18,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:55:58.508Z",
+    "period": 1,
+    "clock": "07:52",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 18,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:56:10.487Z",
+    "period": 1,
+    "clock": "07:36",
+    "playerName": "Isaiah Hartenstein",
+    "action": "offensive rebound",
+    "homeScore": 18,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:56:30.479Z",
+    "period": 1,
+    "clock": "07:35",
+    "playerName": "Luguentz Dort",
+    "action": "makes 24-foot three point jumper (Jalen Williams assists)",
+    "homeScore": 21,
+    "awayScore": 14,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:56:40.503Z",
+    "period": 1,
+    "clock": "07:03",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander misses shot",
+    "homeScore": 21,
+    "awayScore": 17,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:56:50.480Z",
+    "period": 1,
+    "clock": "06:58",
+    "playerName": "Luguentz Dort",
+    "action": "makes 25-foot shot",
+    "homeScore": 24,
+    "awayScore": 17,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:57:10.499Z",
+    "period": 1,
+    "clock": "06:43",
+    "playerName": "Stephon Castle",
+    "action": "makes 10-foot step back jumpshot",
+    "homeScore": 24,
+    "awayScore": 19,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:57:30.539Z",
+    "period": 1,
+    "clock": "06:19",
+    "playerName": "Isaiah Hartenstein",
+    "action": "makes 9-foot jumper (Shai Gilgeous-Alexander assists)",
+    "homeScore": 26,
+    "awayScore": 19,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:58:02.463Z",
+    "period": 1,
+    "clock": "05:53",
+    "playerName": "Luke Kornet",
+    "action": "defensive rebound",
+    "homeScore": 26,
+    "awayScore": 19,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:58:20.473Z",
+    "period": 1,
+    "clock": "05:34",
+    "playerName": "Jalen Williams",
+    "action": "makes 17-foot step back jumpshot",
+    "homeScore": 28,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:58:30.541Z",
+    "period": 1,
+    "clock": "05:23",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 28,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:58:40.521Z",
+    "period": 1,
+    "clock": "05:09",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander misses 18-foot step back jumpshot",
+    "homeScore": 28,
+    "awayScore": 21,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T19:58:50.538Z",
+    "period": 1,
+    "clock": "04:57",
+    "playerName": "Thunder Full",
+    "action": "timeout",
+    "homeScore": 28,
+    "awayScore": 24,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T20:02:24.744Z",
+    "period": 1,
+    "clock": "04:57",
+    "playerName": "Keldon Johnson",
+    "action": "enters the game for De'Aaron Fox",
+    "homeScore": 28,
+    "awayScore": 24,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:02:46.542Z",
+    "period": 1,
+    "clock": "04:43",
+    "playerName": "Alex Caruso",
+    "action": "misses shot",
+    "homeScore": 28,
+    "awayScore": 24,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:02:54.548Z",
+    "period": 1,
+    "clock": "04:41",
+    "playerName": "Luguentz Dort",
+    "action": "offensive rebound",
+    "homeScore": 28,
+    "awayScore": 24,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:03:06.468Z",
+    "period": 1,
+    "clock": "04:33",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes 1-foot two point shot",
+    "homeScore": 30,
+    "awayScore": 24,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:03:14.525Z",
+    "period": 1,
+    "clock": "04:12",
+    "playerName": "Kenrich Williams",
+    "action": "makes 2-foot shot (Isaiah Joe assists)",
+    "homeScore": 32,
+    "awayScore": 24,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:03:46.484Z",
+    "period": 1,
+    "clock": "03:39",
+    "playerName": "Victor Wembanyama",
+    "action": "defensive rebound",
+    "homeScore": 32,
+    "awayScore": 27,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:04:26.523Z",
+    "period": 1,
+    "clock": "03:33",
+    "playerName": "Stephon Castle",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 32,
+    "awayScore": 28,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:04:36.479Z",
+    "period": 1,
+    "clock": "03:33",
+    "playerName": "Cason Wallace",
+    "action": "enters the game for Kenrich Williams",
+    "homeScore": 32,
+    "awayScore": 28,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:04:56.465Z",
+    "period": 1,
+    "clock": "03:31",
+    "playerName": "Isaiah Joe",
+    "action": "defensive rebound",
+    "homeScore": 32,
+    "awayScore": 28,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:05:38.462Z",
+    "period": 1,
+    "clock": "03:18",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes 14-foot pullup jump shot",
+    "homeScore": 34,
+    "awayScore": 28,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:06:08.526Z",
+    "period": 1,
+    "clock": "03:00",
+    "playerName": "Keldon Johnson",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 34,
+    "awayScore": 28,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:06:30.509Z",
+    "period": 1,
+    "clock": "02:57",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 34,
+    "awayScore": 28,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:06:38.477Z",
+    "period": 1,
+    "clock": "02:46",
+    "playerName": "Alex Caruso",
+    "action": "misses shot",
+    "homeScore": 34,
+    "awayScore": 28,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:06:48.710Z",
+    "period": 1,
+    "clock": "02:41",
+    "playerName": "Keldon Johnson",
+    "action": "defensive rebound",
+    "homeScore": 34,
+    "awayScore": 28,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:07:08.471Z",
+    "period": 1,
+    "clock": "02:37",
+    "playerName": "Dylan Harper",
+    "action": "makes running layup",
+    "homeScore": 34,
+    "awayScore": 30,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:07:28.536Z",
+    "period": 1,
+    "clock": "01:56",
+    "playerName": "Chet Holmgren",
+    "action": "shooting foul",
+    "homeScore": 36,
+    "awayScore": 32,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:08:40.457Z",
+    "period": 1,
+    "clock": "01:42",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander misses shot",
+    "homeScore": 36,
+    "awayScore": 33,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:08:50.516Z",
+    "period": 1,
+    "clock": "01:40",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander personal foul",
+    "homeScore": 36,
+    "awayScore": 33,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:09:42.476Z",
+    "period": 1,
+    "clock": "01:40",
+    "playerName": "Victor Wembanyama",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 36,
+    "awayScore": 34,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:09:52.470Z",
+    "period": 1,
+    "clock": "01:40",
+    "playerName": "Victor Wembanyama",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 36,
+    "awayScore": 35,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:10:00.556Z",
+    "period": 1,
+    "clock": "01:22",
+    "playerName": "Keldon Johnson",
+    "action": "defensive rebound",
+    "homeScore": 36,
+    "awayScore": 35,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:10:32.490Z",
+    "period": 1,
+    "clock": "01:06",
+    "playerName": "Dylan Harper",
+    "action": "makes 19-foot step back jumpshot",
+    "homeScore": 36,
+    "awayScore": 37,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:11:02.478Z",
+    "period": 1,
+    "clock": "00:48",
+    "playerName": "Chet Holmgren",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 36,
+    "awayScore": 37,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:11:32.744Z",
+    "period": 1,
+    "clock": "00:47",
+    "playerName": "Julian Champagnie",
+    "action": "defensive rebound",
+    "homeScore": 36,
+    "awayScore": 37,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:11:54.557Z",
+    "period": 1,
+    "clock": "00:23",
+    "playerName": "Keldon Johnson",
+    "action": "defensive rebound",
+    "homeScore": 36,
+    "awayScore": 39,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:12:14.486Z",
+    "period": 1,
+    "clock": "00:07",
+    "playerName": "Keldon Johnson",
+    "action": "makes 2-foot shot",
+    "homeScore": 36,
+    "awayScore": 41,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:12:22.532Z",
+    "period": 1,
+    "clock": "00:00",
+    "playerName": "Cason Wallace",
+    "action": "misses shot",
+    "homeScore": 36,
+    "awayScore": 41,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:15:56.532Z",
+    "period": 2,
+    "clock": "12:00",
+    "playerName": "Aaron Wiggins",
+    "action": "enters the game for Alex Caruso",
+    "homeScore": 36,
+    "awayScore": 41,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:16:16.546Z",
+    "period": 2,
+    "clock": "12:00",
+    "playerName": "Jalen Williams",
+    "action": "enters the game for Isaiah Joe",
+    "homeScore": 36,
+    "awayScore": 41,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:16:48.500Z",
+    "period": 2,
+    "clock": "11:44",
+    "playerName": "Dylan Harper",
+    "action": "makes layup",
+    "homeScore": 36,
+    "awayScore": 43,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:17:18.479Z",
+    "period": 2,
+    "clock": "11:28",
+    "playerName": "Luke Kornet",
+    "action": "shooting foul",
+    "homeScore": 36,
+    "awayScore": 43,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:17:38.464Z",
+    "period": 2,
+    "clock": "11:28",
+    "playerName": "Isaiah Hartenstein",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 37,
+    "awayScore": 43,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:17:58.565Z",
+    "period": 2,
+    "clock": "11:28",
+    "playerName": "Isaiah Hartenstein",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 38,
+    "awayScore": 43,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:18:08.473Z",
+    "period": 2,
+    "clock": "11:10",
+    "playerName": "Luke Kornet",
+    "action": "makes 1-foot dunk (Dylan Harper assists)",
+    "homeScore": 38,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:18:38.482Z",
+    "period": 2,
+    "clock": "10:51",
+    "playerName": "Aaron Wiggins",
+    "action": "makes driving layup",
+    "homeScore": 40,
+    "awayScore": 45,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:18:48.535Z",
+    "period": 2,
+    "clock": "10:19",
+    "playerName": "Jalen Williams",
+    "action": "misses shot",
+    "homeScore": 40,
+    "awayScore": 47,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:19:29.205Z",
+    "period": 2,
+    "clock": "10:06",
+    "playerName": "Thunder Full",
+    "action": "timeout",
+    "homeScore": 40,
+    "awayScore": 47,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T20:23:22.474Z",
+    "period": 2,
+    "clock": "09:44",
+    "playerName": "Victor Wembanyama",
+    "action": "offensive rebound",
+    "homeScore": 43,
+    "awayScore": 47,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:23:32.498Z",
+    "period": 2,
+    "clock": "09:44",
+    "playerName": "Victor Wembanyama",
+    "action": "makes tip in dunk",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:23:52.514Z",
+    "period": 2,
+    "clock": "09:21",
+    "playerName": "Dylan Harper",
+    "action": "misses shot",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:24:02.484Z",
+    "period": 2,
+    "clock": "09:18",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:24:32.477Z",
+    "period": 2,
+    "clock": "08:53",
+    "playerName": "Cason Wallace",
+    "action": "offensive rebound",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:24:42.549Z",
+    "period": 2,
+    "clock": "08:43",
+    "playerName": "Victor Wembanyama",
+    "action": "offensive foul turnover",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:25:12.487Z",
+    "period": 2,
+    "clock": "08:43",
+    "playerName": "Stephon Castle",
+    "action": "enters the game for Dylan Harper",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:25:32.475Z",
+    "period": 2,
+    "clock": "08:21",
+    "playerName": "Julian Champagnie",
+    "action": "defensive rebound",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:25:44.480Z",
+    "period": 2,
+    "clock": "08:08",
+    "playerName": "Kenrich Williams",
+    "action": "defensive rebound",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:26:04.484Z",
+    "period": 2,
+    "clock": "07:52",
+    "playerName": "Jalen Williams",
+    "action": "misses shot",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:26:34.461Z",
+    "period": 2,
+    "clock": "07:46",
+    "playerName": "Kenrich Williams",
+    "action": "misses shot",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:26:44.461Z",
+    "period": 2,
+    "clock": "07:34",
+    "playerName": "Victor Wembanyama",
+    "action": "lost ball turnover (Kenrich Williams steals)",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:26:54.515Z",
+    "period": 2,
+    "clock": "07:26",
+    "playerName": "Cason Wallace",
+    "action": "offensive rebound",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:27:14.608Z",
+    "period": 2,
+    "clock": "07:23",
+    "playerName": "Julian Champagnie",
+    "action": "shooting foul",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:27:24.470Z",
+    "period": 2,
+    "clock": "07:23",
+    "playerName": "Jalen Williams",
+    "action": "misses free throw 1 of 2",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:28:04.620Z",
+    "period": 2,
+    "clock": "07:21",
+    "playerName": "Victor Wembanyama",
+    "action": "defensive rebound",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:28:26.487Z",
+    "period": 2,
+    "clock": "07:05",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 43,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:28:46.518Z",
+    "period": 2,
+    "clock": "06:59",
+    "playerName": "Chet Holmgren",
+    "action": "makes dunk (Jalen Williams assists)",
+    "homeScore": 45,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:29:16.536Z",
+    "period": 2,
+    "clock": "06:48",
+    "playerName": "Cason Wallace",
+    "action": "personal foul",
+    "homeScore": 45,
+    "awayScore": 49,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:29:26.660Z",
+    "period": 2,
+    "clock": "06:35",
+    "playerName": "Victor Wembanyama",
+    "action": "makes 19-foot pullup jump shot",
+    "homeScore": 45,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:29:46.490Z",
+    "period": 2,
+    "clock": "06:25",
+    "playerName": "Jalen Williams",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 46,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:30:06.587Z",
+    "period": 2,
+    "clock": "06:23",
+    "playerName": "Julian Champagnie",
+    "action": "defensive rebound",
+    "homeScore": 46,
+    "awayScore": 51,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:30:26.591Z",
+    "period": 2,
+    "clock": "06:03",
+    "playerName": "Harrison Barnes",
+    "action": "makes 8-foot shot",
+    "homeScore": 46,
+    "awayScore": 53,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:30:48.578Z",
+    "period": 2,
+    "clock": "05:43",
+    "playerName": "Harrison Barnes",
+    "action": "defensive rebound",
+    "homeScore": 46,
+    "awayScore": 53,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:31:28.496Z",
+    "period": 2,
+    "clock": "05:40",
+    "playerName": "Luguentz Dort",
+    "action": "shooting foul",
+    "homeScore": 46,
+    "awayScore": 53,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:31:38.467Z",
+    "period": 2,
+    "clock": "05:40",
+    "playerName": "Isaiah Joe",
+    "action": "enters the game for Kenrich Williams",
+    "homeScore": 46,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:31:48.811Z",
+    "period": 2,
+    "clock": "05:40",
+    "playerName": "Luke Kornet",
+    "action": "enters the game for Victor Wembanyama",
+    "homeScore": 46,
+    "awayScore": 54,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:32:08.588Z",
+    "period": 2,
+    "clock": "05:29",
+    "playerName": "Isaiah Joe",
+    "action": "misses shot",
+    "homeScore": 46,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:32:20.512Z",
+    "period": 2,
+    "clock": "05:27",
+    "playerName": "Chet Holmgren",
+    "action": "loose ball foul",
+    "homeScore": 46,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:32:30.543Z",
+    "period": 2,
+    "clock": "05:27",
+    "playerName": "Isaiah Hartenstein",
+    "action": "enters the game for Chet Holmgren",
+    "homeScore": 46,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:32:50.523Z",
+    "period": 2,
+    "clock": "05:04",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 46,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:33:20.774Z",
+    "period": 2,
+    "clock": "04:52",
+    "playerName": "Isaiah Joe",
+    "action": "makes 5-foot pullup jump shot ( Hartenstein assists)",
+    "homeScore": 48,
+    "awayScore": 55,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:33:30.549Z",
+    "period": 2,
+    "clock": "04:31",
+    "playerName": "Harrison Barnes",
+    "action": "makes 23-foot three point jumper (Stephon Castle assists)",
+    "homeScore": 48,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:33:40.499Z",
+    "period": 2,
+    "clock": "04:11",
+    "playerName": "Luguentz Dort",
+    "action": "bad pass turnover (Harrison Barnes steals)",
+    "homeScore": 48,
+    "awayScore": 58,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:33:50.515Z",
+    "period": 2,
+    "clock": "04:06",
+    "playerName": "Thunder Full",
+    "action": "timeout",
+    "homeScore": 48,
+    "awayScore": 61,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T20:38:02.538Z",
+    "period": 2,
+    "clock": "03:54",
+    "playerName": "Luke Kornet",
+    "action": "defensive 3-seconds (technical foul)",
+    "homeScore": 48,
+    "awayScore": 61,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:38:34.537Z",
+    "period": 2,
+    "clock": "03:42",
+    "playerName": "Luke Kornet",
+    "action": "defensive rebound",
+    "homeScore": 49,
+    "awayScore": 61,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:38:54.536Z",
+    "period": 2,
+    "clock": "03:28",
+    "playerName": "Alex Caruso",
+    "action": "out of bounds bad pass turnover",
+    "homeScore": 49,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:39:04.502Z",
+    "period": 2,
+    "clock": "03:17",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes running layup",
+    "homeScore": 51,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:39:24.487Z",
+    "period": 2,
+    "clock": "03:17",
+    "playerName": "Devin Vassell",
+    "action": "shooting foul",
+    "homeScore": 51,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:39:34.551Z",
+    "period": 2,
+    "clock": "03:17",
+    "playerName": "Victor Wembanyama",
+    "action": "enters the game for Luke Kornet",
+    "homeScore": 51,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:39:54.524Z",
+    "period": 2,
+    "clock": "03:17",
+    "playerName": "Chet Holmgren",
+    "action": "enters the game for Isaiah Hartenstein",
+    "homeScore": 51,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:40:14.477Z",
+    "period": 2,
+    "clock": "03:00",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 52,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:40:46.563Z",
+    "period": 2,
+    "clock": "02:52",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes 13-foot pullup jump shot",
+    "homeScore": 54,
+    "awayScore": 63,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:40:56.540Z",
+    "period": 2,
+    "clock": "02:23",
+    "playerName": "Stephon Castle",
+    "action": "makes tip shot",
+    "homeScore": 54,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:41:06.519Z",
+    "period": 2,
+    "clock": "02:08",
+    "playerName": "Harrison Barnes",
+    "action": "defensive rebound",
+    "homeScore": 54,
+    "awayScore": 65,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:41:26.572Z",
+    "period": 2,
+    "clock": "01:46",
+    "playerName": "Victor Wembanyama",
+    "action": "defensive rebound",
+    "homeScore": 54,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:41:56.649Z",
+    "period": 2,
+    "clock": "01:42",
+    "playerName": "Isaiah Joe",
+    "action": "personal foul",
+    "homeScore": 54,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:42:06.583Z",
+    "period": 2,
+    "clock": "01:42",
+    "playerName": "Jalen Williams",
+    "action": "enters the game for Alex Caruso",
+    "homeScore": 54,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:42:18.522Z",
+    "period": 2,
+    "clock": "01:32",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 54,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:42:26.515Z",
+    "period": 2,
+    "clock": "01:26",
+    "playerName": "Stephon Castle",
+    "action": "shooting foul",
+    "homeScore": 54,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:42:58.633Z",
+    "period": 2,
+    "clock": "01:26",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander misses free throw 1 of 2",
+    "homeScore": 54,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:43:08.589Z",
+    "period": 2,
+    "clock": "01:26",
+    "playerName": "Cason Wallace",
+    "action": "enters the game for Isaiah Joe",
+    "homeScore": 54,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:43:18.508Z",
+    "period": 2,
+    "clock": "01:26",
+    "playerName": "Julian Champagnie",
+    "action": "enters the game for Stephon Castle",
+    "homeScore": 54,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:43:38.520Z",
+    "period": 2,
+    "clock": "01:26",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes free throw 2 of 2",
+    "homeScore": 55,
+    "awayScore": 67,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:44:18.503Z",
+    "period": 2,
+    "clock": "00:34",
+    "playerName": "Kenrich Williams",
+    "action": "defensive rebound",
+    "homeScore": 57,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:44:48.485Z",
+    "period": 2,
+    "clock": "00:02",
+    "playerName": "Jalen Williams",
+    "action": "blocks Harrison Barnes 's 9-foot shot",
+    "homeScore": 60,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T20:44:58.524Z",
+    "period": 2,
+    "clock": "00:00",
+    "playerName": "Cason Wallace",
+    "action": "misses shot",
+    "homeScore": 60,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:02:20.643Z",
+    "period": 3,
+    "clock": "12:00",
+    "playerName": "Luke Kornet",
+    "action": "enters the game for Victor Wembanyama",
+    "homeScore": 60,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:02:24.555Z",
+    "period": 3,
+    "clock": "12:00",
+    "playerName": "Stephon Castle",
+    "action": "enters the game for Julian Champagnie",
+    "homeScore": 60,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:02:34.488Z",
+    "period": 3,
+    "clock": "11:43",
+    "playerName": "Luguentz Dort",
+    "action": "defensive rebound",
+    "homeScore": 60,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:03:04.482Z",
+    "period": 3,
+    "clock": "11:28",
+    "playerName": "Isaiah Hartenstein",
+    "action": "makes layup (Chet Holmgren assists)",
+    "homeScore": 62,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:03:12.584Z",
+    "period": 3,
+    "clock": "11:16",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 62,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:03:24.485Z",
+    "period": 3,
+    "clock": "10:56",
+    "playerName": "Devin Vassell",
+    "action": "defensive rebound",
+    "homeScore": 62,
+    "awayScore": 69,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:04:04.536Z",
+    "period": 3,
+    "clock": "10:39",
+    "playerName": "Stephon Castle",
+    "action": "makes 7-foot two point shot",
+    "homeScore": 62,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:04:14.478Z",
+    "period": 3,
+    "clock": "10:22",
+    "playerName": "Chet Holmgren",
+    "action": "makes 3-foot two point shot (Luguentz Dort assists)",
+    "homeScore": 64,
+    "awayScore": 71,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:04:34.492Z",
+    "period": 3,
+    "clock": "09:43",
+    "playerName": "Harrison Barnes",
+    "action": "defensive rebound",
+    "homeScore": 64,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:04:54.548Z",
+    "period": 3,
+    "clock": "09:20",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander misses shot",
+    "homeScore": 64,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:05:04.466Z",
+    "period": 3,
+    "clock": "09:14",
+    "playerName": "Luguentz Dort",
+    "action": "blocks De'Aaron Fox 's 3-foot running layup",
+    "homeScore": 64,
+    "awayScore": 73,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:05:14.512Z",
+    "period": 3,
+    "clock": "09:00",
+    "playerName": "Chet Holmgren",
+    "action": "misses 25-foot three point jumper",
+    "homeScore": 64,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:05:24.550Z",
+    "period": 3,
+    "clock": "08:55",
+    "playerName": "Luguentz Dort",
+    "action": "blocks Harrison Barnes 's 12-foot shot",
+    "homeScore": 64,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:05:36.480Z",
+    "period": 3,
+    "clock": "08:52",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander defensive rebound",
+    "homeScore": 64,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:05:46.532Z",
+    "period": 3,
+    "clock": "08:43",
+    "playerName": "Isaiah Hartenstein",
+    "action": "makes 12-foot jumper (Shai Gilgeous-Alexander assists)",
+    "homeScore": 66,
+    "awayScore": 75,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:06:06.485Z",
+    "period": 3,
+    "clock": "08:26",
+    "playerName": "Luke Kornet",
+    "action": "makes alley oop dunk (Stephon Castle assists)",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:06:58.509Z",
+    "period": 3,
+    "clock": "08:27",
+    "playerName": "Thunder Full",
+    "action": "timeout",
+    "homeScore": 66,
+    "awayScore": 75,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:09:50.487Z",
+    "period": 3,
+    "clock": "08:11",
+    "playerName": "Isaiah Hartenstein",
+    "action": "misses shot",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:10:00.670Z",
+    "period": 3,
+    "clock": "08:00",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:10:20.679Z",
+    "period": 3,
+    "clock": "07:54",
+    "playerName": "Luke Kornet",
+    "action": "shooting foul",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:10:30.575Z",
+    "period": 3,
+    "clock": "07:54",
+    "playerName": "Spurs Full",
+    "action": "timeout",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:13:54.485Z",
+    "period": 3,
+    "clock": "07:54",
+    "playerName": "Isaiah Hartenstein",
+    "action": "offensive foul turnover",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:14:24.520Z",
+    "period": 3,
+    "clock": "07:34",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:14:32.530Z",
+    "period": 3,
+    "clock": "07:22",
+    "playerName": "Isaiah Hartenstein",
+    "action": "offensive rebound",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:14:44.484Z",
+    "period": 3,
+    "clock": "07:14",
+    "playerName": "Luguentz Dort",
+    "action": "offensive rebound",
+    "homeScore": 66,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:15:04.462Z",
+    "period": 3,
+    "clock": "07:07",
+    "playerName": "Isaiah Hartenstein",
+    "action": "makes 7-foot jumper (Jalen Williams assists)",
+    "homeScore": 68,
+    "awayScore": 77,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:15:14.516Z",
+    "period": 3,
+    "clock": "06:57",
+    "playerName": "Victor Wembanyama",
+    "action": "makes 24-foot three point jumper (De'Aaron Fox assists)",
+    "homeScore": 68,
+    "awayScore": 80,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:15:24.477Z",
+    "period": 3,
+    "clock": "06:44",
+    "playerName": "Jalen Williams",
+    "action": "offensive foul turnover",
+    "homeScore": 68,
+    "awayScore": 80,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:15:46.618Z",
+    "period": 3,
+    "clock": "06:44",
+    "playerName": "Dylan Harper",
+    "action": "enters the game for De'Aaron Fox",
+    "homeScore": 68,
+    "awayScore": 80,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:15:56.502Z",
+    "period": 3,
+    "clock": "06:32",
+    "playerName": "Harrison Barnes",
+    "action": "makes 25-foot three point jumper (Stephon Castle assists)",
+    "homeScore": 68,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:16:06.491Z",
+    "period": 3,
+    "clock": "06:19",
+    "playerName": "Jalen Williams",
+    "action": "loose ball foul",
+    "homeScore": 68,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:16:26.497Z",
+    "period": 3,
+    "clock": "06:19",
+    "playerName": "Aaron Wiggins",
+    "action": "enters the game for Luguentz Dort",
+    "homeScore": 68,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:16:46.520Z",
+    "period": 3,
+    "clock": "06:19",
+    "playerName": "Alex Caruso",
+    "action": "enters the game for Isaiah Hartenstein",
+    "homeScore": 68,
+    "awayScore": 83,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:16:56.523Z",
+    "period": 3,
+    "clock": "05:50",
+    "playerName": "Devin Vassell",
+    "action": "foul",
+    "homeScore": 68,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:17:16.533Z",
+    "period": 3,
+    "clock": "05:50",
+    "playerName": "Cason Wallace",
+    "action": "misses free throw 1 of 3",
+    "homeScore": 68,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:17:46.585Z",
+    "period": 3,
+    "clock": "05:50",
+    "playerName": "Cason Wallace",
+    "action": "makes free throw 2 of 3",
+    "homeScore": 69,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:18:08.491Z",
+    "period": 3,
+    "clock": "05:42",
+    "playerName": "Aaron Wiggins",
+    "action": "blocks Dylan Harper 's 7-foot shot",
+    "homeScore": 70,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:18:18.521Z",
+    "period": 3,
+    "clock": "05:39",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander defensive rebound",
+    "homeScore": 70,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:18:38.568Z",
+    "period": 3,
+    "clock": "05:39",
+    "playerName": "Stephon Castle",
+    "action": "shooting foul",
+    "homeScore": 70,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:18:48.458Z",
+    "period": 3,
+    "clock": "05:39",
+    "playerName": "Julian Champagnie",
+    "action": "enters the game for Stephon Castle",
+    "homeScore": 71,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:18:58.485Z",
+    "period": 3,
+    "clock": "05:39",
+    "playerName": "Keldon Johnson",
+    "action": "enters the game for Harrison Barnes",
+    "homeScore": 71,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:19:18.482Z",
+    "period": 3,
+    "clock": "05:39",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes free throw 2 of 2",
+    "homeScore": 72,
+    "awayScore": 85,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:19:28.473Z",
+    "period": 3,
+    "clock": "05:05",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander misses shot",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:19:38.501Z",
+    "period": 3,
+    "clock": "05:02",
+    "playerName": "Victor Wembanyama",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:19:48.499Z",
+    "period": 3,
+    "clock": "04:54",
+    "playerName": "Chet Holmgren",
+    "action": "blocks Dylan Harper 's 3-foot driving layup",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:19:58.580Z",
+    "period": 3,
+    "clock": "04:40",
+    "playerName": "Victor Wembanyama",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:20:18.496Z",
+    "period": 3,
+    "clock": "04:24",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:20:28.483Z",
+    "period": 3,
+    "clock": "04:15",
+    "playerName": "Alex Caruso",
+    "action": "misses shot",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:20:40.479Z",
+    "period": 3,
+    "clock": "04:11",
+    "playerName": "Keldon Johnson",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:20:50.475Z",
+    "period": 3,
+    "clock": "03:52",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:20:58.524Z",
+    "period": 3,
+    "clock": "03:42",
+    "playerName": "Dylan Harper",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:21:20.469Z",
+    "period": 3,
+    "clock": "03:36",
+    "playerName": "Spurs Full",
+    "action": "timeout",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:22:40.580Z",
+    "period": 3,
+    "clock": "03:36",
+    "playerName": "Luguentz Dort",
+    "action": "enters the game for Cason Wallace",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:23:00.484Z",
+    "period": 3,
+    "clock": "03:19",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander misses shot",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:23:10.492Z",
+    "period": 3,
+    "clock": "03:17",
+    "playerName": "Victor Wembanyama",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:23:20.712Z",
+    "period": 3,
+    "clock": "03:03",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:23:30.558Z",
+    "period": 3,
+    "clock": "02:51",
+    "playerName": "Dylan Harper",
+    "action": "defensive rebound",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:24:32.750Z",
+    "period": 3,
+    "clock": "02:32",
+    "playerName": "Keldon Johnson",
+    "action": "vs. Aaron Wiggins (Victor Wembanyama gains possession)",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:25:02.652Z",
+    "period": 3,
+    "clock": "02:31",
+    "playerName": "Luguentz Dort",
+    "action": "shooting foul",
+    "homeScore": 72,
+    "awayScore": 87,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:25:22.484Z",
+    "period": 3,
+    "clock": "02:31",
+    "playerName": "Victor Wembanyama",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 72,
+    "awayScore": 88,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:25:42.506Z",
+    "period": 3,
+    "clock": "02:18",
+    "playerName": "Chet Holmgren",
+    "action": "makes 1-foot shot",
+    "homeScore": 74,
+    "awayScore": 89,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:26:02.488Z",
+    "period": 3,
+    "clock": "01:58",
+    "playerName": "Dylan Harper",
+    "action": "makes 1-foot dunk (Victor Wembanyama assists)",
+    "homeScore": 74,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:26:44.478Z",
+    "period": 3,
+    "clock": "01:43",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes 5-foot driving floating jump shot",
+    "homeScore": 76,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:26:54.485Z",
+    "period": 3,
+    "clock": "01:30",
+    "playerName": "Isaiah Hartenstein",
+    "action": "enters the game for Chet Holmgren",
+    "homeScore": 76,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:27:02.465Z",
+    "period": 3,
+    "clock": "01:30",
+    "playerName": "Luke Kornet",
+    "action": "enters the game for Victor Wembanyama",
+    "homeScore": 76,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:27:24.477Z",
+    "period": 3,
+    "clock": "01:12",
+    "playerName": "Aaron Wiggins",
+    "action": "offensive rebound",
+    "homeScore": 76,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:27:44.493Z",
+    "period": 3,
+    "clock": "01:09",
+    "playerName": "Alex Caruso",
+    "action": "makes 26-foot three point jumper (Luguentz Dort assists)",
+    "homeScore": 79,
+    "awayScore": 91,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:28:04.494Z",
+    "period": 3,
+    "clock": "00:32",
+    "playerName": "Julian Champagnie",
+    "action": "defensive rebound",
+    "homeScore": 79,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:28:24.493Z",
+    "period": 3,
+    "clock": "00:12",
+    "playerName": "Keldon Johnson",
+    "action": "offensive rebound",
+    "homeScore": 79,
+    "awayScore": 93,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:28:34.553Z",
+    "period": 3,
+    "clock": "00:12",
+    "playerName": "Keldon Johnson",
+    "action": "makes tip in dunk",
+    "homeScore": 79,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:28:44.510Z",
+    "period": 3,
+    "clock": "00:00",
+    "playerName": "Aaron Wiggins",
+    "action": "misses 22-foot three point jumper",
+    "homeScore": 79,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:32:08.524Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Jalen Williams",
+    "action": "enters the game for Aaron Wiggins",
+    "homeScore": 79,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:32:38.472Z",
+    "period": 4,
+    "clock": "12:00",
+    "playerName": "Stephon Castle",
+    "action": "enters the game for Dylan Harper",
+    "homeScore": 79,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:33:30.513Z",
+    "period": 4,
+    "clock": "11:12",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 79,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:33:50.540Z",
+    "period": 4,
+    "clock": "10:56",
+    "playerName": "Isaiah Hartenstein",
+    "action": "offensive rebound",
+    "homeScore": 79,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:34:20.499Z",
+    "period": 4,
+    "clock": "10:56",
+    "playerName": "Keldon Johnson",
+    "action": "shooting foul",
+    "homeScore": 79,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:34:40.586Z",
+    "period": 4,
+    "clock": "10:54",
+    "playerName": "Julian Champagnie",
+    "action": "defensive rebound",
+    "homeScore": 80,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:35:02.465Z",
+    "period": 4,
+    "clock": "10:33",
+    "playerName": "Luke Kornet",
+    "action": "defensive rebound",
+    "homeScore": 80,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:35:12.492Z",
+    "period": 4,
+    "clock": "10:26",
+    "playerName": "Stephon Castle",
+    "action": "bad pass turnover (Jalen Williams steals)",
+    "homeScore": 80,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:35:42.475Z",
+    "period": 4,
+    "clock": "10:21",
+    "playerName": "Victor Wembanyama",
+    "action": "enters the game for De'Aaron Fox",
+    "homeScore": 80,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:35:52.483Z",
+    "period": 4,
+    "clock": "10:10",
+    "playerName": "Kenrich Williams",
+    "action": "makes 25-foot shot",
+    "homeScore": 83,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:36:14.484Z",
+    "period": 4,
+    "clock": "09:54",
+    "playerName": "Harrison Barnes",
+    "action": "turnover Isaiah Joe",
+    "homeScore": 83,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:36:22.549Z",
+    "period": 4,
+    "clock": "09:46",
+    "playerName": "Spurs Full",
+    "action": "timeout",
+    "homeScore": 85,
+    "awayScore": 95,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:37:56.748Z",
+    "period": 4,
+    "clock": "09:46",
+    "playerName": "Spurs Full",
+    "action": "timeout",
+    "homeScore": 85,
+    "awayScore": 95,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:39:26.465Z",
+    "period": 4,
+    "clock": "09:46",
+    "playerName": "Dylan Harper",
+    "action": "enters the game for Keldon Johnson",
+    "homeScore": 85,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:40:06.477Z",
+    "period": 4,
+    "clock": "09:46",
+    "playerName": "Devin Vassell",
+    "action": "enters the game for Luke Kornet",
+    "homeScore": 85,
+    "awayScore": 95,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:40:16.495Z",
+    "period": 4,
+    "clock": "09:25",
+    "playerName": "Stephon Castle",
+    "action": "makes 1-foot dunk (Victor Wembanyama assists)",
+    "homeScore": 85,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:40:36.482Z",
+    "period": 4,
+    "clock": "09:05",
+    "playerName": "Dylan Harper",
+    "action": "defensive rebound",
+    "homeScore": 85,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:40:46.505Z",
+    "period": 4,
+    "clock": "08:50",
+    "playerName": "Isaiah Hartenstein",
+    "action": "defensive rebound",
+    "homeScore": 85,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:41:16.482Z",
+    "period": 4,
+    "clock": "08:34",
+    "playerName": "Isaiah Joe",
+    "action": "makes 25-foot three point jumper ( Hartenstein assists)",
+    "homeScore": 88,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:41:48.545Z",
+    "period": 4,
+    "clock": "08:10",
+    "playerName": "Isaiah Hartenstein",
+    "action": "foul",
+    "homeScore": 88,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:41:58.560Z",
+    "period": 4,
+    "clock": "08:10",
+    "playerName": "Thunder Full",
+    "action": "timeout",
+    "homeScore": 88,
+    "awayScore": 97,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:45:00.491Z",
+    "period": 4,
+    "clock": "08:10",
+    "playerName": "Player",
+    "action": "(08:10) [Thunder] COACH'S CHALLENGE (CALL OVERTURNED) [Thunder] retain their timeout",
+    "homeScore": 88,
+    "awayScore": 97,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:45:10.513Z",
+    "period": 4,
+    "clock": "08:10",
+    "playerName": "Chet Holmgren",
+    "action": "enters the game for Isaiah Hartenstein",
+    "homeScore": 88,
+    "awayScore": 97,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:45:40.492Z",
+    "period": 4,
+    "clock": "08:10",
+    "playerName": "Harrison Barnes",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 88,
+    "awayScore": 98,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:45:50.475Z",
+    "period": 4,
+    "clock": "08:10",
+    "playerName": "Harrison Barnes",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 88,
+    "awayScore": 99,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:46:00.503Z",
+    "period": 4,
+    "clock": "07:55",
+    "playerName": "Victor Wembanyama",
+    "action": "defensive rebound",
+    "homeScore": 88,
+    "awayScore": 99,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:46:20.466Z",
+    "period": 4,
+    "clock": "07:45",
+    "playerName": "Victor Wembanyama",
+    "action": "makes 25-foot three point jumper (Devin Vassell assists)",
+    "homeScore": 88,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:46:42.569Z",
+    "period": 4,
+    "clock": "07:05",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander defensive rebound",
+    "homeScore": 91,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:47:02.474Z",
+    "period": 4,
+    "clock": "06:57",
+    "playerName": "Harrison Barnes",
+    "action": "defensive rebound",
+    "homeScore": 91,
+    "awayScore": 102,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:47:32.492Z",
+    "period": 4,
+    "clock": "06:28",
+    "playerName": "Victor Wembanyama",
+    "action": "defensive rebound",
+    "homeScore": 91,
+    "awayScore": 104,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:48:02.509Z",
+    "period": 4,
+    "clock": "06:07",
+    "playerName": "Thunder Full",
+    "action": "timeout",
+    "homeScore": 91,
+    "awayScore": 106,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:49:24.497Z",
+    "period": 4,
+    "clock": "06:07",
+    "playerName": "Luke Kornet",
+    "action": "enters the game for Victor Wembanyama",
+    "homeScore": 91,
+    "awayScore": 106,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:50:24.483Z",
+    "period": 4,
+    "clock": "06:00",
+    "playerName": "Luke Kornet",
+    "action": "shooting foul",
+    "homeScore": 91,
+    "awayScore": 106,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:50:34.516Z",
+    "period": 4,
+    "clock": "06:00",
+    "playerName": "Alex Caruso",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 92,
+    "awayScore": 106,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:50:54.473Z",
+    "period": 4,
+    "clock": "06:00",
+    "playerName": "Alex Caruso",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 93,
+    "awayScore": 106,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:51:06.494Z",
+    "period": 4,
+    "clock": "05:35",
+    "playerName": "Alex Caruso",
+    "action": "foul",
+    "homeScore": 93,
+    "awayScore": 106,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:51:46.508Z",
+    "period": 4,
+    "clock": "05:35",
+    "playerName": "Dylan Harper",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 93,
+    "awayScore": 107,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:52:06.552Z",
+    "period": 4,
+    "clock": "05:35",
+    "playerName": "Dylan Harper",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 93,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:52:36.473Z",
+    "period": 4,
+    "clock": "04:59",
+    "playerName": "Alex Caruso",
+    "action": "defensive rebound",
+    "homeScore": 96,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:52:56.489Z",
+    "period": 4,
+    "clock": "04:50",
+    "playerName": "Shai Gilgeous",
+    "action": "-Alexander makes 4-foot two point shot",
+    "homeScore": 98,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:53:06.543Z",
+    "period": 4,
+    "clock": "04:29",
+    "playerName": "Harrison Barnes",
+    "action": "defensive rebound",
+    "homeScore": 98,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:53:16.484Z",
+    "period": 4,
+    "clock": "04:18",
+    "playerName": "Spurs Full",
+    "action": "timeout",
+    "homeScore": 98,
+    "awayScore": 108,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T21:54:48.483Z",
+    "period": 4,
+    "clock": "04:18",
+    "playerName": "Victor Wembanyama",
+    "action": "enters the game for Dylan Harper",
+    "homeScore": 98,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:55:08.541Z",
+    "period": 4,
+    "clock": "04:18",
+    "playerName": "Stephon Castle",
+    "action": "enters the game for Luke Kornet",
+    "homeScore": 98,
+    "awayScore": 108,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:55:28.477Z",
+    "period": 4,
+    "clock": "03:50",
+    "playerName": "Luguentz Dort",
+    "action": "misses shot",
+    "homeScore": 98,
+    "awayScore": 110,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:56:08.563Z",
+    "period": 4,
+    "clock": "03:39",
+    "playerName": "Luguentz Dort",
+    "action": "personal foul",
+    "homeScore": 98,
+    "awayScore": 110,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:56:20.476Z",
+    "period": 4,
+    "clock": "03:26",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 98,
+    "awayScore": 110,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:56:38.536Z",
+    "period": 4,
+    "clock": "03:13",
+    "playerName": "Stephon Castle",
+    "action": "defensive rebound",
+    "homeScore": 98,
+    "awayScore": 110,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:57:08.451Z",
+    "period": 4,
+    "clock": "02:41",
+    "playerName": "Devin Vassell",
+    "action": "defensive rebound",
+    "homeScore": 98,
+    "awayScore": 112,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:57:40.489Z",
+    "period": 4,
+    "clock": "02:14",
+    "playerName": "Chet Holmgren",
+    "action": "defensive rebound",
+    "homeScore": 98,
+    "awayScore": 112,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:58:30.476Z",
+    "period": 4,
+    "clock": "01:59",
+    "playerName": "Alex Caruso",
+    "action": "makes free throw 1 of 2",
+    "homeScore": 99,
+    "awayScore": 112,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:58:50.535Z",
+    "period": 4,
+    "clock": "01:59",
+    "playerName": "Alex Caruso",
+    "action": "makes free throw 2 of 2",
+    "homeScore": 100,
+    "awayScore": 112,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:59:10.603Z",
+    "period": 4,
+    "clock": "01:42",
+    "playerName": "Luguentz Dort",
+    "action": "shooting foul",
+    "homeScore": 100,
+    "awayScore": 112,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:59:30.472Z",
+    "period": 4,
+    "clock": "01:42",
+    "playerName": "Kenrich Williams",
+    "action": "enters the game for Jalen",
+    "homeScore": 100,
+    "awayScore": 113,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T21:59:52.587Z",
+    "period": 4,
+    "clock": "01:42",
+    "playerName": "Brooks Barnhizer",
+    "action": "enters the game for Alex Caruso",
+    "homeScore": 100,
+    "awayScore": 113,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T22:00:22.586Z",
+    "period": 4,
+    "clock": "01:12",
+    "playerName": "Spurs Full",
+    "action": "timeout",
+    "homeScore": 100,
+    "awayScore": 114,
+    "isTimeout": true
+  },
+  {
+    "timestamp": "2025-12-25T22:01:32.477Z",
+    "period": 4,
+    "clock": "01:12",
+    "playerName": "Kelly Olynyk",
+    "action": "enters the game for Devin Vassell",
+    "homeScore": 100,
+    "awayScore": 114,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T22:01:52.537Z",
+    "period": 4,
+    "clock": "01:12",
+    "playerName": "Jordan Mc",
+    "action": "McLaughlin enters the game for Harrison Barnes",
+    "homeScore": 100,
+    "awayScore": 114,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T22:02:22.485Z",
+    "period": 4,
+    "clock": "00:47",
+    "playerName": "Kenrich Williams",
+    "action": "offensive rebound",
+    "homeScore": 100,
+    "awayScore": 117,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T22:02:32.558Z",
+    "period": 4,
+    "clock": "00:45",
+    "playerName": "Branden Carlson",
+    "action": "makes 3-foot dunk (Kenrich Williams assists)",
+    "homeScore": 102,
+    "awayScore": 117,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T22:02:42.487Z",
+    "period": 4,
+    "clock": "00:27",
+    "playerName": "Kenrich Williams",
+    "action": "misses shot",
+    "homeScore": 102,
+    "awayScore": 117,
+    "isTimeout": false
+  },
+  {
+    "timestamp": "2025-12-25T22:02:52.546Z",
+    "period": 4,
+    "clock": "00:23",
+    "playerName": "Jeremy Sochan",
+    "action": "defensive rebound",
+    "homeScore": 102,
+    "awayScore": 117,
+    "isTimeout": false
+  }
+]
